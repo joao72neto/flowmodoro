@@ -13,7 +13,7 @@ import lombok.Data;
 @Table(name = "sessions")
 @Builder
 @Data
-public class Sessions {
+public class Session {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
