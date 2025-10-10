@@ -8,13 +8,15 @@ services:
   #   ports:
   #     - "3000:3000"
 
-  # back:
-  #   build:
-  #     context: ./backend
-  #   ports:
-  #     - "8080:8080"
+  back:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
 
-  postgres:
+  db:
     image: postgres:17
     ports:
       - "5432:5432"
