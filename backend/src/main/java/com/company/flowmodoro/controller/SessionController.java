@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.flowmodoro.model.entity.Session;
+import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.service.SessionService;
 
 @RestController
