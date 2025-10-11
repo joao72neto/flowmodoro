@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidSession(InvalidSessionException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message("Invalid Session")
-                .error(ex.getMessage())
+                .errors(ex.getErrors())
                 .build();
                 
         return ResponseEntity.badRequest().body(errorResponse);

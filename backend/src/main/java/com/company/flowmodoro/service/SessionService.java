@@ -1,5 +1,8 @@
 package com.company.flowmodoro.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +23,22 @@ public class SessionService {
 
     private void validateSessions(Session session) {
 
+        List<String> errors = new ArrayList<>();
+
         if (session.getFocus() <= 0) {
-            throw new InvalidSessionException("Focus needs to be greater than 0");
+            errors.add("Focus needs to be greater than 0");
         }
 
         if (session.getRest() <= 0) {
-            throw new InvalidSessionException("Rest needs to be greater than 0");
+            errors.add("Rest needs to be greater than 0");
         }
 
         if (session.getInterruptions() < 0) {
-            throw new InvalidSessionException("Interruptions can't be less than 0");
+            errors.add("Interruptions can't be less than 0");
+        }
+
+        if (!errors.isEmpty()) {
+            throw new InvalidSessionException(errors);
         }
     }
 }
