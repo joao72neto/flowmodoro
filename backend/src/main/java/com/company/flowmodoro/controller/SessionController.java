@@ -34,7 +34,6 @@ public class SessionController {
     @GetMapping
     public ResponseEntity<List<SessionDTO>> consult() {
         List<Session> sessions = sessionService.consult();
-        System.out.println(sessions);
         return ResponseEntity.ok(mapper.toDTO(sessions));
     }
 }

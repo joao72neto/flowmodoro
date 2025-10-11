@@ -14,7 +14,7 @@ public class SessionMapper {
         return Session.builder()
                 .task(sessionDTO.getTask())
                 .focus(sessionDTO.getFocus())
-                .rest(sessionDTO.getRest())
+                .ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
                 .interruptions(sessionDTO.getInterruptions())
                 .build();
     }
@@ -27,8 +27,10 @@ public class SessionMapper {
         return SessionDTO.builder()
                 .task(session.getTask())
                 .focus(session.getFocus())
+                .ratio(session.getRatio())
                 .rest(session.getRest())
                 .interruptions(session.getInterruptions())
+                .date(session.getDate())
                 .build();
     }
 

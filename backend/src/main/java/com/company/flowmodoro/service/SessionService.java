@@ -13,16 +13,28 @@ import com.company.flowmodoro.repository.SessionRespository;
 @Service
 public class SessionService {
 
+    private static final Double RATIO = 0.2;
+
     @Autowired
     private SessionRespository sessionRespository;
 
     public Session save(Session session) {
+        calculateRest(session);
         validateSessions(session);
         return sessionRespository.save(session);
     }
     
     public List<Session> consult() {
         return sessionRespository.findAll();
+    }
+
+    // Private methods
+
+    private void calculateRest(Session session) {
+        if (session.getRatio() == null) {
+            session.setRatio(RATIO);
+        }
+        session.setRest(session.getFocus() * session.getRatio());
     }
 
     private void validateSessions(Session session) {
@@ -33,8 +45,8 @@ public class SessionService {
             errors.add("Focus needs to be greater than 0");
         }
 
-        if (session.getRest() <= 0) {
-            errors.add("Rest needs to be greater than 0");
+        if (session.getRatio() < 0 || session.getRatio() > 1) {
+            errors.add("Ratio needs to be between 0 and 1");
         }
 
         if (session.getInterruptions() < 0) {

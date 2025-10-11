@@ -1,6 +1,6 @@
 package com.company.flowmodoro.model;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,7 +33,7 @@ public class Session {
     @Column(name = "ses_focus")
     private Double focus;
 
-    @Column(name = "ses_ratio", columnDefinition = "double precision default 0.2")
+    @Column(name = "ses_ratio")
     private Double ratio;
 
     @Column(name = "ses_rest")
@@ -44,5 +44,5 @@ public class Session {
 
     @Column(name = "ses_date", updatable = false)
     @CreationTimestamp
-    private LocalDateTime date;
+    private Date date;
 }
