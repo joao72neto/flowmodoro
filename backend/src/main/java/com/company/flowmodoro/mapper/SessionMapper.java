@@ -1,5 +1,7 @@
 package com.company.flowmodoro.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.company.flowmodoro.dto.SessionDTO;
@@ -17,6 +19,10 @@ public class SessionMapper {
                 .build();
     }
 
+    public List<Session> toEntity(List<SessionDTO> sessionDTOs) {
+        return sessionDTOs.stream().map(this::toEntity).toList();
+    }
+
     public SessionDTO toDTO(Session session) {
         return SessionDTO.builder()
                 .task(session.getTask())
@@ -24,5 +30,9 @@ public class SessionMapper {
                 .rest(session.getRest())
                 .interruptions(session.getInterruptions())
                 .build();
+    }
+
+    public List<SessionDTO> toDTO(List<Session> sessions) {
+        return sessions.stream().map(this::toDTO).toList();
     }
 }

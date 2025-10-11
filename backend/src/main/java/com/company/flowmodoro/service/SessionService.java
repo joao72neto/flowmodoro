@@ -20,6 +20,10 @@ public class SessionService {
         validateSessions(session);
         return sessionRespository.save(session);
     }
+    
+    public List<Session> consult() {
+        return sessionRespository.findAll();
+    }
 
     private void validateSessions(Session session) {
 
