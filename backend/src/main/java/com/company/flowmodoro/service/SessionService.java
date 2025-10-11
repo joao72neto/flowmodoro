@@ -3,7 +3,7 @@ package com.company.flowmodoro.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.company.flowmodoro.exceptions.InvalidSessionException;
+import com.company.flowmodoro.exception.InvalidSessionException;
 import com.company.flowmodoro.model.entity.Session;
 import com.company.flowmodoro.repository.SessionRespository;
 

@@ -1,0 +1,19 @@
+package com.company.flowmodoro.exception;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
+import com.company.flowmodoro.dto.ErrorResponse;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    public ResponseEntity<ErrorResponse> handleInvalidSession(InvalidSessionException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message("Invalid Session")
+                .error(ex.getMessage())
+                .build();
+                
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+}

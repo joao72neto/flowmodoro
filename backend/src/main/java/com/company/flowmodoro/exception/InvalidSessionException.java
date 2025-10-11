@@ -1,4 +1,4 @@
-package com.company.flowmodoro.exceptions;
+package com.company.flowmodoro.exception;
 
 public class InvalidSessionException extends RuntimeException {
     public InvalidSessionException(String message) {
