@@ -15,7 +15,6 @@ public class SessionMapper {
                 .rest(sessionDTO.getRest())
                 .interruptions(sessionDTO.getInterruptions())
                 .build();
-
     }
 
     public SessionDTO toDTO(Session session) {

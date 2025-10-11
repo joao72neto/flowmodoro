@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.flowmodoro.dto.SessionDTO;
+import com.company.flowmodoro.mapper.SessionMapper;
 import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.service.SessionService;
 
@@ -17,8 +19,12 @@ public class SessionController {
     @Autowired
     private SessionService sessionService;
 
+    @Autowired
+    private SessionMapper mapper;
+
     @PostMapping
-    public ResponseEntity<Session> save(@RequestBody Session session) {
-        return ResponseEntity.ok(sessionService.save(session));
+    public ResponseEntity<SessionDTO> save(@RequestBody SessionDTO dto) {
+        Session session = sessionService.save(mapper.toEntity(dto));
+        return ResponseEntity.ok(mapper.toDTO(session));
     }
 }
