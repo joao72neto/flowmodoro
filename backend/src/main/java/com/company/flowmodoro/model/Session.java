@@ -33,7 +33,7 @@ public class Session {
     @Column(name = "ses_focus")
     private Double focus;
 
-    @Column(name = "ses_ratio", columnDefinition = "DOUBLE DEFAULT 0.2")
+    @Column(name = "ses_ratio", columnDefinition = "double precision default 0.2")
     private Double ratio;
 
     @Column(name = "ses_rest")
