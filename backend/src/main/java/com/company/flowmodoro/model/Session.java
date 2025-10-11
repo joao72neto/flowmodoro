@@ -1,5 +1,9 @@
 package com.company.flowmodoro.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,9 +33,16 @@ public class Session {
     @Column(name = "ses_focus")
     private Double focus;
 
+    @Column(name = "ses_ratio", columnDefinition = "DOUBLE DEFAULT 0.2")
+    private Double ratio;
+
     @Column(name = "ses_rest")
     private Double rest;
 
     @Column(name = "ses_interruptions")
     private Integer interruptions;
+
+    @Column(name = "ses_date", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime date;
 }
