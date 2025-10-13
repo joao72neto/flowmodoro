@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './Timer.css'
 
-function App() {
+function Timer() {
   const [count, setCount] = useState(0)
 
   return (
@@ -12,4 +12,4 @@ function App() {
   )
 }
 
-export default App
+export default Timer;
