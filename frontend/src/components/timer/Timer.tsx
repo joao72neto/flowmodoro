@@ -5,10 +5,10 @@ function Timer() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <p>Hello World</p>
+    <div className='timer'>
+      <p>Hello World!</p>
       <button onClick={() => setCount(count + 1)}>Click {count}</button>
-    </>
+    </div>
   )
 }
 

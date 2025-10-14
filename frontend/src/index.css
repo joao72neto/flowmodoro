@@ -1,1 +1,43 @@
 @import "tailwindcss";
+
+:root{
+    --color-yellow: #FCBA04;
+    --color-red: #A50104;
+    --color-darkred: #590004;
+    --color-black-bean: #250001;
+    --color-white-smoke: #F3F3F3;
+    --color-white: #fff;
+    --color-darkgray: #222;
+    --color-black: #000;
+    --color-shadow: #0000005d;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    background-color: var(--color-darkgray);
+    height: 100vh;
+}
+ 
+p{
+    color: var(--color-white-smoke);
+}
+
+button{
+    background-color: var(--color-black);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: var(--color-white-smoke);
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border-color 0.3s ease-in-out;
+    box-shadow: 0 0 10px var(--color-shadow);
+    
+    &:focus{
+        border-color: var(--color-white-smoke);
+    }
+}
