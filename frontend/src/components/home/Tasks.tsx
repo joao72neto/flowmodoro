@@ -1,5 +1,5 @@
-import Input from "../input/Input";
-import Button from "../button/Button";
+import Button from "../common/Button";
+import Input from "../common/Input";
 
 function Tasks() {
   return (

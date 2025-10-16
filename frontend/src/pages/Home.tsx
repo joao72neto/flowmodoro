@@ -1,6 +1,6 @@
-import Timer from "../components/timer/Timer";
-import Interruptions from "../components/interruptions/Interruptions";
-import Tasks from "../components/tasks/Tasks";
+import Timer from "../components/home/Timer";
+import Interruptions from "../components/home/Interruptions";
+import Tasks from "../components/home/Tasks";
 
 function Home() {
   return (
