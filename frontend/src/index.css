@@ -20,8 +20,5 @@
 html, body{
     background-color: var(--color-darkgray);
     height: 100vh;
-}
- 
-p{
     color: var(--color-white-smoke);
 }

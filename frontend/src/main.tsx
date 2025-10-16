@@ -1,11 +1,11 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import Timer from './components/timer/Timer.tsx'
+import Home from './pages/Home';
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Timer />
+    <Home />
   </StrictMode>,
 )
