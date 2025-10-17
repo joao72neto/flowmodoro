@@ -21,6 +21,7 @@ function Button({
         cursor-pointer 
         font-semibold 
         text-white 
+        border-white/10
         hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] 
         transition"
       style={{ backgroundColor: variant ? bgColors[variant] : "#000" }}
