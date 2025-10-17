@@ -1,48 +1,53 @@
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import Button from "../common/Button";
 
 function Timer() {
   const BREAK_RATIO = 0.2;
-  const [running, setRunning] = useState(false);
+  const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
   const [seconds, setSeconds] = useState(0);
-  const [breakSeconds, setBreakSeconds] = useState(0);
   const intervalRef = useRef<number | null>(null);
 
   // Running timer
   useEffect(() => {
-    if (running) {
+    if (mode) {
       intervalRef.current = setInterval(() => {
-        setSeconds((prev) => prev + 1);
+        if (mode === "focus") {
+          setSeconds((prev) => prev + 1);
+        } else if (mode === "break") {
+          setSeconds((prev) => {
+            if (prev <= 1) {
+              clearInterval(intervalRef.current!);
+              intervalRef.current = null;
+              setMode(null);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }
       }, 1000);
-    } else {
+    }
+
+    return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-    }
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [running]);
-
+  }, [mode, seconds]);
 
   const startFocus = () => {
     setSeconds(0);
-    setRunning(true);
-  }
+    setMode("focus");
+  };
 
-  const stopTimer = () => {
-    setRunning(false);
-    setBreakSeconds(seconds * BREAK_RATIO);
-    setSeconds(0);
-  }
+  const stopFocus = () => {
+    setMode("stopped");
+    const breakTime = Math.floor(seconds * BREAK_RATIO);
+    setSeconds(breakTime);
+  };
 
   const startBreak = () => {
-    const breakTime = Math.floor(seconds * 0.2);
-    setBreakSeconds(breakTime);
-    setSeconds(0);
-    setRunning(false);
+    setMode("break");
   };
 
   // Formating time
@@ -57,22 +62,29 @@ function Timer() {
   return (
     <>
       <div className="text-6xl font-mono mb-8">
-        {running ? formatTimer(seconds) : formatTimer(breakSeconds | seconds)}
+        {mode ? formatTimer(seconds) : "00:00"}
       </div>
       <div className="flex gap-4 mb-6">
-        {!running ? (
+        {mode === null ? (
           <Button
             onClick={() => startFocus()}
             text="Start"
             variant="danger"
             icon={<i className="bi bi-play-fill" />}
           />
-        ) : (
+        ) : mode === "focus" ? (
           <Button
-            onClick={() => stopTimer()}
+            onClick={() => stopFocus()}
             text="Stop"
             variant="secondary"
             icon={<i className="bi bi-x-lg" />}
+          />
+        ) : (
+          <Button
+            onClick={() => startBreak()}
+            text="Break"
+            variant="secondary"
+            icon={<i className="bi bi-arrow-clockwise" />}
           />
         )}
       </div>
