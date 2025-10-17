@@ -7,13 +7,16 @@ function Button({
   icon,
   variant,
   text,
+  onClick
 }: {
   icon?: React.ReactNode;
   variant?: "secondary" | "danger";
   text?: string;
+  onClick?: () => void;
 }) {
   return (
     <button
+      onClick={onClick}
       className="
         px-5 
         py-2 
