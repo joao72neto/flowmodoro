@@ -1,5 +1,5 @@
-import { use, useEffect, useRef, useState } from "react";
-import Button from "../common/Button";
+import { useEffect, useRef, useState } from "react";
+import Button from "../common/btn/Button";
 
 function Timer() {
   const BREAK_RATIO = 0.2;
