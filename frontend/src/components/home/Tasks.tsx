@@ -1,19 +1,18 @@
-import Button from "../common/btn/Button";
+import IconButton from "../common/btn/IconButton";
 import Input from "../common/Input";
 
 function Tasks() {
   return (
     <div className="w-full max-w-md">
-      <h2 className="text-2xl mb-4 text-center">Tarefas</h2>
+      <h2 className="text-2xl mb-4 text-center">Tasks</h2>
       <div className="flex mb-4">
         <Input placeholder="Add new task" />
-        <Button text="Add" />
       </div>
 
       <ul className="space-y-2">
-        <li className="bg-gray-800 px-4 py-2 rounded flex items-center justify-between">
+        <li className="shadow-2xl border-t border-b border-white/10 px-4 py-3 rounded flex items-center justify-between">
           <span>Task</span>
-          <Button text="Remove" />
+          <IconButton icon={<i className="bi bi-x-lg cursor-pointer" />}></IconButton>
         </li>
       </ul>
     </div>
