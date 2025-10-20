@@ -5,7 +5,11 @@ function IconButton({
   icon?: React.ReactNode;
   onClick?: () => void;
 }) {
-  return <button onClick={onClick}>{icon}</button>;
+  return (
+    <button className="text-xl cursor-pointer" onClick={onClick}>
+      {icon}
+    </button>
+  );
 }
 
 export default IconButton;
