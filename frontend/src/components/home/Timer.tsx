@@ -50,6 +50,11 @@ function Timer() {
     setMode("break");
   };
 
+  const skipBreak = () => {
+    setMode(null);
+    setSeconds(0);
+  }
+
   // Formating time
   const formatTimer = (totalSeconds: number) => {
     const min = Math.floor(totalSeconds / 60)
@@ -79,12 +84,19 @@ function Timer() {
             variant="secondary"
             icon={<i className="bi bi-x-lg" />}
           />
-        ) : (
+        ) : mode === "stopped" ? (
           <Button
             onClick={() => startBreak()}
             text="Break"
+            variant="primary"
+            icon={<i className="bi bi-play-fill" />}
+          />
+        ) : (
+          <Button
+            onClick={() => skipBreak()}
+            text="Skip Break"
             variant="secondary"
-            icon={<i className="bi bi-arrow-clockwise" />}
+            icon={<i className="bi bi-skip-end-fill" />}
           />
         )}
       </div>

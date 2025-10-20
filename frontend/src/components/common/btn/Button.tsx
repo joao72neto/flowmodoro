@@ -1,6 +1,7 @@
 const bgColors = {
   secondary: "#6c757d",
   danger: "#dc3545",
+  primary: "#E6B14D"
 };
 
 function Button({
@@ -10,7 +11,7 @@ function Button({
   onClick
 }: {
   icon?: React.ReactNode;
-  variant?: "secondary" | "danger";
+  variant?: "secondary" | "danger" | "primary";
   text?: string;
   onClick?: () => void;
 }) {
