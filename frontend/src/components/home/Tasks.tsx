@@ -30,10 +30,14 @@ function Tasks() {
 
   const handleCompleteTask = (index: number) => {
     const updatedTasks = [...tasks];
-    updatedTasks[index].completed = true;
+    const selectedTask = { ...updatedTasks[index] };
 
-    const completedTask = updatedTasks.splice(index, 1)[0];
-    setTasks([...updatedTasks, completedTask]);
+    selectedTask.completed = !selectedTask.completed;
+    updatedTasks.splice(index, 1);
+
+    const newTasks = [...updatedTasks, selectedTask];
+
+    setTasks([...newTasks]);
   };
 
   return (
@@ -41,7 +45,7 @@ function Tasks() {
       <h2 className="text-2xl mb-4 text-center">Tasks</h2>
       <div className="flex mb-4">
         <Input
-          placeholder="Add new task"
+          placeholder="Enter to add a new task"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -67,7 +71,10 @@ function Tasks() {
             `}
             >
               <div className="flex items-center">
-                <TaskButton onClick={() => handleCompleteTask(index)} taskCompleted={task.completed}/>
+                <TaskButton
+                  onClick={() => handleCompleteTask(index)}
+                  taskCompleted={task.completed}
+                />
                 <span>{task.text}</span>
               </div>
               <IconButton
