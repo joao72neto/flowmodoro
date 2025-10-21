@@ -19,6 +19,10 @@ function Tasks() {
     }
   };
 
+  const handleRemoveTask = (index: number) => {
+    setTasks(tasks.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="w-full max-w-md">
       <h2 className="text-2xl mb-4 text-center">Tasks</h2>
@@ -33,8 +37,9 @@ function Tasks() {
 
       {tasks.length > 0 && (
         <ul className="space-y-2">
-          {tasks.map((task) => (
+          {tasks.map((task, index) => (
             <li
+              key={index}
               className="
               shadow-xl 
               border-t 
@@ -50,7 +55,10 @@ function Tasks() {
                 <TaskButton />
                 <span>{task}</span>
               </div>
-              <IconButton icon={<i className="bi bi-x-lg" />} />
+              <IconButton
+                icon={<i className="bi bi-x-lg" />}
+                onClick={() => handleRemoveTask(index)}
+              />
             </li>
           ))}
         </ul>
