@@ -4,12 +4,17 @@ import TaskButton from "../common/btn/TaskButton";
 import Input from "../common/Input";
 
 function Tasks() {
-  const [tasks, setTasks] = useState<string[]>([]);
+  type Task = {
+    text: string;
+    completed: boolean;
+  };
+
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
 
   const handleAddTask = () => {
     if (newTask.trim() === "") return;
-    setTasks([newTask, ...tasks]);
+    setTasks([{ text: newTask, completed: false }, ...tasks]);
     setNewTask("");
   };
 
@@ -21,6 +26,14 @@ function Tasks() {
 
   const handleRemoveTask = (index: number) => {
     setTasks(tasks.filter((_, i) => i !== index));
+  };
+
+  const handleCompleteTask = (index: number) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].completed = true;
+
+    const completedTask = updatedTasks.splice(index, 1)[0];
+    setTasks([...updatedTasks, completedTask]);
   };
 
   return (
@@ -40,7 +53,7 @@ function Tasks() {
           {tasks.map((task, index) => (
             <li
               key={index}
-              className="
+              className={`
               shadow-xl 
               border-t 
               border-b 
@@ -49,11 +62,13 @@ function Tasks() {
               py-3 
               rounded 
               flex
-              justify-between"
+              justify-between
+              ${task.completed ? "line-through" : ""}
+            `}
             >
               <div className="flex items-center">
-                <TaskButton />
-                <span>{task}</span>
+                <TaskButton onClick={() => handleCompleteTask(index)} taskCompleted={task.completed}/>
+                <span>{task.text}</span>
               </div>
               <IconButton
                 icon={<i className="bi bi-x-lg" />}
