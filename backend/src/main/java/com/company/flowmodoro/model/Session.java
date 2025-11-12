@@ -22,13 +22,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Session {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ses_id")
     private Long id;
 
     @Column(name = "ses_task")
-    private String task;    
+    private String task;
 
     @Column(name = "ses_focus")
     private Double focus;

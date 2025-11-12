@@ -23,7 +23,7 @@ public class SessionService {
         validateSessions(session);
         return sessionRespository.save(session);
     }
-    
+
     public List<Session> consult() {
         return sessionRespository.findAll();
     }
@@ -34,7 +34,8 @@ public class SessionService {
         if (session.getRatio() == null) {
             session.setRatio(RATIO);
         }
-        session.setRest(session.getFocus() * session.getRatio());
+        double rest = session.getFocus() * session.getRatio();
+        session.setRest(Math.round(rest * 100.0) / 100.0);
     }
 
     private void validateSessions(Session session) {
