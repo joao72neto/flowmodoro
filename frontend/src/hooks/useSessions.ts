@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSessionService } from "../../api/services/sessionService";
+import { getSessionService } from "../api/services/sessionService";
 
 export function useSessions() {
   const [sessions, setSessions] = useState([]);
