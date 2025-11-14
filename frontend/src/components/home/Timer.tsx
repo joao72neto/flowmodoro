@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../common/btn/Button";
-import { useCreateSession } from "../../hooks/useCreateSession";
+import { useSession } from "../../hooks/useSession";
 
 function Timer() {
   const BREAK_RATIO = 0.2;
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
   const [seconds, setSeconds] = useState(0);
-  const { create } = useCreateSession();
+  const { setFocus } = useSession();
 
   const intervalRef = useRef<number | null>(null);
 
@@ -38,21 +38,6 @@ function Timer() {
     };
   }, [mode, seconds]);
 
-  const saveSession = async () => {
-    try {
-      console.log(focus);
-      const data = {
-        task: "Task test",
-        focus: (seconds / 60).toFixed(2),
-        interruptions: 2,
-      };
-
-      const res = await create(data);
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
   const startFocus = () => {
     setSeconds(0);
     setMode("focus");
@@ -62,7 +47,7 @@ function Timer() {
     setMode("stopped");
     const breakTime = Math.floor(seconds * BREAK_RATIO);
     setSeconds(breakTime);
-    saveSession();
+    setFocus((seconds / 60).toFixed(2));
   };
 
   const startBreak = () => {

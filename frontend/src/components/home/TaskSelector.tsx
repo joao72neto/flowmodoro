@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { useSession } from "../../hooks/useSession";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState("Select a task...");
   const tasks = ["Task 1", "Task 2", "Task 3", "Task 4"];
   const ref = useRef<HTMLDivElement>(null);
+  const { setTask } = useSession();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -56,6 +58,7 @@ function TaskSelector() {
               key={task}
               onClick={() => {
                 setSelectedTask(task);
+                setTask(task);
                 setIsOpen(false);
               }}
               className="py-3 hover:bg-black/30 cursor-pointer"

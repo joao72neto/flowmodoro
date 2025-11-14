@@ -2,12 +2,12 @@ import React, { createContext, useState } from "react";
 import { useCreateSession } from "../hooks/useCreateSession";
 
 interface SessionContextType {
-  tasks: any[];
-  interruptions: any[];
-  focus: number;
-  setTasks: (tasks: any[]) => void;
-  setInterruptions: (interruptions: any[]) => void;
-  setFocus: (time: number) => void;
+  task: string;
+  interruptions: number;
+  focus: string;
+  setTask: (tasks: string) => void;
+  setInterruptions: (interruptions: number) => void;
+  setFocus: (time: string) => void;
   saveSession: () => Promise<void>;
 }
 
@@ -18,22 +18,19 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [interruptions, setInterruptions] = useState<any[]>([]);
-  const [focus, setFocus] = useState(0);
+  const [task, setTask] = useState<string>("");
+  const [interruptions, setInterruptions] = useState<number>(0);
+  const [focus, setFocus] = useState<string>("");
   const { create } = useCreateSession();
 
   const saveSession = async () => {
     try {
-      console.log(focus);
       const data = {
-        tasks,
+        task,
         focus,
         interruptions,
       };
-
-      const res = await create(data);
-      console.log(res);
+      await create(data);
     } catch (e) {
       console.error(e);
     }
@@ -42,10 +39,10 @@ export const SessionProvider = ({
   return (
     <SessionContext.Provider
       value={{
-        tasks,
+        task,
         interruptions,
         focus,
-        setTasks,
+        setTask,
         setInterruptions,
         setFocus,
         saveSession,

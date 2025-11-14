@@ -8,11 +8,11 @@ import { useSession } from "../hooks/useSession";
 
 function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // const { focus, saveSession } = useSession();
+  const { focus, saveSession } = useSession();
 
-  // useEffect(() => {
-  //   saveSession();
-  // }, [focus]);
+  useEffect(() => {
+    saveSession();
+  }, [focus]);
 
   return (
     <div className="flex">

@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useSession } from "../../hooks/useSession";
 
 function Interruptions() {
-  let [count, setCount] = useState(0);
+  const { interruptions, setInterruptions } = useSession();
 
   return (
     <div className="flex items-center justify-center gap-2 mb-6">
       <p>Interruptions</p>
       <span className="cursor-pointer">
-        <i onClick={() => setCount(count + 1)} className="bi bi-plus-lg" />
+        <i
+          onClick={() => setInterruptions(interruptions + 1)}
+          className="bi bi-plus-lg"
+        />
       </span>
-      <span className="text-lg font-bold">{count}</span>
+      <span className="text-lg font-bold">{interruptions}</span>
     </div>
   );
 }
