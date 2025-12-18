@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { createSessionService } from "../api/services/sessionService";
+import sessionsService from "../services/sessions.service";
 
 export const useCreateSession = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>();
 
-  const create = async (data: any) => {
+  const createSession = async (data: any) => {
     setLoading(true);
     setError(null);
 
     try {
-      const res = await createSessionService(data);
+      const res = await sessionsService.createSession(data);
       return res;
     } catch (e: any) {
-      setError("Erro ao salvar a sessão");
+      setError("Error: " + e.message);
       throw e;
     } finally {
       setLoading(false);
@@ -23,6 +23,6 @@ export const useCreateSession = () => {
   return {
     loading,
     error,
-    create,
+    createSession,
   };
 };

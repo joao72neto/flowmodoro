@@ -2,17 +2,11 @@ import Timer from "../components/home/Timer";
 import Interruptions from "../components/home/Interruptions";
 import TaskSelector from "../components/home/TaskSelector";
 import SideBar from "../components/home/SideBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import IconButton from "../components/common/btn/IconButton";
-import { useSession } from "../hooks/useSession";
 
 function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { focus, saveSession } = useSession();
-
-  useEffect(() => {
-    saveSession();
-  }, [focus]);
 
   return (
     <div className="flex">

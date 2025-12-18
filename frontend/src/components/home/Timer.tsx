@@ -7,10 +7,10 @@ function Timer() {
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
   const [seconds, setSeconds] = useState(0);
   const { setFocus } = useSession();
+  const { saveSession } = useSession();
 
   const intervalRef = useRef<number | null>(null);
 
-  // Running timer
   useEffect(() => {
     if (mode) {
       intervalRef.current = setInterval(() => {
@@ -48,6 +48,7 @@ function Timer() {
     const breakTime = Math.floor(seconds * BREAK_RATIO);
     setSeconds(breakTime);
     setFocus((seconds / 60).toFixed(2));
+    saveSession();
   };
 
   const startBreak = () => {

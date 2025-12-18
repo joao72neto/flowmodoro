@@ -21,7 +21,7 @@ export const SessionProvider = ({
   const [task, setTask] = useState<string>("");
   const [interruptions, setInterruptions] = useState<number>(0);
   const [focus, setFocus] = useState<string>("");
-  const { create } = useCreateSession();
+  const { createSession } = useCreateSession();
 
   const saveSession = async () => {
     try {
@@ -30,9 +30,10 @@ export const SessionProvider = ({
         focus,
         interruptions,
       };
-      await create(data);
-    } catch (e) {
-      console.error(e);
+      await createSession(data);
+      alert("Session saved successfully!");
+    } catch (e: any) {
+      alert(e.message);
     }
   };
 
