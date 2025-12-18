@@ -1,7 +1,21 @@
-const bgColors = {
-  secondary: "#6c757d",
-  danger: "#dc3545",
-  primary: "#E6B14D",
+import clsx from "clsx";
+
+const baseStyle = clsx(
+  "px-5",
+  "py-2",
+  "rounded-2xl",
+  "cursor-pointer",
+  "font-semibold",
+  "text-white",
+  "border-white/10",
+  "hover:shadow-[0_0_10px_rgba(255,255,255,0.1)]",
+  "transition"
+);
+
+const variants = {
+  primary: clsx(baseStyle, "bg-primary"),
+  secondary: clsx(baseStyle, "bg-secondary"),
+  danger: clsx(baseStyle, "bg-danger"),
 };
 
 function Button({
@@ -16,20 +30,7 @@ function Button({
   onClick?: () => void;
 }) {
   return (
-    <button
-      onClick={onClick}
-      className="
-        px-5 
-        py-2 
-        rounded-2xl 
-        cursor-pointer 
-        font-semibold 
-        text-white 
-        border-white/10
-        hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] 
-        transition"
-      style={{ backgroundColor: variant ? bgColors[variant] : "#000" }}
-    >
+    <button onClick={onClick} className={variants[variant || "primary"]}>
       {icon && <span className="mr-2">{icon}</span>}
       {children}
     </button>
