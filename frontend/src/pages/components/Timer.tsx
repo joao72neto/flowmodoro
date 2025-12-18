@@ -78,31 +78,35 @@ function Timer() {
         {mode === null ? (
           <Button
             onClick={() => startFocus()}
-            text="Start"
             variant="danger"
             icon={<i className="bi bi-play-fill" />}
-          />
+          >
+            Start
+          </Button>
         ) : mode === "focus" ? (
           <Button
             onClick={() => stopFocus()}
-            text="Stop"
             variant="secondary"
             icon={<i className="bi bi-x-lg" />}
-          />
+          >
+            Stop
+          </Button>
         ) : mode === "stopped" ? (
           <Button
             onClick={() => startBreak()}
-            text="Break"
             variant="primary"
             icon={<i className="bi bi-play-fill" />}
-          />
+          >
+            Break
+          </Button>
         ) : (
           <Button
             onClick={() => skipBreak()}
-            text="Skip Break"
             variant="secondary"
             icon={<i className="bi bi-skip-end-fill" />}
-          />
+          >
+            Skip Break
+          </Button>
         )}
       </div>
     </>

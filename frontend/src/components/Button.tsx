@@ -1,18 +1,18 @@
 const bgColors = {
   secondary: "#6c757d",
   danger: "#dc3545",
-  primary: "#E6B14D"
+  primary: "#E6B14D",
 };
 
 function Button({
   icon,
   variant,
-  text,
-  onClick
+  children,
+  onClick,
 }: {
   icon?: React.ReactNode;
   variant?: "secondary" | "danger" | "primary";
-  text?: string;
+  children: React.ReactNode;
   onClick?: () => void;
 }) {
   return (
@@ -31,7 +31,7 @@ function Button({
       style={{ backgroundColor: variant ? bgColors[variant] : "#000" }}
     >
       {icon && <span className="mr-2">{icon}</span>}
-      {text}
+      {children}
     </button>
   );
 }
