@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Button from "../common/btn/Button";
+import Button from "../../components/Button";
 import { useSession } from "../../hooks/useSession";
 
 function Timer() {

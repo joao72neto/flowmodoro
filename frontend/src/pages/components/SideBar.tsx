@@ -1,7 +1,7 @@
-import IconButton from "../common/btn/IconButton";
+import IconButton from "./buttons/IconButton";
 import Tasks from "./Tasks";
 
-function SideBar({onClick}: {onClick?: () => void}) {
+function SideBar({ onClick }: { onClick?: () => void }) {
   return (
     <div className="border-l bg-[#222] border-l-white/10 h-screen p-3 shadow-2xl">
       <IconButton

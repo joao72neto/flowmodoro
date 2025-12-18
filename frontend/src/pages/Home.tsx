@@ -1,9 +1,9 @@
-import Timer from "../components/home/Timer";
-import Interruptions from "../components/home/Interruptions";
-import TaskSelector from "../components/home/TaskSelector";
-import SideBar from "../components/home/SideBar";
+import Timer from "./components/Timer";
+import Interruptions from "./components/Interruptions";
+import TaskSelector from "./components/TaskSelector";
+import SideBar from "./components/SideBar";
 import { useState } from "react";
-import IconButton from "../components/common/btn/IconButton";
+import IconButton from "./components/buttons/IconButton";
 
 function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
