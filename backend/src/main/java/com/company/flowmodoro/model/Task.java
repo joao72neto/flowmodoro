@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tasks {
+public class Task {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

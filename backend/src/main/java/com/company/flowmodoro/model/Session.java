@@ -49,5 +49,5 @@ public class Session {
     private Date date;
 
     @OneToOne(mappedBy = "session")
-    private Tasks tasks;
+    private Task tasks;
 }
