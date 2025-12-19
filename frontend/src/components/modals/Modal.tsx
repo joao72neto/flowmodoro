@@ -20,7 +20,9 @@ const Modal = ({
 
         <div>{children}</div>
 
-        <Button variant="secondary">{buttonText ?? "Close"}</Button>
+        <Button onClick={onClose} variant="secondary">
+          {buttonText ?? "Close"}
+        </Button>
       </div>
     </div>
   );

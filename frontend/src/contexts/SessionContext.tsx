@@ -9,6 +9,8 @@ interface SessionContextType {
   setInterruptions: (interruptions: number) => void;
   setFocus: (time: string) => void;
   saveSession: () => Promise<void>;
+  error: string | undefined | null;
+  success: string | undefined | null;
 }
 
 export const SessionContext = createContext<SessionContextType | null>(null);
@@ -21,20 +23,15 @@ export const SessionProvider = ({
   const [task, setTask] = useState<string>("");
   const [interruptions, setInterruptions] = useState<number>(0);
   const [focus, setFocus] = useState<string>("");
-  const { createSession } = useCreateSession();
+  const { createSession, error, success } = useCreateSession();
 
   const saveSession = async () => {
-    try {
-      const data = {
-        task,
-        focus,
-        interruptions,
-      };
-      await createSession(data);
-      alert("Session saved successfully!");
-    } catch (e: any) {
-      alert(e.message);
-    }
+    const data = {
+      task,
+      focus,
+      interruptions,
+    };
+    await createSession(data);
   };
 
   return (
@@ -47,6 +44,8 @@ export const SessionProvider = ({
         setInterruptions,
         setFocus,
         saveSession,
+        error,
+        success,
       }}
     >
       {children}

@@ -2,13 +2,25 @@ import Timer from "./components/Timer";
 import Interruptions from "./components/Interruptions";
 import TaskSelector from "./components/TaskSelector";
 import SideBar from "./components/SideBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IconButton from "./components/buttons/IconButton";
 import Modal from "../components/modals/Modal";
+import { useSession } from "../hooks/useSession";
 
 function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const { error, success } = useSession();
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if (error || success) {
+      setShowModal(true);
+    }
+  }, [error, success]);
 
   return (
     <>
@@ -39,7 +51,14 @@ function Home() {
         </div>
       </div>
 
-      {showModal && <Modal title="Sucesso!">Deu muito bom</Modal>}
+      {showModal && (
+        <Modal
+          onClose={handleCloseModal}
+          title={error ? "Erro :(" : "Sucesso!"}
+        >
+          {error ?? success ?? "Nada aconteceu"}
+        </Modal>
+      )}
     </>
   );
 }
