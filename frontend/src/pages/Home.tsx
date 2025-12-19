@@ -8,7 +8,7 @@ import Modal from "../components/modals/Modal";
 
 function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showModal] = useState(false);
+  const [showModal] = useState(true);
 
   return (
     <>

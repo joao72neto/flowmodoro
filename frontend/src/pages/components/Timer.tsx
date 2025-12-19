@@ -60,7 +60,6 @@ function Timer() {
     setSeconds(0);
   };
 
-  // Formating time
   const formatTimer = (totalSeconds: number) => {
     const min = Math.floor(totalSeconds / 60)
       .toString()

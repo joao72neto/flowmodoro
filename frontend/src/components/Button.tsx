@@ -3,13 +3,17 @@ import clsx from "clsx";
 const baseStyle = clsx(
   "px-5",
   "py-2",
-  "rounded-2xl",
+  "rounded-xl",
   "cursor-pointer",
   "font-semibold",
   "text-white",
-  "border-white/10",
-  "hover:shadow-[0_0_10px_rgba(255,255,255,0.1)]",
-  "transition"
+  "border",
+  "border-gray-600/20",
+  "hover:bg-white/20",
+  "transition-all",
+  "duration-300",
+  "ease-in-out",
+  "focus:border-white/40"
 );
 
 const variants = {
@@ -23,14 +27,19 @@ function Button({
   variant,
   children,
   onClick,
+  className,
 }: {
   icon?: React.ReactNode;
   variant?: "secondary" | "danger" | "primary";
   children: React.ReactNode;
   onClick?: () => void;
+  className?: string;
 }) {
   return (
-    <button onClick={onClick} className={variants[variant || "primary"]}>
+    <button
+      onClick={onClick}
+      className={`${variants[variant || "primary"]} ${className}`}
+    >
       {icon && <span className="mr-2">{icon}</span>}
       {children}
     </button>
