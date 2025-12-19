@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.flowmodoro.dto.TaskDTO;
+import com.company.flowmodoro.mapper.TaskMapper;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.service.TaskService;
 
@@ -18,8 +20,12 @@ public class TaskController {
   @Autowired
   private TaskService taskService;
 
-  public ResponseEntity<Void> save(@RequestBody Task task) {
-    taskService.save(task);
+  @Autowired
+  private TaskMapper mapper;
+
+  public ResponseEntity<TaskDTO> save(@RequestBody TaskDTO task) {
+    Task taskEntity = taskService.save(mapper.toEntity(task));
+    taskService.save(taskEntity);
     return ResponseEntity.ok().build();
   }
 }
