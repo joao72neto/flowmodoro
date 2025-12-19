@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class TaskDTO {
   private String name;
   private Boolean checked;
-  private SessionDTO session;
 }

@@ -3,6 +3,7 @@ package com.company.flowmodoro.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +24,10 @@ public class TaskController {
   @Autowired
   private TaskMapper mapper;
 
+  @PostMapping
   public ResponseEntity<TaskDTO> save(@RequestBody TaskDTO task) {
     Task taskEntity = taskService.save(mapper.toEntity(task));
     taskService.save(taskEntity);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(mapper.toDTO(taskEntity));
   }
 }
