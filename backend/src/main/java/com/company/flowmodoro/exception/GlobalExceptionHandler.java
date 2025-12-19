@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
                 .message("Invalid Session")
                 .errors(ex.getErrors())
                 .build();
-                
+
         return ResponseEntity.badRequest().body(errorResponse);
     }
 }
