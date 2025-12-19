@@ -6,9 +6,14 @@ export const useCreateSession = () => {
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
 
+  const reset = () => {
+    setError(null);
+    setSuccess(null);
+  };
+
   const createSession = async (data: any) => {
     setLoading(true);
-    setError(null);
+    reset();
 
     try {
       const res = await sessionsService.createSession(data);
