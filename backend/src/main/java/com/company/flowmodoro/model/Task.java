@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,8 +31,7 @@ public class Task {
   @Column(name = "tsk_checked")
   private Boolean checked;
 
-  @OneToOne
-  @JoinColumn(name = "tsk_ses_id")
+  @OneToOne(mappedBy = "tasks")
   private Session session;
 
 }

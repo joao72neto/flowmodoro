@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,9 +30,6 @@ public class Session {
     @Column(name = "ses_id")
     private Long id;
 
-    @Column(name = "ses_task")
-    private String task;
-
     @Column(name = "ses_focus")
     private Double focus;
 
@@ -48,6 +46,7 @@ public class Session {
     @CreationTimestamp
     private Date date;
 
-    @OneToOne(mappedBy = "session")
+    @OneToOne()
+    @JoinColumn(name = "ses_tsk_id")
     private Task tasks;
 }
