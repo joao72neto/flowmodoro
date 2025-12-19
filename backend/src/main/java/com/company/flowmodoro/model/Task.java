@@ -37,4 +37,3 @@ public class Task {
   private Session session;
 
 }
-
