@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.company.flowmodoro.exception.InvalidSessionException;
 import com.company.flowmodoro.model.Session;
+import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.SessionRespository;
+import com.company.flowmodoro.repository.TaskRepository;
 
 @Service
 public class SessionService {
@@ -18,9 +20,27 @@ public class SessionService {
     @Autowired
     private SessionRespository sessionRespository;
 
-    public Session save(Session session) {
+    @Autowired
+    private TaskRepository taskRepository;
+
+    public Session save(Session session, Long taskId) {
+
+        List<String> errors = new ArrayList<>();
+
+        if (taskId == null) {
+            errors.add("Task id can't be null");
+            throw new InvalidSessionException(errors);
+        }
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new InvalidSessionException(
+                        List.of("Task not found")));
+
         calculateRest(session);
-        validateSessions(session);
+        validateSessions(session, errors);
+
+        session.setTask(task);
+
         return sessionRespository.save(session);
     }
 
@@ -38,9 +58,7 @@ public class SessionService {
         session.setRest(Math.round(rest * 100.0) / 100.0);
     }
 
-    private void validateSessions(Session session) {
-
-        List<String> errors = new ArrayList<>();
+    private void validateSessions(Session session, List<String> errors) {
 
         if (session.getFocus() <= 0) {
             errors.add("Focus needs to be greater than 0");

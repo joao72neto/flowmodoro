@@ -2,25 +2,19 @@ package com.company.flowmodoro.mapper;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.company.flowmodoro.dto.SessionDTO;
 import com.company.flowmodoro.model.Session;
-import com.company.flowmodoro.repository.TaskRepository;
 
 @Component
 public class SessionMapper {
-
-    @Autowired
-    private TaskRepository taskRepository;
 
     public Session toEntity(SessionDTO sessionDTO) {
         return Session.builder()
                 .focus(sessionDTO.getFocus())
                 .ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
                 .interruptions(sessionDTO.getInterruptions())
-                .task(taskRepository.findById(sessionDTO.getTask().getId()).orElse(null))
                 .build();
     }
 
