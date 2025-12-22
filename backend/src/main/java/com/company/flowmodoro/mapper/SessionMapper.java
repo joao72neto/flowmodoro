@@ -2,6 +2,7 @@ package com.company.flowmodoro.mapper;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.company.flowmodoro.dto.SessionDTO;
@@ -9,6 +10,9 @@ import com.company.flowmodoro.model.Session;
 
 @Component
 public class SessionMapper {
+
+    @Autowired
+    private TaskMapper mapper;
 
     public Session toEntity(SessionDTO sessionDTO) {
         return Session.builder()
@@ -29,7 +33,7 @@ public class SessionMapper {
                 .rest(session.getRest())
                 .interruptions(session.getInterruptions())
                 .date(session.getDate())
-                .task(session.getTask())
+                .task(mapper.toDTO(session.getTask()))
                 .build();
     }
 
