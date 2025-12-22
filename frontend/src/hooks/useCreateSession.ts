@@ -11,12 +11,12 @@ export const useCreateSession = () => {
     setSuccess(null);
   };
 
-  const createSession = async (data: any) => {
+  const createSession = async (data: any, taskId: number) => {
     setLoading(true);
     reset();
 
     try {
-      const res = await sessionsService.createSession(data);
+      const res = await sessionsService.createSession(data, taskId);
       setSuccess("Session created successfully");
       return res;
     } catch (e: any) {
