@@ -2,6 +2,8 @@ package com.company.flowmodoro.dto;
 
 import java.sql.Date;
 
+import com.company.flowmodoro.model.Task;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +19,5 @@ public class SessionDTO {
     private Double rest;
     private Integer interruptions;
     private Date date;
+    private Task task;
 }

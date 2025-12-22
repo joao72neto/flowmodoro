@@ -31,7 +31,7 @@ public class Task {
   @Column(name = "tsk_checked")
   private Boolean checked;
 
-  @OneToOne(mappedBy = "tasks")
+  @OneToOne(mappedBy = "task")
   private Session session;
 
 }

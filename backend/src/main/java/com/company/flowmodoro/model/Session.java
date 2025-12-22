@@ -48,5 +48,5 @@ public class Session {
 
     @OneToOne()
     @JoinColumn(name = "ses_tsk_id")
-    private Task tasks;
+    private Task task;
 }
