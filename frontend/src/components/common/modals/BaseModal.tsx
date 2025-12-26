@@ -1,6 +1,6 @@
-import Button from "./Button";
+import Button from "../Button";
 
-const Modal = ({
+const BaseModal = ({
   title,
   children,
   buttonText,
@@ -28,4 +28,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default BaseModal;
