@@ -1,10 +1,10 @@
-import Timer from "./components/Timer";
-import Interruptions from "./components/Interruptions";
-import TaskSelector from "./components/TaskSelector";
-import SideBar from "./components/SideBar";
+import Timer from "../components/home/Timer";
+import Interruptions from "../components/home/Interruptions";
+import TaskSelector from "../components/home/TaskSelector";
+import SideBar from "../components/layout/SideBar";
 import { useEffect, useState } from "react";
-import IconButton from "./components/buttons/IconButton";
-import Modal from "../components/modals/Modal";
+import IconButton from "../components/home/buttons/IconButton";
+import Modal from "../components/common/Modal";
 import { useSession } from "../hooks/useSession";
 
 function Home() {

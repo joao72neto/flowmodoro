@@ -1,7 +1,7 @@
 import { useState } from "react";
 import IconButton from "./buttons/IconButton";
 import TaskButton from "./buttons/TaskButton";
-import Input from "../../components/Input";
+import Input from "../common/Input";
 import useCreateTask from "../../hooks/useCreateTask";
 
 function Tasks() {

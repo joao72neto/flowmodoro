@@ -2,7 +2,7 @@ function Input({
   placeholder,
   onKeyDown,
   onChange,
-  value
+  value,
 }: {
   placeholder: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
