@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,13 +42,13 @@ public class TaskController {
     return ResponseEntity.status(201).body(mapper.toDTO(saved));
   }
 
-  @PostMapping("/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<TaskDTO> update(@PathVariable Long id, @RequestBody TaskDTO task) {
     Task taskEntity = taskService.update(id, mapper.toEntity(task));
     return ResponseEntity.ok(mapper.toDTO(taskEntity));
   }
 
-  @PostMapping("/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     taskService.deleteById(id);
     return ResponseEntity.noContent().build();
