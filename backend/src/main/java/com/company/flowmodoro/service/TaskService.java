@@ -40,14 +40,12 @@ public class TaskService {
   }
 
   @Transactional
-  public Task update(Long id, Task task) {
+  public Task updateStatus(Long id, Task task) {
     Task taskToUpdate = taskRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Task not found"));
 
-    taskToUpdate.setName(task.getName());
     taskToUpdate.setChecked(task.getChecked());
 
-    taskRepository.save(taskToUpdate);
     return taskToUpdate;
   }
 }
