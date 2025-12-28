@@ -1,5 +1,7 @@
 package com.company.flowmodoro.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.company.flowmodoro.dto.TaskDTO;
@@ -19,5 +21,9 @@ public class TaskMapper {
         .name(task.getName())
         .checked(task.getChecked())
         .build();
+  }
+
+  public List<TaskDTO> toDTO(List<Task> tasks) {
+    return tasks.stream().map(this::toDTO).toList();
   }
 }

@@ -2,35 +2,52 @@ package com.company.flowmodoro.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.TaskRepository;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class TaskService {
 
-  @Autowired
-  private TaskRepository taskRepository;
+  private final TaskRepository taskRepository;
+
+  public TaskService(TaskRepository taskRepository) {
+    this.taskRepository = taskRepository;
+  }
 
   public List<Task> consult() {
     return taskRepository.findAll();
   }
 
+  public Task findById(Long id) {
+    return taskRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Task not found"));
+  }
+
   public Task save(Task task) {
-    taskRepository.save(task);
-    return task;
+    return taskRepository.save(task);
   }
 
-  public Task delete(Task task) {
-    taskRepository.deleteById(task.getId());
-    return task;
+  @Transactional
+  public void deleteById(Long id) {
+    Task taskToDelete = taskRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Task not found"));
+
+    taskRepository.delete(taskToDelete);
   }
 
-  public Task update(Task task) {
-    taskRepository.save(task);
-    return task;
-  }
+  @Transactional
+  public Task update(Long id, Task task) {
+    Task taskToUpdate = taskRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Task not found"));
 
+    taskToUpdate.setName(task.getName());
+    taskToUpdate.setChecked(task.getChecked());
+
+    taskRepository.save(taskToUpdate);
+    return taskToUpdate;
+  }
 }
