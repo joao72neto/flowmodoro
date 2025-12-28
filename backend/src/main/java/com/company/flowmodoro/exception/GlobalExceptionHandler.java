@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidSessionException.class)
     public ResponseEntity<ErrorResponse> handleInvalidSession(InvalidSessionException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .message("Invalid Session")
+                .code(ex.getCode())
                 .errors(ex.getErrors())
                 .build();
 
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidTaskException.class)
     public ResponseEntity<ErrorResponse> handleInvalidTask(InvalidTaskException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .message("Invalid Task")
+                .code(ex.getCode())
                 .errors(ex.getErrors())
                 .build();
 

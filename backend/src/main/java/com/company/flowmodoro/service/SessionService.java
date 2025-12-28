@@ -12,10 +12,13 @@ import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.SessionRespository;
 import com.company.flowmodoro.repository.TaskRepository;
 
+import com.company.flowmodoro.enums.ErrorCode;
+
 @Service
 public class SessionService {
 
     private static final Double RATIO = 0.2;
+    private static final ErrorCode ERROR_CODE = ErrorCode.TASK_NOT_FOUND;
 
     @Autowired
     private SessionRespository sessionRespository;
@@ -29,12 +32,12 @@ public class SessionService {
 
         if (taskId == null) {
             errors.add("Task id can't be null");
-            throw new InvalidSessionException(errors);
+            throw new InvalidSessionException(ErrorCode.TASK_ID_CAN_NOT_BE_NULL, errors);
         }
 
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new InvalidSessionException(
-                        List.of("Task not found")));
+                        ERROR_CODE, "Task not found"));
 
         calculateRest(session);
         validateSessions(session, errors);
@@ -73,7 +76,7 @@ public class SessionService {
         }
 
         if (!errors.isEmpty()) {
-            throw new InvalidSessionException(errors);
+            throw new InvalidSessionException(ErrorCode.INVALID_SESSION, errors);
         }
     }
 }

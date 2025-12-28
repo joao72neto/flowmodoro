@@ -2,6 +2,8 @@ package com.company.flowmodoro.dto;
 
 import java.util.List;
 
+import com.company.flowmodoro.enums.ErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse {
-    private String message;
+    private ErrorCode code;
     private List<String> errors;
 }
