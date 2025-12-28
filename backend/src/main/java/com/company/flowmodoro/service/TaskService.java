@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.company.flowmodoro.exception.InvalidTaskException;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.TaskRepository;
 
@@ -24,7 +25,7 @@ public class TaskService {
 
   public Task findById(Long id) {
     return taskRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Task not found"));
+        .orElseThrow(() -> new InvalidTaskException("Task not found"));
   }
 
   public Task save(Task task) {
@@ -34,7 +35,7 @@ public class TaskService {
   @Transactional
   public void deleteById(Long id) {
     Task taskToDelete = taskRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Task not found"));
+        .orElseThrow(() -> new InvalidTaskException("Task not found to delete"));
 
     taskRepository.delete(taskToDelete);
   }
@@ -42,7 +43,7 @@ public class TaskService {
   @Transactional
   public Task updateStatus(Long id, Task task) {
     Task taskToUpdate = taskRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Task not found"));
+        .orElseThrow(() -> new InvalidTaskException("Task not found to update status"));
 
     taskToUpdate.setChecked(task.getChecked());
 
