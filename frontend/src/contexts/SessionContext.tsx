@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { useCreateSession } from "../hooks/sessions/useCreateSession";
+import useSession from "../hooks/sessions/useSession";
 
 interface SessionContextType {
   task: string;
@@ -23,7 +23,7 @@ export const SessionProvider = ({
   const [task, setTask] = useState<string>("");
   const [interruptions, setInterruptions] = useState<number>(0);
   const [focus, setFocus] = useState<string>("");
-  const { error, success } = useCreateSession();
+  const { error, success } = useSession();
 
   const saveSession = async () => {
     // const data = {

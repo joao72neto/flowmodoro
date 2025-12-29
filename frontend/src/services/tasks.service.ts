@@ -1,7 +1,8 @@
+import type { TaskModel } from "../types/tasks.types";
 import api from "./api";
 
 class TaskService {
-  async createTask(data: any) {
+  async createTask(data: TaskModel) {
     return await api.post("/task", data);
   }
 

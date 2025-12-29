@@ -1,7 +1,7 @@
-import { useSession } from "../../hooks/sessions/useSession";
+import { useSessionContext } from "../../hooks/sessions/useSessionContext";
 
 function Interruptions() {
-  const { interruptions, setInterruptions } = useSession();
+  const { interruptions, setInterruptions } = useSessionContext();
 
   return (
     <div className="flex items-center justify-center gap-2 mb-6">

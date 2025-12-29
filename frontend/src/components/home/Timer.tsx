@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../common/Button";
-import { useSession } from "../../hooks/sessions/useSession";
+import { useSessionContext } from "../../hooks/sessions/useSessionContext";
 
 function Timer() {
   const BREAK_RATIO = 0.2;
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
   const [seconds, setSeconds] = useState(0);
-  const { setFocus } = useSession();
-  const { saveSession } = useSession();
+  const { setFocus, saveSession } = useSessionContext();
 
   const intervalRef = useRef<number | null>(null);
 

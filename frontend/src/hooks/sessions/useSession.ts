@@ -1,10 +1,39 @@
-import { useContext } from "react";
-import { SessionContext } from "../../contexts/SessionContext";
+import { useState } from "react";
+import sessionsService from "../../services/sessions.service";
+import type { SessionRequest } from "../../types/sessions.types";
 
-export const useSession = () => {
-  const context = useContext(SessionContext);
-  if (!context)
-    throw new Error("useSession must be used within a SessionProvider");
+const useSession = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>();
+  const [success, setSuccess] = useState<string | null>();
 
-  return context;
+  const reset = () => {
+    setError(null);
+    setSuccess(null);
+  };
+
+  const createSession = async (taskId: number, data: SessionRequest) => {
+    setLoading(true);
+    reset();
+
+    try {
+      const res = await sessionsService.createSession(data, taskId);
+      setSuccess("Session created successfully");
+      return res;
+    } catch (e: any) {
+      setError(e.message);
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    loading,
+    error,
+    createSession,
+    success,
+  };
 };
+
+export default useSession;

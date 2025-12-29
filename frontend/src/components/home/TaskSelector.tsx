@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { useSession } from "../../hooks/sessions/useSession";
+import { useSessionContext } from "../../hooks/sessions/useSessionContext";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState("Select a task...");
   const tasks = ["Task 1", "Task 2", "Task 3", "Task 4"];
   const ref = useRef<HTMLDivElement>(null);
-  const { setTask } = useSession();
+  const { setTask } = useSessionContext();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
