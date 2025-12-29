@@ -1,27 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IconButton from "./buttons/IconButton";
 import TaskButton from "./buttons/TaskButton";
 import Input from "../common/Input";
 import useTasks from "../../hooks/useTasks";
+import clsx from "clsx";
 
 function Tasks() {
-  type Task = {
-    text: string;
-    completed: boolean;
-  };
-
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
+  const { createTask, fetchTasks, tasks } = useTasks();
 
-  const { createTask } = useTasks();
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks, tasks]);
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;
-    setTasks([{ text: newTask, completed: false }, ...tasks]);
-    setNewTask("");
 
     try {
       await createTask({ name: newTask, checked: false });
+      setNewTask("");
     } catch (e: any) {
       console.log(e);
     }
@@ -33,21 +30,8 @@ function Tasks() {
     }
   };
 
-  const handleRemoveTask = (index: number) => {
-    setTasks(tasks.filter((_, i) => i !== index));
-  };
-
-  const handleCompleteTask = (index: number) => {
-    const updatedTasks = [...tasks];
-    const selectedTask = { ...updatedTasks[index] };
-
-    selectedTask.completed = !selectedTask.completed;
-    updatedTasks.splice(index, 1);
-
-    const newTasks = [...updatedTasks, selectedTask];
-
-    setTasks([...newTasks]);
-  };
+  const handleRemoveTask = (index: number) => {};
+  const handleCompleteTask = (index: number) => {};
 
   return (
     <>
@@ -66,25 +50,19 @@ function Tasks() {
             {tasks.map((task, index) => (
               <li
                 key={index}
-                className={`
-                shadow-xl
-                border-t
-                border-b
-                border-white/10
-                px-4
-                py-3
-                rounded
-                flex
-                justify-between
-                ${task.completed ? "line-through" : ""}
-              `}
+                className={clsx(
+                  "shadow-xl border-t border-b border-white/10 px-4 py-3 rounded flex justify-between",
+                  {
+                    "line-through": task.checked,
+                  }
+                )}
               >
                 <div className="flex items-center">
                   <TaskButton
                     onClick={() => handleCompleteTask(index)}
-                    taskCompleted={task.completed}
+                    taskCompleted={task.checked}
                   />
-                  <span>{task.text}</span>
+                  <span>{task.name}</span>
                 </div>
                 <IconButton
                   icon={<i className="bi bi-x-lg" />}
