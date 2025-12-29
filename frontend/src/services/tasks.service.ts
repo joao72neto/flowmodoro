@@ -1,4 +1,4 @@
-import type { TaskModel } from "../types/tasks.types";
+import type { TaskModel, UpdateTaskRequest } from "../types/tasks.types";
 import api from "./api";
 
 class TaskService {
@@ -8,6 +8,14 @@ class TaskService {
 
   async fetchTasks() {
     return await api.get("/task");
+  }
+
+  async deleteTask(id: number) {
+    return await api.delete(`/task/${id}`);
+  }
+
+  async updateTaskStatus(id: number, data: UpdateTaskRequest) {
+    return await api.patch(`/task/${id}`, data);
   }
 }
 

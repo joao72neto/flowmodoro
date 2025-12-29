@@ -1,6 +1,6 @@
 import { useState } from "react";
 import tasksService from "../services/tasks.service";
-import type { TaskModel } from "../types/tasks.types";
+import type { TaskModel, UpdateTaskRequest } from "../types/tasks.types";
 
 const useTask = () => {
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,38 @@ const useTask = () => {
     }
   };
 
-  return { loading, tasks, createTask, fetchTasks };
+  const updateTaskStatus = async (id: number, data: UpdateTaskRequest) => {
+    setLoading(true);
+    try {
+      await tasksService.updateTaskStatus(id, data);
+      return true;
+    } catch (e: any) {
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteTask = async (id: number) => {
+    setLoading(true);
+    try {
+      await tasksService.deleteTask(id);
+      return true;
+    } catch (e: any) {
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    loading,
+    tasks,
+    createTask,
+    fetchTasks,
+    deleteTask,
+    updateTaskStatus,
+  };
 };
 
 export default useTask;

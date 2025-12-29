@@ -5,8 +5,8 @@ class SessionService {
   async getSessions() {
     return await api.get("/session");
   }
-  async createSession(data: SessionRequest, taskId: number) {
-    return await api.post(`/session/${taskId}`, data);
+  async createSession(id: number, data: SessionRequest) {
+    return await api.post(`/session/${id}`, data);
   }
 }
 

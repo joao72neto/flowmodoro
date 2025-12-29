@@ -12,12 +12,12 @@ const useSession = () => {
     setSuccess(null);
   };
 
-  const createSession = async (taskId: number, data: SessionRequest) => {
+  const createSession = async (id: number, data: SessionRequest) => {
     setLoading(true);
     reset();
 
     try {
-      const res = await sessionsService.createSession(data, taskId);
+      const res = await sessionsService.createSession(id, data);
       setSuccess("Session created successfully");
       return res;
     } catch (e: any) {
