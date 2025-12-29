@@ -1,7 +1,7 @@
 import Timer from "../components/home/Timer";
 import Interruptions from "../components/home/Interruptions";
 import TaskSelector from "../components/home/TaskSelector";
-import { useSession } from "../hooks/useSession";
+import { useSession } from "../hooks/sessions/useSession";
 import MainLayout from "../layouts/MainLayout";
 import Modal from "../components/common/modals/Modal";
 function Home() {

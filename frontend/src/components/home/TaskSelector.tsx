@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSession } from "../../hooks/useSession";
+import { useSession } from "../../hooks/sessions/useSession";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);

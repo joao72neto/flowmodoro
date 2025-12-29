@@ -1,5 +1,5 @@
 import { useState } from "react";
-import sessionsService from "../services/sessions.service";
+import sessionsService from "../../services/sessions.service";
 
 export const useCreateSession = () => {
   const [loading, setLoading] = useState(false);

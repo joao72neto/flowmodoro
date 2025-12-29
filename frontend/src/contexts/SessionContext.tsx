@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { useCreateSession } from "../hooks/useCreateSession";
+import { useCreateSession } from "../hooks/sessions/useCreateSession";
 
 interface SessionContextType {
   task: string;

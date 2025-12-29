@@ -1,4 +1,4 @@
-import { useSession } from "../../hooks/useSession";
+import { useSession } from "../../hooks/sessions/useSession";
 
 function Interruptions() {
   const { interruptions, setInterruptions } = useSession();

@@ -2,7 +2,7 @@ import { useState } from "react";
 import IconButton from "./buttons/IconButton";
 import TaskButton from "./buttons/TaskButton";
 import Input from "../common/Input";
-import useCreateTask from "../../hooks/useCreateTask";
+import useTasks from "../../hooks/useTasks";
 
 function Tasks() {
   type Task = {
@@ -13,7 +13,7 @@ function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
 
-  const { createTask } = useCreateTask();
+  const { createTask } = useTasks();
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;

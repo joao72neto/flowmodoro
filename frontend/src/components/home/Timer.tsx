@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../common/Button";
-import { useSession } from "../../hooks/useSession";
+import { useSession } from "../../hooks/sessions/useSession";
 
 function Timer() {
   const BREAK_RATIO = 0.2;
