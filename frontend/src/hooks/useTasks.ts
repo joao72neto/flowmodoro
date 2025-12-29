@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import tasksService from "../services/tasks.service";
 import type { TaskModel, UpdateTaskRequest } from "../types/tasks.types";
 
@@ -6,7 +6,7 @@ const useTask = () => {
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<TaskModel[]>([]);
 
-  const createTask = async (data: TaskModel) => {
+  const createTask = useCallback(async (data: TaskModel) => {
     setLoading(true);
 
     try {
@@ -17,9 +17,9 @@ const useTask = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     setLoading(true);
     try {
       const res = await tasksService.fetchTasks();
@@ -31,21 +31,24 @@ const useTask = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const updateTaskStatus = async (id: number, data: UpdateTaskRequest) => {
-    setLoading(true);
-    try {
-      await tasksService.updateTaskStatus(id, data);
-      return true;
-    } catch (e: any) {
-      throw e;
-    } finally {
-      setLoading(false);
-    }
-  };
+  const updateTaskStatus = useCallback(
+    async (id: number, data: UpdateTaskRequest) => {
+      setLoading(true);
+      try {
+        await tasksService.updateTaskStatus(id, data);
+        return true;
+      } catch (e: any) {
+        throw e;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
-  const deleteTask = async (id: number) => {
+  const deleteTask = useCallback(async (id: number) => {
     setLoading(true);
     try {
       await tasksService.deleteTask(id);
@@ -55,7 +58,7 @@ const useTask = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   return {
     loading,

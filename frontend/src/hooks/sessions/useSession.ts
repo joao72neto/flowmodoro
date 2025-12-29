@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import sessionsService from "../../services/sessions.service";
 import type { SessionRequest } from "../../types/sessions.types";
 
@@ -12,21 +12,24 @@ const useSession = () => {
     setSuccess(null);
   };
 
-  const createSession = async (id: number, data: SessionRequest) => {
-    setLoading(true);
-    reset();
+  const createSession = useCallback(
+    async (id: number, data: SessionRequest) => {
+      setLoading(true);
+      reset();
 
-    try {
-      const res = await sessionsService.createSession(id, data);
-      setSuccess("Session created successfully");
-      return res;
-    } catch (e: any) {
-      setError(e.message);
-      throw e;
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const res = await sessionsService.createSession(id, data);
+        setSuccess("Session created successfully");
+        return res;
+      } catch (e: any) {
+        setError(e.message);
+        throw e;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   return {
     loading,
