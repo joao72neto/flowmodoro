@@ -58,7 +58,8 @@ function TaskSelector() {
             "rounded-xl",
             "shadow-lg",
             "text-center",
-            "overflow-hidden z-10"
+            "overflow-auto z-10",
+            "h-80"
           )}
         >
           {tasks.map((task, index) => (
