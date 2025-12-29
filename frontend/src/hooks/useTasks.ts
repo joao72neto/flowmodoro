@@ -1,12 +1,16 @@
 import { useCallback, useState } from "react";
 import tasksService from "../services/tasks.service";
-import type { TaskModel, UpdateTaskRequest } from "../types/tasks.types";
+import type {
+  TaskModel,
+  TaskRequest,
+  UpdateTaskRequest,
+} from "../types/tasks.types";
 
 const useTask = () => {
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<TaskModel[]>([]);
 
-  const createTask = useCallback(async (data: TaskModel) => {
+  const createTask = useCallback(async (data: TaskRequest) => {
     setLoading(true);
 
     try {

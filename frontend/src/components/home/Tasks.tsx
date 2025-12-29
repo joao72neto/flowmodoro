@@ -7,17 +7,18 @@ import clsx from "clsx";
 
 function Tasks() {
   const [newTask, setNewTask] = useState("");
-  const { createTask, fetchTasks, tasks } = useTasks();
+  const { createTask, fetchTasks, tasks, deleteTask } = useTasks();
 
   useEffect(() => {
     fetchTasks();
-  }, [fetchTasks, tasks]);
+  }, [fetchTasks]);
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;
 
     try {
       await createTask({ name: newTask, checked: false });
+      await fetchTasks();
       setNewTask("");
     } catch (e: any) {
       console.log(e);
@@ -30,8 +31,15 @@ function Tasks() {
     }
   };
 
-  const handleRemoveTask = (index: number) => {};
-  const handleCompleteTask = (index: number) => {};
+  const handleRemoveTask = async (id: number) => {
+    try {
+      await deleteTask(id);
+      await fetchTasks();
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+  // const handleCompleteTask = (index: number) => {};
 
   return (
     <>
@@ -47,9 +55,9 @@ function Tasks() {
         </div>
         {tasks.length > 0 && (
           <ul className="space-y-2">
-            {tasks.map((task, index) => (
+            {tasks.map((task) => (
               <li
-                key={index}
+                key={task.id}
                 className={clsx(
                   "shadow-xl border-t border-b border-white/10 px-4 py-3 rounded flex justify-between",
                   {
@@ -58,15 +66,12 @@ function Tasks() {
                 )}
               >
                 <div className="flex items-center">
-                  <TaskButton
-                    onClick={() => handleCompleteTask(index)}
-                    taskCompleted={task.checked}
-                  />
+                  <TaskButton onClick={() => {}} taskCompleted={task.checked} />
                   <span>{task.name}</span>
                 </div>
                 <IconButton
                   icon={<i className="bi bi-x-lg" />}
-                  onClick={() => handleRemoveTask(index)}
+                  onClick={() => handleRemoveTask(task.id)}
                 />
               </li>
             ))}

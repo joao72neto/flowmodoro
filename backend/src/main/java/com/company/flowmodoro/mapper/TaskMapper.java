@@ -11,6 +11,7 @@ import com.company.flowmodoro.model.Task;
 public class TaskMapper {
   public Task toEntity(TaskDTO taskDTO) {
     return Task.builder()
+        .id(taskDTO.getId())
         .name(taskDTO.getName())
         .checked(taskDTO.getChecked())
         .build();
@@ -18,6 +19,7 @@ public class TaskMapper {
 
   public TaskDTO toDTO(Task task) {
     return TaskDTO.builder()
+        .id(task.getId())
         .name(task.getName())
         .checked(task.getChecked())
         .build();
