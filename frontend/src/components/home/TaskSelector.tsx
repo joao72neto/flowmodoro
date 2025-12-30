@@ -5,7 +5,7 @@ import clsx from "clsx";
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const { tasks, selectedTask, setSelectedTask, setIsSidebarOpen } =
+  const { selectedTask, setSelectedTask, setIsSidebarOpen, undoneTasks } =
     useSessionContext();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function TaskSelector() {
     <div ref={ref} className="relative inline-block w-70 mb-15">
       <button
         onClick={() => {
-          tasks.length > 0 ? setIsOpen(!isOpen) : setIsSidebarOpen(true);
+          undoneTasks.length > 0 ? setIsOpen(!isOpen) : setIsSidebarOpen(true);
         }}
         className={clsx(
           "appearance-none",
@@ -38,14 +38,14 @@ function TaskSelector() {
         )}
       >
         {selectedTask}
-        {tasks.length > 0 ? (
+        {undoneTasks.length > 0 ? (
           <i className="bi bi-caret-down-fill ml-2 text-white/60"></i>
         ) : (
           <i className="bi bi-plus-lg ml-2 text-white/60"></i>
         )}
       </button>
 
-      {isOpen && tasks.length > 0 && (
+      {isOpen && undoneTasks.length > 0 && (
         <ul
           className={clsx(
             "absolute",
@@ -62,7 +62,7 @@ function TaskSelector() {
             "max-h-80"
           )}
         >
-          {tasks.map((task, index) => (
+          {undoneTasks.map((task, index) => (
             <li
               key={index}
               onClick={() => {

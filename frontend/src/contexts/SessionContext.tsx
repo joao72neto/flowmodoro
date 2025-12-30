@@ -13,6 +13,7 @@ interface SessionContextType {
   setSelectedTask: (task: string) => void;
   isSidebarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
+  undoneTasks: TaskModel[];
 }
 
 export const SessionContext = createContext<SessionContextType | null>(null);
@@ -27,13 +28,14 @@ export const SessionProvider = ({
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
     useTasks();
+  const undoneTasks = tasks.filter((task) => !task.checked);
 
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
   useEffect(() => {
-    if (tasks.length > 0) setSelectedTask(tasks[0].name);
+    if (undoneTasks.length > 0) setSelectedTask(undoneTasks[0].name);
     else setSelectedTask("Crie nova tarefa");
   }, [tasks]);
 
@@ -80,6 +82,7 @@ export const SessionProvider = ({
         setSelectedTask,
         isSidebarOpen,
         setIsSidebarOpen,
+        undoneTasks,
       }}
     >
       {children}
