@@ -1,16 +1,14 @@
-import React, { createContext, useState } from "react";
-import useSession from "../hooks/sessions/useSession";
+import React, { createContext, useEffect, useState } from "react";
+import useTasks from "../hooks/useTasks";
+import type { TaskModel } from "../types/tasks.types";
 
 interface SessionContextType {
-  task: string;
-  interruptions: number;
-  focus: string;
-  setTask: (tasks: string) => void;
-  setInterruptions: (interruptions: number) => void;
-  setFocus: (time: string) => void;
-  saveSession: () => Promise<void>;
-  error: string | undefined | null;
-  success: string | undefined | null;
+  handleAddTask: () => Promise<void>;
+  newTask: string;
+  setNewTask: (task: string) => void;
+  handleRemoveTask: (id: number) => Promise<void>;
+  handleCompleteTask: (index: number, checked: boolean) => Promise<void>;
+  tasks: TaskModel[];
 }
 
 export const SessionContext = createContext<SessionContextType | null>(null);
@@ -20,32 +18,52 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [task, setTask] = useState<string>("");
-  const [interruptions, setInterruptions] = useState<number>(0);
-  const [focus, setFocus] = useState<string>("");
-  const { error, success } = useSession();
+  const [newTask, setNewTask] = useState<string>("");
+  const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
+    useTasks();
 
-  const saveSession = async () => {
-    // const data = {
-    //   task,
-    //   focus,
-    //   interruptions,
-    // };
-    // await createSession(data);
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  const handleAddTask = async () => {
+    if (newTask.trim() === "") return;
+
+    try {
+      await createTask({ name: newTask, checked: false });
+      await fetchTasks();
+      setNewTask("");
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  const handleRemoveTask = async (id: number) => {
+    try {
+      await deleteTask(id);
+      await fetchTasks();
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+  const handleCompleteTask = async (index: number, checked: boolean) => {
+    try {
+      await updateTaskStatus(index, { checked: !checked });
+      await fetchTasks();
+    } catch (e: any) {
+      console.log(e);
+    }
   };
 
   return (
     <SessionContext.Provider
       value={{
-        task,
-        interruptions,
-        focus,
-        setTask,
-        setInterruptions,
-        setFocus,
-        saveSession,
-        error,
-        success,
+        handleAddTask,
+        newTask,
+        setNewTask,
+        handleCompleteTask,
+        handleRemoveTask,
+        tasks,
       }}
     >
       {children}

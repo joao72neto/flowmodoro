@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../common/Button";
-import { useSessionContext } from "../../hooks/sessions/useSessionContext";
 
 function Timer() {
   const BREAK_RATIO = 0.2;
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
   const [seconds, setSeconds] = useState(0);
-  const { setFocus, saveSession } = useSessionContext();
 
   const intervalRef = useRef<number | null>(null);
 
@@ -46,8 +44,8 @@ function Timer() {
     setMode("stopped");
     const breakTime = Math.floor(seconds * BREAK_RATIO);
     setSeconds(breakTime);
-    setFocus((seconds / 60).toFixed(2));
-    saveSession();
+    // setFocus((seconds / 60).toFixed(2));
+    // saveSession();
   };
 
   const startBreak = () => {

@@ -1,51 +1,22 @@
-import { useEffect, useState } from "react";
 import IconButton from "./buttons/IconButton";
 import TaskButton from "./buttons/TaskButton";
 import Input from "../common/Input";
-import useTasks from "../../hooks/useTasks";
 import clsx from "clsx";
+import { useSessionContext } from "../../hooks/sessions/useSessionContext";
 
 function Tasks() {
-  const [newTask, setNewTask] = useState("");
-  const { createTask, fetchTasks, tasks, deleteTask, updateTaskStatus } =
-    useTasks();
-
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
-
-  const handleAddTask = async () => {
-    if (newTask.trim() === "") return;
-
-    try {
-      await createTask({ name: newTask, checked: false });
-      await fetchTasks();
-      setNewTask("");
-    } catch (e: any) {
-      console.log(e);
-    }
-  };
+  const {
+    handleAddTask,
+    newTask,
+    setNewTask,
+    tasks,
+    handleCompleteTask,
+    handleRemoveTask,
+  } = useSessionContext();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleAddTask();
-    }
-  };
-
-  const handleRemoveTask = async (id: number) => {
-    try {
-      await deleteTask(id);
-      await fetchTasks();
-    } catch (e: any) {
-      console.log(e);
-    }
-  };
-  const handleCompleteTask = async (index: number, checked: boolean) => {
-    try {
-      await updateTaskStatus(index, { checked: !checked });
-      await fetchTasks();
-    } catch (e: any) {
-      console.log(e);
     }
   };
 

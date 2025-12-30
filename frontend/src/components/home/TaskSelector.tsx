@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useSessionContext } from "../../hooks/sessions/useSessionContext";
 import clsx from "clsx";
-import useTask from "../../hooks/useTasks";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState("Select a task...");
   const ref = useRef<HTMLDivElement>(null);
-  const { setTask } = useSessionContext();
-  const { fetchTasks, tasks } = useTask();
+  const { tasks } = useSessionContext();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -19,10 +17,6 @@ function TaskSelector() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isOpen]);
-
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
 
   return (
     <div ref={ref} className="relative inline-block w-70 mb-15">
@@ -67,7 +61,6 @@ function TaskSelector() {
               key={index}
               onClick={() => {
                 setSelectedTask(task.name);
-                setTask(task.name);
                 setIsOpen(false);
               }}
               className="py-3 hover:bg-black/30 cursor-pointer"
