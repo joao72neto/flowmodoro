@@ -9,6 +9,8 @@ interface SessionContextType {
   handleRemoveTask: (id: number) => Promise<void>;
   handleCompleteTask: (index: number, checked: boolean) => Promise<void>;
   tasks: TaskModel[];
+  selectedTask: string;
+  setSelectedTask: (task: string) => void;
 }
 
 export const SessionContext = createContext<SessionContextType | null>(null);
@@ -19,6 +21,7 @@ export const SessionProvider = ({
   children: React.ReactNode;
 }) => {
   const [newTask, setNewTask] = useState<string>("");
+  const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
     useTasks();
 
@@ -33,6 +36,7 @@ export const SessionProvider = ({
       await createTask({ name: newTask, checked: false });
       await fetchTasks();
       setNewTask("");
+      setSelectedTask(newTask);
     } catch (e: any) {
       console.log(e);
     }
@@ -64,6 +68,8 @@ export const SessionProvider = ({
         handleCompleteTask,
         handleRemoveTask,
         tasks,
+        selectedTask,
+        setSelectedTask,
       }}
     >
       {children}

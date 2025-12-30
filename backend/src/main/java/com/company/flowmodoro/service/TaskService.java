@@ -23,7 +23,7 @@ public class TaskService {
   }
 
   public List<Task> consult() {
-    return taskRepository.findAll();
+    return taskRepository.findAllByOrderByIdDesc();
   }
 
   public Task findById(Long id) {

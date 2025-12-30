@@ -4,9 +4,8 @@ import clsx from "clsx";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState("Select a task...");
   const ref = useRef<HTMLDivElement>(null);
-  const { tasks } = useSessionContext();
+  const { tasks, selectedTask, setSelectedTask } = useSessionContext();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -53,7 +52,7 @@ function TaskSelector() {
             "shadow-lg",
             "text-center",
             "overflow-auto z-10",
-            "h-80"
+            "max-h-80"
           )}
         >
           {tasks.map((task, index) => (
