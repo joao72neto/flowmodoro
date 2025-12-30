@@ -7,7 +7,8 @@ import clsx from "clsx";
 
 function Tasks() {
   const [newTask, setNewTask] = useState("");
-  const { createTask, fetchTasks, tasks, deleteTask } = useTasks();
+  const { createTask, fetchTasks, tasks, deleteTask, updateTaskStatus } =
+    useTasks();
 
   useEffect(() => {
     fetchTasks();
@@ -39,7 +40,14 @@ function Tasks() {
       console.log(e);
     }
   };
-  // const handleCompleteTask = (index: number) => {};
+  const handleCompleteTask = async (index: number, checked: boolean) => {
+    try {
+      await updateTaskStatus(index, { checked: !checked });
+      await fetchTasks();
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -66,7 +74,10 @@ function Tasks() {
                 )}
               >
                 <div className="flex items-center">
-                  <TaskButton onClick={() => {}} taskCompleted={task.checked} />
+                  <TaskButton
+                    onClick={() => handleCompleteTask(task.id, task.checked)}
+                    taskCompleted={task.checked}
+                  />
                   <span>{task.name}</span>
                 </div>
                 <IconButton
