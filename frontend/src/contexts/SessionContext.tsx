@@ -11,6 +11,8 @@ interface SessionContextType {
   tasks: TaskModel[];
   selectedTask: string;
   setSelectedTask: (task: string) => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
 }
 
 export const SessionContext = createContext<SessionContextType | null>(null);
@@ -21,6 +23,7 @@ export const SessionProvider = ({
   children: React.ReactNode;
 }) => {
   const [newTask, setNewTask] = useState<string>("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
     useTasks();
@@ -28,6 +31,11 @@ export const SessionProvider = ({
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
+
+  useEffect(() => {
+    if (tasks.length > 0) setSelectedTask(tasks[0].name);
+    else setSelectedTask("Crie nova tarefa");
+  }, [tasks]);
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;
@@ -70,6 +78,8 @@ export const SessionProvider = ({
         tasks,
         selectedTask,
         setSelectedTask,
+        isSidebarOpen,
+        setIsSidebarOpen,
       }}
     >
       {children}

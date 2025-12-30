@@ -1,4 +1,3 @@
-import { useState } from "react";
 import IconButton from "../components/home/buttons/IconButton";
 import SideBar from "../components/layout/SideBar";
 
@@ -6,9 +5,11 @@ import LayoutContainer from "../components/layout/containers/LayoutContainer";
 import MainContentContainer from "../components/layout/containers/MainContentContainer";
 import SideBarContainer from "../components/layout/containers/SideBarContainer";
 import ToggleButtonContainer from "../components/layout/containers/ToggleButtonContainer";
+import { useSessionContext } from "../hooks/sessions/useSessionContext";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isSidebarOpen, setIsSidebarOpen } = useSessionContext();
+
   return (
     <LayoutContainer>
       <MainContentContainer isOpen={isSidebarOpen}>
