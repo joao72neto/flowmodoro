@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-01-11",
+    "totalFocus": 40,
+    "totalRest": 8,
+    "sessions": [
+      {
+        "focus": 40,
+        "rest": 8,
+        "ratio": 0.2,
+        "interruptions": 0,
+        "task": {
+          "id": 6,
+          "name": "My task"
+        }
+      }
+    ]
+  }
+]
