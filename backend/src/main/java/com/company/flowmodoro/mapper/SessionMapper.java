@@ -32,7 +32,6 @@ public class SessionMapper {
                 .ratio(session.getRatio())
                 .rest(session.getRest())
                 .interruptions(session.getInterruptions())
-                .date(session.getDate())
                 .task(mapper.toDTO(session.getTask()))
                 .build();
     }

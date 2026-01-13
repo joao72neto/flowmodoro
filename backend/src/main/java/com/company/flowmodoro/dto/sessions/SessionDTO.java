@@ -18,6 +18,5 @@ public class SessionDTO {
     private Double ratio;
     private Double rest;
     private Integer interruptions;
-    private LocalDate date;
     private TaskDTO task;
 }
