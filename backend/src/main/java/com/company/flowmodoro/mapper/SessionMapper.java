@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.dto.SessionDTO;
+import com.company.flowmodoro.dto.sessions.SessionDTO;
 import com.company.flowmodoro.model.Session;
 
 @Component

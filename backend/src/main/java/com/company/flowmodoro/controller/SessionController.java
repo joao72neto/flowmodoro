@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.company.flowmodoro.dto.SessionDTO;
+import com.company.flowmodoro.dto.sessions.DailySessionsDTO;
+import com.company.flowmodoro.dto.sessions.SessionDTO;
 import com.company.flowmodoro.mapper.SessionMapper;
 import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.service.SessionService;
@@ -35,8 +36,7 @@ public class SessionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SessionDTO>> consult() {
-        List<Session> sessions = sessionService.consult();
-        return ResponseEntity.ok(mapper.toDTO(sessions));
+    public ResponseEntity<List<DailySessionsDTO>> consult() {
+        return ResponseEntity.ok(sessionService.consult());
     }
 }

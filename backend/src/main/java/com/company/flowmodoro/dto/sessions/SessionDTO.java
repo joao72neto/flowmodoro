@@ -1,6 +1,8 @@
-package com.company.flowmodoro.dto;
+package com.company.flowmodoro.dto.sessions;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
+import com.company.flowmodoro.dto.TaskDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +18,6 @@ public class SessionDTO {
     private Double ratio;
     private Double rest;
     private Integer interruptions;
-    private Date date;
+    private LocalDate date;
     private TaskDTO task;
 }

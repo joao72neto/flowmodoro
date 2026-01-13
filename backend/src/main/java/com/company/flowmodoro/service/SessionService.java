@@ -1,7 +1,11 @@
 package com.company.flowmodoro.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +15,9 @@ import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.SessionRespository;
 import com.company.flowmodoro.repository.TaskRepository;
-
+import com.company.flowmodoro.dto.TaskDTO;
+import com.company.flowmodoro.dto.sessions.DailySessionsDTO;
+import com.company.flowmodoro.dto.sessions.SessionDTO;
 import com.company.flowmodoro.enums.ErrorCode;
 
 @Service
@@ -47,8 +53,48 @@ public class SessionService {
         return sessionRespository.save(session);
     }
 
-    public List<Session> consult() {
-        return sessionRespository.findAll();
+    public List<DailySessionsDTO> consult() {
+        List<Session> sessions = sessionRespository.findAll();
+
+        Map<LocalDate, List<Session>> sessionsByDate = sessions.stream()
+                .collect(Collectors.groupingBy(Session::getDate));
+
+        return sessionsByDate.entrySet().stream()
+                .map((Map.Entry<LocalDate, List<Session>> entry) -> {
+                    LocalDate date = entry.getKey();
+                    List<Session> daySessions = entry.getValue();
+
+                    double totalFocus = daySessions.stream()
+                            .mapToDouble(Session::getFocus)
+                            .sum();
+
+                    double totalRest = daySessions.stream()
+                            .mapToDouble(Session::getRest)
+                            .sum();
+
+                    List<SessionDTO> sessionDTOs = daySessions.stream()
+                            .map((Session s) -> SessionDTO.builder()
+                                    .focus(s.getFocus())
+                                    .rest(s.getRest())
+                                    .ratio(s.getRatio())
+                                    .interruptions(s.getInterruptions())
+                                    .task(TaskDTO.builder()
+                                            .id(s.getTask().getId())
+                                            .name(s.getTask().getName())
+                                            .checked(s.getTask().getChecked())
+                                            .build())
+                                    .build())
+                            .toList();
+
+                    return DailySessionsDTO.builder()
+                            .date(date)
+                            .totalFocus(totalFocus)
+                            .totalRest(totalRest)
+                            .sessions(sessionDTOs)
+                            .build();
+                })
+                .toList();
+
     }
 
     // Private methods

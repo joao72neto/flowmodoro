@@ -1,6 +1,6 @@
 package com.company.flowmodoro.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -44,7 +44,7 @@ public class Session {
 
     @Column(name = "ses_date", updatable = false)
     @CreationTimestamp
-    private Date date;
+    private LocalDate date;
 
     @OneToOne()
     @JoinColumn(name = "ses_tsk_id")
