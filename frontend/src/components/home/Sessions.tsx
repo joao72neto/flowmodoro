@@ -1,6 +1,6 @@
 const Sessions = () => {
   return (
-    <div className="border p-4 rounded-xl">
+    <div className="border p-4 rounded-xl min-w-[300px]">
       <h1 className="text-2xl">Work</h1>
 
       <div>

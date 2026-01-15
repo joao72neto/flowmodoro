@@ -1,4 +1,4 @@
-import Timer from "../components/home/timer/Counter";
+import Counter from "../components/home/timer/Counter";
 import Interruptions from "../components/home/timer/Interruptions";
 import TaskSelector from "../components/home/timer/TaskSelector";
 import MainLayout from "../layouts/MainLayout";
@@ -12,9 +12,8 @@ function Home() {
       <Stack gap={0}>
         <TaskSelector />
         <Interruptions />
-        <Timer />
+        <Counter />
       </Stack>
-
       <Sessions />
     </MainLayout>
   );
