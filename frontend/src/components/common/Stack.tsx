@@ -12,7 +12,7 @@ const gaps = {
 interface StackProps {
   align?: "left" | "center" | "right";
   direction?: "row" | "col";
-  justify?: "start" | "center" | "end";
+  justify?: "start" | "center" | "end" | "between";
   wFull?: boolean;
   gap?: keyof typeof gaps;
   children: React.ReactNode;
@@ -42,6 +42,7 @@ const Stack = ({
           start: "justify-start",
           center: "justify-center",
           end: "justify-end",
+          between: "justify-between",
         }[justify],
         gaps[gap],
         wFull && "w-full",

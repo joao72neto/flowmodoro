@@ -14,6 +14,7 @@ function Home() {
         <Interruptions />
         <Counter />
       </TimerContainer>
+
       <Sessions />
     </MainLayout>
   );
