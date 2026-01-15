@@ -2,13 +2,20 @@ import Timer from "../components/home/timer/Counter";
 import Interruptions from "../components/home/timer/Interruptions";
 import TaskSelector from "../components/home/timer/TaskSelector";
 import MainLayout from "../layouts/MainLayout";
+import Stack from "../components/common/Stack";
+
+import Sessions from "../components/home/Sessions";
 
 function Home() {
   return (
     <MainLayout>
-      <TaskSelector />
-      <Interruptions />
-      <Timer />
+      <Stack gap={0}>
+        <TaskSelector />
+        <Interruptions />
+        <Timer />
+      </Stack>
+
+      <Sessions />
     </MainLayout>
   );
 }
