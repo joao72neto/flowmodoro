@@ -1,8 +1,8 @@
-import IconButton from "./buttons/IconButton";
-import TaskButton from "./buttons/TaskButton";
-import Input from "../common/Input";
+import IconButton from "../buttons/IconButton";
+import TaskButton from "../buttons/TaskButton";
+import Input from "../../common/Input";
 import clsx from "clsx";
-import { useSessionContext } from "../../hooks/sessions/useSessionContext";
+import { useSessionContext } from "../../../hooks/sessions/useSessionContext";
 
 function Tasks() {
   const {

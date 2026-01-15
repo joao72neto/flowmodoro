@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSessionContext } from "../../hooks/sessions/useSessionContext";
+import { useSessionContext } from "../../../hooks/sessions/useSessionContext";
 import clsx from "clsx";
 
 function TaskSelector() {

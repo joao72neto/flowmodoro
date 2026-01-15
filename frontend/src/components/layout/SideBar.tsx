@@ -1,5 +1,5 @@
 import IconButton from "../home/buttons/IconButton";
-import Tasks from "../home/Tasks";
+import Tasks from "../home/timer/Tasks";
 
 function SideBar({ onClick }: { onClick?: () => void }) {
   return (

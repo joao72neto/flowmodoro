@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import Button from "../common/Button";
+import Button from "../../common/Button";
 
-function Timer() {
+function Counter() {
   const BREAK_RATIO = 0.2;
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
   const [seconds, setSeconds] = useState(0);
@@ -109,4 +109,4 @@ function Timer() {
   );
 }
 
-export default Timer;
+export default Counter;

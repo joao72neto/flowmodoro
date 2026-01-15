@@ -1,7 +1,5 @@
 package com.company.flowmodoro.dto.sessions;
 
-import java.time.LocalDate;
-
 import com.company.flowmodoro.dto.TaskDTO;
 
 import lombok.AllArgsConstructor;
