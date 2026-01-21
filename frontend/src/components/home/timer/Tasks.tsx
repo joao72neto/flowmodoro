@@ -2,8 +2,7 @@ import IconButton from "../buttons/IconButton";
 import TaskButton from "../buttons/TaskButton";
 import Input from "../../common/Input";
 import clsx from "clsx";
-import { useSessionContext } from "../../../hooks/sessions/useSessionContext";
-
+import { useSessionContext } from "../../../contexts/SessionContext";
 function Tasks() {
   const {
     handleAddTask,
@@ -41,7 +40,7 @@ function Tasks() {
                   "shadow-xl border-t border-b border-white/10 px-4 py-3 rounded flex justify-between",
                   {
                     "line-through": task.checked,
-                  }
+                  },
                 )}
               >
                 <div className="flex items-center">

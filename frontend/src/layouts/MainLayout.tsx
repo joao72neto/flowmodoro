@@ -5,7 +5,7 @@ import LayoutContainer from "../components/layout/containers/LayoutContainer";
 import MainContentContainer from "../components/layout/containers/MainContentContainer";
 import SideBarContainer from "../components/layout/containers/SideBarContainer";
 import ToggleButtonContainer from "../components/layout/containers/ToggleButtonContainer";
-import { useSessionContext } from "../hooks/sessions/useSessionContext";
+import { useSessionContext } from "../contexts/SessionContext";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useSessionContext();

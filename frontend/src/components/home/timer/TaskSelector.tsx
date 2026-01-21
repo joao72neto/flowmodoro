@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSessionContext } from "../../../hooks/sessions/useSessionContext";
+import { useSessionContext } from "../../../contexts/SessionContext";
 import clsx from "clsx";
 
 function TaskSelector() {
@@ -34,7 +34,7 @@ function TaskSelector() {
           "cursor-pointer",
           "border",
           "border-white/10",
-          "transition"
+          "transition",
         )}
       >
         {selectedTask}
@@ -59,7 +59,7 @@ function TaskSelector() {
             "shadow-lg",
             "text-center",
             "overflow-auto z-10",
-            "max-h-80"
+            "max-h-80",
           )}
         >
           {undoneTasks.map((task, index) => (
