@@ -3,7 +3,7 @@ import Interruptions from "../components/home/timer/Interruptions";
 import TaskSelector from "../components/home/timer/TaskSelector";
 import MainLayout from "../layouts/MainLayout";
 
-import Sessions from "../components/home/Sessions";
+import SessionsDisplay from "../components/home/sessions/SessionsDisplay";
 import TimerContainer from "../components/home/containers/TimerContainer";
 
 function Home() {
@@ -15,7 +15,7 @@ function Home() {
         <Counter />
       </TimerContainer>
 
-      <Sessions />
+      <SessionsDisplay />
     </MainLayout>
   );
 }
