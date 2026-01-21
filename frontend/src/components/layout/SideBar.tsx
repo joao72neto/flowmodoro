@@ -1,5 +1,6 @@
 import IconButton from "../home/buttons/IconButton";
 import Tasks from "../home/timer/Tasks";
+import Stack from "../common/Stack";
 
 function SideBar({ onClick }: { onClick?: () => void }) {
   return (
@@ -8,9 +9,9 @@ function SideBar({ onClick }: { onClick?: () => void }) {
         icon={<i className="bi bi-caret-right" />}
         onClick={onClick}
       />
-      <div className="flex flex-col items-center">
+      <Stack>
         <Tasks />
-      </div>
+      </Stack>
     </div>
   );
 }

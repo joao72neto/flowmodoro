@@ -10,8 +10,8 @@ const SideBarContainer = ({
   return (
     <div
       className={clsx(
-        "fixed top-0 right-0 w-1/3 z-20 transition-transform duration-300",
-        isOpen ? "translate-x-0" : "translate-x-full"
+        "fixed top-0 right-0 lg:max-w-md w-full z-20 transition-transform duration-300",
+        isOpen ? "translate-x-0" : "translate-x-full",
       )}
     >
       {children}

@@ -21,7 +21,7 @@ function Tasks() {
 
   return (
     <>
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-xl">
         <h2 className="text-2xl mb-4 text-center">Tasks</h2>
         <div className="flex mb-4">
           <Input

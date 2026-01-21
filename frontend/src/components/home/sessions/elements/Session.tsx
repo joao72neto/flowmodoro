@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import Stack from "../../../common/Stack";
-import { CgDetailsMore } from "react-icons/cg";
 
 const Session = ({
   activity,
