@@ -1,12 +1,19 @@
-import type { TaskModel } from "./tasks.types";
-
-export interface SessionResponse {
-  focus: number;
-  ratio: number;
-  rest: number;
-  interruptions: number;
+export interface ISessionGroupoResponse {
   date: string;
-  task: TaskModel;
+  totalFocus: number;
+  totalRest: number;
+  sessions: Session[];
+}
+
+export interface Session {
+  focus: number;
+  rest: number;
+  ratio: number;
+  interruptions: number;
+  task: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface SessionRequest {
