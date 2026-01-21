@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import useTasks from "../hooks/useTasks";
 import type { TaskModel } from "../types/tasks.types";
 
@@ -88,4 +88,12 @@ export const SessionProvider = ({
       {children}
     </SessionContext.Provider>
   );
+};
+
+export const useSessionContext = () => {
+  const context = useContext(SessionContext);
+  if (!context)
+    throw new Error("useSession must be used within a SessionProvider");
+
+  return context;
 };

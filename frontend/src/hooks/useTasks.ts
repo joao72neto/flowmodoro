@@ -49,7 +49,7 @@ const useTask = () => {
         setLoading(false);
       }
     },
-    []
+    [],
   );
 
   const deleteTask = useCallback(async (id: number) => {
