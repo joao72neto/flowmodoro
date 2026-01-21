@@ -10,9 +10,9 @@ const MainContentContainer = ({
   return (
     <div
       className={clsx(
-        "flex flex-wrap justify-center min-h-screen p-6 transition-all duration-300",
-        "gap-x-50",
-        isOpen ? "w-2/3" : "w-full"
+        "flex flex-wrap justify-center content-center min-h-screen p-6 transition-all duration-300",
+        "gap-x-40 gap-y-10",
+        isOpen ? "w-2/3" : "w-full",
       )}
     >
       {children}
