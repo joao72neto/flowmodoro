@@ -40,8 +40,10 @@ function Button({
       onClick={onClick}
       className={`${variants[variant || "primary"]} ${className}`}
     >
-      {icon && <span className="mr-2">{icon}</span>}
-      {children}
+      <div className="flex items-center justify-center gap-2">
+        {icon}
+        {children}
+      </div>
     </button>
   );
 }
