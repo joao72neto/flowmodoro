@@ -1,13 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Button from "../../common/Button";
-import { useSessionContext } from "../../../contexts/SessionContext";
+import useCounterComponent from "../../../hooks/components/useCounterComponent";
 
 function Counter() {
-  const { setFocus } = useSessionContext();
+  const {
+    mode,
+    seconds,
+    setSeconds,
+    setMode,
+    formatTimer,
+    startBreak,
+    startFocus,
+    stopFocus,
+    skipBreak,
+  } = useCounterComponent();
 
-  const BREAK_RATIO = 0.2;
-  const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
-  const [seconds, setSeconds] = useState(0);
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -36,39 +43,6 @@ function Counter() {
       }
     };
   }, [mode, seconds]);
-
-  const handleSaveSession = () => {
-    setFocus(Math.floor(seconds / 60));
-  };
-
-  const startFocus = () => {
-    setSeconds(0);
-    setMode("focus");
-  };
-
-  const stopFocus = () => {
-    setMode("stopped");
-    const breakTime = Math.floor(seconds * BREAK_RATIO);
-    setSeconds(breakTime);
-    handleSaveSession();
-  };
-
-  const startBreak = () => {
-    setMode("break");
-  };
-
-  const skipBreak = () => {
-    setMode(null);
-    setSeconds(0);
-  };
-
-  const formatTimer = (totalSeconds: number) => {
-    const min = Math.floor(totalSeconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const sec = (totalSeconds % 60).toString().padStart(2, "0");
-    return `${min}:${sec}`;
-  };
 
   return (
     <>
