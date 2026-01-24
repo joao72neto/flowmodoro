@@ -30,3 +30,8 @@ body {
   --color-danger: #dc3545;
   --color-success: #28a745;
 }
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
