@@ -46,7 +46,7 @@ const Stack = ({
         }[justify],
         gaps[gap],
         wFull && "w-full",
-        className
+        className,
       )}
     >
       {children}

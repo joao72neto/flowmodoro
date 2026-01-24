@@ -7,19 +7,18 @@ const baseStyle = clsx(
   "cursor-pointer",
   "font-semibold",
   "text-white",
-  "border",
-  "border-gray-600/20",
-  "hover:bg-white/20",
+  "border border-white/20",
   "transition-all",
-  "duration-300",
+  "duration-200",
   "ease-in-out",
-  "focus:border-white/40"
+  "hover:scale-110",
+  "hover:brightness-120",
 );
 
 const variants = {
   primary: clsx(baseStyle, "bg-primary"),
   secondary: clsx(baseStyle, "bg-secondary"),
-  danger: clsx(baseStyle, "bg-danger"),
+  danger: clsx(baseStyle, "bg-danger "),
 };
 
 function Button({

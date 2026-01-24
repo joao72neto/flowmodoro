@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import useSessions from "../hooks/services/useSessions";
 import Modal from "../components/common/modals/Modal";
+import { formatToHour } from "../utils/number.utils";
 
 interface ISessionContext {
   focus: number;
@@ -23,10 +24,10 @@ export const SessionProvider = ({
 }) => {
   const { createSession } = useSessions();
   const [focus, setFocus] = useState<number>(0);
-  const [interruptions, setInterruptions] = useState(0);
+  const [interruptions, setInterruptions] = useState<number>(0);
   const [taskId, setTaskId] = useState<number>(0);
-
-  const [showSaveSessionModal, setShowSaveSessionModal] = useState(false);
+  const [showSaveSessionModal, setShowSaveSessionModal] =
+    useState<boolean>(false);
 
   const handleSaveSession = async () => {
     try {
@@ -56,7 +57,15 @@ export const SessionProvider = ({
     >
       {children}
       {showSaveSessionModal && (
-        <Modal onClose={() => setShowSaveSessionModal(false)} />
+        <Modal
+          closeButtonText="Descartar"
+          confirmButtonText="Salvar"
+          onClose={() => setShowSaveSessionModal(false)}
+          onConfirm={() => setShowSaveSessionModal(false)}
+          title="Sessão Finalizada! 🎉"
+        >
+          Deseja salvar ou desacartar a sessão atual de {formatToHour(focus)}?
+        </Modal>
       )}
     </SessionContext.Provider>
   );

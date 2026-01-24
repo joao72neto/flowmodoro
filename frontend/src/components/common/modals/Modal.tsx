@@ -4,22 +4,28 @@ import { modalConfig } from "../../../config/modal.config";
 const Modal = ({
   type = "default",
   title,
-  buttonText,
+  closeButtonText,
+  confirmButtonText,
   children,
   onClose,
+  onConfirm,
 }: {
   type?: "default" | "success" | "error" | "warning";
   title?: string;
-  buttonText?: string;
+  closeButtonText?: string;
+  confirmButtonText?: string;
   children?: React.ReactNode;
   onClose?: () => void;
+  onConfirm?: () => void;
 }) => {
   const config = modalConfig[type];
   return (
     <BaseModal
-      buttonText={buttonText ?? config.buttonText}
+      closeButtonText={closeButtonText ?? config.closeButtonText}
+      confirmButtonText={confirmButtonText ?? config.confirmButtonText}
       title={title ?? config.title}
       onClose={onClose}
+      onConfirm={onConfirm}
     >
       {children ?? config.children}
     </BaseModal>
