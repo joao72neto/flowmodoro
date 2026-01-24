@@ -2,15 +2,11 @@ import { useState } from "react";
 import { useSessionContext } from "../../contexts/SessionContext";
 
 const useCounterComponent = () => {
-  const { setFocus } = useSessionContext();
+  const { setFocus, setShowSaveSessionModal } = useSessionContext();
 
   const BREAK_RATIO = 0.2;
   const [seconds, setSeconds] = useState(0);
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
-
-  const handleSaveSession = () => {
-    setFocus(Math.floor(seconds / 60));
-  };
 
   const startFocus = () => {
     setSeconds(0);
@@ -21,7 +17,8 @@ const useCounterComponent = () => {
     setMode("stopped");
     const breakTime = Math.floor(seconds * BREAK_RATIO);
     setSeconds(breakTime);
-    handleSaveSession();
+    setFocus(seconds / 60);
+    setShowSaveSessionModal(true);
   };
 
   const startBreak = () => {

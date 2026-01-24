@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useTaskContext } from "../../../contexts/TaskContext";
 import clsx from "clsx";
+import { useSessionContext } from "../../../contexts/SessionContext";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { selectedTask, setSelectedTask, setIsSidebarOpen, undoneTasks } =
     useTaskContext();
+  const { setTaskId } = useSessionContext();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -67,6 +69,7 @@ function TaskSelector() {
               key={index}
               onClick={() => {
                 setSelectedTask(task.name);
+                setTaskId(task.id);
                 setIsOpen(false);
               }}
               className="py-3 hover:bg-black/30 cursor-pointer"

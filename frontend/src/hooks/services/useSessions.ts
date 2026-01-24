@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import sessionsService from "../../services/sessions.service";
 import type { SessionRequest } from "../../types/sessions.types";
 
-const useSession = () => {
+const useSessions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
@@ -39,4 +39,4 @@ const useSession = () => {
   };
 };
 
-export default useSession;
+export default useSessions;
