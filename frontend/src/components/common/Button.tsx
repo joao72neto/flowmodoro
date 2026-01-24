@@ -19,6 +19,7 @@ const variants = {
   primary: clsx(baseStyle, "bg-primary"),
   secondary: clsx(baseStyle, "bg-secondary"),
   danger: clsx(baseStyle, "bg-danger "),
+  success: clsx(baseStyle, "bg-success"),
 };
 
 function Button({
@@ -29,7 +30,7 @@ function Button({
   className,
 }: {
   icon?: React.ReactNode;
-  variant?: "secondary" | "danger" | "primary";
+  variant?: "secondary" | "danger" | "primary" | "success";
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;

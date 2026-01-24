@@ -17,7 +17,7 @@ const useCounterComponent = () => {
     setMode("stopped");
     const breakTime = Math.floor(seconds * BREAK_RATIO);
     setSeconds(breakTime);
-    setFocus(seconds / 60);
+    setFocus(Number((seconds / 60).toFixed(2)));
     setShowSaveSessionModal(true);
   };
 

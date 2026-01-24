@@ -29,14 +29,30 @@ export const SessionProvider = ({
   const [showSaveSessionModal, setShowSaveSessionModal] =
     useState<boolean>(false);
 
+  const [errors, setErrors] = useState<string[]>([]);
+  const [success, setSuccess] = useState<string | null>(null);
+
   const handleSaveSession = async () => {
     try {
       await createSession(taskId, { focus, interruptions });
-      alert("Sessão Salva!");
+      setSuccess("Sessão salva com sucesso!");
     } catch (e: any) {
-      console.log(e);
+      setErrors(e.response?.data?.errors);
     }
+    reset();
+  };
 
+  const handleCancel = () => {
+    reset();
+    setShowSaveSessionModal(false);
+  };
+
+  const handleConfirm = () => {
+    handleSaveSession();
+    setShowSaveSessionModal(false);
+  };
+
+  const reset = () => {
     setFocus(0);
     setInterruptions(0);
   };
@@ -60,11 +76,29 @@ export const SessionProvider = ({
         <Modal
           closeButtonText="Descartar"
           confirmButtonText="Salvar"
-          onClose={() => setShowSaveSessionModal(false)}
-          onConfirm={() => setShowSaveSessionModal(false)}
+          onClose={handleCancel}
+          onConfirm={handleConfirm}
           title="Sessão Finalizada! 🎉"
         >
           Deseja salvar ou desacartar a sessão atual de {formatToHour(focus)}?
+        </Modal>
+      )}
+
+      {errors?.length > 0 && (
+        <Modal onClose={() => setErrors([])} title="Error">
+          {errors.map((error, index) => (
+            <p key={index}>{error}</p>
+          ))}
+        </Modal>
+      )}
+
+      {success && (
+        <Modal
+          onConfirm={() => setSuccess(null)}
+          confirmButtonText="Fechar"
+          title="Success!"
+        >
+          {success}
         </Modal>
       )}
     </SessionContext.Provider>

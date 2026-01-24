@@ -41,7 +41,7 @@ const BaseModal = ({
             </Button>
           )}
           {onConfirm && (
-            <Button className="w-full" onClick={onConfirm} variant="secondary">
+            <Button className="w-full" onClick={onConfirm} variant="success">
               {confirmButtonText ?? "Confirm"}
             </Button>
           )}

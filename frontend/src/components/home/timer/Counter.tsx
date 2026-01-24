@@ -69,7 +69,7 @@ function Counter() {
         ) : mode === "stopped" ? (
           <Button
             onClick={() => startBreak()}
-            variant="primary"
+            variant="success"
             icon={<i className="bi bi-play-fill" />}
           >
             Break
