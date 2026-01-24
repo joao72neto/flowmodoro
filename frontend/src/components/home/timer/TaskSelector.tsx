@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { useSessionContext } from "../../../contexts/SessionContext";
+import { useTaskContext } from "../../../contexts/TaskContext";
 import clsx from "clsx";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { selectedTask, setSelectedTask, setIsSidebarOpen, undoneTasks } =
-    useSessionContext();
+    useTaskContext();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

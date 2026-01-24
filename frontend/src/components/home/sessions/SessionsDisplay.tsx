@@ -10,10 +10,7 @@ const SessionsDisplay = () => {
       {sessionData.map((sessionGroup) => (
         <SessionsGroup groupName={sessionGroup.date}>
           {sessionGroup.sessions.map((session) => (
-            <Session
-              activity={session.task.name}
-              duration={session.focus.toString()}
-            />
+            <Session activity={session.task.name} duration={session.focus} />
           ))}
         </SessionsGroup>
       ))}

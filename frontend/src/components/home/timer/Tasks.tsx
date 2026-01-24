@@ -2,7 +2,7 @@ import IconButton from "../buttons/IconButton";
 import TaskButton from "../buttons/TaskButton";
 import Input from "../../common/Input";
 import clsx from "clsx";
-import { useSessionContext } from "../../../contexts/SessionContext";
+import { useTaskContext } from "../../../contexts/TaskContext";
 function Tasks() {
   const {
     handleAddTask,
@@ -11,7 +11,7 @@ function Tasks() {
     tasks,
     handleCompleteTask,
     handleRemoveTask,
-  } = useSessionContext();
+  } = useTaskContext();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {

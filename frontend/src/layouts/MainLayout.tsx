@@ -5,10 +5,10 @@ import LayoutContainer from "../components/layout/containers/LayoutContainer";
 import MainContentContainer from "../components/layout/containers/MainContentContainer";
 import SideBarContainer from "../components/layout/containers/SideBarContainer";
 import ToggleButtonContainer from "../components/layout/containers/ToggleButtonContainer";
-import { useSessionContext } from "../contexts/SessionContext";
+import { useTaskContext } from "../contexts/TaskContext";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isSidebarOpen, setIsSidebarOpen } = useSessionContext();
+  const { isSidebarOpen, setIsSidebarOpen } = useTaskContext();
 
   return (
     <LayoutContainer>

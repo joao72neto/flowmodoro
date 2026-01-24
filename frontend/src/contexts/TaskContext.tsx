@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import useTasks from "../hooks/useTasks";
 import type { TaskModel } from "../types/tasks.types";
 
-interface SessionContextType {
+interface TaskContextType {
   handleAddTask: () => Promise<void>;
   newTask: string;
   setNewTask: (task: string) => void;
@@ -16,13 +16,9 @@ interface SessionContextType {
   undoneTasks: TaskModel[];
 }
 
-export const SessionContext = createContext<SessionContextType | null>(null);
+export const TaskContext = createContext<TaskContextType | null>(null);
 
-export const SessionProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [newTask, setNewTask] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
@@ -70,7 +66,7 @@ export const SessionProvider = ({
   };
 
   return (
-    <SessionContext.Provider
+    <TaskContext.Provider
       value={{
         handleAddTask,
         newTask,
@@ -86,14 +82,14 @@ export const SessionProvider = ({
       }}
     >
       {children}
-    </SessionContext.Provider>
+    </TaskContext.Provider>
   );
 };
 
-export const useSessionContext = () => {
-  const context = useContext(SessionContext);
+export const useTaskContext = () => {
+  const context = useContext(TaskContext);
   if (!context)
-    throw new Error("useSession must be used within a SessionProvider");
+    throw new Error("useTaskContext must be used within a TaskProvider");
 
   return context;
 };
