@@ -3,7 +3,7 @@ import Button from "../../common/Button";
 import { useSessionContext } from "../../../contexts/SessionContext";
 
 function Counter() {
-  const { setFocus, setInterruptions } = useSessionContext();
+  const { setFocus } = useSessionContext();
 
   const BREAK_RATIO = 0.2;
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
@@ -39,7 +39,6 @@ function Counter() {
 
   const handleSaveSession = () => {
     setFocus(Math.floor(seconds / 60));
-    setInterruptions(0);
   };
 
   const startFocus = () => {

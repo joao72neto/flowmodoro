@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useSessionContext } from "../../../contexts/SessionContext";
 
 function Interruptions() {
-  const [interruptions, setInterruptions] = useState(0);
+  const { setInterruptions, interruptions } = useSessionContext();
+
   return (
     <div className="flex items-center justify-center gap-2 mb-6">
       <p>Interruptions</p>

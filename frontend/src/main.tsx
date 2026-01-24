@@ -4,11 +4,14 @@ import "./index.css";
 import Home from "./pages/Home";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { TaskProvider } from "./contexts/TaskContext";
+import { SessionProvider } from "./contexts/SessionContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <TaskProvider>
-      <Home />
+      <SessionProvider>
+        <Home />
+      </SessionProvider>
     </TaskProvider>
   </StrictMode>,
 );

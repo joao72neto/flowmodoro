@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
-import tasksService from "../services/tasks.service";
+import tasksService from "../../services/tasks.service";
 import type {
   TaskModel,
   TaskRequest,
   UpdateTaskRequest,
-} from "../types/tasks.types";
+} from "../../types/tasks.types";
 
 const useTask = () => {
   const [loading, setLoading] = useState(false);
