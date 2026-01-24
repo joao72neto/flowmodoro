@@ -1,12 +1,14 @@
 import clsx from "clsx";
 import Stack from "../../../common/Stack";
 
+import { formatToHour } from "../../../../utils/number.utils";
+
 const Session = ({
   activity,
   duration,
 }: {
   activity: string;
-  duration: string;
+  duration: number;
 }) => {
   return (
     <Stack
@@ -18,7 +20,7 @@ const Session = ({
       )}
     >
       <span className="text-xl">{activity}</span>
-      <span className="text-xl">{duration}</span>
+      <span className="text-xl">{formatToHour(duration)}</span>
     </Stack>
   );
 };
