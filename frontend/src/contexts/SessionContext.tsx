@@ -1,6 +1,11 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
-interface ISessionContext {}
+interface ISessionContext {
+  focus: number;
+  interruptions: number;
+  setFocus: (focus: number) => void;
+  setInterruptions: (interruptions: number) => void;
+}
 
 export const SessionContext = createContext<ISessionContext | null>(null);
 
@@ -9,8 +14,20 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [focus, setFocus] = useState(0);
+  const [interruptions, setInterruptions] = useState(0);
+
   return (
-    <SessionContext.Provider value={{}}>{children}</SessionContext.Provider>
+    <SessionContext.Provider
+      value={{
+        focus,
+        interruptions,
+        setFocus,
+        setInterruptions,
+      }}
+    >
+      {children}
+    </SessionContext.Provider>
   );
 };
 

@@ -7,10 +7,10 @@ const useSession = () => {
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setError(null);
     setSuccess(null);
-  };
+  }, []);
 
   const createSession = useCallback(
     async (id: number, data: SessionRequest) => {
@@ -28,7 +28,7 @@ const useSession = () => {
         setLoading(false);
       }
     },
-    []
+    [],
   );
 
   return {

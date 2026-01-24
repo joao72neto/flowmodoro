@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../../common/Button";
+import { useSessionContext } from "../../../contexts/SessionContext";
 
 function Counter() {
+  const { setFocus, setInterruptions } = useSessionContext();
+
   const BREAK_RATIO = 0.2;
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
   const [seconds, setSeconds] = useState(0);
-
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -35,6 +37,11 @@ function Counter() {
     };
   }, [mode, seconds]);
 
+  const handleSaveSession = () => {
+    setFocus(Math.floor(seconds / 60));
+    setInterruptions(0);
+  };
+
   const startFocus = () => {
     setSeconds(0);
     setMode("focus");
@@ -44,8 +51,7 @@ function Counter() {
     setMode("stopped");
     const breakTime = Math.floor(seconds * BREAK_RATIO);
     setSeconds(breakTime);
-    // setFocus((seconds / 60).toFixed(2));
-    // saveSession();
+    handleSaveSession();
   };
 
   const startBreak = () => {
