@@ -1,11 +1,15 @@
 import { useCallback, useState } from "react";
 import sessionsService from "../../services/sessions.service";
-import type { SessionRequest } from "../../types/sessions.types";
+import type {
+  ISessionGroupoResponse,
+  SessionRequest,
+} from "../../types/sessions.types";
 
 const useSessions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
+  const [sessions, setSessions] = useState<ISessionGroupoResponse[]>([]);
 
   const reset = useCallback(() => {
     setError(null);
@@ -31,11 +35,29 @@ const useSessions = () => {
     [],
   );
 
+  const fetchSessions = useCallback(async () => {
+    setLoading(true);
+    reset();
+
+    try {
+      const res = await sessionsService.getSessions();
+      const data: ISessionGroupoResponse[] = res.data;
+      setSessions(data);
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return {
     loading,
     error,
     createSession,
     success,
+    fetchSessions,
   };
 };
 
