@@ -13,6 +13,7 @@ interface ISessionContext {
   setTaskId: (taskId: number) => void;
   showSaveSessionModal: boolean;
   setShowSaveSessionModal: (show: boolean) => void;
+  success: string | null;
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
@@ -69,6 +70,7 @@ export const SessionProvider = ({
         setTaskId,
         showSaveSessionModal,
         setShowSaveSessionModal,
+        success,
       }}
     >
       {children}

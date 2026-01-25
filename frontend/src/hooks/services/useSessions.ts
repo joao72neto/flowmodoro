@@ -58,6 +58,7 @@ const useSessions = () => {
     createSession,
     success,
     fetchSessions,
+    sessions,
   };
 };
 
