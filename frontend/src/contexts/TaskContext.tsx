@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import useTasks from "../hooks/services/useTasks";
 import type { TaskModel } from "../types/tasks.types";
+import { useSessionContext } from "./SessionContext";
 
 interface TaskContextType {
   handleAddTask: () => Promise<void>;
@@ -25,15 +26,23 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
     useTasks();
   const undoneTasks = tasks.filter((task) => !task.checked);
+  const { setTaskId } = useSessionContext();
 
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
   useEffect(() => {
-    if (undoneTasks.length > 0) setSelectedTask(undoneTasks[0].name);
-    else setSelectedTask("Crie nova tarefa");
-  }, [tasks]);
+    const firstUndoneTask = undoneTasks[0];
+
+    if (!firstUndoneTask) {
+      setSelectedTask("Crie nova tarefa");
+      return;
+    }
+
+    setTaskId(firstUndoneTask.id);
+    setSelectedTask(firstUndoneTask.name);
+  }, [undoneTasks, setTaskId]);
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;
