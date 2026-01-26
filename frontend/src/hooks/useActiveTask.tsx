@@ -1,0 +1,19 @@
+import { useEffect, useMemo } from "react";
+import { useSessionContext } from "../contexts/SessionContext";
+import type { TaskModel } from "../types/tasks.types";
+
+const useActiveTask = (tasks: TaskModel[]) => {
+  const { setTaskId } = useSessionContext();
+
+  const activeTask = useMemo(
+    () => tasks.find((task) => !task.checked),
+    [tasks],
+  );
+
+  useEffect(() => {
+    if (activeTask) setTaskId(activeTask.id);
+  }, [activeTask, setTaskId]);
+
+  return { activeTask };
+};
+export default useActiveTask;

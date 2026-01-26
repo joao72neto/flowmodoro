@@ -1,7 +1,13 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import useTasks from "../hooks/services/useTasks";
 import type { TaskModel } from "../types/tasks.types";
-import { useSessionContext } from "./SessionContext";
+import useActiveTask from "../hooks/useActiveTask";
 
 interface TaskContextType {
   handleAddTask: () => Promise<void>;
@@ -25,24 +31,24 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
     useTasks();
-  const undoneTasks = tasks.filter((task) => !task.checked);
-  const { setTaskId } = useSessionContext();
+
+  const undoneTasks = useMemo(
+    () => tasks.filter((task) => !task.checked),
+    [tasks],
+  );
+  const { activeTask } = useActiveTask(undoneTasks);
 
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
   useEffect(() => {
-    const firstUndoneTask = undoneTasks[0];
-
-    if (!firstUndoneTask) {
+    if (activeTask) {
+      setSelectedTask(activeTask.name);
+    } else {
       setSelectedTask("Crie nova tarefa");
-      return;
     }
-
-    setTaskId(firstUndoneTask.id);
-    setSelectedTask(firstUndoneTask.name);
-  }, [undoneTasks, setTaskId]);
+  }, [activeTask]);
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;
