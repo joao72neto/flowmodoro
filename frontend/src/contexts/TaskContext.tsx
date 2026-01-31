@@ -22,6 +22,7 @@ interface TaskContextType {
   setIsSidebarOpen: (open: boolean) => void;
   undoneTasks: TaskModel[];
   wasTaskDeleted: boolean;
+  activeTask: TaskModel | undefined;
 }
 
 export const TaskContext = createContext<TaskContextType | null>(null);
@@ -98,6 +99,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         setIsSidebarOpen,
         undoneTasks,
         wasTaskDeleted,
+        activeTask,
       }}
     >
       {children}

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useSessionContext } from "../../contexts/SessionContext";
+import { useTaskContext } from "../../contexts/TaskContext";
+import { useModal } from "../../contexts/ModalContext";
 
 const useCounterComponent = () => {
   const { setFocus, setShowSaveSessionModal } = useSessionContext();
@@ -7,8 +9,20 @@ const useCounterComponent = () => {
   const BREAK_RATIO = 0.2;
   const [seconds, setSeconds] = useState(0);
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
+  const { activeTask } = useTaskContext();
+
+  const { showWarning, hideModal } = useModal();
 
   const startFocus = () => {
+    if (!activeTask) {
+      showWarning(
+        "Nenhuma tarefa selecionada",
+        "Selecione uma tarefa",
+        hideModal,
+      );
+      return;
+    }
+
     setSeconds(0);
     setMode("focus");
   };
