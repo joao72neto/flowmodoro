@@ -1,5 +1,6 @@
 import BaseModal from "./BaseModal";
 import { modalConfig } from "../../../config/modal.config";
+import type { ModalType } from "../../../types/globals.types";
 
 const Modal = ({
   type = "default",
@@ -10,7 +11,7 @@ const Modal = ({
   onClose,
   onConfirm,
 }: {
-  type?: "default" | "success" | "error" | "warning";
+  type?: ModalType;
   title?: string;
   closeButtonText?: string;
   confirmButtonText?: string;

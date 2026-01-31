@@ -64,8 +64,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
       {modalType && (
         <Modal
-          closeButtonText="Descartar"
-          confirmButtonText="Salvar"
+          type={modalType}
           onClose={hideModal}
           onConfirm={handleConfirm}
           title={modalTitle}
