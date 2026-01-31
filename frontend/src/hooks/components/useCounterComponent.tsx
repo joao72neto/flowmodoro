@@ -9,17 +9,18 @@ const useCounterComponent = () => {
   const BREAK_RATIO = 0.2;
   const [seconds, setSeconds] = useState(0);
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(null);
-  const { activeTask } = useTaskContext();
+  const { activeTask, setIsSidebarOpen } = useTaskContext();
 
-  const { showWarning, hideModal } = useModal();
+  const { showDefault, hideModal } = useModal();
 
   const startFocus = () => {
     if (!activeTask) {
-      showWarning(
+      showDefault(
         "Nenhuma tarefa selecionada",
-        "Selecione uma tarefa",
+        "Crie ou selecione uma tarefa para dar início ao timer.",
         hideModal,
       );
+      setIsSidebarOpen(true);
       return;
     }
 

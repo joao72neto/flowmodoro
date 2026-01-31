@@ -6,6 +6,7 @@ interface IModalContext {
   showError: (title: string, message: string, action: () => void) => void;
   showWarning: (title: string, message: string, action: () => void) => void;
   showSuccess: (title: string, message: string, action: () => void) => void;
+  showDefault: (title: string, message: string, action: () => void) => void;
   hideModal: () => void;
 }
 
@@ -29,6 +30,10 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     setTitle(title);
     setModalMessage(msg);
     setOnConfirmCallback(() => onConfirm || (() => {}));
+  };
+
+  const showDefault = (title: string, msg: string, action: () => void) => {
+    showModal("default", title, msg, action);
   };
 
   const showError = (title: string, msg: string, action: () => void) => {
@@ -58,19 +63,32 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         showError,
         showWarning,
         showSuccess,
+        showDefault,
         hideModal,
       }}
     >
       {children}
-      {modalType && (
+      {modalType && ["success", "default", "error"].includes(modalType) ? (
         <Modal
+          closeButtonText="Fechar"
           type={modalType}
           onClose={hideModal}
-          onConfirm={handleConfirm}
           title={modalTitle}
         >
           {modalMessage}
         </Modal>
+      ) : (
+        modalType &&
+        ["warning"].includes(modalType) && (
+          <Modal
+            type={modalType}
+            onClose={hideModal}
+            onConfirm={handleConfirm}
+            title={modalTitle}
+          >
+            {modalMessage}
+          </Modal>
+        )
       )}
     </ModalContext.Provider>
   );
