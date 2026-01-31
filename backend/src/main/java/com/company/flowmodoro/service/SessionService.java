@@ -54,7 +54,7 @@ public class SessionService {
     }
 
     public List<DailySessionsDTO> consult() {
-        List<Session> sessions = sessionRespository.findAll();
+        List<Session> sessions = sessionRespository.findAllByOrderByIdDesc();
 
         Map<LocalDate, List<Session>> sessionsByDate = sessions.stream()
                 .collect(Collectors.groupingBy(Session::getDate));
