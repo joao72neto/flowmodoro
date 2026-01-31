@@ -19,7 +19,7 @@ import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.service.SessionService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/session")
 public class SessionController {
 

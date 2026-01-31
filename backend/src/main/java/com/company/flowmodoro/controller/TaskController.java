@@ -21,7 +21,7 @@ import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.service.TaskService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/task")
 public class TaskController {
 

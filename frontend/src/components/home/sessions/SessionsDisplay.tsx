@@ -6,7 +6,7 @@ import { useSessionContext } from "../../../contexts/SessionContext";
 import useSessions from "../../../hooks/services/useSessions";
 import { useEffect } from "react";
 import { formatToBRDate } from "../../../utils/date.utils";
-import { formatNumber, formatToHour } from "../../../utils/number.utils";
+import { formatToHour } from "../../../utils/number.utils";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();
