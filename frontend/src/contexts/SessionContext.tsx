@@ -31,7 +31,7 @@ export const SessionProvider = ({
     useState<boolean>(false);
 
   const [errors, setErrors] = useState<string[]>([]);
-  const [success, setSuccess] = useState<boolean>(true);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const handleConfirm = () => {
     handleSaveSession();

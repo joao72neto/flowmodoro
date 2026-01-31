@@ -18,7 +18,7 @@ const SessionsDisplay = () => {
 
   useEffect(() => {
     if (success) fetchSessions();
-  }, [success]);
+  }, [success, fetchSessions]);
 
   if (sessions.length === 0) return null;
 
