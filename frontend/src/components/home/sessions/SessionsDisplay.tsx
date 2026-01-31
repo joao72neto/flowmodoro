@@ -6,6 +6,7 @@ import { useSessionContext } from "../../../contexts/SessionContext";
 import useSessions from "../../../hooks/services/useSessions";
 import { useEffect } from "react";
 import { formatToBRDate } from "../../../utils/date.utils";
+import { formatNumber, formatToHour } from "../../../utils/number.utils";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();
@@ -24,7 +25,11 @@ const SessionsDisplay = () => {
   return (
     <SessionsWrapper>
       {sessions.map((sessionGroup) => (
-        <SessionsGroup groupName={formatToBRDate(sessionGroup.date)}>
+        <SessionsGroup
+          groupName={formatToBRDate(sessionGroup.date)}
+          totalFocus={formatToHour(sessionGroup.totalFocus)}
+          totalRest={formatToHour(sessionGroup.totalRest)}
+        >
           {sessionGroup.sessions.map((session) => (
             <Session activity={session.task.name} duration={session.focus} />
           ))}

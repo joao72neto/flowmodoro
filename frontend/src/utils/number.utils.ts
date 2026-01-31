@@ -3,3 +3,7 @@ export const formatToHour = (minutes: number) => {
     ? `${minutes.toFixed(0)} min`
     : `${Math.floor(minutes / 60)}h ${Math.floor(minutes % 60)}min`;
 };
+
+export const formatNumber = (value: number): string => {
+  return new Intl.NumberFormat("pt-BR").format(value);
+};
