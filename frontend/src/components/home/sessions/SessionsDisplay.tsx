@@ -7,9 +7,11 @@ import useSessions from "../../../hooks/services/useSessions";
 import { useEffect } from "react";
 import { formatToBRDate } from "../../../utils/date.utils";
 import { formatToHour } from "../../../utils/number.utils";
+import { useTaskContext } from "../../../contexts/TaskContext";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();
+  const { wasTaskDeleted } = useTaskContext();
   const { sessions, fetchSessions } = useSessions();
 
   useEffect(() => {
@@ -17,8 +19,11 @@ const SessionsDisplay = () => {
   }, [fetchSessions]);
 
   useEffect(() => {
-    if (success) fetchSessions();
-  }, [success, fetchSessions]);
+    if (success || wasTaskDeleted) {
+      fetchSessions();
+      console.log("fetching sessions");
+    }
+  }, [success, wasTaskDeleted, fetchSessions]);
 
   if (sessions.length === 0) return null;
 

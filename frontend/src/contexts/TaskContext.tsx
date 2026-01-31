@@ -21,6 +21,7 @@ interface TaskContextType {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
   undoneTasks: TaskModel[];
+  wasTaskDeleted: boolean;
 }
 
 export const TaskContext = createContext<TaskContextType | null>(null);
@@ -37,6 +38,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     [tasks],
   );
   const { activeTask } = useActiveTask(undoneTasks);
+  const [wasTaskDeleted, setWasTaskDeleted] = useState(false);
 
   useEffect(() => {
     fetchTasks();
@@ -52,7 +54,6 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;
-
     try {
       await createTask({ name: newTask, checked: false });
       await fetchTasks();
@@ -64,9 +65,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleRemoveTask = async (id: number) => {
+    setWasTaskDeleted(false);
     try {
       await deleteTask(id);
       await fetchTasks();
+      setWasTaskDeleted(true);
     } catch (e: any) {
       console.log(e);
     }
@@ -94,6 +97,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         isSidebarOpen,
         setIsSidebarOpen,
         undoneTasks,
+        wasTaskDeleted,
       }}
     >
       {children}
