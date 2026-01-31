@@ -3,15 +3,11 @@ import TaskButton from "../buttons/TaskButton";
 import Input from "../../common/Input";
 import clsx from "clsx";
 import { useTaskContext } from "../../../contexts/TaskContext";
+import useTasksComponent from "../../../hooks/components/useTasksComponent";
 function Tasks() {
-  const {
-    handleAddTask,
-    newTask,
-    setNewTask,
-    tasks,
-    handleCompleteTask,
-    handleRemoveTask,
-  } = useTaskContext();
+  const { handleAddTask, newTask, setNewTask, tasks, handleCompleteTask } =
+    useTaskContext();
+  const { handleDeleteTask } = useTasksComponent();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -54,7 +50,7 @@ function Tasks() {
                   </div>
                   <IconButton
                     icon={<i className="bi bi-x-lg" />}
-                    onClick={() => handleRemoveTask(task.id)}
+                    onClick={() => handleDeleteTask(task.id)}
                   />
                 </li>
               ))}
