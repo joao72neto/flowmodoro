@@ -2,7 +2,8 @@ import clsx from "clsx";
 import Stack from "../../../common/Stack";
 
 import { formatToHour } from "../../../../utils/number.utils";
-import { useModal } from "../../../../contexts/ModalContext";
+import SessionDetailsModal from "../../../sessions/SessionDetailsModal";
+import { useState } from "react";
 
 const Session = ({
   activity,
@@ -13,30 +14,30 @@ const Session = ({
   activity: string;
   duration: number;
 }) => {
-  const { showDefault } = useModal();
+  const [showSessionDetailsModal, setShowSessionDetailsModal] =
+    useState<boolean>(false);
 
   const handleDetailsModal = () => {
-    showDefault(
-      "Detalhes da sessão",
-      "Detalhes da sessão de id " + sessionId,
-      () => {},
-    );
+    setShowSessionDetailsModal(!showSessionDetailsModal);
   };
 
   return (
-    <div onClick={handleDetailsModal} className="w-full">
-      <Stack
-        direction="row"
-        justify="between"
-        className={clsx(
-          "border border-white/10 shadow-lg py-6 px-4 cursor-pointer rounded-lg w-full ",
-          "hover:scale-115 duration-200 hover:shadow-xl",
-        )}
-      >
-        <span className="text-xl">{activity}</span>
-        <span className="text-xl">{formatToHour(duration)}</span>
-      </Stack>
-    </div>
+    <>
+      <div onClick={handleDetailsModal} className="w-full">
+        <Stack
+          direction="row"
+          justify="between"
+          className={clsx(
+            "border border-white/10 shadow-lg py-6 px-4 cursor-pointer rounded-lg w-full ",
+            "hover:scale-115 duration-200 hover:shadow-xl",
+          )}
+        >
+          <span className="text-xl">{activity}</span>
+          <span className="text-xl">{formatToHour(duration)}</span>
+        </Stack>
+      </div>
+      {showSessionDetailsModal && <SessionDetailsModal sessionId={sessionId} />}
+    </>
   );
 };
 

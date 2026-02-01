@@ -30,34 +30,32 @@ const BaseModal = ({
 
   return (
     <ModalContainer>
-      <div className="flex flex-col border border-white/10 gap-8 z-55 backdrop-blur-2xl bg-white/10 text-white max-w-[500px] min-w-[300px] rounded-xl p-6 text-center">
-        {title && <h1 className="font-bold text-xl">{title}</h1>}
+      {title && <h1 className="font-bold text-xl">{title}</h1>}
 
-        <div className="px-5">{children}</div>
+      <div className="px-5">{children}</div>
 
-        <Stack wFull direction="row" gap={5}>
-          {onClose && (
-            <Button
-              icon={<MdOutlineCancel size={20} />}
-              className="w-full"
-              onClick={onClose}
-              variant="danger"
-            >
-              {closeButtonText ?? "Close"}
-            </Button>
-          )}
-          {onConfirm && (
-            <Button
-              icon={<GiConfirmed size={20} />}
-              className="w-full"
-              onClick={onConfirm}
-              variant="success"
-            >
-              {confirmButtonText ?? "Confirm"}
-            </Button>
-          )}
-        </Stack>
-      </div>
+      <Stack wFull direction="row" gap={5}>
+        {onClose && (
+          <Button
+            icon={<MdOutlineCancel size={20} />}
+            className="w-full"
+            onClick={onClose}
+            variant="danger"
+          >
+            {closeButtonText ?? "Close"}
+          </Button>
+        )}
+        {onConfirm && (
+          <Button
+            icon={<GiConfirmed size={20} />}
+            className="w-full"
+            onClick={onConfirm}
+            variant="success"
+          >
+            {confirmButtonText ?? "Confirm"}
+          </Button>
+        )}
+      </Stack>
     </ModalContainer>
   );
 };
