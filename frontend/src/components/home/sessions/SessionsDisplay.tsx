@@ -35,8 +35,13 @@ const SessionsDisplay = () => {
           totalFocus={formatToHour(sessionGroup.totalFocus)}
           totalRest={formatToHour(sessionGroup.totalRest)}
         >
-          {sessionGroup.sessions.map((session) => (
-            <Session activity={session.task.name} duration={session.focus} />
+          {sessionGroup.sessions.map((session, index) => (
+            <Session
+              key={index}
+              sessionId={session.id}
+              activity={session.task.name}
+              duration={session.focus}
+            />
           ))}
         </SessionsGroup>
       ))}

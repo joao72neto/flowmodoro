@@ -6,6 +6,7 @@ export interface ISessionGroupoResponse {
 }
 
 export interface Session {
+  id: number;
   focus: number;
   rest: number;
   ratio: number;
