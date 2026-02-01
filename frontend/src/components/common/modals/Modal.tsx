@@ -1,12 +1,14 @@
 import BaseModal from "./BaseModal";
 import { modalConfig } from "../../../config/modal.config";
-import type { ModalType } from "../../../types/globals.types";
+import type { ModalType, VariantType } from "../../../types/globals.types";
 
 const Modal = ({
   type = "default",
   title,
   closeButtonText,
+  confirmButtonVariant,
   confirmButtonText,
+  closeButtonVariant,
   children,
   onClose,
   onConfirm,
@@ -14,7 +16,9 @@ const Modal = ({
   type?: ModalType;
   title?: string;
   closeButtonText?: string;
+  confirmButtonVariant?: VariantType;
   confirmButtonText?: string;
+  closeButtonVariant?: VariantType;
   children?: React.ReactNode;
   onClose?: () => void;
   onConfirm?: () => void;
@@ -27,6 +31,8 @@ const Modal = ({
       title={title ?? config.title}
       onClose={onClose}
       onConfirm={onConfirm}
+      confirmButtonVariant={confirmButtonVariant ?? config.confirmButtonVariant}
+      closeButtonVariant={closeButtonVariant ?? config.closeButtonVariant}
     >
       {children ?? config.children}
     </BaseModal>

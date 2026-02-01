@@ -36,7 +36,9 @@ const Session = ({
           <span className="text-xl">{formatToHour(duration)}</span>
         </Stack>
       </div>
-      {showSessionDetailsModal && <SessionDetailsModal sessionId={sessionId} />}
+      {showSessionDetailsModal && (
+        <SessionDetailsModal sessionId={sessionId} close={handleDetailsModal} />
+      )}
     </>
   );
 };

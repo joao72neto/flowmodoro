@@ -5,18 +5,23 @@ import Stack from "../Stack";
 import { MdOutlineCancel } from "react-icons/md";
 import { GiConfirmed } from "react-icons/gi";
 import ModalContainer from "./ModalContainer";
+import type { VariantType } from "../../../types/globals.types";
 
 const BaseModal = ({
   title,
   children,
   closeButtonText,
+  closeButtonVariant,
   confirmButtonText,
+  confirmButtonVariant,
   onClose,
   onConfirm,
 }: {
   title: string;
   children: React.ReactNode;
+  closeButtonVariant?: VariantType;
   closeButtonText?: string;
+  confirmButtonVariant?: VariantType;
   confirmButtonText?: string;
   onClose?: () => void;
   onConfirm?: () => void;
@@ -40,7 +45,7 @@ const BaseModal = ({
             icon={<MdOutlineCancel size={20} />}
             className="w-full"
             onClick={onClose}
-            variant="danger"
+            variant={closeButtonVariant || "danger"}
           >
             {closeButtonText ?? "Close"}
           </Button>
@@ -50,7 +55,7 @@ const BaseModal = ({
             icon={<GiConfirmed size={20} />}
             className="w-full"
             onClick={onConfirm}
-            variant="success"
+            variant={confirmButtonVariant || "primary"}
           >
             {confirmButtonText ?? "Confirm"}
           </Button>

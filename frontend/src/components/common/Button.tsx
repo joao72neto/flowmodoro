@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import type { VariantType } from "../../types/globals.types";
 
 const baseStyle = clsx(
   "px-5",
@@ -30,7 +31,7 @@ function Button({
   className,
 }: {
   icon?: React.ReactNode;
-  variant?: "secondary" | "danger" | "primary" | "success";
+  variant?: VariantType;
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
