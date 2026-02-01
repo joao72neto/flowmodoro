@@ -1,13 +1,17 @@
 export const formatToBRDate = (value: string) => {
-  const [year, month, day] = value.split("-");
+  const [year, month, day] = value.split("-").map(Number);
 
-  const d = day.padStart(2, "0");
-  const m = month.padStart(2, "0");
+  const inputDate = new Date(year, month - 1, day);
+  const today = new Date();
 
-  const newDate = new Date(Number(year), Number(month) - 1, Number(day));
+  inputDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
-  if (newDate.getDate() === new Date().getDate()) return "Hoje";
-  if (newDate.getDate() === new Date().getDate() - 1) return "Ontem";
+  const diffInDays =
+    (today.getTime() - inputDate.getTime()) / (1000 * 60 * 60 * 24);
 
-  return `${d}/${m}/${year}`;
+  if (diffInDays === 0) return "Hoje";
+  if (diffInDays === 1) return "Ontem";
+
+  return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`;
 };
