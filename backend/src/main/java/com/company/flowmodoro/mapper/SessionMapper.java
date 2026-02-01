@@ -16,6 +16,7 @@ public class SessionMapper {
 
     public Session toEntity(SessionDTO sessionDTO) {
         return Session.builder()
+                .id(sessionDTO.getId())
                 .focus(sessionDTO.getFocus())
                 .ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
                 .interruptions(sessionDTO.getInterruptions())
@@ -28,6 +29,7 @@ public class SessionMapper {
 
     public SessionDTO toDTO(Session session) {
         return SessionDTO.builder()
+                .id(session.getId())
                 .focus(session.getFocus())
                 .ratio(session.getRatio())
                 .rest(session.getRest())

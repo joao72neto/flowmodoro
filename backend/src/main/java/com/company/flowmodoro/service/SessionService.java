@@ -73,6 +73,7 @@ public class SessionService {
 
                     List<SessionDTO> sessionDTOs = daySessions.stream()
                             .map((Session s) -> SessionDTO.builder()
+                                    .id(s.getId())
                                     .focus(s.getFocus())
                                     .rest(s.getRest())
                                     .ratio(s.getRatio())

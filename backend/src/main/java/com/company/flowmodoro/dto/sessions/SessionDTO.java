@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SessionDTO {
+    private Long id;
     private Double focus;
     private Double ratio;
     private Double rest;
