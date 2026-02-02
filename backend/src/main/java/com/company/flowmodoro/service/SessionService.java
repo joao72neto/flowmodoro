@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import java.util.Comparator;
+import java.util.TreeMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +59,10 @@ public class SessionService {
         List<Session> sessions = sessionRespository.findAllByOrderByIdDesc();
 
         Map<LocalDate, List<Session>> sessionsByDate = sessions.stream()
-                .collect(Collectors.groupingBy(Session::getDate));
+                .collect(Collectors.groupingBy(
+                        Session::getDate,
+                        () -> new TreeMap<>(Comparator.reverseOrder()),
+                        Collectors.toList()));
 
         return sessionsByDate.entrySet().stream()
                 .map((Map.Entry<LocalDate, List<Session>> entry) -> {
