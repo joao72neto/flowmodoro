@@ -1,5 +1,6 @@
 import ModalContainer from "../common/modals/ModalContainer";
-import Button from "../common/Button";
+import { IoClose } from "react-icons/io5";
+import Stack from "../common/Stack";
 
 const SessionDetailsModal = ({
   sessionId,
@@ -10,8 +11,10 @@ const SessionDetailsModal = ({
 }) => {
   return (
     <ModalContainer>
-      <p>Detalhes da sessão de id {sessionId}</p>
-      <Button onClick={close}>Fechar</Button>
+      <Stack direction="row" justify="between">
+        <h1 className="font-bold text-xl">Session Details</h1>
+        <IoClose size={30} className="cursor-pointer" onClick={close} />
+      </Stack>
     </ModalContainer>
   );
 };
