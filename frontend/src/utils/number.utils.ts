@@ -7,3 +7,6 @@ export const formatToHour = (minutes: number) => {
 export const formatNumber = (value: number): string => {
   return new Intl.NumberFormat("pt-BR").format(value);
 };
+
+export const formatToPercentage = (value: number) =>
+  `${(value * 100).toFixed(0)}%`;
