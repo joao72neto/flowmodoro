@@ -4,16 +4,9 @@ import Stack from "../../../common/Stack";
 import { formatToHour } from "../../../../utils/number.utils";
 import SessionDetailsModal from "../../../sessions/SessionDetailsModal";
 import { useState } from "react";
+import type { SessionType } from "../../../../types/sessions.types";
 
-const Session = ({
-  activity,
-  duration,
-  sessionId,
-}: {
-  sessionId: number;
-  activity: string;
-  duration: number;
-}) => {
+const Session = ({ session }: { session: SessionType }) => {
   const [showSessionDetailsModal, setShowSessionDetailsModal] =
     useState<boolean>(false);
 
@@ -32,12 +25,12 @@ const Session = ({
             "hover:scale-115 duration-200 hover:shadow-xl",
           )}
         >
-          <span className="text-xl">{activity}</span>
-          <span className="text-xl">{formatToHour(duration)}</span>
+          <span className="text-xl">{session.task.name}</span>
+          <span className="text-xl">{formatToHour(session.focus)}</span>
         </Stack>
       </div>
       {showSessionDetailsModal && (
-        <SessionDetailsModal sessionId={sessionId} close={handleDetailsModal} />
+        <SessionDetailsModal session={session} close={handleDetailsModal} />
       )}
     </>
   );

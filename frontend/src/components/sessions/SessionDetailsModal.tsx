@@ -1,18 +1,19 @@
 import ModalContainer from "../common/modals/ModalContainer";
 import { IoClose } from "react-icons/io5";
 import Stack from "../common/Stack";
+import type { SessionType } from "../../types/sessions.types";
 
 const SessionDetailsModal = ({
-  sessionId,
+  session,
   close,
 }: {
-  sessionId: number;
+  session: SessionType;
   close: () => void;
 }) => {
   return (
     <ModalContainer>
       <Stack direction="row" justify="between">
-        <h1 className="font-bold text-xl">Session Details</h1>
+        <h1 className="font-bold text-xl">{session.task.name}</h1>
         <IoClose size={30} className="cursor-pointer" onClick={close} />
       </Stack>
     </ModalContainer>
