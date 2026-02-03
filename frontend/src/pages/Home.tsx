@@ -1,4 +1,4 @@
-import Counter from "../components/home/timer/Counter";
+import Timer from "../components/home/timer/Timer";
 import Interruptions from "../components/home/timer/Interruptions";
 import TaskSelector from "../components/home/timer/TaskSelector";
 import MainLayout from "../layouts/MainLayout";
@@ -12,7 +12,7 @@ function Home() {
       <TimerContainer>
         <TaskSelector />
         <Interruptions />
-        <Counter />
+        <Timer />
       </TimerContainer>
 
       <SessionsDisplay />

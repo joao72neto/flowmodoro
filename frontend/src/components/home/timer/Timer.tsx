@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import Button from "../../common/Button";
 import useCounterComponent from "../../../hooks/components/useCounterComponent";
 
-function Counter() {
+function Timer() {
   const {
     mode,
     seconds,
@@ -88,4 +88,4 @@ function Counter() {
   );
 }
 
-export default Counter;
+export default Timer;
