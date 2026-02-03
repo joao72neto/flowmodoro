@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Button from "../../common/Button";
 import useCounterComponent from "../../../hooks/components/useCounterComponent";
+import clsx from "clsx";
 
 function Timer() {
   const {
@@ -46,7 +47,13 @@ function Timer() {
 
   return (
     <>
-      <div className="text-6xl font-mono mb-8">
+      <div
+        className={clsx(
+          "text-6xl font-mono mb-8 border px-5 py-17 rounded-full border-white/10 transition-all",
+          mode === "focus" &&
+            "animate-[border-breathe_2.5s_ease-in-out_infinite] border-red-400!",
+        )}
+      >
         {mode ? formatTimer(seconds) : "00:00"}
       </div>
       <div className="flex gap-4 mb-6">

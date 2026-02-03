@@ -29,6 +29,28 @@ body {
   --color-secondary: #6c757d;
   --color-danger: #dc3545;
   --color-success: #28a745;
+
+  @keyframes border-breathe {
+    0%,
+    100% {
+      box-shadow: 0 0 0px rgba(239, 68, 68, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.9);
+    }
+  }
+
+  @keyframes heartbeat {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+  }
 }
 
 .scrollbar-hidden {
