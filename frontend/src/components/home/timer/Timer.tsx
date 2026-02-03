@@ -51,7 +51,9 @@ function Timer() {
         className={clsx(
           "text-6xl font-mono mb-8 border px-5 py-17 rounded-full border-white/10 transition-all",
           mode === "focus" &&
-            "animate-[border-breathe_2.5s_ease-in-out_infinite] border-red-400!",
+            "animate-[border-breathe-focus_2.5s_ease-in-out_infinite] border-red-500!",
+          mode === "break" &&
+            "animate-[border-breathe-break_2.5s_ease-in-out_infinite] border-green-500!",
         )}
       >
         {mode ? formatTimer(seconds) : "00:00"}
