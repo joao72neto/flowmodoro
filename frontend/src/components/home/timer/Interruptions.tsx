@@ -5,7 +5,6 @@ function Interruptions() {
 
   return (
     <div className="flex items-center justify-center gap-2 mb-6">
-      <p>Interruptions</p>
       <span className="cursor-pointer">
         <i
           onClick={() => setInterruptions(interruptions + 1)}

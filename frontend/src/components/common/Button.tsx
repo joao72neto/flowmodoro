@@ -8,7 +8,7 @@ const baseStyle = clsx(
   "cursor-pointer",
   "font-semibold",
   "text-white",
-  "border border-white/20",
+  "shadow",
   "transition-all",
   "duration-200",
   "ease-in-out",
@@ -19,8 +19,10 @@ const baseStyle = clsx(
 const variants = {
   primary: clsx(baseStyle, "bg-primary"),
   secondary: clsx(baseStyle, "bg-secondary"),
-  danger: clsx(baseStyle, "bg-danger "),
+  danger: clsx(baseStyle, "bg-danger"),
+  danger2: clsx(baseStyle, "bg-danger-2"),
   success: clsx(baseStyle, "bg-success"),
+  success2: clsx(baseStyle, "bg-success-2"),
 };
 
 function Button({

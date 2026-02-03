@@ -21,9 +21,9 @@ export const modalConfig: IModalConfig = {
     title: "Aviso",
     children: "Este é um aviso padrão",
     closeButtonText: "Fechar",
-    closeButtonVariant: "secondary",
+    closeButtonVariant: "danger",
     confirmButtonText: "Confirmar",
-    confirmButtonVariant: "primary",
+    confirmButtonVariant: "success",
   },
   success: {
     title: "Sucesso!",

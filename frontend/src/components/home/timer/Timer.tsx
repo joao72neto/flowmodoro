@@ -70,7 +70,7 @@ function Timer() {
         ) : mode === "focus" ? (
           <Button
             onClick={() => stopFocus()}
-            variant="secondary"
+            variant="danger2"
             icon={<i className="bi bi-x-lg" />}
           >
             Stop
@@ -86,7 +86,7 @@ function Timer() {
         ) : (
           <Button
             onClick={() => skipBreak()}
-            variant="secondary"
+            variant="success2"
             icon={<i className="bi bi-skip-end-fill" />}
           >
             Skip Break
