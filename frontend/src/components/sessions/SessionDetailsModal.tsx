@@ -4,6 +4,7 @@ import Stack from "../common/Stack";
 import type { SessionType } from "../../types/sessions.types";
 import { formatToHour, formatToPercentage } from "../../utils/number.utils";
 import clsx from "clsx";
+import { capitalize } from "../../utils/string.utils";
 
 const SessionDetailsModal = ({
   session,
@@ -16,7 +17,7 @@ const SessionDetailsModal = ({
     <ModalContainer>
       <div>
         <Stack direction="row" justify="between" className="pb-4">
-          <h1 className="font-bold text-xl">{session.task.name}</h1>
+          <h1 className="font-bold text-xl">{capitalize(session.task.name)}</h1>
           <IoClose size={30} className="cursor-pointer" onClick={close} />
         </Stack>
 

@@ -5,6 +5,7 @@ import { formatToHour } from "../../../../utils/number.utils";
 import SessionDetailsModal from "../../../sessions/SessionDetailsModal";
 import { useState } from "react";
 import type { SessionType } from "../../../../types/sessions.types";
+import { capitalize } from "../../../../utils/string.utils";
 
 const Session = ({ session }: { session: SessionType }) => {
   const [showSessionDetailsModal, setShowSessionDetailsModal] =
@@ -25,7 +26,7 @@ const Session = ({ session }: { session: SessionType }) => {
             "hover:scale-115 duration-200 hover:shadow-xl",
           )}
         >
-          <span className="text-xl">{session.task.name}</span>
+          <span className="text-xl">{capitalize(session.task.name)}</span>
           <span className="text-xl">{formatToHour(session.focus)}</span>
         </Stack>
       </div>
