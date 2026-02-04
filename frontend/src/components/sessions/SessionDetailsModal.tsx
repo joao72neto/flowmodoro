@@ -5,6 +5,7 @@ import type { SessionType } from "../../types/sessions.types";
 import { formatToHour, formatToPercentage } from "../../utils/number.utils";
 import clsx from "clsx";
 import { capitalize } from "../../utils/string.utils";
+import Line from "../common/Line";
 
 const SessionDetailsModal = ({
   session,
@@ -43,16 +44,19 @@ const SessionDetailsModal = ({
       <div className="flex flex-col gap-3">
         <Stack direction="row" justify="between">
           <p>Tempo total:</p>
+          <Line />
           <p>{formatToHour(session.focus + session.rest)}</p>
         </Stack>
 
         <Stack direction="row" justify="between">
           <p>Interrupções:</p>
+          <Line />
           <p> {session.interruptions}</p>
         </Stack>
 
         <Stack direction="row" justify="between">
           <p>Razão de Descanso:</p>
+          <Line />
           <p>{formatToPercentage(session.ratio)}</p>
         </Stack>
       </div>
