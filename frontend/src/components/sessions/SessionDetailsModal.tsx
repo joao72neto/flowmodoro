@@ -24,7 +24,7 @@ const SessionDetailsModal = ({
 
         <Stack
           direction="row"
-          justify="start"
+          justify="center"
           align="right"
           className={clsx(
             "relative pb-3 border-b border-t border-white/20",
