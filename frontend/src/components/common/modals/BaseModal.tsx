@@ -26,13 +26,6 @@ const BaseModal = ({
   onClose?: () => void;
   onConfirm?: () => void;
 }) => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
-
   return (
     <ModalContainer>
       {title && <h1 className="font-bold text-xl">{title}</h1>}
