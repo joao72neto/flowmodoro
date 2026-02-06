@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +32,7 @@ public class Task {
   @Column(name = "tsk_checked")
   private Boolean checked;
 
-  @OneToOne(mappedBy = "task", cascade = CascadeType.REMOVE)
+  @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
   private Session session;
 
 }
