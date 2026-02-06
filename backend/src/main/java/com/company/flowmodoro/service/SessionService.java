@@ -125,6 +125,14 @@ public class SessionService {
 
     }
 
+    public Session update(Session session) {
+        return sessionRepository.save(session);
+    }
+
+    public void delete(Long id) {
+        sessionRepository.deleteById(id);
+    }
+
     // Private methods
 
     private double calculateRatio(double focus, double rest) {

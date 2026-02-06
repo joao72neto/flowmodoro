@@ -2,11 +2,12 @@ package com.company.flowmodoro.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +24,13 @@ import com.company.flowmodoro.service.SessionService;
 @RequestMapping("/api/session")
 public class SessionController {
 
-    @Autowired
-    private SessionService sessionService;
+    private final SessionService sessionService;
+    private final SessionMapper mapper;
 
-    @Autowired
-    private SessionMapper mapper;
+    public SessionController(SessionService sessionService, SessionMapper mapper) {
+        this.sessionService = sessionService;
+        this.mapper = mapper;
+    }
 
     @PostMapping("/{id}")
     public ResponseEntity<SessionDTO> save(@PathVariable Long id, @RequestBody SessionDTO dto) {
@@ -38,5 +41,17 @@ public class SessionController {
     @GetMapping
     public ResponseEntity<List<DailySessionsDTO>> consult() {
         return ResponseEntity.ok(sessionService.consult());
+    }
+
+    @PutMapping
+    public ResponseEntity<SessionDTO> update(@RequestBody SessionDTO dto) {
+        Session session = sessionService.update(mapper.toEntity(dto));
+        return ResponseEntity.ok(mapper.toDTO(session));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        sessionService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
