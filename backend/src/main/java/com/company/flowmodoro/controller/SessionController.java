@@ -43,9 +43,9 @@ public class SessionController {
         return ResponseEntity.ok(sessionService.consult());
     }
 
-    @PutMapping
-    public ResponseEntity<SessionDTO> update(@RequestBody SessionDTO dto) {
-        Session session = sessionService.update(mapper.toEntity(dto));
+    @PutMapping("/{id}")
+    public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionDTO dto) {
+        Session session = sessionService.update(id, mapper.toEntity(dto));
         return ResponseEntity.ok(mapper.toDTO(session));
     }
 

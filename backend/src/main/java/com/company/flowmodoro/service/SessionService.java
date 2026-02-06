@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.company.flowmodoro.exception.InvalidSessionException;
+import com.company.flowmodoro.exception.InvalidTaskException;
 import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.SessionRespository;
@@ -125,8 +126,25 @@ public class SessionService {
 
     }
 
-    public Session update(Session session) {
-        return sessionRepository.save(session);
+    public Session update(Long id, Session session) {
+        Session existing = sessionRepository.findById(id)
+                .orElseThrow(() -> new InvalidSessionException(
+                        ErrorCode.SESSION_NOT_FOUND,
+                        "Session not found with id: " + id));
+
+        existing.setRest(session.getRest());
+        existing.setFocus(session.getFocus());
+        existing.setRatio(session.getRatio());
+        existing.setInterruptions(session.getInterruptions());
+
+        if (session.getTask() != null) {
+            Task task = taskRepository.findById(session.getTask().getId())
+                    .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found"));
+
+            existing.setTask(task);
+        }
+
+        return sessionRepository.save(existing);
     }
 
     public void delete(Long id) {
