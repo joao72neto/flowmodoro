@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class SessionService {
     private static final ErrorCode ERROR_CODE = ErrorCode.TASK_NOT_FOUND;
 
     @Autowired
-    private SessionRespository sessionRespository;
+    private SessionRespository sessionRepository;
 
     @Autowired
     private TaskRepository taskRepository;
@@ -50,53 +51,74 @@ public class SessionService {
         calculateRest(session);
         validateSessions(session, errors);
 
-        session.setTask(task);
+        Optional<Session> existingSession = sessionRepository
+                .findByTaskIdAndDate(taskId, session.getDate());
 
-        return sessionRespository.save(session);
+        if (existingSession.isPresent()) {
+            Session existing = existingSession.get();
+            existing.setFocus(existing.getFocus() + session.getFocus());
+            existing.setRest(existing.getRest() + session.getRest());
+            existing.setInterruptions(existing.getInterruptions() + session.getInterruptions());
+            existing.setRatio(calculateRatio(existing.getFocus(), existing.getRest()));
+
+            return sessionRepository.save(existing);
+        } else {
+            session.setTask(task);
+            return sessionRepository.save(session);
+        }
     }
 
     public List<DailySessionsDTO> consult() {
-        List<Session> sessions = sessionRespository.findAllByOrderByIdDesc();
+        List<Session> sessions = sessionRepository.findAllByOrderByIdDesc();
+        Map<LocalDate, Map<Long, SessionDTO>> accByDay = new TreeMap<>(Comparator.reverseOrder());
 
-        Map<LocalDate, List<Session>> sessionsByDate = sessions.stream()
-                .collect(Collectors.groupingBy(
-                        Session::getDate,
-                        () -> new TreeMap<>(Comparator.reverseOrder()),
-                        Collectors.toList()));
+        for (Session s : sessions) {
+            LocalDate date = s.getDate();
+            Long taskId = s.getTask().getId();
 
-        return sessionsByDate.entrySet().stream()
-                .map((Map.Entry<LocalDate, List<Session>> entry) -> {
+            accByDay.putIfAbsent(date, new HashMap<>());
+            Map<Long, SessionDTO> accByTask = accByDay.get(date);
+
+            if (accByTask.containsKey(taskId)) {
+                SessionDTO acc = accByTask.get(taskId);
+                acc.setFocus(acc.getFocus() + s.getFocus());
+                acc.setRest(acc.getRest() + s.getRest());
+                acc.setInterruptions(acc.getInterruptions() + s.getInterruptions());
+            } else {
+                SessionDTO dto = SessionDTO.builder()
+                        .id(s.getId())
+                        .focus(s.getFocus())
+                        .rest(s.getRest())
+                        .ratio(s.getRatio())
+                        .interruptions(s.getInterruptions())
+                        .task(TaskDTO.builder()
+                                .id(s.getTask().getId())
+                                .name(s.getTask().getName())
+                                .checked(s.getTask().getChecked())
+                                .build())
+                        .build();
+                accByTask.put(taskId, dto);
+            }
+        }
+
+        return accByDay.entrySet().stream()
+                .map(entry -> {
                     LocalDate date = entry.getKey();
-                    List<Session> daySessions = entry.getValue();
+                    Map<Long, SessionDTO> dayTasks = entry.getValue();
 
-                    double totalFocus = daySessions.stream()
-                            .mapToDouble(Session::getFocus)
+                    double totalFocus = dayTasks.values().stream()
+                            .mapToDouble(SessionDTO::getFocus)
                             .sum();
 
-                    double totalRest = daySessions.stream()
-                            .mapToDouble(Session::getRest)
+                    double totalRest = dayTasks.values().stream()
+                            .mapToDouble(SessionDTO::getRest)
                             .sum();
-
-                    List<SessionDTO> sessionDTOs = daySessions.stream()
-                            .map((Session s) -> SessionDTO.builder()
-                                    .id(s.getId())
-                                    .focus(s.getFocus())
-                                    .rest(s.getRest())
-                                    .ratio(s.getRatio())
-                                    .interruptions(s.getInterruptions())
-                                    .task(TaskDTO.builder()
-                                            .id(s.getTask().getId())
-                                            .name(s.getTask().getName())
-                                            .checked(s.getTask().getChecked())
-                                            .build())
-                                    .build())
-                            .toList();
 
                     return DailySessionsDTO.builder()
                             .date(date)
                             .totalFocus(totalFocus)
                             .totalRest(totalRest)
-                            .sessions(sessionDTOs)
+                            .sessions(new ArrayList<>(dayTasks.values()))
                             .build();
                 })
                 .toList();
@@ -104,6 +126,12 @@ public class SessionService {
     }
 
     // Private methods
+
+    private double calculateRatio(double focus, double rest) {
+        if (rest == 0)
+            return focus;
+        return focus / rest;
+    }
 
     private void calculateRest(Session session) {
         if (session.getRatio() == null) {
