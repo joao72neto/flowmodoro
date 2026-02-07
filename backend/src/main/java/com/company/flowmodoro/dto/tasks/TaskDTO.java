@@ -1,4 +1,4 @@
-package com.company.flowmodoro.dto;
+package com.company.flowmodoro.dto.tasks;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

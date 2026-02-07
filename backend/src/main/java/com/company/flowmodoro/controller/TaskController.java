@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.flowmodoro.dto.TaskDTO;
-import com.company.flowmodoro.dto.TaskStatusDTO;
-import com.company.flowmodoro.mapper.TaskMapper;
-import com.company.flowmodoro.mapper.TaskStatusMapper;
+import com.company.flowmodoro.dto.tasks.TaskDTO;
+import com.company.flowmodoro.dto.tasks.TaskStatusDTO;
+import com.company.flowmodoro.mapper.tasks.TaskMapper;
+import com.company.flowmodoro.mapper.tasks.TaskStatusMapper;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.service.TaskService;
 

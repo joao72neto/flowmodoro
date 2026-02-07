@@ -19,9 +19,9 @@ import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.SessionRespository;
 import com.company.flowmodoro.repository.TaskRepository;
-import com.company.flowmodoro.dto.TaskDTO;
 import com.company.flowmodoro.dto.sessions.DailySessionsDTO;
 import com.company.flowmodoro.dto.sessions.SessionDTO;
+import com.company.flowmodoro.dto.tasks.TaskDTO;
 import com.company.flowmodoro.enums.ErrorCode;
 
 @Service
