@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class TaskService {
 
   private static final ErrorCode ERROR_CODE = ErrorCode.TASK_NOT_FOUND;
-
   private final TaskRepository taskRepository;
 
   public TaskService(TaskRepository taskRepository) {
@@ -24,11 +23,6 @@ public class TaskService {
 
   public List<Task> consult() {
     return taskRepository.findAllByOrderByIdDesc();
-  }
-
-  public Task findById(Long id) {
-    return taskRepository.findById(id)
-        .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found"));
   }
 
   public Task save(Task task) {
@@ -48,6 +42,17 @@ public class TaskService {
     Task taskToUpdate = taskRepository.findById(id)
         .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found to update status"));
 
+    taskToUpdate.setChecked(task.getChecked());
+
+    return taskToUpdate;
+  }
+
+  @Transactional
+  public Task update(Long id, Task task) {
+    Task taskToUpdate = taskRepository.findById(id)
+        .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found to update"));
+
+    taskToUpdate.setName(task.getName());
     taskToUpdate.setChecked(task.getChecked());
 
     return taskToUpdate;

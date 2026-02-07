@@ -30,7 +30,7 @@ import com.company.flowmodoro.enums.ErrorCode;
 public class SessionService {
 
     private static final Double RATIO = 0.2;
-    private static final ErrorCode ERROR_CODE = ErrorCode.TASK_NOT_FOUND;
+    private static final ErrorCode ERROR_CODE = ErrorCode.SESSION_NOT_FOUND;
 
     private final SessionRespository sessionRepository;
     private final TaskRepository taskRepository;
