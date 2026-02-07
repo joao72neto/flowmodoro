@@ -15,7 +15,7 @@ class TaskService {
   }
 
   async updateTaskStatus(id: number, data: UpdateTaskRequest) {
-    return await api.patch(`/task/${id}`, data);
+    return await api.patch(`/task/${id}/status`, data);
   }
 }
 
