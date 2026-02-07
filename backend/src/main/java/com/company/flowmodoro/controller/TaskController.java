@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.flowmodoro.dto.tasks.TaskDTO;
 import com.company.flowmodoro.dto.tasks.TaskStatusDTO;
+import com.company.flowmodoro.dto.tasks.TaskUpdateDTO;
 import com.company.flowmodoro.mapper.tasks.TaskMapper;
 import com.company.flowmodoro.mapper.tasks.TaskStatusMapper;
+import com.company.flowmodoro.mapper.tasks.TaskUpdateMapper;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.service.TaskService;
 
@@ -29,11 +31,14 @@ public class TaskController {
   private final TaskService taskService;
   private final TaskMapper taskMapper;
   private final TaskStatusMapper taskStatusMapper;
+  private final TaskUpdateMapper taskUpdateMapper;
 
-  public TaskController(TaskService taskService, TaskMapper taskMapper, TaskStatusMapper taskStatusMapper) {
+  public TaskController(TaskService taskService, TaskMapper taskMapper, TaskStatusMapper taskStatusMapper,
+      TaskUpdateMapper taskUpdateMapper) {
     this.taskService = taskService;
     this.taskMapper = taskMapper;
     this.taskStatusMapper = taskStatusMapper;
+    this.taskUpdateMapper = taskUpdateMapper;
   }
 
   @GetMapping
@@ -54,8 +59,8 @@ public class TaskController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<TaskDTO> update(@PathVariable Long id, @RequestBody TaskDTO task) {
-    Task taskEntity = taskService.update(id, taskMapper.toEntity(task));
+  public ResponseEntity<TaskDTO> update(@PathVariable Long id, @RequestBody TaskUpdateDTO task) {
+    Task taskEntity = taskService.update(id, taskUpdateMapper.toEntity(task));
     return ResponseEntity.ok(taskMapper.toDTO(taskEntity));
   }
 
