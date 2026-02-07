@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.company.flowmodoro.exception.InvalidSessionException;
+import com.company.flowmodoro.exception.InvalidTaskException;
+import com.company.flowmodoro.mapper.sessions.SessionUpdateMapper;
 import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.SessionRespository;
@@ -31,12 +34,16 @@ public class SessionService {
 
     private final SessionRespository sessionRepository;
     private final TaskRepository taskRepository;
+    private final SessionUpdateMapper sessionUpdateMapper;
 
-    public SessionService(SessionRespository sessionRepository, TaskRepository taskRepository) {
+    public SessionService(SessionRespository sessionRepository, TaskRepository taskRepository,
+            SessionUpdateMapper sessionUpdateMapper) {
         this.sessionRepository = sessionRepository;
         this.taskRepository = taskRepository;
+        this.sessionUpdateMapper = sessionUpdateMapper;
     }
 
+    @Transactional
     public Session save(Session session, Long taskId) {
 
         List<String> errors = new ArrayList<>();
@@ -127,13 +134,21 @@ public class SessionService {
 
     }
 
-    public Session update(Long id, SessionUpdateDTO sessionUpdateDTO) {
-        Session existing = sessionRepository.findById(id)
+    @Transactional
+    public Session update(Long id, SessionUpdateDTO dto) {
+        Session session = sessionRepository.findById(id)
                 .orElseThrow(() -> new InvalidSessionException(
                         ErrorCode.SESSION_NOT_FOUND,
                         "Session not found with id: " + id));
 
-        return sessionRepository.save(existing);
+        Task task = taskRepository.findById(dto.getTask())
+                .orElseThrow(() -> new InvalidTaskException(
+                        ERROR_CODE,
+                        "Task not found with id: " + dto.getTask()));
+
+        sessionUpdateMapper.apply(session, dto);
+        session.setTask(task);
+        return sessionRepository.save(session);
     }
 
     public void delete(Long id) {

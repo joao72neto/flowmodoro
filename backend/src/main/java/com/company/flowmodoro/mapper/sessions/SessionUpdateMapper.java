@@ -1,17 +1,18 @@
 package com.company.flowmodoro.mapper.sessions;
 
+import org.springframework.stereotype.Component;
+
 import com.company.flowmodoro.dto.sessions.SessionUpdateDTO;
 import com.company.flowmodoro.model.Session;
 
+@Component
 public class SessionUpdateMapper {
 
-  public Session toEntity(SessionUpdateDTO sessionUpdateDTO) {
-    return Session.builder()
-        .focus(sessionUpdateDTO.getFocus())
-        .ratio(sessionUpdateDTO.getRatio())
-        .rest(sessionUpdateDTO.getRest())
-        .interruptions(sessionUpdateDTO.getInterruptions())
-        .build();
+  public void apply(Session session, SessionUpdateDTO dto) {
+    session.setFocus(dto.getFocus());
+    session.setRatio(dto.getRatio());
+    session.setRest(dto.getRest());
+    session.setInterruptions(dto.getInterruptions());
   }
 
   public SessionUpdateDTO toDTO(Session session) {
@@ -20,7 +21,7 @@ public class SessionUpdateMapper {
         .ratio(session.getRatio())
         .rest(session.getRest())
         .interruptions(session.getInterruptions())
-        .taskId(session.getTask().getId())
+        .task(session.getTask().getId())
         .build();
   }
 }

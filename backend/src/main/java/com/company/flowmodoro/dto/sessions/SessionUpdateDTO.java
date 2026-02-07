@@ -15,5 +15,5 @@ public class SessionUpdateDTO {
   private Double ratio;
   private Double rest;
   private Integer interruptions;
-  private Long taskId;
+  private Long task;
 }
