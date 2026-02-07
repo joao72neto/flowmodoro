@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.company.flowmodoro.dto.sessions.DailySessionsDTO;
 import com.company.flowmodoro.dto.sessions.SessionDTO;
+import com.company.flowmodoro.dto.sessions.SessionUpdateDTO;
 import com.company.flowmodoro.mapper.sessions.SessionMapper;
 import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.service.SessionService;
@@ -44,8 +45,8 @@ public class SessionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionDTO dto) {
-        Session session = sessionService.update(id, mapper.toEntity(dto));
+    public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionUpdateDTO dto) {
+        Session session = sessionService.update(id, dto);
         return ResponseEntity.ok(mapper.toDTO(session));
     }
 

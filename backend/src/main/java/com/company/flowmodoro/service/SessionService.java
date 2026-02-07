@@ -10,17 +10,16 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.company.flowmodoro.exception.InvalidSessionException;
-import com.company.flowmodoro.exception.InvalidTaskException;
 import com.company.flowmodoro.model.Session;
 import com.company.flowmodoro.model.Task;
 import com.company.flowmodoro.repository.SessionRespository;
 import com.company.flowmodoro.repository.TaskRepository;
 import com.company.flowmodoro.dto.sessions.DailySessionsDTO;
 import com.company.flowmodoro.dto.sessions.SessionDTO;
+import com.company.flowmodoro.dto.sessions.SessionUpdateDTO;
 import com.company.flowmodoro.dto.tasks.TaskDTO;
 import com.company.flowmodoro.enums.ErrorCode;
 
@@ -30,11 +29,13 @@ public class SessionService {
     private static final Double RATIO = 0.2;
     private static final ErrorCode ERROR_CODE = ErrorCode.TASK_NOT_FOUND;
 
-    @Autowired
-    private SessionRespository sessionRepository;
+    private final SessionRespository sessionRepository;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    private TaskRepository taskRepository;
+    public SessionService(SessionRespository sessionRepository, TaskRepository taskRepository) {
+        this.sessionRepository = sessionRepository;
+        this.taskRepository = taskRepository;
+    }
 
     public Session save(Session session, Long taskId) {
 
@@ -126,23 +127,11 @@ public class SessionService {
 
     }
 
-    public Session update(Long id, Session session) {
+    public Session update(Long id, SessionUpdateDTO sessionUpdateDTO) {
         Session existing = sessionRepository.findById(id)
                 .orElseThrow(() -> new InvalidSessionException(
                         ErrorCode.SESSION_NOT_FOUND,
                         "Session not found with id: " + id));
-
-        existing.setRest(session.getRest());
-        existing.setFocus(session.getFocus());
-        existing.setRatio(session.getRatio());
-        existing.setInterruptions(session.getInterruptions());
-
-        if (session.getTask() != null) {
-            Task task = taskRepository.findById(session.getTask().getId())
-                    .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found"));
-
-            existing.setTask(task);
-        }
 
         return sessionRepository.save(existing);
     }
