@@ -151,7 +151,13 @@ public class SessionService {
         return sessionRepository.save(session);
     }
 
+    @Transactional
     public void delete(Long id) {
+        sessionRepository.findById(id)
+                .orElseThrow(() -> new InvalidSessionException(
+                        ErrorCode.SESSION_NOT_FOUND,
+                        "Session not found with id: " + id));
+
         sessionRepository.deleteById(id);
     }
 
