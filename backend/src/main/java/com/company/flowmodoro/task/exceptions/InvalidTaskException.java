@@ -2,29 +2,15 @@ package com.company.flowmodoro.task.exceptions;
 
 import java.util.List;
 
-import com.company.flowmodoro.global.ErrorCode;
+import com.company.flowmodoro.global.BaseException;
+import com.company.flowmodoro.task.enums.TaskErrorCode;
 
-public class InvalidTaskException extends RuntimeException {
-  private final List<String> errors;
-  private final ErrorCode code;
-
-  public InvalidTaskException(ErrorCode code, String error) {
-    super(error);
-    this.code = code;
-    this.errors = List.of(error);
+public class InvalidTaskException extends BaseException {
+  public InvalidTaskException(TaskErrorCode code, String error) {
+    super(code, error);
   }
 
-  public InvalidTaskException(ErrorCode code, List<String> errors) {
-    super(String.join(", ", errors));
-    this.code = code;
-    this.errors = errors;
-  }
-
-  public ErrorCode getCode() {
-    return code;
-  }
-
-  public List<String> getErrors() {
-    return errors;
+  public InvalidTaskException(TaskErrorCode code, List<String> error) {
+    super(code, error);
   }
 }

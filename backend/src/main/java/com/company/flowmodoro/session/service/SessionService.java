@@ -52,11 +52,11 @@ public class SessionService {
 
         if (taskId == null) {
             errors.add("Task id can't be null");
-            throw new InvalidSessionException(TaskErrorCode.TASK_ID_CAN_NOT_BE_NULL, errors);
+            throw new InvalidTaskException(TaskErrorCode.TASK_ID_CAN_NOT_BE_NULL, errors);
         }
 
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new InvalidSessionException(
+                .orElseThrow(() -> new InvalidTaskException(
                         TASK_NOT_FOUND, "Task not found"));
 
         calculateRest(session);

@@ -2,30 +2,15 @@ package com.company.flowmodoro.session.exceptions;
 
 import java.util.List;
 
-import com.company.flowmodoro.global.ErrorCode;
+import com.company.flowmodoro.global.BaseException;
+import com.company.flowmodoro.session.enums.SessionErrorCode;
 
-public class InvalidSessionException extends RuntimeException {
-
-    private final List<String> errors;
-    private final ErrorCode code;
-
-    public InvalidSessionException(ErrorCode code, String error) {
-        super(error);
-        this.code = code;
-        this.errors = List.of(error);
+public class InvalidSessionException extends BaseException {
+    public InvalidSessionException(SessionErrorCode code, String error) {
+        super(code, error);
     }
 
-    public InvalidSessionException(ErrorCode code, List<String> errors) {
-        super(String.join(", ", errors));
-        this.code = code;
-        this.errors = errors;
-    }
-
-    public ErrorCode getCode() {
-        return code;
-    }
-
-    public List<String> getErrors() {
-        return errors;
+    public InvalidSessionException(SessionErrorCode code, List<String> errors) {
+        super(code, errors);
     }
 }

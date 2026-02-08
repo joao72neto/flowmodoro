@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.company.flowmodoro.global.ErrorCode;
 import com.company.flowmodoro.task.enums.TaskErrorCode;
 import com.company.flowmodoro.task.exceptions.InvalidTaskException;
 import com.company.flowmodoro.task.model.Task;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TaskService {
 
-  private static final ErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
+  private static final TaskErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
   private final TaskRepository taskRepository;
 
   public TaskService(TaskRepository taskRepository) {
