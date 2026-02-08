@@ -1,4 +1,4 @@
-package com.company.flowmodoro.task.controller;
+package com.company.flowmodoro.task;
 
 import java.util.List;
 
@@ -20,8 +20,6 @@ import com.company.flowmodoro.task.dtos.TaskUpdateDTO;
 import com.company.flowmodoro.task.mappers.TaskMapper;
 import com.company.flowmodoro.task.mappers.TaskStatusMapper;
 import com.company.flowmodoro.task.mappers.TaskUpdateMapper;
-import com.company.flowmodoro.task.model.Task;
-import com.company.flowmodoro.task.service.TaskService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -48,19 +46,19 @@ public class TaskController {
 
   @PostMapping
   public ResponseEntity<TaskDTO> save(@RequestBody TaskDTO task) {
-    Task saved = taskService.save(taskMapper.toEntity(task));
+    TaskModel saved = taskService.save(taskMapper.toEntity(task));
     return ResponseEntity.status(201).body(taskMapper.toDTO(saved));
   }
 
   @PatchMapping("/{id}/status")
   public ResponseEntity<TaskDTO> updateStatus(@PathVariable Long id, @RequestBody TaskStatusDTO task) {
-    Task taskEntity = taskService.updateStatus(id, taskStatusMapper.toEntity(task));
+    TaskModel taskEntity = taskService.updateStatus(id, taskStatusMapper.toEntity(task));
     return ResponseEntity.ok(taskMapper.toDTO(taskEntity));
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<TaskDTO> update(@PathVariable Long id, @RequestBody TaskUpdateDTO task) {
-    Task taskEntity = taskService.update(id, taskUpdateMapper.toEntity(task));
+    TaskModel taskEntity = taskService.update(id, taskUpdateMapper.toEntity(task));
     return ResponseEntity.ok(taskMapper.toDTO(taskEntity));
   }
 

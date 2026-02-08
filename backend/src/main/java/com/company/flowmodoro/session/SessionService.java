@@ -1,4 +1,4 @@
-package com.company.flowmodoro.session.service;
+package com.company.flowmodoro.session;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,13 +19,11 @@ import com.company.flowmodoro.session.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.session.enums.SessionErrorCode;
 import com.company.flowmodoro.session.exceptions.InvalidSessionException;
 import com.company.flowmodoro.session.mappers.SessionUpdateMapper;
-import com.company.flowmodoro.session.model.Session;
-import com.company.flowmodoro.session.repository.SessionRespository;
+import com.company.flowmodoro.task.TaskModel;
+import com.company.flowmodoro.task.TaskRepository;
 import com.company.flowmodoro.task.dtos.TaskDTO;
 import com.company.flowmodoro.task.enums.TaskErrorCode;
 import com.company.flowmodoro.task.exceptions.InvalidTaskException;
-import com.company.flowmodoro.task.model.Task;
-import com.company.flowmodoro.task.repository.TaskRepository;
 
 @Service
 public class SessionService {
@@ -46,7 +44,7 @@ public class SessionService {
     }
 
     @Transactional
-    public Session save(Session session, Long taskId) {
+    public SessionModel save(SessionModel session, Long taskId) {
 
         List<String> errors = new ArrayList<>();
 
@@ -55,18 +53,18 @@ public class SessionService {
             throw new InvalidTaskException(TaskErrorCode.TASK_ID_CAN_NOT_BE_NULL, errors);
         }
 
-        Task task = taskRepository.findById(taskId)
+        TaskModel task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new InvalidTaskException(
                         TASK_NOT_FOUND, "Task not found"));
 
         calculateRest(session);
         validateSessions(session, errors);
 
-        Optional<Session> existingSession = sessionRepository
+        Optional<SessionModel> existingSession = sessionRepository
                 .findByTaskIdAndDate(taskId, session.getDate());
 
         if (existingSession.isPresent()) {
-            Session existing = existingSession.get();
+            SessionModel existing = existingSession.get();
             existing.setFocus(existing.getFocus() + session.getFocus());
             existing.setRest(existing.getRest() + session.getRest());
             existing.setInterruptions(existing.getInterruptions() + session.getInterruptions());
@@ -80,10 +78,10 @@ public class SessionService {
     }
 
     public List<DailySessionsDTO> consult() {
-        List<Session> sessions = sessionRepository.findAllByOrderByIdDesc();
+        List<SessionModel> sessions = sessionRepository.findAllByOrderByIdDesc();
         Map<LocalDate, Map<Long, SessionDTO>> accByDay = new TreeMap<>(Comparator.reverseOrder());
 
-        for (Session s : sessions) {
+        for (SessionModel s : sessions) {
             LocalDate date = s.getDate();
             Long taskId = s.getTask().getId();
 
@@ -137,13 +135,13 @@ public class SessionService {
     }
 
     @Transactional
-    public Session update(Long id, SessionUpdateDTO dto) {
-        Session session = sessionRepository.findById(id)
+    public SessionModel update(Long id, SessionUpdateDTO dto) {
+        SessionModel session = sessionRepository.findById(id)
                 .orElseThrow(() -> new InvalidSessionException(
                         SESSION_NOT_FOUND,
                         "Session not found with id: " + id));
 
-        Task task = taskRepository.findById(dto.getTask())
+        TaskModel task = taskRepository.findById(dto.getTask())
                 .orElseThrow(() -> new InvalidTaskException(
                         TASK_NOT_FOUND,
                         "Task not found with id: " + dto.getTask()));
@@ -171,7 +169,7 @@ public class SessionService {
         return focus / rest;
     }
 
-    private void calculateRest(Session session) {
+    private void calculateRest(SessionModel session) {
         if (session.getRatio() == null) {
             session.setRatio(RATIO);
         }
@@ -179,7 +177,7 @@ public class SessionService {
         session.setRest(Math.round(rest * 100.0) / 100.0);
     }
 
-    private void validateSessions(Session session, List<String> errors) {
+    private void validateSessions(SessionModel session, List<String> errors) {
 
         if (session.getFocus() <= 0) {
             errors.add("Focus needs to be greater than 0");

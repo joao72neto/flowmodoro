@@ -2,19 +2,19 @@ package com.company.flowmodoro.task.mappers;
 
 import org.springframework.stereotype.Component;
 
+import com.company.flowmodoro.task.TaskModel;
 import com.company.flowmodoro.task.dtos.TaskStatusDTO;
-import com.company.flowmodoro.task.model.Task;
 
 @Component
 public class TaskStatusMapper {
 
-  public Task toEntity(TaskStatusDTO taskStatusDTO) {
-    return Task.builder()
+  public TaskModel toEntity(TaskStatusDTO taskStatusDTO) {
+    return TaskModel.builder()
         .checked(taskStatusDTO.getChecked())
         .build();
   }
 
-  public TaskStatusDTO toDTO(Task task) {
+  public TaskStatusDTO toDTO(TaskModel task) {
     return TaskStatusDTO.builder()
         .checked(task.getChecked())
         .build();

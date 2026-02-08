@@ -1,8 +1,8 @@
-package com.company.flowmodoro.task.model;
+package com.company.flowmodoro.task;
 
 import java.util.List;
 
-import com.company.flowmodoro.session.model.Session;
+import com.company.flowmodoro.session.SessionModel;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Task {
+public class TaskModel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +37,6 @@ public class Task {
   private Boolean checked;
 
   @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
-  private List<Session> session;
+  private List<SessionModel> session;
 
 }

@@ -1,4 +1,4 @@
-package com.company.flowmodoro.session.controller;
+package com.company.flowmodoro.session;
 
 import java.util.List;
 
@@ -17,8 +17,6 @@ import com.company.flowmodoro.session.dtos.DailySessionsDTO;
 import com.company.flowmodoro.session.dtos.SessionDTO;
 import com.company.flowmodoro.session.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.session.mappers.SessionMapper;
-import com.company.flowmodoro.session.model.Session;
-import com.company.flowmodoro.session.service.SessionService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -35,7 +33,7 @@ public class SessionController {
 
     @PostMapping("/{id}")
     public ResponseEntity<SessionDTO> save(@PathVariable Long id, @RequestBody SessionDTO dto) {
-        Session session = sessionService.save(mapper.toEntity(dto), id);
+        SessionModel session = sessionService.save(mapper.toEntity(dto), id);
         return ResponseEntity.status(201).body(mapper.toDTO(session));
     }
 
@@ -46,7 +44,7 @@ public class SessionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionUpdateDTO dto) {
-        Session session = sessionService.update(id, dto);
+        SessionModel session = sessionService.update(id, dto);
         return ResponseEntity.ok(mapper.toDTO(session));
     }
 

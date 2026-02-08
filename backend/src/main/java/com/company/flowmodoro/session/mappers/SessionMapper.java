@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.company.flowmodoro.session.SessionModel;
 import com.company.flowmodoro.session.dtos.SessionDTO;
-import com.company.flowmodoro.session.model.Session;
 import com.company.flowmodoro.task.mappers.TaskMapper;
 
 @Component
@@ -15,8 +15,8 @@ public class SessionMapper {
     @Autowired
     private TaskMapper mapper;
 
-    public Session toEntity(SessionDTO sessionDTO) {
-        return Session.builder()
+    public SessionModel toEntity(SessionDTO sessionDTO) {
+        return SessionModel.builder()
                 .id(sessionDTO.getId())
                 .focus(sessionDTO.getFocus())
                 .ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
@@ -24,11 +24,11 @@ public class SessionMapper {
                 .build();
     }
 
-    public List<Session> toEntity(List<SessionDTO> sessionDTOs) {
+    public List<SessionModel> toEntity(List<SessionDTO> sessionDTOs) {
         return sessionDTOs.stream().map(this::toEntity).toList();
     }
 
-    public SessionDTO toDTO(Session session) {
+    public SessionDTO toDTO(SessionModel session) {
         return SessionDTO.builder()
                 .id(session.getId())
                 .focus(session.getFocus())
@@ -39,7 +39,7 @@ public class SessionMapper {
                 .build();
     }
 
-    public List<SessionDTO> toDTO(List<Session> sessions) {
+    public List<SessionDTO> toDTO(List<SessionModel> sessions) {
         return sessions.stream().map(this::toDTO).toList();
     }
 }

@@ -1,10 +1,10 @@
-package com.company.flowmodoro.session.model;
+package com.company.flowmodoro.session;
 
 import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.company.flowmodoro.task.model.Task;
+import com.company.flowmodoro.task.TaskModel;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Session {
+public class SessionModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +50,5 @@ public class Session {
 
     @ManyToOne()
     @JoinColumn(name = "ses_tsk_id")
-    private Task task;
+    private TaskModel task;
 }

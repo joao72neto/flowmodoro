@@ -1,4 +1,4 @@
-package com.company.flowmodoro.task.service;
+package com.company.flowmodoro.task;
 
 import java.util.List;
 
@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.company.flowmodoro.task.enums.TaskErrorCode;
 import com.company.flowmodoro.task.exceptions.InvalidTaskException;
-import com.company.flowmodoro.task.model.Task;
-import com.company.flowmodoro.task.repository.TaskRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,25 +19,25 @@ public class TaskService {
     this.taskRepository = taskRepository;
   }
 
-  public List<Task> consult() {
+  public List<TaskModel> consult() {
     return taskRepository.findAllByOrderByIdDesc();
   }
 
-  public Task save(Task task) {
+  public TaskModel save(TaskModel task) {
     return taskRepository.save(task);
   }
 
   @Transactional
   public void deleteById(Long id) {
-    Task taskToDelete = taskRepository.findById(id)
+    TaskModel taskToDelete = taskRepository.findById(id)
         .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to delete"));
 
     taskRepository.delete(taskToDelete);
   }
 
   @Transactional
-  public Task updateStatus(Long id, Task task) {
-    Task taskToUpdate = taskRepository.findById(id)
+  public TaskModel updateStatus(Long id, TaskModel task) {
+    TaskModel taskToUpdate = taskRepository.findById(id)
         .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update status"));
 
     taskToUpdate.setChecked(task.getChecked());
@@ -48,8 +46,8 @@ public class TaskService {
   }
 
   @Transactional
-  public Task update(Long id, Task task) {
-    Task taskToUpdate = taskRepository.findById(id)
+  public TaskModel update(Long id, TaskModel task) {
+    TaskModel taskToUpdate = taskRepository.findById(id)
         .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update"));
 
     taskToUpdate.setName(task.getName());
