@@ -1,4 +1,4 @@
-package com.company.flowmodoro.global;
+package com.company.flowmodoro.shared.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

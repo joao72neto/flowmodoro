@@ -2,7 +2,7 @@ package com.company.flowmodoro.task.exceptions;
 
 import java.util.List;
 
-import com.company.flowmodoro.global.BaseException;
+import com.company.flowmodoro.shared.exception.BaseException;
 import com.company.flowmodoro.task.enums.TaskErrorCode;
 
 public class InvalidTaskException extends BaseException {
