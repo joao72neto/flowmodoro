@@ -1,4 +1,4 @@
-package com.company.flowmodoro.session.dto;
+package com.company.flowmodoro.session.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

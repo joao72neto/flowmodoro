@@ -1,10 +1,10 @@
-package com.company.flowmodoro.task.mapper;
+package com.company.flowmodoro.task.mappers;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.task.dto.TaskDTO;
+import com.company.flowmodoro.task.dtos.TaskDTO;
 import com.company.flowmodoro.task.model.Task;
 
 @Component

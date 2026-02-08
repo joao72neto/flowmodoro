@@ -1,4 +1,4 @@
-package com.company.flowmodoro.task.exception;
+package com.company.flowmodoro.task.exceptions;
 
 import java.util.List;
 

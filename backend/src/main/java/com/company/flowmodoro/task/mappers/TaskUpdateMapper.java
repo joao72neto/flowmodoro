@@ -1,8 +1,8 @@
-package com.company.flowmodoro.task.mapper;
+package com.company.flowmodoro.task.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.task.dto.TaskUpdateDTO;
+import com.company.flowmodoro.task.dtos.TaskUpdateDTO;
 import com.company.flowmodoro.task.model.Task;
 
 @Component

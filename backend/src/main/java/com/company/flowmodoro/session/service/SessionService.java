@@ -13,16 +13,17 @@ import java.util.TreeMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.company.flowmodoro.global.ErrorCode;
-import com.company.flowmodoro.session.dto.DailySessionsDTO;
-import com.company.flowmodoro.session.dto.SessionDTO;
-import com.company.flowmodoro.session.dto.SessionUpdateDTO;
-import com.company.flowmodoro.session.exception.InvalidSessionException;
-import com.company.flowmodoro.session.mapper.SessionUpdateMapper;
+import com.company.flowmodoro.session.dtos.DailySessionsDTO;
+import com.company.flowmodoro.session.dtos.SessionDTO;
+import com.company.flowmodoro.session.dtos.SessionUpdateDTO;
+import com.company.flowmodoro.session.enums.SessionErrorCode;
+import com.company.flowmodoro.session.exceptions.InvalidSessionException;
+import com.company.flowmodoro.session.mappers.SessionUpdateMapper;
 import com.company.flowmodoro.session.model.Session;
 import com.company.flowmodoro.session.repository.SessionRespository;
-import com.company.flowmodoro.task.dto.TaskDTO;
-import com.company.flowmodoro.task.exception.InvalidTaskException;
+import com.company.flowmodoro.task.dtos.TaskDTO;
+import com.company.flowmodoro.task.enums.TaskErrorCode;
+import com.company.flowmodoro.task.exceptions.InvalidTaskException;
 import com.company.flowmodoro.task.model.Task;
 import com.company.flowmodoro.task.repository.TaskRepository;
 
@@ -30,7 +31,8 @@ import com.company.flowmodoro.task.repository.TaskRepository;
 public class SessionService {
 
     private static final Double RATIO = 0.2;
-    private static final ErrorCode ERROR_CODE = ErrorCode.SESSION_NOT_FOUND;
+    private static final SessionErrorCode SESSION_NOT_FOUND = SessionErrorCode.SESSION_NOT_FOUND;
+    private static final TaskErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
 
     private final SessionRespository sessionRepository;
     private final TaskRepository taskRepository;
@@ -50,12 +52,12 @@ public class SessionService {
 
         if (taskId == null) {
             errors.add("Task id can't be null");
-            throw new InvalidSessionException(ErrorCode.TASK_ID_CAN_NOT_BE_NULL, errors);
+            throw new InvalidSessionException(TaskErrorCode.TASK_ID_CAN_NOT_BE_NULL, errors);
         }
 
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new InvalidSessionException(
-                        ERROR_CODE, "Task not found"));
+                        TASK_NOT_FOUND, "Task not found"));
 
         calculateRest(session);
         validateSessions(session, errors);
@@ -138,12 +140,12 @@ public class SessionService {
     public Session update(Long id, SessionUpdateDTO dto) {
         Session session = sessionRepository.findById(id)
                 .orElseThrow(() -> new InvalidSessionException(
-                        ErrorCode.SESSION_NOT_FOUND,
+                        SESSION_NOT_FOUND,
                         "Session not found with id: " + id));
 
         Task task = taskRepository.findById(dto.getTask())
                 .orElseThrow(() -> new InvalidTaskException(
-                        ERROR_CODE,
+                        TASK_NOT_FOUND,
                         "Task not found with id: " + dto.getTask()));
 
         sessionUpdateMapper.apply(session, dto);
@@ -155,7 +157,7 @@ public class SessionService {
     public void delete(Long id) {
         sessionRepository.findById(id)
                 .orElseThrow(() -> new InvalidSessionException(
-                        ErrorCode.SESSION_NOT_FOUND,
+                        SESSION_NOT_FOUND,
                         "Session not found with id: " + id));
 
         sessionRepository.deleteById(id);
@@ -192,7 +194,7 @@ public class SessionService {
         }
 
         if (!errors.isEmpty()) {
-            throw new InvalidSessionException(ErrorCode.INVALID_SESSION, errors);
+            throw new InvalidSessionException(SessionErrorCode.INVALID_SESSION, errors);
         }
     }
 }

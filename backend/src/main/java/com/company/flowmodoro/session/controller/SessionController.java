@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.company.flowmodoro.session.dto.DailySessionsDTO;
-import com.company.flowmodoro.session.dto.SessionDTO;
-import com.company.flowmodoro.session.dto.SessionUpdateDTO;
-import com.company.flowmodoro.session.mapper.SessionMapper;
+import com.company.flowmodoro.session.dtos.DailySessionsDTO;
+import com.company.flowmodoro.session.dtos.SessionDTO;
+import com.company.flowmodoro.session.dtos.SessionUpdateDTO;
+import com.company.flowmodoro.session.mappers.SessionMapper;
 import com.company.flowmodoro.session.model.Session;
 import com.company.flowmodoro.session.service.SessionService;
 

@@ -1,0 +1,8 @@
+package com.company.flowmodoro.session.enums;
+
+import com.company.flowmodoro.global.ErrorCode;
+
+public enum SessionErrorCode implements ErrorCode {
+  INVALID_SESSION,
+  SESSION_NOT_FOUND
+}

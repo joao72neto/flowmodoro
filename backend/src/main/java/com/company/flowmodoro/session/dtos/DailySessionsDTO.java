@@ -1,4 +1,4 @@
-package com.company.flowmodoro.session.dto;
+package com.company.flowmodoro.session.dtos;
 
 import java.time.LocalDate;
 import java.util.List;

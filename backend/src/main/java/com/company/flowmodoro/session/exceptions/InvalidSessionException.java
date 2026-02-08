@@ -1,4 +1,4 @@
-package com.company.flowmodoro.session.exception;
+package com.company.flowmodoro.session.exceptions;
 
 import java.util.List;
 

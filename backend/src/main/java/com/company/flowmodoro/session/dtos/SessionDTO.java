@@ -1,6 +1,6 @@
-package com.company.flowmodoro.session.dto;
+package com.company.flowmodoro.session.dtos;
 
-import com.company.flowmodoro.task.dto.TaskDTO;
+import com.company.flowmodoro.task.dtos.TaskDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

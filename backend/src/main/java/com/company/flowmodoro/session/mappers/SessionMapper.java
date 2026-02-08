@@ -1,13 +1,13 @@
-package com.company.flowmodoro.session.mapper;
+package com.company.flowmodoro.session.mappers;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.session.dto.SessionDTO;
+import com.company.flowmodoro.session.dtos.SessionDTO;
 import com.company.flowmodoro.session.model.Session;
-import com.company.flowmodoro.task.mapper.TaskMapper;
+import com.company.flowmodoro.task.mappers.TaskMapper;
 
 @Component
 public class SessionMapper {

@@ -1,8 +1,8 @@
-package com.company.flowmodoro.session.mapper;
+package com.company.flowmodoro.session.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.session.dto.SessionUpdateDTO;
+import com.company.flowmodoro.session.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.session.model.Session;
 
 @Component

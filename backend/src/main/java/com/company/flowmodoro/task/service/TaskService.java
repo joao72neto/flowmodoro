@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.company.flowmodoro.global.ErrorCode;
-import com.company.flowmodoro.task.exception.InvalidTaskException;
+import com.company.flowmodoro.task.enums.TaskErrorCode;
+import com.company.flowmodoro.task.exceptions.InvalidTaskException;
 import com.company.flowmodoro.task.model.Task;
 import com.company.flowmodoro.task.repository.TaskRepository;
 
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TaskService {
 
-  private static final ErrorCode ERROR_CODE = ErrorCode.TASK_NOT_FOUND;
+  private static final ErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
   private final TaskRepository taskRepository;
 
   public TaskService(TaskRepository taskRepository) {
@@ -32,7 +33,7 @@ public class TaskService {
   @Transactional
   public void deleteById(Long id) {
     Task taskToDelete = taskRepository.findById(id)
-        .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found to delete"));
+        .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to delete"));
 
     taskRepository.delete(taskToDelete);
   }
@@ -40,7 +41,7 @@ public class TaskService {
   @Transactional
   public Task updateStatus(Long id, Task task) {
     Task taskToUpdate = taskRepository.findById(id)
-        .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found to update status"));
+        .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update status"));
 
     taskToUpdate.setChecked(task.getChecked());
 
@@ -50,7 +51,7 @@ public class TaskService {
   @Transactional
   public Task update(Long id, Task task) {
     Task taskToUpdate = taskRepository.findById(id)
-        .orElseThrow(() -> new InvalidTaskException(ERROR_CODE, "Task not found to update"));
+        .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update"));
 
     taskToUpdate.setName(task.getName());
     taskToUpdate.setChecked(task.getChecked());

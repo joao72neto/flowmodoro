@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.company.flowmodoro.session.exception.InvalidSessionException;
-import com.company.flowmodoro.task.exception.InvalidTaskException;
+import com.company.flowmodoro.session.exceptions.InvalidSessionException;
+import com.company.flowmodoro.task.exceptions.InvalidTaskException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

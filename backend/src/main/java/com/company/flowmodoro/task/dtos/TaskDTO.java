@@ -1,4 +1,4 @@
-package com.company.flowmodoro.task.dto;
+package com.company.flowmodoro.task.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskStatusDTO {
+public class TaskDTO {
+  private Long id;
+  private String name;
   private Boolean checked;
 }
