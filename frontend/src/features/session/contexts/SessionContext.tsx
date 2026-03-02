@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import useSessions from "../hooks/useSessions";
-import Modal from "../../../components/common/modals/Modal";
+import Modal from "../../../shared/components/modals/Modal";
 import { formatToHour } from "../../../shared/utils/number.utils";
 
 interface ISessionContext {

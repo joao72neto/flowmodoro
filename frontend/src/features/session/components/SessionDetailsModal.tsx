@@ -1,6 +1,6 @@
-import ModalContainer from "../../../components/common/modals/ModalContainer";
+import ModalContainer from "../../../shared/components/modals/ModalContainer";
 import { IoClose } from "react-icons/io5";
-import Stack from "../../../components/common/Stack";
+import Stack from "../../../shared/components/Stack";
 import type { SessionType } from "../types/sessions.types";
 import {
   formatToHour,
@@ -8,7 +8,7 @@ import {
 } from "../../../shared/utils/number.utils";
 import clsx from "clsx";
 import { capitalize } from "../../../shared/utils/string.utils";
-import Line from "../../../components/common/Line";
+import Line from "../../../shared/components/Line";
 
 const SessionDetailsModal = ({
   session,

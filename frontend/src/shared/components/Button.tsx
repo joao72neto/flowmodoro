@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { VariantType } from "../../types/globals.types";
+import type { VariantType } from "../types/globals.types";
 
 const baseStyle = clsx(
   "px-5",

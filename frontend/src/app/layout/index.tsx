@@ -1,11 +1,12 @@
-import IconButton from "../features/home/components/buttons/IconButton";
-import SideBar from "../components/layout/SideBar";
+import IconButton from "../../features/home/components/buttons/IconButton";
+import SideBar from "./SideBar";
 
-import LayoutContainer from "../components/layout/containers/LayoutContainer";
-import MainContentContainer from "../components/layout/containers/MainContentContainer";
-import SideBarContainer from "../components/layout/containers/SideBarContainer";
-import ToggleButtonContainer from "../components/layout/containers/ToggleButtonContainer";
-import { useTaskContext } from "../features/task/contexts/TaskContext";
+import LayoutContainer from "./LayoutContainer";
+import MainContentContainer from "./MainContentContainer";
+
+import { useTaskContext } from "../../features/task/contexts/TaskContext";
+import SideBarContainer from "./SideBarContainer";
+import ToggleButtonContainer from "./ToggleButtonContainer";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useTaskContext();

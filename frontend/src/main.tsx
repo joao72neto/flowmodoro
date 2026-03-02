@@ -4,7 +4,7 @@ import "./index.css";
 import Home from "./features/home/Home";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import Providers from "./components/providers/Providers";
+import Providers from "./app/Providers";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

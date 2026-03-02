@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import Button from "../../../components/common/Button";
-import useCounterComponent from "../../../hooks/useCounterComponent";
+import Button from "../../../shared/components/Button";
+import useTimer from "../hooks/useTimer";
 import clsx from "clsx";
 
 function Timer() {
@@ -14,7 +14,7 @@ function Timer() {
     startFocus,
     stopFocus,
     skipBreak,
-  } = useCounterComponent();
+  } = useTimer();
 
   const intervalRef = useRef<number | null>(null);
 

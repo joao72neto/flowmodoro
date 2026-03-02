@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import Stack from "../../../../components/common/Stack";
+import Stack from "../../../../shared/components/Stack";
 
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import SessionDetailsModal from "../SessionDetailsModal";

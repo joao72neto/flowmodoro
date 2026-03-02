@@ -1,5 +1,5 @@
 import type { SessionRequest } from "../types/sessions.types";
-import api from "../../../services/api";
+import api from "../../../configs/api";
 
 class SessionService {
   async getSessions() {

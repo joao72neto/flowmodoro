@@ -1,4 +1,4 @@
-import Modal from "../components/common/modals/Modal";
+import Modal from "../components/modals/Modal";
 import { createContext, useContext, useState } from "react";
 import type { ModalType } from "../types/globals.types";
 

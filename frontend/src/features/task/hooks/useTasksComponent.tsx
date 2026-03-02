@@ -1,4 +1,4 @@
-import { useModal } from "../../../contexts/ModalContext";
+import { useModal } from "../../../shared/contexts/ModalContext";
 import { useTaskContext } from "../contexts/TaskContext";
 
 const useTasksComponent = () => {

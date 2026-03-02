@@ -1,7 +1,7 @@
 import Timer from "./components/Timer";
 import Interruptions from "./components/Interruptions";
-import TaskSelector from "./components/tasks/TaskSelector";
-import MainLayout from "../../layouts/MainLayout";
+import TaskSelector from "../task/components/TaskSelector";
+import MainLayout from "../../app/layout";
 
 import SessionsDisplay from "../session/components/SessionsDisplay";
 import TimerContainer from "./components/TimerContainer";

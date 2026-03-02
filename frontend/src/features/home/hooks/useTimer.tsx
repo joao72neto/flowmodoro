@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useSessionContext } from "../features/session/contexts/SessionContext";
-import { useTaskContext } from "../features/task/contexts/TaskContext";
-import { useModal } from "../contexts/ModalContext";
+import { useSessionContext } from "../../session/contexts/SessionContext";
+import { useTaskContext } from "../../task/contexts/TaskContext";
+import { useModal } from "../../../shared/contexts/ModalContext";
 
-const useCounterComponent = () => {
+const useTimer = () => {
   const { setFocus, setShowSaveSessionModal } = useSessionContext();
 
   const BREAK_RATIO = 0.2;
@@ -66,4 +66,4 @@ const useCounterComponent = () => {
   };
 };
 
-export default useCounterComponent;
+export default useTimer;
