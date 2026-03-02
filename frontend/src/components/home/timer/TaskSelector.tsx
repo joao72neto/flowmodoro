@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { useTaskContext } from "../../../contexts/TaskContext";
+import { useTaskContext } from "../../../features/task/contexts/TaskContext";
 import clsx from "clsx";
-import { useSessionContext } from "../../../contexts/SessionContext";
+import { useSessionContext } from "../../../features/session/contexts/SessionContext";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);

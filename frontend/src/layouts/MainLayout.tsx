@@ -5,7 +5,7 @@ import LayoutContainer from "../components/layout/containers/LayoutContainer";
 import MainContentContainer from "../components/layout/containers/MainContentContainer";
 import SideBarContainer from "../components/layout/containers/SideBarContainer";
 import ToggleButtonContainer from "../components/layout/containers/ToggleButtonContainer";
-import { useTaskContext } from "../contexts/TaskContext";
+import { useTaskContext } from "../features/task/contexts/TaskContext";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useTaskContext();

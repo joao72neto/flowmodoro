@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useSessionContext } from "../contexts/SessionContext";
+import { useSessionContext } from "../../session/contexts/SessionContext";
 import type { TaskModel } from "../types/tasks.types";
 
 const useActiveTask = (tasks: TaskModel[]) => {

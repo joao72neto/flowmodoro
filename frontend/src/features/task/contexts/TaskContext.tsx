@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import useTasks from "../hooks/services/useTasks";
+import useTasks from "../hooks/useTasks";
 import type { TaskModel } from "../types/tasks.types";
 import useActiveTask from "../hooks/useActiveTask";
 

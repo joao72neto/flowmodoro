@@ -1,5 +1,5 @@
-import { useModal } from "../../contexts/ModalContext";
-import { useTaskContext } from "../../contexts/TaskContext";
+import { useModal } from "../../../contexts/ModalContext";
+import { useTaskContext } from "../contexts/TaskContext";
 
 const useTasksComponent = () => {
   const { showWarning, hideModal } = useModal();

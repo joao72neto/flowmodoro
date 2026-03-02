@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
-import useSessions from "../hooks/services/useSessions";
-import Modal from "../components/common/modals/Modal";
-import { formatToHour } from "../utils/number.utils";
+import useSessions from "../hooks/useSessions";
+import Modal from "../../../components/common/modals/Modal";
+import { formatToHour } from "../../../shared/utils/number.utils";
 
 interface ISessionContext {
   focus: number;

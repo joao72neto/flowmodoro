@@ -1,5 +1,8 @@
-import type { TaskRequest, UpdateTaskRequest } from "../types/tasks.types";
-import api from "./api";
+import type {
+  TaskRequest,
+  UpdateTaskRequest,
+} from "../types/tasks.types";
+import api from "../../../services/api";
 
 class TaskService {
   async createTask(data: TaskRequest) {

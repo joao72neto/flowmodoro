@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useSessionContext } from "../../contexts/SessionContext";
-import { useTaskContext } from "../../contexts/TaskContext";
-import { useModal } from "../../contexts/ModalContext";
+import { useSessionContext } from "../features/session/contexts/SessionContext";
+import { useTaskContext } from "../features/task/contexts/TaskContext";
+import { useModal } from "../contexts/ModalContext";
 
 const useCounterComponent = () => {
   const { setFocus, setShowSaveSessionModal } = useSessionContext();

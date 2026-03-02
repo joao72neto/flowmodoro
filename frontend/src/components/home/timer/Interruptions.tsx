@@ -1,4 +1,4 @@
-import { useSessionContext } from "../../../contexts/SessionContext";
+import { useSessionContext } from "../../../features/session/contexts/SessionContext";
 import { CiCirclePlus } from "react-icons/ci";
 import { CiCircleMinus } from "react-icons/ci";
 

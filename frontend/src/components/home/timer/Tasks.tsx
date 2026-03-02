@@ -2,8 +2,8 @@ import IconButton from "../buttons/IconButton";
 import TaskButton from "../buttons/TaskButton";
 import Input from "../../common/Input";
 import clsx from "clsx";
-import { useTaskContext } from "../../../contexts/TaskContext";
-import useTasksComponent from "../../../hooks/components/useTasksComponent";
+import { useTaskContext } from "../../../features/task/contexts/TaskContext";
+import useTasksComponent from "../../../features/task/hooks/useTasksComponent";
 function Tasks() {
   const { handleAddTask, newTask, setNewTask, tasks, handleCompleteTask } =
     useTaskContext();

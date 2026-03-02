@@ -1,11 +1,11 @@
-import ModalContainer from "../common/modals/ModalContainer";
+import ModalContainer from "../../../components/common/modals/ModalContainer";
 import { IoClose } from "react-icons/io5";
-import Stack from "../common/Stack";
-import type { SessionType } from "../../types/sessions.types";
-import { formatToHour, formatToPercentage } from "../../utils/number.utils";
+import Stack from "../../../components/common/Stack";
+import type { SessionType } from "../types/sessions.types";
+import { formatToHour, formatToPercentage } from "../../../shared/utils/number.utils";
 import clsx from "clsx";
-import { capitalize } from "../../utils/string.utils";
-import Line from "../common/Line";
+import { capitalize } from "../../../shared/utils/string.utils";
+import Line from "../../../components/common/Line";
 
 const SessionDetailsModal = ({
   session,

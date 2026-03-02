@@ -2,12 +2,12 @@ import SessionsWrapper from "./elements/SessionsWrapper";
 import SessionsGroup from "./elements/SessionsGroup";
 import Session from "./elements/Session";
 
-import { useSessionContext } from "../../../contexts/SessionContext";
-import useSessions from "../../../hooks/services/useSessions";
+import { useSessionContext } from "../../../features/session/contexts/SessionContext";
+import useSessions from "../../../features/session/hooks/useSessions";
 import { useEffect } from "react";
-import { formatToBRDate } from "../../../utils/date.utils";
-import { formatToHour } from "../../../utils/number.utils";
-import { useTaskContext } from "../../../contexts/TaskContext";
+import { formatToBRDate } from "../../../shared/utils/date.utils";
+import { formatToHour } from "../../../shared/utils/number.utils";
+import { useTaskContext } from "../../../features/task/contexts/TaskContext";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();

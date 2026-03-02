@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import sessionsService from "../../services/sessions.service";
+import sessionsService from "../services/sessions.service";
 import type {
   ISessionGroupoResponse,
   SessionRequest,
-} from "../../types/sessions.types";
+} from "../types/sessions.types";
 
 const useSessions = () => {
   const [loading, setLoading] = useState(false);
