@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import Button from "../../common/Button";
+import Button from "../../../components/common/Button";
 import useCounterComponent from "../../../hooks/useCounterComponent";
 import clsx from "clsx";
 

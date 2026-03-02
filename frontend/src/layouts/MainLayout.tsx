@@ -1,4 +1,4 @@
-import IconButton from "../components/home/buttons/IconButton";
+import IconButton from "../features/home/components/buttons/IconButton";
 import SideBar from "../components/layout/SideBar";
 
 import LayoutContainer from "../components/layout/containers/LayoutContainer";

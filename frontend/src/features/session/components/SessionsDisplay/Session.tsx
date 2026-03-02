@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import Stack from "../../../common/Stack";
+import Stack from "../../../../components/common/Stack";
 
 import { formatToHour } from "../../../../shared/utils/number.utils";
-import SessionDetailsModal from "../../../../features/session/components/SessionDetailsModal";
+import SessionDetailsModal from "../SessionDetailsModal";
 import { useState } from "react";
-import type { SessionType } from "../../../../features/session/types/sessions.types";
+import type { SessionType } from "../../types/sessions.types";
 import { capitalize } from "../../../../shared/utils/string.utils";
 
 const Session = ({ session }: { session: SessionType }) => {

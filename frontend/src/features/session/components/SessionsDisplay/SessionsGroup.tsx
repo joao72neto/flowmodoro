@@ -1,4 +1,4 @@
-import Stack from "../../../common/Stack";
+import Stack from "../../../../components/common/Stack";
 
 const SessionsGroup = ({
   children,

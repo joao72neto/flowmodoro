@@ -1,13 +1,13 @@
-import SessionsWrapper from "./elements/SessionsWrapper";
-import SessionsGroup from "./elements/SessionsGroup";
-import Session from "./elements/Session";
+import SessionsWrapper from "./SessionsWrapper";
+import SessionsGroup from "./SessionsGroup";
+import Session from "./Session";
 
-import { useSessionContext } from "../../../features/session/contexts/SessionContext";
-import useSessions from "../../../features/session/hooks/useSessions";
+import { useSessionContext } from "../../contexts/SessionContext";
+import useSessions from "../../hooks/useSessions";
 import { useEffect } from "react";
-import { formatToBRDate } from "../../../shared/utils/date.utils";
-import { formatToHour } from "../../../shared/utils/number.utils";
-import { useTaskContext } from "../../../features/task/contexts/TaskContext";
+import { formatToBRDate } from "../../../../shared/utils/date.utils";
+import { formatToHour } from "../../../../shared/utils/number.utils";
+import { useTaskContext } from "../../../task/contexts/TaskContext";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();
