@@ -6,3 +6,11 @@ export type VariantType =
   | "primary"
   | "success"
   | "success2";
+
+export interface PaginationResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}

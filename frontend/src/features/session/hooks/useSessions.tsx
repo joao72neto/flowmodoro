@@ -4,12 +4,14 @@ import type {
   ISessionGroupoResponse,
   SessionRequest,
 } from "../types/sessions.types";
+import type { PaginationResponse } from "../../../shared/types/globals.types";
 
 const useSessions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
-  const [sessions, setSessions] = useState<ISessionGroupoResponse[]>([]);
+  const [sessions, setSessions] =
+    useState<PaginationResponse<ISessionGroupoResponse>>();
 
   const reset = useCallback(() => {
     setError(null);
@@ -41,7 +43,7 @@ const useSessions = () => {
 
     try {
       const res = await sessionsService.getSessions();
-      const data: ISessionGroupoResponse[] = res.data;
+      const data: PaginationResponse<ISessionGroupoResponse> = res.data;
       setSessions(data);
       return data;
     } catch (e: any) {

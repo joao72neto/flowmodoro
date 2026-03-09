@@ -25,21 +25,22 @@ const SessionsDisplay = () => {
     }
   }, [success, wasTaskDeleted, fetchSessions]);
 
-  if (sessions.length === 0) return null;
+  if (sessions?.content.length === 0) return null;
 
   return (
     <SessionsWrapper>
-      {sessions.map((sessionGroup) => (
-        <SessionsGroup
-          groupName={formatToBRDate(sessionGroup.date)}
-          totalFocus={formatToHour(sessionGroup.totalFocus)}
-          totalRest={formatToHour(sessionGroup.totalRest)}
-        >
-          {sessionGroup.sessions.map((session, index) => (
-            <Session key={index} session={session} />
-          ))}
-        </SessionsGroup>
-      ))}
+      {sessions &&
+        sessions.content.map((sessionGroup) => (
+          <SessionsGroup
+            groupName={formatToBRDate(sessionGroup.date)}
+            totalFocus={formatToHour(sessionGroup.totalFocus)}
+            totalRest={formatToHour(sessionGroup.totalRest)}
+          >
+            {sessionGroup.sessions.map((session, index) => (
+              <Session key={index} session={session} />
+            ))}
+          </SessionsGroup>
+        ))}
     </SessionsWrapper>
   );
 };

@@ -6,7 +6,9 @@ class SessionService {
     return await api.get("/session");
   }
   async createSession(id: number, data: SessionRequest) {
-    return await api.post(`/session/${id}`, data);
+    return await api.post(`/session/${id}`, data, {
+      params: { page: 1, size: 10 },
+    });
   }
 }
 
