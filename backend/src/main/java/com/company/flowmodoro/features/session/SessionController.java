@@ -40,9 +40,9 @@ public class SessionController {
 
     @GetMapping
     public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(sessionService.consult(page, size));
+        return ResponseEntity.ok(sessionService.consult(page - 1, size));
     }
 
     @PutMapping("/{id}")
