@@ -15,6 +15,8 @@ import com.company.flowmodoro.features.session.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.session.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.session.enums.SessionErrorCode;
 import com.company.flowmodoro.features.session.exceptions.InvalidSessionException;
+import com.company.flowmodoro.features.session.helpers.SessionCalculator;
+import com.company.flowmodoro.features.session.helpers.SessionValidator;
 import com.company.flowmodoro.features.session.mappers.SessionUpdateMapper;
 import com.company.flowmodoro.features.task.TaskModel;
 import com.company.flowmodoro.features.task.TaskRepository;
@@ -25,24 +27,33 @@ import com.company.flowmodoro.shared.dto.PageResponse;
 @Service
 public class SessionService {
 
-    private static final Double RATIO = 0.2;
     private static final SessionErrorCode SESSION_NOT_FOUND = SessionErrorCode.SESSION_NOT_FOUND;
     private static final TaskErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
 
     private final SessionRespository sessionRepository;
     private final TaskRepository taskRepository;
     private final SessionUpdateMapper sessionUpdateMapper;
-    private final SessionAggregator sessionAggregator;
+
+    private final SessionAggregator aggregator;
+    private final SessionCalculator calculator;
+    private final SessionValidator validator;
 
     public SessionService(
             SessionRespository sessionRepository,
             TaskRepository taskRepository,
             SessionUpdateMapper sessionUpdateMapper,
-            SessionAggregator sessionAggregator) {
+
+            SessionAggregator aggregator,
+            SessionCalculator calculator,
+            SessionValidator validator) {
+
         this.sessionRepository = sessionRepository;
         this.taskRepository = taskRepository;
         this.sessionUpdateMapper = sessionUpdateMapper;
-        this.sessionAggregator = sessionAggregator;
+
+        this.aggregator = aggregator;
+        this.calculator = calculator;
+        this.validator = validator;
     }
 
     @Transactional
@@ -59,8 +70,8 @@ public class SessionService {
                 .orElseThrow(() -> new InvalidTaskException(
                         TASK_NOT_FOUND, "Task not found"));
 
-        calculateRest(session);
-        validateSessions(session, errors);
+        calculator.calculateRest(session);
+        validator.validateSessions(session, errors);
 
         Optional<SessionModel> existingSession = sessionRepository
                 .findByTaskIdAndDate(taskId, session.getDate());
@@ -70,7 +81,7 @@ public class SessionService {
             existing.setFocus(existing.getFocus() + session.getFocus());
             existing.setRest(existing.getRest() + session.getRest());
             existing.setInterruptions(existing.getInterruptions() + session.getInterruptions());
-            existing.setRatio(calculateRatio(existing.getFocus(), existing.getRest()));
+            existing.setRatio(calculator.calculateRatio(existing.getFocus(), existing.getRest()));
 
             return sessionRepository.save(existing);
         } else {
@@ -90,7 +101,7 @@ public class SessionService {
 
         List<SessionModel> sessions = sessionRepository.findByDateInOrderByIdDesc(datePage.getContent());
 
-        List<DailySessionsDTO> dailySessions = sessionAggregator.groupSessionsByDate(sessions, datePage.getContent());
+        List<DailySessionsDTO> dailySessions = aggregator.groupSessionsByDate(sessions, datePage.getContent());
 
         return new PageResponse<>(
                 dailySessions,
@@ -125,40 +136,5 @@ public class SessionService {
                         "Session not found with id: " + id));
 
         sessionRepository.deleteById(id);
-    }
-
-    // Private methods
-
-    private double calculateRatio(double focus, double rest) {
-        if (rest == 0)
-            return focus;
-        return focus / rest;
-    }
-
-    private void calculateRest(SessionModel session) {
-        if (session.getRatio() == null) {
-            session.setRatio(RATIO);
-        }
-        double rest = session.getFocus() * session.getRatio();
-        session.setRest(Math.round(rest * 100.0) / 100.0);
-    }
-
-    private void validateSessions(SessionModel session, List<String> errors) {
-
-        if (session.getFocus() <= 0) {
-            errors.add("Focus needs to be greater than 0");
-        }
-
-        if (session.getRatio() < 0 || session.getRatio() > 1) {
-            errors.add("Ratio needs to be between 0 and 1");
-        }
-
-        if (session.getInterruptions() < 0) {
-            errors.add("Interruptions can't be less than 0");
-        }
-
-        if (!errors.isEmpty()) {
-            throw new InvalidSessionException(SessionErrorCode.INVALID_SESSION, errors);
-        }
     }
 }
