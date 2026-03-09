@@ -1,7 +1,5 @@
 package com.company.flowmodoro.features.session;
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,12 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.flowmodoro.features.session.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.session.dtos.SessionDTO;
 import com.company.flowmodoro.features.session.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.session.mappers.SessionMapper;
+import com.company.flowmodoro.shared.dto.PageResponse;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -39,8 +39,10 @@ public class SessionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DailySessionsDTO>> consult() {
-        return ResponseEntity.ok(sessionService.consult());
+    public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(sessionService.consult(page, size));
     }
 
     @PutMapping("/{id}")

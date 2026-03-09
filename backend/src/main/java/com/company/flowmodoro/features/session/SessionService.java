@@ -9,7 +9,11 @@ import java.util.Optional;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,7 @@ import com.company.flowmodoro.features.task.TaskRepository;
 import com.company.flowmodoro.features.task.dtos.TaskDTO;
 import com.company.flowmodoro.features.task.enums.TaskErrorCode;
 import com.company.flowmodoro.features.task.exceptions.InvalidTaskException;
+import com.company.flowmodoro.shared.dto.PageResponse;
 
 @Service
 public class SessionService {
@@ -77,19 +82,53 @@ public class SessionService {
         }
     }
 
-    public List<DailySessionsDTO> consult() {
-        List<SessionModel> sessions = sessionRepository.findAllByOrderByIdDesc();
-        Map<LocalDate, Map<Long, SessionDTO>> accByDay = new TreeMap<>(Comparator.reverseOrder());
+    public PageResponse<DailySessionsDTO> consult(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        for (SessionModel s : sessions) {
-            LocalDate date = s.getDate();
+        Page<LocalDate> datePage = sessionRepository.findDistinctDates(pageable);
+
+        if (datePage.isEmpty()) {
+            return new PageResponse<>(List.of(), page, size, 0, 0);
+        }
+
+        List<SessionModel> sessions = sessionRepository.findByDateInOrderByIdDesc(datePage.getContent());
+
+        List<DailySessionsDTO> dailySessions = groupSessionsByDate(sessions, datePage.getContent());
+
+        return new PageResponse<>(
+                dailySessions,
+                datePage.getNumber(),
+                datePage.getSize(),
+                datePage.getTotalElements(),
+                datePage.getTotalPages());
+    }
+
+    private List<DailySessionsDTO> groupSessionsByDate(List<SessionModel> sessions, List<LocalDate> orderedDates) {
+        Map<LocalDate, List<SessionModel>> sessionsByDay = sessions.stream()
+                .collect(Collectors.groupingBy(SessionModel::getDate));
+
+        List<DailySessionsDTO> result = new ArrayList<>();
+
+        for (LocalDate date : orderedDates) {
+            List<SessionModel> daySessions = sessionsByDay.getOrDefault(date, List.of());
+            result.add(aggregateSessionsForOneDay(date, daySessions));
+        }
+
+        return result;
+    }
+
+    private DailySessionsDTO aggregateSessionsForOneDay(LocalDate date, List<SessionModel> daySessions) {
+        Map<Long, SessionDTO> tasksMap = new HashMap<>();
+        double totalFocus = 0;
+        double totalRest = 0;
+
+        for (SessionModel s : daySessions) {
+            totalFocus += s.getFocus();
+            totalRest += s.getRest();
             Long taskId = s.getTask().getId();
 
-            accByDay.putIfAbsent(date, new HashMap<>());
-            Map<Long, SessionDTO> accByTask = accByDay.get(date);
-
-            if (accByTask.containsKey(taskId)) {
-                SessionDTO acc = accByTask.get(taskId);
+            if (tasksMap.containsKey(taskId)) {
+                SessionDTO acc = tasksMap.get(taskId);
                 acc.setFocus(acc.getFocus() + s.getFocus());
                 acc.setRest(acc.getRest() + s.getRest());
                 acc.setInterruptions(acc.getInterruptions() + s.getInterruptions());
@@ -106,32 +145,16 @@ public class SessionService {
                                 .checked(s.getTask().getChecked())
                                 .build())
                         .build();
-                accByTask.put(taskId, dto);
+                tasksMap.put(taskId, dto);
             }
         }
 
-        return accByDay.entrySet().stream()
-                .map(entry -> {
-                    LocalDate date = entry.getKey();
-                    Map<Long, SessionDTO> dayTasks = entry.getValue();
-
-                    double totalFocus = dayTasks.values().stream()
-                            .mapToDouble(SessionDTO::getFocus)
-                            .sum();
-
-                    double totalRest = dayTasks.values().stream()
-                            .mapToDouble(SessionDTO::getRest)
-                            .sum();
-
-                    return DailySessionsDTO.builder()
-                            .date(date)
-                            .totalFocus(totalFocus)
-                            .totalRest(totalRest)
-                            .sessions(new ArrayList<>(dayTasks.values()))
-                            .build();
-                })
-                .toList();
-
+        return DailySessionsDTO.builder()
+                .date(date)
+                .totalFocus(totalFocus)
+                .totalRest(totalRest)
+                .sessions(new ArrayList<>(tasksMap.values()))
+                .build();
     }
 
     @Transactional
