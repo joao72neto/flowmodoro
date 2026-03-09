@@ -54,6 +54,7 @@ public class SessionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         sessionService.delete(id);
+
         return ResponseEntity.noContent().build();
     }
 }
