@@ -37,22 +37,25 @@ const useSessions = () => {
     [],
   );
 
-  const fetchSessions = useCallback(async () => {
-    setLoading(true);
-    reset();
+  const fetchSessions = useCallback(
+    async (page: number = 1, size: number = 10) => {
+      setLoading(true);
+      reset();
 
-    try {
-      const res = await sessionsService.getSessions();
-      const data: PaginationResponse<ISessionGroupoResponse> = res.data;
-      setSessions(data);
-      return data;
-    } catch (e: any) {
-      setError(e.message);
-      throw e;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        const res = await sessionsService.getSessions(page, size);
+        const data: PaginationResponse<ISessionGroupoResponse> = res.data;
+        setSessions(data);
+        return data;
+      } catch (e: any) {
+        setError(e.message);
+        throw e;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
 
   return {
     loading,

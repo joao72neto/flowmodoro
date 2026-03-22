@@ -2,13 +2,11 @@ import type { SessionRequest } from "../types/sessions.types";
 import api from "../../../configs/api";
 
 class SessionService {
-  async getSessions() {
-    return await api.get("/session");
+  async getSessions(page: number = 1, size: number = 10) {
+    return await api.get("/session", { params: { page, size } });
   }
   async createSession(id: number, data: SessionRequest) {
-    return await api.post(`/session/${id}`, data, {
-      params: { page: 1, size: 10 },
-    });
+    return await api.post(`/session/${id}`, data);
   }
 }
 

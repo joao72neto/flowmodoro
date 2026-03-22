@@ -16,13 +16,15 @@ const SessionsDisplay = () => {
   const { wasTaskDeleted } = useTaskContext();
   const { sessions, fetchSessions } = useSessions();
 
+  const SIZE = 10;
+
   useEffect(() => {
     fetchSessions();
   }, [fetchSessions]);
 
   useEffect(() => {
     if (success || wasTaskDeleted) {
-      fetchSessions();
+      fetchSessions(1, SIZE);
     }
   }, [success, wasTaskDeleted, fetchSessions]);
 
@@ -36,7 +38,7 @@ const SessionsDisplay = () => {
     hasPrevPage,
   } = usePagination({
     initialPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: SIZE,
     totalItems: sessions?.totalElements ?? 0,
   });
 
