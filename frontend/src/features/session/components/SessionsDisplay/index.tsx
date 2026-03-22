@@ -26,7 +26,15 @@ const SessionsDisplay = () => {
     }
   }, [success, wasTaskDeleted, fetchSessions]);
 
-  const { currentPage, prevPage, nextPage, totalPages } = usePagination({
+  const {
+    currentPage,
+    prevPage,
+    nextPage,
+    totalPages,
+    goToPage,
+    hasNextPage,
+    hasPrevPage,
+  } = usePagination({
     initialPage: 1,
     itemsPerPage: 10,
     totalItems: sessions?.totalElements ?? 0,
@@ -50,7 +58,11 @@ const SessionsDisplay = () => {
             </SessionsGroup>
           ))}
       </SessionsWrapper>
+
       <PageSelector
+        goToPage={goToPage}
+        hasNextPage={hasNextPage}
+        hasPrevPage={hasPrevPage}
         currentPage={currentPage}
         prevPage={prevPage}
         nextPage={nextPage}
