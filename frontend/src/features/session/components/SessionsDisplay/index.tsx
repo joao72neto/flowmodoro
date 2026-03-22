@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { formatToBRDate } from "../../../../shared/utils/date.utils";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useTaskContext } from "../../../task/contexts/TaskContext";
+import PageSelector from "../../../../shared/components/PageSelector";
+import { usePagination } from "../../../../shared/hooks/usePagination";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();
@@ -21,27 +23,40 @@ const SessionsDisplay = () => {
   useEffect(() => {
     if (success || wasTaskDeleted) {
       fetchSessions();
-      console.log("fetching sessions");
     }
   }, [success, wasTaskDeleted, fetchSessions]);
+
+  const { currentPage, prevPage, nextPage, totalPages } = usePagination({
+    initialPage: 1,
+    itemsPerPage: 10,
+    totalItems: sessions?.totalElements ?? 0,
+  });
 
   if (sessions?.content.length === 0) return null;
 
   return (
-    <SessionsWrapper>
-      {sessions &&
-        sessions.content.map((sessionGroup) => (
-          <SessionsGroup
-            groupName={formatToBRDate(sessionGroup.date)}
-            totalFocus={formatToHour(sessionGroup.totalFocus)}
-            totalRest={formatToHour(sessionGroup.totalRest)}
-          >
-            {sessionGroup.sessions.map((session, index) => (
-              <Session key={index} session={session} />
-            ))}
-          </SessionsGroup>
-        ))}
-    </SessionsWrapper>
+    <div className="flex flex-col gap-4 w-full items-center">
+      <SessionsWrapper>
+        {sessions &&
+          sessions.content.map((sessionGroup) => (
+            <SessionsGroup
+              groupName={formatToBRDate(sessionGroup.date)}
+              totalFocus={formatToHour(sessionGroup.totalFocus)}
+              totalRest={formatToHour(sessionGroup.totalRest)}
+            >
+              {sessionGroup.sessions.map((session, index) => (
+                <Session key={index} session={session} />
+              ))}
+            </SessionsGroup>
+          ))}
+      </SessionsWrapper>
+      <PageSelector
+        currentPage={currentPage}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        totalPages={totalPages}
+      />
+    </div>
   );
 };
 

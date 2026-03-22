@@ -1,44 +1,35 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
-type UsePaginationOptions = {
-  paginaInicial?: number;
-  totalPaginas?: number;
-};
+interface UsePaginationProps {
+  totalItems: number;
+  itemsPerPage: number;
+  initialPage?: number;
+}
 
-export const usePagination = ({
-  paginaInicial: initialPage = 1,
-  totalPaginas: totalPaginas,
-}: UsePaginationOptions = {}) => {
-  const [pagina, setPagina] = useState(initialPage);
+export function usePagination({
+  initialPage = 1,
+  itemsPerPage,
+  totalItems,
+}: UsePaginationProps) {
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
-  const onPageChange = useCallback(
-    (novaPagina: number) => {
-      setPagina(() => {
-        if (novaPagina < 1) {
-          return 1;
-        }
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-        if (totalPaginas && novaPagina > totalPaginas) {
-          return totalPaginas;
-        }
+  const goToPage = (page: number) => {
+    const validPage = Math.max(1, Math.min(page, totalPages));
+    setCurrentPage(validPage);
+  };
 
-        return novaPagina;
-      });
-    },
-    [totalPaginas],
-  );
-
-  useEffect(() => {
-    if (!totalPaginas) {
-      return;
-    }
-
-    setPagina((p) => Math.min(p, totalPaginas));
-  }, [totalPaginas]);
+  const nextPage = () => goToPage(currentPage + 1);
+  const prevPage = () => goToPage(currentPage - 1);
 
   return {
-    pagina: pagina,
-    setPage: setPagina,
-    onPageChange,
+    currentPage,
+    totalPages,
+    nextPage,
+    prevPage,
+    goToPage,
+    hasNextPage: currentPage < totalPages,
+    hasPrevPage: currentPage > 1,
   };
-};
+}
