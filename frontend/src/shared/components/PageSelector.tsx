@@ -67,10 +67,11 @@ const PageSelector = ({
             key={page}
             onClick={() => goToPage(page)}
             className={clsx(
-              "px-3 py-1 rounded-md text-sm font-medium transition-colors",
+              "px-3 py-1 rounded-md text-sm font-medium transition-colors text-white",
+              "border-neutral-600 cursor-pointer",
               currentPage === page
-                ? "bg-blue-600 text-white border-blue-600"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-50",
+                ? "bg-danger-2"
+                : "border hover:bg-gray-600/20",
             )}
           >
             {page}

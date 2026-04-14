@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SessionRespository extends JpaRepository<SessionModel, Long> {
 
-  @Query("SELECT DISTINCT s.date FROM SessionModel s ORDER BY s.date DESC")
+  @Query(value = "SELECT DISTINCT s.date FROM SessionModel s", countQuery = "SELECT COUNT(DISTINCT s.date) FROM SessionModel s")
   Page<LocalDate> findDistinctDates(Pageable pageable);
 
   List<SessionModel> findByDateInOrderByIdDesc(List<LocalDate> dates);

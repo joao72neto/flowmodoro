@@ -16,7 +16,7 @@ const SessionsDisplay = () => {
   const { wasTaskDeleted } = useTaskContext();
   const { sessions, fetchSessions } = useSessions();
 
-  const SIZE = 10;
+  const SIZE = 5;
 
   useEffect(() => {
     fetchSessions();
@@ -61,15 +61,17 @@ const SessionsDisplay = () => {
           ))}
       </SessionsWrapper>
 
-      <PageSelector
-        goToPage={goToPage}
-        hasNextPage={hasNextPage}
-        hasPrevPage={hasPrevPage}
-        currentPage={currentPage}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        totalPages={totalPages}
-      />
+      {sessions && sessions.totalElements > SIZE && (
+        <PageSelector
+          goToPage={goToPage}
+          hasNextPage={hasNextPage}
+          hasPrevPage={hasPrevPage}
+          currentPage={currentPage}
+          prevPage={prevPage}
+          nextPage={nextPage}
+          totalPages={totalPages}
+        />
+      )}
     </div>
   );
 };
