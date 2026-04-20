@@ -3,7 +3,6 @@ package com.company.flowmodoro.features.task;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,10 +21,6 @@ import com.company.flowmodoro.features.task.mappers.TaskStatusMapper;
 import com.company.flowmodoro.features.task.mappers.TaskUpdateMapper;
 
 @RestController
-@CrossOrigin(origins = {
-    "http://localhost:5173",
-    "https://frontend-nkaw.onrender.com"
-})
 @RequestMapping("/api/task")
 public class TaskController {
 
