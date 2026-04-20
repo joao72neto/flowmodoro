@@ -42,7 +42,7 @@ const SessionsDisplay = () => {
     totalItems: sessions?.totalElements ?? 0,
   });
 
-  if (sessions?.content.length === 0) return null;
+  if (sessions?.content.length === 0 || !sessions) return null;
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">

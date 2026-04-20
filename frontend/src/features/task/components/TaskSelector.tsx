@@ -24,7 +24,7 @@ function TaskSelector() {
   }, [isOpen]);
 
   return (
-    <div ref={ref} className="relative inline-block w-70 mb-12">
+    <div ref={ref} className="relative inline-block w-70">
       <button
         onClick={() => {
           undoneTasks.length > 0 ? setIsOpen(!isOpen) : setIsSidebarOpen(true);

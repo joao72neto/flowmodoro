@@ -53,7 +53,7 @@ function Timer() {
       <div
         className={clsx(
           "flex justify-center items-center",
-          "text-6xl font-mono mb-12 w-50 h-50 border rounded-full border-white/10 transition-all",
+          "text-6xl font-mono w-50 h-50 border rounded-full border-white/10 transition-all",
           mode === "focus" &&
             "animate-[border-breathe-focus_2.5s_ease-in-out_infinite] border-red-500!",
           mode === "break" &&
@@ -62,7 +62,7 @@ function Timer() {
       >
         {mode ? formatTimer(seconds) : "00:00"}
       </div>
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4">
         {mode === null ? (
           <Button
             onClick={() => startFocus()}

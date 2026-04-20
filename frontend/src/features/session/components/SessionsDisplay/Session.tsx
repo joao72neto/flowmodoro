@@ -23,7 +23,7 @@ const Session = ({ session }: { session: SessionType }) => {
           justify="between"
           className={clsx(
             "border border-white/10 shadow-lg py-6 px-4 cursor-pointer rounded-lg w-full ",
-            "hover:scale-115 duration-200 hover:shadow-xl",
+            "hover:scale-105 duration-200 hover:shadow-xl",
           )}
         >
           <span className="text-xl">{capitalize(session.task.name)}</span>
