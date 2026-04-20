@@ -24,7 +24,7 @@ import com.company.flowmodoro.features.task.mappers.TaskUpdateMapper;
 @RestController
 @CrossOrigin(origins = {
     "http://localhost:5173",
-    "https://flowmodoro-cp5v.vercel.app"
+    "https://frontend-nkaw.onrender.com"
 })
 @RequestMapping("/api/task")
 public class TaskController {
