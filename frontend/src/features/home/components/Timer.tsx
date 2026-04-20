@@ -49,7 +49,8 @@ function Timer() {
     <>
       <div
         className={clsx(
-          "text-6xl font-mono mb-12 border px-5 py-17 rounded-full border-white/10 transition-all",
+          "flex justify-center items-center",
+          "text-6xl font-mono mb-12 w-50 h-50 border rounded-full border-white/10 transition-all",
           mode === "focus" &&
             "animate-[border-breathe-focus_2.5s_ease-in-out_infinite] border-red-500!",
           mode === "break" &&
