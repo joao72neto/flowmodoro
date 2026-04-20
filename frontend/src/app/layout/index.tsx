@@ -8,7 +8,7 @@ import { useTaskContext } from "../../features/task/contexts/TaskContext";
 import SideBarContainer from "./SideBarContainer";
 import ToggleButtonContainer from "./ToggleButtonContainer";
 
-import { PiCaretLeft } from "react-icons/pi";
+import { PiCaretLeftBold } from "react-icons/pi";
 import clsx from "clsx";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
@@ -27,8 +27,8 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       <ToggleButtonContainer>
         <IconButton
           icon={
-            <PiCaretLeft
-              size={30}
+            <PiCaretLeftBold
+              size={25}
               className={clsx("transition duration-200 hover:-translate-x-1")}
             />
           }

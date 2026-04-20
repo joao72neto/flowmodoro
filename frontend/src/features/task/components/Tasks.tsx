@@ -4,6 +4,9 @@ import Input from "../../../shared/components/Input";
 import clsx from "clsx";
 import { useTaskContext } from "../contexts/TaskContext";
 import useTasksComponent from "../hooks/useTasksComponent";
+
+import { FaTrash } from "react-icons/fa";
+
 function Tasks() {
   const { handleAddTask, newTask, setNewTask, tasks, handleCompleteTask } =
     useTaskContext();
@@ -49,7 +52,9 @@ function Tasks() {
                     <span>{task.name}</span>
                   </div>
                   <IconButton
-                    icon={<i className="bi bi-x-lg" />}
+                    icon={
+                      <FaTrash size={18} className="transition duration-200" />
+                    }
                     onClick={() => handleDeleteTask(task.id)}
                   />
                 </li>

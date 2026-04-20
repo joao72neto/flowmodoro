@@ -1,3 +1,5 @@
+import { FaCheck } from "react-icons/fa6";
+
 function TaskButton({
   onClick,
   taskCompleted,
@@ -14,7 +16,7 @@ function TaskButton({
       {!taskCompleted ? (
         <div className="border w-5 h-5 rounded-full"></div>
       ) : (
-        <i className="bi bi-check-lg text-xl"></i>
+        <FaCheck size={20} />
       )}
     </div>
   );

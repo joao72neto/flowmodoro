@@ -53,7 +53,7 @@ function TaskSelector() {
             )}
           />
         ) : (
-          <CiCirclePlus size={20} className="text-white/60" />
+          <CiCirclePlus size={25} className="text-white/60" />
         )}
       </button>
 
