@@ -26,7 +26,9 @@ const Session = ({ session }: { session: SessionType }) => {
             "hover:scale-105 duration-200 hover:shadow-xl",
           )}
         >
-          <span className="text-xl">{capitalize(session.task.name)}</span>
+          <span className="flex-1 text-xl line-clamp-1 break-all">
+            {capitalize(session.task.name)}
+          </span>
           <span className="text-xl">{formatToHour(session.focus)}</span>
         </Stack>
       </div>

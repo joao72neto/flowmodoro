@@ -6,6 +6,7 @@ import { useTaskContext } from "../contexts/TaskContext";
 import useTasksComponent from "../hooks/useTasksComponent";
 
 import { FaTrash } from "react-icons/fa";
+import { PiEmpty } from "react-icons/pi";
 
 function Tasks() {
   const { handleAddTask, newTask, setNewTask, tasks, handleCompleteTask } =
@@ -21,10 +22,10 @@ function Tasks() {
   return (
     <>
       <div className="w-full max-w-xl flex flex-col h-screen">
-        <h2 className="text-2xl mb-4 text-center">Tasks</h2>
+        <h2 className="text-2xl mb-4 text-center">Tarefas</h2>
         <div className="flex mb-4">
           <Input
-            placeholder="Enter to add a new task"
+            placeholder="Adicionar tarefa"
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -32,6 +33,20 @@ function Tasks() {
         </div>
 
         <div className="flex flex-col flex-1 min-h-0 overflow-auto mb-15 scrollbar-hidden">
+          {tasks.length === 0 && (
+            <div className="flex flex-col gap-3 justify-center items-center flex-1">
+              <div className="flex flex-col items-center gap-2">
+                <PiEmpty size={30} />
+                <h2 className="text-xl mb-4 text-center m-0!">
+                  Nenhuma tarefa cadastrada
+                </h2>
+              </div>
+              <p className="text-neutral-40 max-w-[280px] text-center">
+                Digite e pressione enter para adicionar uma nova tarefa.
+              </p>
+            </div>
+          )}
+
           {tasks.length > 0 && (
             <ul className="space-y-2">
               {tasks.map((task) => (
@@ -49,7 +64,7 @@ function Tasks() {
                       onClick={() => handleCompleteTask(task.id, task.checked)}
                       taskCompleted={task.checked}
                     />
-                    <span>{task.name}</span>
+                    <span className="line-clamp-1 break-all">{task.name}</span>
                   </div>
                   <IconButton
                     icon={

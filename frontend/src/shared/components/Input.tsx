@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 function Input({
   placeholder,
   onKeyDown,
@@ -11,7 +13,10 @@ function Input({
 }) {
   return (
     <input
-      className="flex-grow px-4 py-2 text-white rounded-l border-1 border-white/10 focus:outline-none"
+      className={clsx(
+        "flex-grow px-4 py-2 text-white rounded-md border border-white/10 ",
+        "focus:border-danger focus:outline-none transition-colors duration-200 ease-in-out",
+      )}
       placeholder={placeholder}
       onKeyDown={onKeyDown}
       onChange={onChange}

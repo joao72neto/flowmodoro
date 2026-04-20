@@ -8,6 +8,7 @@ import React, {
 import useTasks from "../hooks/useTasks";
 import type { TaskModel } from "../types/tasks.types";
 import useActiveTask from "../hooks/useActiveTask";
+import { useModal } from "../../../shared/contexts/ModalContext";
 
 interface TaskContextType {
   handleAddTask: () => Promise<void>;
@@ -33,6 +34,8 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
     useTasks();
+
+  const { showError } = useModal();
 
   const undoneTasks = useMemo(
     () => tasks.filter((task) => !task.checked),
@@ -60,8 +63,9 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       await fetchTasks();
       setNewTask("");
       setSelectedTask(newTask);
-    } catch (e: any) {
-      console.log(e);
+    } catch (error: any) {
+      if (error instanceof Error)
+        showError("Erro ao criar tarefa", error.message, () => {});
     }
   };
 
@@ -71,16 +75,18 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       await deleteTask(id);
       await fetchTasks();
       setWasTaskDeleted(true);
-    } catch (e: any) {
-      console.log(e);
+    } catch (error: any) {
+      if (error instanceof Error)
+        showError("Erro ao deletar tarefa", error.message, () => {});
     }
   };
   const handleCompleteTask = async (index: number, checked: boolean) => {
     try {
       await updateTaskStatus(index, { checked: !checked });
       await fetchTasks();
-    } catch (e: any) {
-      console.log(e);
+    } catch (error: any) {
+      if (error instanceof Error)
+        showError("Erro ao atualizar tarefa", error.message, () => {});
     }
   };
 

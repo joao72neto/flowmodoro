@@ -13,7 +13,7 @@ const ModalContainer = ({ children }: { children: React.ReactNode }) => {
       <div
         className={clsx(
           "flex flex-col border border-white/10 gap-8 backdrop-blur-2xl mx-6",
-          "bg-white/10 text-white max-w-[500px] min-w-[280px] ",
+          "bg-white/10 text-white max-w-[400px] min-w-[280px] ",
           "rounded-xl p-6 text-center",
         )}
       >

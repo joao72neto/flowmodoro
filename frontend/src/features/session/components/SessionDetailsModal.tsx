@@ -21,7 +21,9 @@ const SessionDetailsModal = ({
     <ModalContainer>
       <div>
         <Stack direction="row" justify="between" className="pb-4">
-          <h1 className="font-bold text-xl">{capitalize(session.task.name)}</h1>
+          <h1 className="flex-1 font-bold text-xl line-clamp-1 break-all">
+            {capitalize(session.task.name)}
+          </h1>
           <IoClose size={30} className="cursor-pointer" onClick={close} />
         </Stack>
 

@@ -69,7 +69,7 @@ function Timer() {
             variant="danger"
             icon={<FaPlayCircle size={20} />}
           >
-            Start
+            Iniciar
           </Button>
         ) : mode === "focus" ? (
           <Button
@@ -77,7 +77,7 @@ function Timer() {
             variant="danger2"
             icon={<FaStopCircle size={20} />}
           >
-            Stop
+            Parar
           </Button>
         ) : mode === "stopped" ? (
           <Button
@@ -85,7 +85,7 @@ function Timer() {
             variant="success"
             icon={<FaPlayCircle size={20} />}
           >
-            Break
+            Iniciar Pausa
           </Button>
         ) : (
           <Button
@@ -93,7 +93,7 @@ function Timer() {
             variant="success2"
             icon={<IoPlaySkipForwardCircleSharp size={20} />}
           >
-            Skip Break
+            Pular Pausa
           </Button>
         )}
       </div>

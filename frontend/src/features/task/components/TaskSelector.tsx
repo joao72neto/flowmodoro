@@ -43,7 +43,7 @@ function TaskSelector() {
           "transition",
         )}
       >
-        <div className="flex-1">{selectedTask}</div>
+        <div className="flex-1 line-clamp-1 break-all">{selectedTask}</div>
         {undoneTasks.length > 0 ? (
           <FaCaretDown
             size={20}
@@ -70,7 +70,7 @@ function TaskSelector() {
           "shadow-lg",
           "text-center",
           "overflow-auto z-10",
-          "transition-all duration-200 ease-in-out",
+          "transition-all duration-200 ease-in-out ",
           isOpen
             ? "opacity-100 max-h-80 translate-y-1"
             : "opacity-0 max-h-0 pointer-events-none translate-y-0",
@@ -84,9 +84,9 @@ function TaskSelector() {
               setTaskId(task.id);
               setIsOpen(false);
             }}
-            className="py-3 hover:bg-black/30 cursor-pointer"
+            className="p-3 hover:bg-black/30 cursor-pointer"
           >
-            {task.name}
+            <div className="line-clamp-1 break-all">{task.name}</div>
           </li>
         ))}
       </ul>
