@@ -4,7 +4,7 @@ import type { VariantType } from "../types/globals.types";
 const baseStyle = clsx(
   "px-5",
   "py-2",
-  "rounded-xl",
+  "rounded-lg",
   "cursor-pointer",
   "font-semibold",
   "text-white",
@@ -12,8 +12,9 @@ const baseStyle = clsx(
   "transition-all",
   "duration-200",
   "ease-in-out",
-  "hover:scale-110",
+  "hover:scale-105",
   "hover:brightness-120",
+  "active:scale-95",
 );
 
 const variants = {

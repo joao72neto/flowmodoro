@@ -1,6 +1,5 @@
 import Button from "../Button";
 
-import Stack from "../Stack";
 import { MdOutlineCancel } from "react-icons/md";
 import { GiConfirmed } from "react-icons/gi";
 import ModalContainer from "./ModalContainer";
@@ -31,7 +30,7 @@ const BaseModal = ({
 
       <div className="px-5">{children}</div>
 
-      <Stack wFull direction="row" gap={5}>
+      <div className="flex flex-col-reverse sm:flex-row items-center gap-3">
         {onClose && (
           <Button
             icon={<MdOutlineCancel size={20} />}
@@ -52,7 +51,7 @@ const BaseModal = ({
             {confirmButtonText ?? "Confirm"}
           </Button>
         )}
-      </Stack>
+      </div>
     </ModalContainer>
   );
 };
