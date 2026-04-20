@@ -3,6 +3,9 @@ import { useTaskContext } from "../contexts/TaskContext";
 import clsx from "clsx";
 import { useSessionContext } from "../../session/contexts/SessionContext";
 
+import { FaCaretDown } from "react-icons/fa";
+import { CiCirclePlus } from "react-icons/ci";
+
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -27,58 +30,66 @@ function TaskSelector() {
           undoneTasks.length > 0 ? setIsOpen(!isOpen) : setIsSidebarOpen(true);
         }}
         className={clsx(
+          "flex items-center px-3",
           "appearance-none",
           "bg-transparent",
           "text-center",
-          "rounded-2xl",
+          "rounded-xl",
           "w-full",
-          "py-4",
+          "py-3",
           "cursor-pointer",
           "border",
           "border-white/10",
           "transition",
         )}
       >
-        {selectedTask}
+        <div className="flex-1">{selectedTask}</div>
         {undoneTasks.length > 0 ? (
-          <i className="bi bi-caret-down-fill ml-2 text-white/60"></i>
+          <FaCaretDown
+            size={20}
+            className={clsx(
+              "text-white/60 transition duration-200",
+              isOpen && "rotate-180",
+            )}
+          />
         ) : (
-          <i className="bi bi-plus-lg ml-2 text-white/60"></i>
+          <CiCirclePlus size={20} className="text-white/60" />
         )}
       </button>
 
-      {isOpen && undoneTasks.length > 0 && (
-        <ul
-          className={clsx(
-            "absolute",
-            "mt-2",
-            "w-full",
-            "bg-gray",
-            "backdrop-blur-lg",
-            "border",
-            "border-white/10",
-            "rounded-xl",
-            "shadow-lg",
-            "text-center",
-            "overflow-auto z-10",
-            "max-h-80",
-          )}
-        >
-          {undoneTasks.map((task, index) => (
-            <li
-              key={index}
-              onClick={() => {
-                setSelectedTask(task.name);
-                setTaskId(task.id);
-                setIsOpen(false);
-              }}
-              className="py-3 hover:bg-black/30 cursor-pointer"
-            >
-              {task.name}
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul
+        className={clsx(
+          "absolute",
+          "mt-2",
+          "w-full",
+          "bg-gray",
+          "backdrop-blur-lg",
+          "border",
+          "border-white/10",
+          "rounded-xl",
+          "shadow-lg",
+          "text-center",
+          "overflow-auto z-10",
+          "transition-all duration-200 ease-in-out",
+          isOpen
+            ? "opacity-100 max-h-80 translate-y-1"
+            : "opacity-0 max-h-0 pointer-events-none translate-y-0",
+        )}
+      >
+        {undoneTasks.map((task, index) => (
+          <li
+            key={index}
+            onClick={() => {
+              setSelectedTask(task.name);
+              setTaskId(task.id);
+              setIsOpen(false);
+            }}
+            className="py-3 hover:bg-black/30 cursor-pointer"
+          >
+            {task.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

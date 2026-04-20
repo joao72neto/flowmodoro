@@ -3,6 +3,9 @@ import Button from "../../../shared/components/Button";
 import useTimer from "../hooks/useTimer";
 import clsx from "clsx";
 
+import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
+import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
+
 function Timer() {
   const {
     mode,
@@ -64,7 +67,7 @@ function Timer() {
           <Button
             onClick={() => startFocus()}
             variant="danger"
-            icon={<i className="bi bi-play-fill" />}
+            icon={<FaPlayCircle size={20} />}
           >
             Start
           </Button>
@@ -72,7 +75,7 @@ function Timer() {
           <Button
             onClick={() => stopFocus()}
             variant="danger2"
-            icon={<i className="bi bi-x-lg" />}
+            icon={<FaStopCircle size={20} />}
           >
             Stop
           </Button>
@@ -80,7 +83,7 @@ function Timer() {
           <Button
             onClick={() => startBreak()}
             variant="success"
-            icon={<i className="bi bi-play-fill" />}
+            icon={<FaPlayCircle size={20} />}
           >
             Break
           </Button>
@@ -88,7 +91,7 @@ function Timer() {
           <Button
             onClick={() => skipBreak()}
             variant="success2"
-            icon={<i className="bi bi-skip-end-fill" />}
+            icon={<IoPlaySkipForwardCircleSharp size={20} />}
           >
             Skip Break
           </Button>

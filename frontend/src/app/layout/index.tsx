@@ -8,6 +8,9 @@ import { useTaskContext } from "../../features/task/contexts/TaskContext";
 import SideBarContainer from "./SideBarContainer";
 import ToggleButtonContainer from "./ToggleButtonContainer";
 
+import { PiCaretLeft } from "react-icons/pi";
+import clsx from "clsx";
+
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useTaskContext();
 
@@ -23,7 +26,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
       <ToggleButtonContainer>
         <IconButton
-          icon={<i className={`${!isSidebarOpen ? "bi bi-caret-left" : ""}`} />}
+          icon={
+            <PiCaretLeft
+              size={30}
+              className={clsx("transition duration-200 hover:-translate-x-1")}
+            />
+          }
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         />
       </ToggleButtonContainer>
