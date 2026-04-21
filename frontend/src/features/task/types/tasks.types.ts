@@ -12,3 +12,7 @@ export interface TaskRequest {
 export interface UpdateTaskRequest {
   checked: boolean;
 }
+
+export interface UpdateTaskNameRequest {
+  name: string;
+}

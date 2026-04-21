@@ -1,5 +1,6 @@
 import type {
   TaskRequest,
+  UpdateTaskNameRequest,
   UpdateTaskRequest,
 } from "../types/tasks.types";
 import api from "../../../configs/api";
@@ -19,6 +20,10 @@ class TaskService {
 
   async updateTaskStatus(id: number, data: UpdateTaskRequest) {
     return await api.patch(`/task/${id}/status`, data);
+  }
+
+  async updateTask(id: number, data: UpdateTaskNameRequest) {
+    return await api.put(`/task/${id}`, data);
   }
 }
 

@@ -4,6 +4,7 @@ import type {
   TaskModel,
   TaskRequest,
   UpdateTaskRequest,
+  UpdateTaskNameRequest,
 } from "../types/tasks.types";
 
 const useTask = () => {
@@ -52,6 +53,21 @@ const useTask = () => {
     [],
   );
 
+  const updateTask = useCallback(
+    async (id: number, data: UpdateTaskNameRequest) => {
+      setLoading(true);
+      try {
+        await tasksService.updateTask(id, data);
+        return true;
+      } catch (e: any) {
+        throw e;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
+
   const deleteTask = useCallback(async (id: number) => {
     setLoading(true);
     try {
@@ -71,6 +87,7 @@ const useTask = () => {
     fetchTasks,
     deleteTask,
     updateTaskStatus,
+    updateTask,
   };
 };
 

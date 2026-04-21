@@ -81,6 +81,7 @@ export const SessionProvider = ({
           onClose={handleCancel}
           onConfirm={handleConfirm}
           title="Sessão Finalizada! 🎉"
+          closeButtonVariant="danger"
         >
           Deseja salvar ou desacartar a sessão atual de {formatToHour(focus)}?
         </Modal>

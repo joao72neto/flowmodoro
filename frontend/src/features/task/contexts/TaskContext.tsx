@@ -16,6 +16,7 @@ interface TaskContextType {
   setNewTask: (task: string) => void;
   handleRemoveTask: (id: number) => Promise<void>;
   handleCompleteTask: (index: number, checked: boolean) => Promise<void>;
+  handleUpdateTask: (id: number, name: string) => Promise<void>;
   tasks: TaskModel[];
   selectedTask: string;
   setSelectedTask: (task: string) => void;
@@ -32,8 +33,14 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [newTask, setNewTask] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
-  const { createTask, fetchTasks, deleteTask, updateTaskStatus, tasks } =
-    useTasks();
+  const {
+    createTask,
+    fetchTasks,
+    deleteTask,
+    updateTaskStatus,
+    updateTask,
+    tasks,
+  } = useTasks();
 
   const { showError } = useModal();
 
@@ -80,6 +87,17 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         showError("Erro ao deletar tarefa", error.message, () => {});
     }
   };
+
+  const handleUpdateTask = async (id: number, name: string) => {
+    try {
+      await updateTask(id, { name });
+      await fetchTasks();
+    } catch (error: any) {
+      if (error instanceof Error)
+        showError("Erro ao atualizar tarefa", error.message, () => {});
+    }
+  };
+
   const handleCompleteTask = async (index: number, checked: boolean) => {
     try {
       await updateTaskStatus(index, { checked: !checked });
@@ -106,6 +124,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         undoneTasks,
         wasTaskDeleted,
         activeTask,
+        handleUpdateTask,
       }}
     >
       {children}
