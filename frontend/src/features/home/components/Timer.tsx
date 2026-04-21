@@ -53,12 +53,12 @@ function Timer() {
       <div
         className={clsx(
           "flex justify-center items-center",
-          "text-6xl font-mono aspect-square p-4 border rounded-full border-white/10",
+          "text-6xl font-mono aspect-square p-7 border rounded-full border-white/10",
           "transition-colors transform-gpu",
           mode === "focus" &&
-            "animate-[border-breathe-focus_2.5s_ease-in-out_infinite] border-red-500!",
+            "animate-[sonar-focus_2.5s_ease-in-out_infinite] border-danger!",
           mode === "break" &&
-            "animate-[border-breathe-break_2.5s_ease-in-out_infinite] border-green-500!",
+            "animate-[sonar-break_2.5s_ease-in-out_infinite] border-success!",
         )}
       >
         {mode ? formatTimer(seconds) : "00:00"}
