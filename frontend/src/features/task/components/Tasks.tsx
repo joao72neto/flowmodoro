@@ -7,7 +7,13 @@ import useTasksComponent from "../hooks/useTasksComponent";
 import { useTimerContext } from "../../home/contexts/TimerContext";
 import { useState, useMemo } from "react";
 
-import { FaTrash, FaCheck, FaPlay, FaStop } from "react-icons/fa6";
+import {
+  FaTrash,
+  FaCheck,
+  FaPlay,
+  FaStop,
+  FaForwardStep,
+} from "react-icons/fa6";
 import { MdModeEdit } from "react-icons/md";
 import { PiEmpty } from "react-icons/pi";
 
@@ -24,7 +30,8 @@ function Tasks() {
   } = useTaskContext();
 
   const { handleDeleteTask } = useTasksComponent();
-  const { startFocus, stopFocus, mode } = useTimerContext();
+  const { startFocus, stopFocus, startBreak, skipBreak, mode } =
+    useTimerContext();
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
@@ -151,6 +158,26 @@ function Tasks() {
                 const isTaskRunning =
                   mode === "focus" && activeTask?.id === task.id;
 
+                const isTaskBreaking =
+                  mode === "break" && activeTask?.id === task.id;
+
+                const isTaskStopped =
+                  mode === "stopped" && activeTask?.id === task.id;
+
+                let timerIcon: React.ReactNode;
+
+                if (isTaskRunning) {
+                  timerIcon = <FaStop size={14} className="text-danger-2" />;
+                } else if (isTaskStopped) {
+                  timerIcon = <FaPlay size={14} className="text-success" />;
+                } else if (isTaskBreaking) {
+                  timerIcon = (
+                    <FaForwardStep size={14} className="text-success-2" />
+                  );
+                } else {
+                  timerIcon = <FaPlay size={14} className="text-danger" />;
+                }
+
                 return (
                   <li
                     key={task.id}
@@ -187,16 +214,14 @@ function Tasks() {
                     {!task.checked && (
                       <div className="flex gap-2">
                         <IconButton
-                          icon={
-                            isTaskRunning ? (
-                              <FaStop size={14} className="text-primary" />
-                            ) : (
-                              <FaPlay size={14} className="text-danger" />
-                            )
-                          }
+                          icon={timerIcon}
                           onClick={() => {
                             if (isTaskRunning) {
                               stopFocus();
+                            } else if (isTaskStopped) {
+                              startBreak();
+                            } else if (isTaskBreaking) {
+                              skipBreak();
                             } else {
                               setManualActiveTaskId(task.id);
                               startFocus();
