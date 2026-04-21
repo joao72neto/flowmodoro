@@ -17,6 +17,7 @@ interface TaskContextType {
   handleRemoveTask: (id: number) => Promise<void>;
   handleCompleteTask: (index: number, checked: boolean) => Promise<void>;
   handleUpdateTask: (id: number, name: string) => Promise<void>;
+  setManualActiveTaskId: (id: number | null) => void;
   tasks: TaskModel[];
   selectedTask: string;
   setSelectedTask: (task: string) => void;
@@ -33,6 +34,10 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [newTask, setNewTask] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
+  const [manualActiveTaskId, setManualActiveTaskId] = useState<number | null>(
+    null,
+  );
+
   const {
     createTask,
     fetchTasks,
@@ -48,7 +53,16 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     () => tasks.filter((task) => !task.checked),
     [tasks],
   );
-  const { activeTask } = useActiveTask(undoneTasks);
+
+  const taskToProcess = useMemo(() => {
+    if (manualActiveTaskId) {
+      const task = undoneTasks.find((t) => t.id === manualActiveTaskId);
+      if (task) return [task];
+    }
+    return undoneTasks;
+  }, [undoneTasks, manualActiveTaskId]);
+
+  const { activeTask } = useActiveTask(taskToProcess);
   const [wasTaskDeleted, setWasTaskDeleted] = useState(false);
 
   useEffect(() => {
@@ -125,6 +139,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         wasTaskDeleted,
         activeTask,
         handleUpdateTask,
+        setManualActiveTaskId,
       }}
     >
       {children}

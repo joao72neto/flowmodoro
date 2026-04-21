@@ -1,5 +1,5 @@
 import Button from "../../../shared/components/Button";
-import useTimer from "../hooks/useTimer";
+import { useTimerContext } from "../contexts/TimerContext";
 import clsx from "clsx";
 
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
@@ -14,7 +14,7 @@ function Timer() {
     startFocus,
     stopFocus,
     skipBreak,
-  } = useTimer();
+  } = useTimerContext();
 
   return (
     <>

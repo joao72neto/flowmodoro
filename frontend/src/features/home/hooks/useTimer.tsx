@@ -102,6 +102,7 @@ const useTimer = () => {
       return;
     }
 
+    setIsSidebarOpen(false);
     const now = Date.now();
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
@@ -117,6 +118,7 @@ const useTimer = () => {
     startTimeRef.current = Date.now();
     setFocus(Number((seconds / 60).toFixed(2)));
     setShowSaveSessionModal(true);
+    setIsSidebarOpen(false);
   };
 
   const startBreak = () => {

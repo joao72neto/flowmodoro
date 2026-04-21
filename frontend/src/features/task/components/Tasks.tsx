@@ -4,9 +4,10 @@ import Input from "../../../shared/components/Input";
 import clsx from "clsx";
 import { useTaskContext } from "../contexts/TaskContext";
 import useTasksComponent from "../hooks/useTasksComponent";
+import { useTimerContext } from "../../home/contexts/TimerContext";
 import { useState, useMemo } from "react";
 
-import { FaTrash, FaCheck } from "react-icons/fa6";
+import { FaTrash, FaCheck, FaPlay, FaStop } from "react-icons/fa6";
 import { MdModeEdit } from "react-icons/md";
 import { PiEmpty } from "react-icons/pi";
 
@@ -18,13 +19,16 @@ function Tasks() {
     tasks,
     handleCompleteTask,
     handleUpdateTask,
+    activeTask,
+    setManualActiveTaskId,
   } = useTaskContext();
+
   const { handleDeleteTask } = useTasksComponent();
+  const { startFocus, stopFocus, mode } = useTimerContext();
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
   const [activeTab, setActiveTab] = useState<"todo" | "done">("todo");
-
   const { todoCount, doneCount } = useMemo(() => {
     return {
       todoCount: tasks.filter((t) => !t.checked).length,
@@ -143,63 +147,89 @@ function Tasks() {
 
           {filteredTasks.length > 0 && (
             <ul className="space-y-2">
-              {filteredTasks.map((task) => (
-                <li
-                  key={task.id}
-                  className={clsx(
-                    "shadow-xl border-t border-b border-white/10 px-4 py-3 rounded flex justify-between items-center",
-                    {
-                      "line-through text-neutral-500": task.checked,
-                    },
-                  )}
-                >
-                  <div className="flex items-center flex-1 mr-4">
-                    <TaskButton
-                      onClick={() => handleCompleteTask(task.id, task.checked)}
-                      taskCompleted={task.checked}
-                    />
-                    {editingId === task.id ? (
-                      <input
-                        autoFocus
-                        className="bg-transparent outline-none w-full ml-2 border-b border-white/20"
-                        value={editingName}
-                        onChange={(e) => setEditingName(e.target.value)}
-                        onKeyDown={handleEditKeyDown}
-                        onBlur={saveEditing}
-                      />
-                    ) : (
-                      <span className="line-clamp-1 break-all ml-2">
-                        {task.name}
-                      </span>
-                    )}
-                  </div>
+              {filteredTasks.map((task) => {
+                const isTaskRunning =
+                  mode === "focus" && activeTask?.id === task.id;
 
-                  {!task.checked && (
-                    <div className="flex gap-2">
+                return (
+                  <li
+                    key={task.id}
+                    className={clsx(
+                      "shadow-xl border-t border-b border-white/10 px-4 py-3 rounded flex justify-between items-center",
+                      {
+                        "line-through text-neutral-500": task.checked,
+                      },
+                    )}
+                  >
+                    <div className="flex items-center flex-1 mr-4">
+                      <TaskButton
+                        onClick={() =>
+                          handleCompleteTask(task.id, task.checked)
+                        }
+                        taskCompleted={task.checked}
+                      />
                       {editingId === task.id ? (
-                        <IconButton
-                          icon={<FaCheck size={18} className="text-success" />}
-                          onClick={saveEditing}
+                        <input
+                          autoFocus
+                          className="bg-transparent outline-none w-full ml-2"
+                          value={editingName}
+                          onChange={(e) => setEditingName(e.target.value)}
+                          onKeyDown={handleEditKeyDown}
+                          onBlur={saveEditing}
                         />
                       ) : (
-                        <IconButton
-                          icon={<MdModeEdit size={18} />}
-                          onClick={() => startEditing(task.id, task.name)}
-                        />
+                        <span className="line-clamp-1 break-all ml-2">
+                          {task.name}
+                        </span>
                       )}
-                      <IconButton
-                        icon={
-                          <FaTrash
-                            size={16}
-                            className="transition duration-200"
-                          />
-                        }
-                        onClick={() => handleDeleteTask(task.id)}
-                      />
                     </div>
-                  )}
-                </li>
-              ))}
+
+                    {!task.checked && (
+                      <div className="flex gap-2">
+                        <IconButton
+                          icon={
+                            isTaskRunning ? (
+                              <FaStop size={14} className="text-primary" />
+                            ) : (
+                              <FaPlay size={14} className="text-danger" />
+                            )
+                          }
+                          onClick={() => {
+                            if (isTaskRunning) {
+                              stopFocus();
+                            } else {
+                              setManualActiveTaskId(task.id);
+                              startFocus();
+                            }
+                          }}
+                        />
+                        {editingId === task.id ? (
+                          <IconButton
+                            icon={
+                              <FaCheck size={18} className="text-success" />
+                            }
+                            onClick={saveEditing}
+                          />
+                        ) : (
+                          <IconButton
+                            icon={<MdModeEdit size={18} />}
+                            onClick={() => startEditing(task.id, task.name)}
+                          />
+                        )}
+                        <IconButton
+                          icon={
+                            <FaTrash
+                              size={16}
+                              className="transition duration-200"
+                            />
+                          }
+                          onClick={() => handleDeleteTask(task.id)}
+                        />
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
