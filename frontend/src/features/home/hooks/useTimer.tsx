@@ -4,6 +4,10 @@ import { useTaskContext } from "../../task/contexts/TaskContext";
 import { useModal } from "../../../shared/contexts/ModalContext";
 
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
+import {
+  updateFaviconWithTime,
+  resetFavicon,
+} from "../../../shared/utils/favicon.utils";
 
 const useTimer = () => {
   const { setFocus, setShowSaveSessionModal } = useSessionContext();
@@ -35,6 +39,21 @@ const useTimer = () => {
       localStorageKeys.timer,
       JSON.stringify({ mode, seconds, lastUpdated: Date.now() }),
     );
+
+    const faviconTime =
+      seconds < 60 ? seconds.toString() : Math.floor(seconds / 60).toString();
+
+    if (mode === "focus") {
+      updateFaviconWithTime({ time: faviconTime, color: "#ef4444" });
+    } else if (mode === "break") {
+      updateFaviconWithTime({
+        time: faviconTime,
+        color: "#22c55e",
+        textColor: "#000000",
+      });
+    } else {
+      resetFavicon();
+    }
   }, [mode, seconds]);
 
   useEffect(() => {
