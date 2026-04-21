@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSessionContext } from "../../session/contexts/SessionContext";
 import { useTaskContext } from "../../task/contexts/TaskContext";
 import { useModal } from "../../../shared/contexts/ModalContext";
@@ -12,6 +12,39 @@ const useTimer = () => {
   const { activeTask, setIsSidebarOpen } = useTaskContext();
 
   const { showDefault, hideModal } = useModal();
+
+  const startTimeRef = useRef<number | null>(null);
+  const baseSecondsRef = useRef<number>(0);
+
+  useEffect(() => {
+    let interval: number | null = null;
+
+    if (mode === "focus" || mode === "break") {
+      startTimeRef.current = Date.now();
+      baseSecondsRef.current = seconds;
+
+      interval = window.setInterval(() => {
+        const now = Date.now();
+        const diffInSeconds = Math.floor((now - startTimeRef.current!) / 1000);
+
+        if (mode === "focus") {
+          setSeconds(baseSecondsRef.current + diffInSeconds);
+        } else if (mode === "break") {
+          const remaining = baseSecondsRef.current - diffInSeconds;
+          if (remaining <= 0) {
+            setSeconds(0);
+            setMode(null);
+          } else {
+            setSeconds(remaining);
+          }
+        }
+      }, 100);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [mode]);
 
   const startFocus = () => {
     if (!activeTask) {
@@ -60,9 +93,7 @@ const useTimer = () => {
     skipBreak,
     formatTimer,
     mode,
-    setMode,
     seconds,
-    setSeconds,
   };
 };
 

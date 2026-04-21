@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import Button from "../../../shared/components/Button";
 import useTimer from "../hooks/useTimer";
 import clsx from "clsx";
@@ -10,43 +9,12 @@ function Timer() {
   const {
     mode,
     seconds,
-    setSeconds,
-    setMode,
     formatTimer,
     startBreak,
     startFocus,
     stopFocus,
     skipBreak,
   } = useTimer();
-
-  const intervalRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (mode) {
-      intervalRef.current = setInterval(() => {
-        if (mode === "focus") {
-          setSeconds((prev) => prev + 1);
-        } else if (mode === "break") {
-          setSeconds((prev) => {
-            if (prev <= 1) {
-              clearInterval(intervalRef.current!);
-              intervalRef.current = null;
-              setMode(null);
-              return 0;
-            }
-            return prev - 1;
-          });
-        }
-      }, 1000);
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [mode, seconds]);
 
   return (
     <>
