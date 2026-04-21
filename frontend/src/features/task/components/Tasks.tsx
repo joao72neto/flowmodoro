@@ -4,7 +4,7 @@ import Input from "../../../shared/components/Input";
 import clsx from "clsx";
 import { useTaskContext } from "../contexts/TaskContext";
 import useTasksComponent from "../hooks/useTasksComponent";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { FaTrash, FaCheck } from "react-icons/fa6";
 import { MdModeEdit } from "react-icons/md";
@@ -23,6 +23,20 @@ function Tasks() {
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
+  const [activeTab, setActiveTab] = useState<"todo" | "done">("todo");
+
+  const { todoCount, doneCount } = useMemo(() => {
+    return {
+      todoCount: tasks.filter((t) => !t.checked).length,
+      doneCount: tasks.filter((t) => t.checked).length,
+    };
+  }, [tasks]);
+
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) =>
+      activeTab === "todo" ? !task.checked : task.checked,
+    );
+  }, [tasks, activeTab]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -63,24 +77,73 @@ function Tasks() {
           />
         </div>
 
+        <div className="flex border-b border-white/10 mb-4">
+          <button
+            onClick={() => setActiveTab("todo")}
+            className={clsx(
+              "flex-1 py-2 text-sm font-medium transition-colors border-b-2 cursor-pointer flex items-center justify-center gap-2",
+              activeTab === "todo"
+                ? "border-danger text-danger"
+                : "border-transparent text-neutral-400 hover:text-white",
+            )}
+          >
+            A fazer
+            <span
+              className={clsx(
+                "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
+                activeTab === "todo"
+                  ? "bg-danger text-white"
+                  : "bg-white/10 text-neutral-400",
+              )}
+            >
+              {todoCount}
+            </span>
+          </button>
+          <button
+            onClick={() => setActiveTab("done")}
+            className={clsx(
+              "flex-1 py-2 text-sm font-medium transition-colors border-b-2 cursor-pointer flex items-center justify-center gap-2",
+              activeTab === "done"
+                ? "border-success text-success"
+                : "border-transparent text-neutral-400 hover:text-white",
+            )}
+          >
+            Concluído
+            <span
+              className={clsx(
+                "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
+                activeTab === "done"
+                  ? "bg-success text-neutral-100"
+                  : "bg-white/10 text-neutral-400",
+              )}
+            >
+              {doneCount}
+            </span>
+          </button>
+        </div>
+
         <div className="flex flex-col flex-1 min-h-0 overflow-auto mb-15 scrollbar-hidden">
-          {tasks.length === 0 && (
+          {filteredTasks.length === 0 && (
             <div className="flex flex-col gap-3 justify-center items-center flex-1">
               <div className="flex flex-col items-center gap-2">
                 <PiEmpty size={30} />
                 <h2 className="text-xl mb-4 text-center m-0!">
-                  Nenhuma tarefa cadastrada
+                  {activeTab === "todo"
+                    ? "Nada para fazer"
+                    : "Nenhuma tarefa concluída"}
                 </h2>
               </div>
               <p className="text-neutral-40 max-w-[280px] text-center">
-                Digite e pressione enter para adicionar uma nova tarefa.
+                {activeTab === "todo"
+                  ? "Aproveite seu tempo livre ou adicione uma nova tarefa."
+                  : "As tarefas que você terminar aparecerão aqui."}
               </p>
             </div>
           )}
 
-          {tasks.length > 0 && (
+          {filteredTasks.length > 0 && (
             <ul className="space-y-2">
-              {tasks.map((task) => (
+              {filteredTasks.map((task) => (
                 <li
                   key={task.id}
                   className={clsx(
@@ -98,7 +161,7 @@ function Tasks() {
                     {editingId === task.id ? (
                       <input
                         autoFocus
-                        className="bg-transparent outline-none w-full ml-2"
+                        className="bg-transparent outline-none w-full ml-2 border-b border-white/20"
                         value={editingName}
                         onChange={(e) => setEditingName(e.target.value)}
                         onKeyDown={handleEditKeyDown}
