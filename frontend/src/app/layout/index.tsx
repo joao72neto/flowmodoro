@@ -5,6 +5,7 @@ import LayoutContainer from "./LayoutContainer";
 import MainContentContainer from "./MainContentContainer";
 
 import { useTaskContext } from "../../features/task/contexts/TaskContext";
+import { useNotificationPermission } from "../../shared/hooks/useNotificationPermission";
 import SideBarContainer from "./SideBarContainer";
 import ToggleButtonContainer from "./ToggleButtonContainer";
 
@@ -13,6 +14,7 @@ import clsx from "clsx";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useTaskContext();
+  useNotificationPermission();
 
   return (
     <LayoutContainer>

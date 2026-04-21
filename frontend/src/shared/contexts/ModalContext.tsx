@@ -1,5 +1,5 @@
 import Modal from "../components/modals/Modal";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import type { ModalType } from "../types/globals.types";
 
 interface IModalContext {
@@ -20,38 +20,48 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     () => {},
   );
 
-  const showModal = (
-    type: ModalType,
-    title: string,
-    msg: string,
-    onConfirm?: () => void,
-  ) => {
-    setModalType(type);
-    setTitle(title);
-    setModalMessage(msg);
-    setOnConfirmCallback(() => onConfirm || (() => {}));
-  };
+  const showModal = useCallback(
+    (type: ModalType, title: string, msg: string, onConfirm?: () => void) => {
+      setModalType(type);
+      setTitle(title);
+      setModalMessage(msg);
+      setOnConfirmCallback(() => onConfirm || (() => {}));
+    },
+    [],
+  );
 
-  const showDefault = (title: string, msg: string, action: () => void) => {
-    showModal("default", title, msg, action);
-  };
+  const showDefault = useCallback(
+    (title: string, msg: string, action: () => void) => {
+      showModal("default", title, msg, action);
+    },
+    [showModal],
+  );
 
-  const showError = (title: string, msg: string, action: () => void) => {
-    showModal("error", title, msg, action);
-  };
+  const showError = useCallback(
+    (title: string, msg: string, action: () => void) => {
+      showModal("error", title, msg, action);
+    },
+    [showModal],
+  );
 
-  const showWarning = (title: string, msg: string, action: () => void) => {
-    showModal("warning", title, msg, action);
-  };
+  const showWarning = useCallback(
+    (title: string, msg: string, action: () => void) => {
+      showModal("warning", title, msg, action);
+    },
+    [showModal],
+  );
 
-  const showSuccess = (title: string, msg: string, action: () => void) => {
-    showModal("success", title, msg, action);
-  };
+  const showSuccess = useCallback(
+    (title: string, msg: string, action: () => void) => {
+      showModal("success", title, msg, action);
+    },
+    [showModal],
+  );
 
-  const hideModal = () => {
+  const hideModal = useCallback(() => {
     setModalType(null);
     setOnConfirmCallback(() => () => {});
-  };
+  }, []);
 
   const handleConfirm = () => {
     onConfirmCallback();

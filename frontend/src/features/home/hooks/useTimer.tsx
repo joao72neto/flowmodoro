@@ -50,6 +50,12 @@ const useTimer = () => {
           if (remaining <= 0) {
             setSeconds(0);
             setMode(null);
+            if (Notification.permission === "granted") {
+              new Notification("Pausa Finalizada!", {
+                body: "Sua pausa acabou. Hora de voltar ao foco!",
+                icon: "/flowmodoro-icon.svg",
+              });
+            }
           } else {
             setSeconds(remaining);
           }
