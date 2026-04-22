@@ -86,7 +86,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       setSelectedTask(newTask);
     } catch (error: any) {
       if (error instanceof Error)
-        showError("Erro ao criar tarefa", error.message, () => {});
+        showError({
+          title: "Erro ao criar tarefa",
+          message: error.message,
+          action: () => {},
+        });
     }
   };
 
@@ -98,7 +102,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       setWasTaskDeleted(true);
     } catch (error: any) {
       if (error instanceof Error)
-        showError("Erro ao deletar tarefa", error.message, () => {});
+        showError({
+          title: "Erro ao deletar tarefa",
+          message: error.message,
+          action: () => {},
+        });
     }
   };
 
@@ -108,7 +116,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       await fetchTasks();
     } catch (error: any) {
       if (error instanceof Error)
-        showError("Erro ao atualizar tarefa", error.message, () => {});
+        showError({
+          title: "Erro ao atualizar tarefa",
+          message: error.message,
+          action: () => {},
+        });
     }
   };
 
@@ -118,7 +130,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       await fetchTasks();
     } catch (error: any) {
       if (error instanceof Error)
-        showError("Erro ao atualizar tarefa", error.message, () => {});
+        showError({
+          title: "Erro ao atualizar tarefa",
+          message: error.message,
+          action: () => {},
+        });
     }
   };
 

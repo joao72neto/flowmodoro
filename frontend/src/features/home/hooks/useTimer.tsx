@@ -93,11 +93,11 @@ const useTimer = () => {
 
   const startFocus = () => {
     if (!activeTask) {
-      showDefault(
-        "Nenhuma tarefa selecionada",
-        "Crie ou selecione uma tarefa para dar início ao timer.",
-        hideModal,
-      );
+      showDefault({
+        title: "Nenhuma tarefa selecionada",
+        message: "Crie ou selecione uma tarefa para dar início ao timer.",
+        action: hideModal,
+      });
       setIsSidebarOpen(true);
       return;
     }

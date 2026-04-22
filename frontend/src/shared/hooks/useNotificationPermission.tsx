@@ -7,28 +7,31 @@ export const useNotificationPermission = () => {
   useEffect(() => {
     (async () => {
       if (!("Notification" in window)) {
-        showDefault(
-          "Notificações não suportadas",
-          "Seu navegador não suporta notificações. Você não será avisado quando a pausa terminar.",
-          hideModal,
-        );
+        showDefault({
+          title: "Notificações não suportadas",
+          message:
+            "Seu navegador não suporta notificações. Você não será avisado quando a pausa terminar.",
+          action: hideModal,
+        });
         return;
       }
 
       if (Notification.permission === "denied") {
-        showDefault(
-          "Notificações bloqueadas",
-          "As notificações estão desativadas. Ative-as nas configurações do navegador para ser avisado sobre o fim das pausas.",
-          hideModal,
-        );
+        showDefault({
+          title: "Notificações bloqueadas",
+          message:
+            "As notificações estão desativadas. Ative-as nas configurações do navegador para ser avisado sobre o fim das pausas.",
+          action: hideModal,
+        });
       } else if (Notification.permission === "default") {
         const permission = await Notification.requestPermission();
         if (permission === "denied") {
-          showDefault(
-            "Notificações bloqueadas",
-            "Você bloqueou as notificações. Você não será avisado quando a pausa terminar.",
-            hideModal,
-          );
+          showDefault({
+            title: "Notificações bloqueadas",
+            message:
+              "Você bloqueou as notificações. Você não será avisado quando a pausa terminar.",
+            action: hideModal,
+          });
         }
       }
     })();

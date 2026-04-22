@@ -6,14 +6,14 @@ const useTasksComponent = () => {
   const { handleRemoveTask } = useTaskContext();
 
   const handleDeleteTask = (id: number) => {
-    showWarning(
-      "Deletar tarefa",
-      "Tem certeza que deseja deletar essa tarefa?",
-      () => {
+    showWarning({
+      title: "Deletar tarefa",
+      message: "Tem certeza que deseja deletar essa tarefa?",
+      action: () => {
         handleRemoveTask(id);
         hideModal();
       },
-    );
+    });
   };
 
   return { handleDeleteTask };

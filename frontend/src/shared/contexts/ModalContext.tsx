@@ -3,10 +3,42 @@ import { createContext, useContext, useState, useCallback } from "react";
 import type { ModalType } from "../types/globals.types";
 
 interface IModalContext {
-  showError: (title: string, message: string, action: () => void) => void;
-  showWarning: (title: string, message: string, action: () => void) => void;
-  showSuccess: (title: string, message: string, action: () => void) => void;
-  showDefault: (title: string, message: string, action: () => void) => void;
+  showError: ({
+    title,
+    message,
+    action,
+  }: {
+    title: string;
+    message: string;
+    action: () => void;
+  }) => void;
+  showWarning: ({
+    title,
+    message,
+    action,
+  }: {
+    title: string;
+    message: string;
+    action: () => void;
+  }) => void;
+  showSuccess: ({
+    title,
+    message,
+    action,
+  }: {
+    title: string;
+    message: string;
+    action: () => void;
+  }) => void;
+  showDefault: ({
+    title,
+    message,
+    action,
+  }: {
+    title: string;
+    message: string;
+    action: () => void;
+  }) => void;
   hideModal: () => void;
 }
 
@@ -21,39 +53,81 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const showModal = useCallback(
-    (type: ModalType, title: string, msg: string, onConfirm?: () => void) => {
+    ({
+      type,
+      title,
+      message,
+      onConfirm,
+    }: {
+      type: ModalType;
+      title: string;
+      message: string;
+      onConfirm?: () => void;
+    }) => {
       setModalType(type);
       setTitle(title);
-      setModalMessage(msg);
+      setModalMessage(message);
       setOnConfirmCallback(() => onConfirm || (() => {}));
     },
     [],
   );
 
   const showDefault = useCallback(
-    (title: string, msg: string, action: () => void) => {
-      showModal("default", title, msg, action);
+    ({
+      title,
+      message,
+      action,
+    }: {
+      title: string;
+      message: string;
+      action: () => void;
+    }) => {
+      showModal({ type: "default", title, message, onConfirm: action });
     },
     [showModal],
   );
 
   const showError = useCallback(
-    (title: string, msg: string, action: () => void) => {
-      showModal("error", title, msg, action);
+    ({
+      title,
+      message,
+      action,
+    }: {
+      title: string;
+      message: string;
+      action: () => void;
+    }) => {
+      showModal({ type: "error", title, message, onConfirm: action });
     },
     [showModal],
   );
 
   const showWarning = useCallback(
-    (title: string, msg: string, action: () => void) => {
-      showModal("warning", title, msg, action);
+    ({
+      title,
+      message,
+      action,
+    }: {
+      title: string;
+      message: string;
+      action: () => void;
+    }) => {
+      showModal({ type: "warning", title, message, onConfirm: action });
     },
     [showModal],
   );
 
   const showSuccess = useCallback(
-    (title: string, msg: string, action: () => void) => {
-      showModal("success", title, msg, action);
+    ({
+      title,
+      message,
+      action,
+    }: {
+      title: string;
+      message: string;
+      action: () => void;
+    }) => {
+      showModal({ type: "success", title, message, onConfirm: action });
     },
     [showModal],
   );
