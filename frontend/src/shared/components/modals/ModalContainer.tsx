@@ -1,21 +1,46 @@
 import clsx from "clsx";
 import { useEffect } from "react";
 
-const ModalContainer = ({ children }: { children: React.ReactNode }) => {
+const sizes = {
+  sm: "max-w-md",
+  md: "max-w-[600px]",
+  lg: "max-w-[800px]",
+};
+
+const ModalContainer = ({
+  children,
+  className,
+  size = "sm",
+  close,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  size?: keyof typeof sizes;
+  close?: () => void;
+}) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
     };
   }, []);
+
   return (
-    <div className="flex items-center justify-center fixed inset-0 bg-black/50 z-50">
+    <div
+      className={clsx(
+        "fixed inset-0 flex items-center justify-center z-50 bg-[#00000085]",
+      )}
+      onClick={() => close?.()}
+    >
       <div
         className={clsx(
-          "flex flex-col border border-white/10 gap-8 backdrop-blur-2xl mx-6",
-          "bg-white/10 text-white max-w-[400px] min-w-[280px] ",
-          "rounded-xl p-6 text-center",
+          "flex flex-col gap-8 text-center",
+          "p-6 rounded-xl w-full mx-4 relative max-h-[90vh] animate-fade-in bg-white/10",
+          "overflow-auto overscroll-contain backdrop-blur-2xl border border-white/10",
+          sizes[size],
+          className,
         )}
+        onClick={(e) => e.stopPropagation()}
       >
         {children}
       </div>
