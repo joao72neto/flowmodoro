@@ -1,7 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import useSessions from "../hooks/useSessions";
-import Modal from "../../../shared/components/modals/Modal";
-import { formatToHour } from "../../../shared/utils/number.utils";
+import { useModal } from "../../../shared/contexts/ModalContext";
 
 interface ISessionContext {
   focus: number;
@@ -30,32 +29,22 @@ export const SessionProvider = ({
   const [showSaveSessionModal, setShowSaveSessionModal] =
     useState<boolean>(false);
 
-  const [errors, setErrors] = useState<string[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
+  const { showError, hideModal } = useModal();
 
-  const handleConfirm = () => {
-    handleSaveSession();
-    setShowSaveSessionModal(false);
-  };
-
-  const handleCancel = () => {
-    reset();
-    setShowSaveSessionModal(false);
-  };
   const handleSaveSession = async () => {
-    reset();
     try {
       await createSession(taskId, { focus, interruptions });
       setSuccess(true);
-    } catch (e: any) {
-      setErrors(e.response?.data?.errors);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error)
+        showError({
+          title: "Error",
+          message: error.message,
+          action: hideModal,
+        });
     }
-  };
-
-  const reset = () => {
-    setFocus(0);
-    setInterruptions(0);
-    setSuccess(false);
   };
 
   return (
@@ -74,26 +63,6 @@ export const SessionProvider = ({
       }}
     >
       {children}
-      {showSaveSessionModal && (
-        <Modal
-          closeButtonText="Descartar"
-          confirmButtonText="Salvar"
-          onClose={handleCancel}
-          onConfirm={handleConfirm}
-          title="Sessão Finalizada! 🎉"
-          closeButtonVariant="danger"
-        >
-          Deseja salvar ou desacartar a sessão atual de {formatToHour(focus)}?
-        </Modal>
-      )}
-
-      {errors?.length > 0 && (
-        <Modal onClose={() => setErrors([])} title="Error">
-          {errors.map((error, index) => (
-            <p key={index}>{error}</p>
-          ))}
-        </Modal>
-      )}
     </SessionContext.Provider>
   );
 };

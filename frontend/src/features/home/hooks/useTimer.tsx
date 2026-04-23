@@ -9,10 +9,13 @@ import {
   resetFavicon,
 } from "../../../shared/utils/favicon.utils";
 
+import { formatToHour } from "../../../shared/utils/number.utils";
+
 const useTimer = () => {
-  const { setFocus, setShowSaveSessionModal } = useSessionContext();
+  const { setFocus, setShowSaveSessionModal, handleSaveSession } =
+    useSessionContext();
   const { activeTask, setIsSidebarOpen } = useTaskContext();
-  const { showDefault, hideModal } = useModal();
+  const { showDefault, showWarning, hideModal } = useModal();
 
   const BREAK_RATIO = 0.2;
 
@@ -33,6 +36,7 @@ const useTimer = () => {
 
   const startTimeRef = useRef<number>(Date.now());
   const baseSecondsRef = useRef<number>(seconds);
+  const focus = Number((seconds / 60).toFixed(2));
 
   useEffect(() => {
     localStorage.setItem(
@@ -115,8 +119,17 @@ const useTimer = () => {
     setSeconds(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
-    setFocus(Number((seconds / 60).toFixed(2)));
+    setFocus(focus);
     setShowSaveSessionModal(true);
+
+    showWarning({
+      title: "Sessão Finalizada! 🎉",
+      message: `Deseja salvar ou desacartar a sessão atual de ${formatToHour(focus)}?`,
+      action: () => {
+        handleSaveSession();
+        hideModal();
+      },
+    });
   };
 
   const startBreak = () => {
