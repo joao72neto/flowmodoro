@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
-import { useSessionContext } from "../../session/contexts/SessionContext";
-import type { TaskResponse } from "../types/tasks.types";
+import { useSessionContext } from "../../session/session.context";
+import type { TaskResponse } from "../task.types";
 
 const useActiveTask = (tasks: TaskResponse[]) => {
   const { setTaskId } = useSessionContext();

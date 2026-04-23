@@ -1,7 +1,7 @@
-import { ModalProvider } from "../shared/contexts/ModalContext";
-import { SessionProvider } from "../features/session/contexts/SessionContext";
-import { TaskProvider } from "../features/task/contexts/TaskContext";
-import { TimerProvider } from "../features/home/contexts/TimerContext";
+import { ModalProvider } from "../shared/modal.context";
+import { SessionProvider } from "../features/session/session.context";
+import { TaskProvider } from "../features/task/task.context";
+import { TimerProvider } from "../features/home/timer.context";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

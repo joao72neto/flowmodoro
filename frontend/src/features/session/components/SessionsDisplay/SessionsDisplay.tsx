@@ -2,12 +2,12 @@ import SessionsWrapper from "./SessionsWrapper";
 import SessionsGroup from "./SessionsGroup";
 import Session from "./Session";
 
-import { useSessionContext } from "../../contexts/SessionContext";
-import useSessions from "../../hooks/useSessions";
+import { useSessionContext } from "../../session.context";
+import useSessions from "../../useSession";
 import { useEffect } from "react";
 import { formatToBRDate } from "../../../../shared/utils/date.utils";
 import { formatToHour } from "../../../../shared/utils/number.utils";
-import { useTaskContext } from "../../../task/contexts/TaskContext";
+import { useTaskContext } from "../../../task/task.context";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 

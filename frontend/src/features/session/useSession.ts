@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
-import sessionsService from "../services/sessions.service";
+import sessionsService from "./session.service";
 import type {
   ISessionGroupoResponse,
   SessionRequest,
-} from "../types/sessions.types";
-import type { PaginationResponse } from "../../../shared/types/globals.types";
+} from "./session.types";
+import type { PaginationResponse } from "../../shared/globals.types";
 
 const useSessions = () => {
   const [loading, setLoading] = useState(false);

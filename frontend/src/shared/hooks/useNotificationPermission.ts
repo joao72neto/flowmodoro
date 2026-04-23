@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useModal } from "../contexts/ModalContext";
+import { useModal } from "../modal.context";
 
 export const useNotificationPermission = () => {
   const { showDefault, hideModal } = useModal();

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { useTaskContext } from "../contexts/TaskContext";
+import { useTaskContext } from "../task.context";
 import clsx from "clsx";
-import { useSessionContext } from "../../session/contexts/SessionContext";
+import { useSessionContext } from "../../session/session.context";
 
 import { FaCaretDown } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";

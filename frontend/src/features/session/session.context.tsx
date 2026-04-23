@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
-import useSessions from "../hooks/useSessions";
-import { useModal } from "../../../shared/contexts/ModalContext";
+import useSessions from "./useSession";
+import { useModal } from "../../shared/modal.context";
 
 interface ISessionContext {
   focus: number;

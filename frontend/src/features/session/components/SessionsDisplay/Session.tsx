@@ -4,7 +4,7 @@ import Stack from "../../../../shared/components/Stack";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import SessionDetailsModal from "../SessionDetailsModal";
 import { useState } from "react";
-import type { SessionResponse } from "../../types/sessions.types";
+import type { SessionResponse } from "../../session.types";
 import { capitalize } from "../../../../shared/utils/string.utils";
 
 const Session = ({ session }: { session: SessionResponse }) => {

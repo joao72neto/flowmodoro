@@ -1,6 +1,6 @@
 import BaseModal from "./BaseModal";
 import { modalConfig } from "../../../configs/modal.config";
-import type { ModalType, VariantType } from "../../types/globals.types";
+import type { ModalType, VariantType } from "../../globals.types";
 
 const Modal = ({
   type = "default",

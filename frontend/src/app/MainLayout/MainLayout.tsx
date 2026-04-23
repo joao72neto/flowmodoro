@@ -4,7 +4,7 @@ import SideBar from "./SideBar";
 import LayoutContainer from "./LayoutContainer";
 import MainContentContainer from "./MainContentContainer";
 
-import { useTaskContext } from "../../features/task/contexts/TaskContext";
+import { useTaskContext } from "../../features/task/task.context";
 import { useNotificationPermission } from "../../shared/hooks/useNotificationPermission";
 import SideBarContainer from "./SideBarContainer";
 import ToggleButtonContainer from "./ToggleButtonContainer";

@@ -1,5 +1,5 @@
-import Button from "../../../shared/components/Button";
-import { useTimerContext } from "../contexts/TimerContext";
+import Button from "../../../../shared/components/Button";
+import { useTimerContext } from "../../timer.context";
 import clsx from "clsx";
 
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";

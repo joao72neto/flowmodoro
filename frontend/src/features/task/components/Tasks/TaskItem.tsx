@@ -10,10 +10,10 @@ import {
 import { MdModeEdit } from "react-icons/md";
 import IconButton from "../../../home/components/buttons/IconButton";
 import TaskButton from "../../../home/components/buttons/TaskButton";
-import { useTaskContext } from "../../contexts/TaskContext";
-import { useTimerContext } from "../../../home/contexts/TimerContext";
+import { useTaskContext } from "../../task.context";
+import { useTimerContext } from "../../../home/timer.context";
 import useTasksComponent from "../../hooks/useTasksComponent";
-import type { TaskResponse } from "../../types/tasks.types";
+import type { TaskResponse } from "../../task.types";
 
 interface TaskItemProps {
   task: TaskResponse;

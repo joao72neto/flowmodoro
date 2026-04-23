@@ -1,7 +1,7 @@
-import ModalContainer from "../../../shared/components/modals/ModalContainer";
+import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import { IoClose } from "react-icons/io5";
 import Stack from "../../../shared/components/Stack";
-import type { SessionResponse } from "../types/sessions.types";
+import type { SessionResponse } from "../session.types";
 import {
   formatToHour,
   formatToPercentage,
