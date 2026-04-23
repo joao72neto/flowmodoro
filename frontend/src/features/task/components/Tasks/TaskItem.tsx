@@ -12,8 +12,8 @@ import IconButton from "../../../home/components/buttons/IconButton";
 import TaskButton from "../../../home/components/buttons/TaskButton";
 import { useTaskContext } from "../../task.context";
 import { useTimerContext } from "../../../home/timer.context";
-import useTasksComponent from "../../hooks/useTasksComponent";
 import type { TaskResponse } from "../../task.types";
+import { useModal } from "../../../../shared/modal.context";
 
 interface TaskItemProps {
   task: TaskResponse;
@@ -23,12 +23,14 @@ function TaskItem({ task }: TaskItemProps) {
   const {
     handleCompleteTask,
     handleUpdateTask,
+    handleRemoveTask,
     activeTask,
     setManualActiveTaskId,
   } = useTaskContext();
-  const { handleDeleteTask } = useTasksComponent();
   const { startFocus, stopFocus, startBreak, skipBreak, mode } =
     useTimerContext();
+
+  const { showWarning, hideModal } = useModal();
 
   const [isEditing, setIsEditing] = useState(false);
   const [editingName, setEditingName] = useState(task.name);
@@ -51,6 +53,17 @@ function TaskItem({ task }: TaskItemProps) {
       setEditingName(task.name);
       setIsEditing(false);
     }
+  };
+
+  const handleDeleteTask = (id: number) => {
+    showWarning({
+      title: "Deletar tarefa",
+      message: "Tem certeza que deseja deletar essa tarefa?",
+      action: () => {
+        handleRemoveTask(id);
+        hideModal();
+      },
+    });
   };
 
   const getTimerIcon = () => {
