@@ -47,7 +47,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     tasks,
   } = useTasks();
 
-  const { showError } = useModal();
+  const { showError, hideModal } = useModal();
 
   const undoneTasks = useMemo(
     () => tasks.filter((task) => !task.checked),
@@ -89,7 +89,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         showError({
           title: "Erro ao criar tarefa",
           message: error.message,
-          action: () => {},
+          action: hideModal,
         });
     }
   };
@@ -105,7 +105,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         showError({
           title: "Erro ao deletar tarefa",
           message: error.message,
-          action: () => {},
+          action: hideModal,
         });
     }
   };
@@ -119,7 +119,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         showError({
           title: "Erro ao atualizar tarefa",
           message: error.message,
-          action: () => {},
+          action: hideModal,
         });
     }
   };
@@ -133,7 +133,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         showError({
           title: "Erro ao atualizar tarefa",
           message: error.message,
-          action: () => {},
+          action: hideModal,
         });
     }
   };

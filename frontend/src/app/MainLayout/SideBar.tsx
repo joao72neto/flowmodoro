@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import IconButton from "../../features/home/components/buttons/IconButton";
-import Tasks from "../../features/task/components/Tasks";
+import Tasks from "../../features/task/components/Tasks/Tasks";
 import Stack from "../../shared/components/Stack";
 
 import { PiCaretRightBold } from "react-icons/pi";

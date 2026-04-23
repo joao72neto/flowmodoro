@@ -1,8 +1,8 @@
 import Timer from "./components/Timer";
 import TaskSelector from "../task/components/TaskSelector";
-import MainLayout from "../../app/layout";
+import MainLayout from "../../app/MainLayout/MainLayout";
 
-import SessionsDisplay from "../session/components/SessionsDisplay";
+import SessionsDisplay from "../session/components/SessionsDisplay/SessionsDisplay";
 import TimerContainer from "./components/TimerContainer";
 
 function Home() {
