@@ -2,10 +2,10 @@ export interface ISessionGroupoResponse {
   date: string;
   totalFocus: number;
   totalRest: number;
-  sessions: SessionType[];
+  sessions: SessionResponse[];
 }
 
-export interface SessionType {
+export interface SessionResponse {
   id: number;
   focus: number;
   rest: number;

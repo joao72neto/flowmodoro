@@ -4,10 +4,10 @@ import Stack from "../../../../shared/components/Stack";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import SessionDetailsModal from "../SessionDetailsModal";
 import { useState } from "react";
-import type { SessionType } from "../../types/sessions.types";
+import type { SessionResponse } from "../../types/sessions.types";
 import { capitalize } from "../../../../shared/utils/string.utils";
 
-const Session = ({ session }: { session: SessionType }) => {
+const Session = ({ session }: { session: SessionResponse }) => {
   const [showSessionDetailsModal, setShowSessionDetailsModal] =
     useState<boolean>(false);
 

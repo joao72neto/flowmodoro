@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import useTasks from "../hooks/useTasks";
-import type { TaskModel } from "../types/tasks.types";
+import type { TaskResponse } from "../types/tasks.types";
 import useActiveTask from "../hooks/useActiveTask";
 import { useModal } from "../../../shared/contexts/ModalContext";
 
@@ -18,14 +18,14 @@ interface TaskContextType {
   handleCompleteTask: (index: number, checked: boolean) => Promise<void>;
   handleUpdateTask: (id: number, name: string) => Promise<void>;
   setManualActiveTaskId: (id: number | null) => void;
-  tasks: TaskModel[];
+  tasks: TaskResponse[];
   selectedTask: string;
   setSelectedTask: (task: string) => void;
   isSidebarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
-  undoneTasks: TaskModel[];
+  undoneTasks: TaskResponse[];
   wasTaskDeleted: boolean;
-  activeTask: TaskModel | undefined;
+  activeTask: TaskResponse | undefined;
 }
 
 export const TaskContext = createContext<TaskContextType | null>(null);

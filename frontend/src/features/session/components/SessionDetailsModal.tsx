@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/modals/ModalContainer";
 import { IoClose } from "react-icons/io5";
 import Stack from "../../../shared/components/Stack";
-import type { SessionType } from "../types/sessions.types";
+import type { SessionResponse } from "../types/sessions.types";
 import {
   formatToHour,
   formatToPercentage,
@@ -14,7 +14,7 @@ const SessionDetailsModal = ({
   session,
   close,
 }: {
-  session: SessionType;
+  session: SessionResponse;
   close: () => void;
 }) => {
   return (

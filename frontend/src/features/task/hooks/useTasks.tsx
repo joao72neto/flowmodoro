@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import tasksService from "../services/tasks.service";
 import type {
-  TaskModel,
+  TaskResponse,
   TaskRequest,
   UpdateTaskRequest,
   UpdateTaskNameRequest,
@@ -9,7 +9,7 @@ import type {
 
 const useTask = () => {
   const [loading, setLoading] = useState(false);
-  const [tasks, setTasks] = useState<TaskModel[]>([]);
+  const [tasks, setTasks] = useState<TaskResponse[]>([]);
 
   const createTask = useCallback(async (data: TaskRequest) => {
     setLoading(true);
@@ -28,7 +28,7 @@ const useTask = () => {
     setLoading(true);
     try {
       const res = await tasksService.fetchTasks();
-      const data: TaskModel[] = res.data;
+      const data: TaskResponse[] = res.data;
       setTasks(data);
       return data;
     } catch (e: any) {
