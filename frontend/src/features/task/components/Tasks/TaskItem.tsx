@@ -68,15 +68,15 @@ function TaskItem({ task }: TaskItemProps) {
 
   const getTimerIcon = () => {
     if (isTaskRunning) {
-      return <FaStop size={14} className="text-danger-2" />;
+      return <FaStop size={18} className="text-danger-2" />;
     }
     if (isTaskStopped) {
-      return <FaPlay size={14} className="text-success" />;
+      return <FaPlay size={18} className="text-success" />;
     }
     if (isTaskBreaking) {
-      return <FaForwardStep size={14} className="text-success-2" />;
+      return <FaForwardStep size={18} className="text-success-2" />;
     }
-    return <FaPlay size={14} className="text-danger" />;
+    return <FaPlay size={18} className="text-danger" />;
   };
 
   const handleTimerAction = () => {
@@ -101,10 +101,18 @@ function TaskItem({ task }: TaskItemProps) {
         },
       )}
     >
-      <div className="flex items-center flex-1 mr-4">
+      <div
+        className={clsx(
+          "flex items-center flex-1 mr-4",
+          task.checked && "cursor-pointer",
+        )}
+        onClick={() =>
+          task.checked && handleCompleteTask(task.id, task.checked)
+        }
+      >
         <TaskButton
-          onClick={() => handleCompleteTask(task.id, task.checked)}
           taskCompleted={task.checked}
+          onClick={() => handleCompleteTask(task.id, task.checked)}
         />
         {isEditing ? (
           <input
@@ -121,21 +129,28 @@ function TaskItem({ task }: TaskItemProps) {
       </div>
 
       {!task.checked && (
-        <div className="flex gap-2">
-          <IconButton icon={getTimerIcon()} onClick={handleTimerAction} />
+        <div className="flex gap-5">
+          <IconButton
+            title="Iniciar timer"
+            icon={getTimerIcon()}
+            onClick={handleTimerAction}
+          />
           {isEditing ? (
             <IconButton
-              icon={<FaCheck size={18} className="text-success" />}
+              title="Salvar edição"
+              icon={<FaCheck size={22} className="text-success" />}
               onClick={saveEditing}
             />
           ) : (
             <IconButton
-              icon={<MdModeEdit size={18} />}
+              title="Editar tarefa"
+              icon={<MdModeEdit size={22} />}
               onClick={() => setIsEditing(true)}
             />
           )}
           <IconButton
-            icon={<FaTrash size={16} className="transition duration-200" />}
+            title="Deletar tarefa"
+            icon={<FaTrash size={18} className="transition duration-200" />}
             onClick={() => handleDeleteTask(task.id)}
           />
         </div>

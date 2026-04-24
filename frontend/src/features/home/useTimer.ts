@@ -124,7 +124,7 @@ const useTimer = () => {
 
     showWarning({
       title: "Sessão Finalizada! 🎉",
-      message: `Deseja salvar ou desacartar a sessão atual de ${formatToHour(focus)}?`,
+      message: `Deseja salvar a sessão atual de ${formatToHour(focus)}?`,
       action: () => {
         handleSaveSession();
         hideModal();
