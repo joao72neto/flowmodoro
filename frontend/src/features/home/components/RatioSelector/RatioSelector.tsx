@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { PiCaretDownLight, PiCaretUpLight } from "react-icons/pi";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
@@ -13,25 +13,27 @@ function RatioSelector() {
   const { restRatio, setRestRatio } = useSessionContext();
   const { mode } = useTimerContext();
 
-  const isTimerRunning = mode !== null && mode !== "stopped";
+  const isFocusRunning = mode === "focus";
 
   const currentPreset =
     PRESETS.find((p) => p.value === restRatio) || PRESETS[1];
+
+  useEffect(() => {
+    if (isFocusRunning) setIsOpen(false);
+  }, [mode]);
 
   return (
     <div className="flex flex-col items-center">
       <button
         type="button"
-        disabled={isTimerRunning}
+        disabled={isFocusRunning}
         title={
-          isTimerRunning
-            ? "Não é possível alterar a razão com o timer rodando"
-            : ""
+          isFocusRunning ? "Não é possível alterar a razão no modo de foco" : ""
         }
         className={clsx(
           "group flex items-center justify-center transition-all duration-300",
           "h-10 px-4 rounded-xl border border-white/10",
-          isTimerRunning
+          isFocusRunning
             ? "opacity-50 cursor-not-allowed"
             : "cursor-pointer hover:bg-white/5",
         )}
@@ -46,7 +48,7 @@ function RatioSelector() {
           {currentPreset.label}
         </span>
 
-        {!isTimerRunning && (
+        {!isFocusRunning && (
           <>
             {isOpen ? (
               <PiCaretUpLight
@@ -67,7 +69,7 @@ function RatioSelector() {
         )}
       </button>
 
-      <AnimatedCollapse show={isOpen && !isTimerRunning}>
+      <AnimatedCollapse show={isOpen && !isFocusRunning}>
         <div className="pt-2">
           <RatioSlider
             presets={PRESETS as any}
