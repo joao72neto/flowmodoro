@@ -12,12 +12,12 @@ import {
 import { formatToHour } from "../../shared/utils/number.utils";
 
 const useTimer = () => {
-  const { setFocus, setShowSaveSessionModal, handleSaveSession } =
+  const { setFocus, setShowSaveSessionModal, handleSaveSession, restRatio } =
     useSessionContext();
   const { activeTask, setIsSidebarOpen } = useTaskContext();
   const { showDefault, showWarning, hideModal } = useModal();
 
-  const BREAK_RATIO = 0.2;
+  const BREAK_RATIO = restRatio / 100;
 
   const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(() => {
     const saved = localStorage.getItem(localStorageKeys.timer);

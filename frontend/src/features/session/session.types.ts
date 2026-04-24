@@ -20,4 +20,5 @@ export interface SessionResponse {
 export interface SessionRequest {
   focus: number;
   interruptions: number;
+  ratio?: number;
 }

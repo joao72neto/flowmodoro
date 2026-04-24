@@ -5,6 +5,7 @@ export const PRESETS = [
     textClass: "text-danger",
     bgClass: "bg-danger",
   },
+
   {
     value: 20,
     label: "Padrão",

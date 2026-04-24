@@ -5,10 +5,11 @@ import { PiCaretDownLight, PiCaretUpLight } from "react-icons/pi";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import RatioSlider from "./RatioSlider";
 import { PRESETS } from "../../ratio.const";
+import { useSessionContext } from "../../../session/session.context";
 
 function RatioSelector() {
   const [isOpen, setIsOpen] = useState(false);
-  const [restRatio, setRestRatio] = useState<number>(20);
+  const { restRatio, setRestRatio } = useSessionContext();
 
   const currentPreset =
     PRESETS.find((p) => p.value === restRatio) || PRESETS[1];

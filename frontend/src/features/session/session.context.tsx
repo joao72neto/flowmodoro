@@ -13,6 +13,8 @@ interface ISessionContext {
   showSaveSessionModal: boolean;
   setShowSaveSessionModal: (show: boolean) => void;
   success: boolean;
+  restRatio: number;
+  setRestRatio: (ratio: number) => void;
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
@@ -32,10 +34,16 @@ export const SessionProvider = ({
   const [success, setSuccess] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
 
+  const [restRatio, setRestRatio] = useState<number>(20);
+
   const handleSaveSession = async () => {
     setSuccess(false);
     try {
-      await createSession(taskId, { focus, interruptions });
+      await createSession(taskId, {
+        focus,
+        interruptions,
+        ratio: restRatio / 100,
+      });
       setSuccess(true);
     } catch (error) {
       console.log(error);
@@ -61,6 +69,8 @@ export const SessionProvider = ({
         showSaveSessionModal,
         setShowSaveSessionModal,
         success,
+        restRatio,
+        setRestRatio,
       }}
     >
       {children}
