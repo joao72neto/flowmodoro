@@ -4,6 +4,7 @@ import MainLayout from "../../app/MainLayout/MainLayout";
 
 import SessionsDisplay from "../session/components/SessionsDisplay/SessionsDisplay";
 import TimerContainer from "./components/Timer/TimerContainer";
+import RatioSlider from "./components/RatioSlider";
 
 function Home() {
   return (
@@ -12,7 +13,7 @@ function Home() {
         <TaskSelector />
         <Timer />
       </TimerContainer>
-
+      <RatioSlider />
       <SessionsDisplay />
     </MainLayout>
   );

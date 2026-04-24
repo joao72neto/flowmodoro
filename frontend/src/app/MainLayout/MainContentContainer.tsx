@@ -10,12 +10,13 @@ const MainContentContainer = ({
   return (
     <div
       className={clsx(
-        "relative flex flex-col justify-center items-center px-15 py-20 ",
-        "transition-all duration-300 gap-12",
+        "relative px-15 py-20 transition-all duration-300",
         isOpen ? "w-2/3" : "w-full",
       )}
     >
-      {children}
+      <div className="flex flex-col gap-12 max-w-180 mx-auto w-full">
+        {children}
+      </div>
     </div>
   );
 };
