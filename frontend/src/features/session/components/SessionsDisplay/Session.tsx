@@ -22,14 +22,21 @@ const Session = ({ session }: { session: SessionResponse }) => {
           direction="row"
           justify="between"
           className={clsx(
-            "border border-white/10 shadow-lg py-6 px-4 cursor-pointer rounded-lg w-full ",
+            "border border-white/10 shadow-lg py-4 sm:py-6 px-4 cursor-pointer rounded-lg w-full ",
             "hover:scale-102 duration-200 hover:shadow-xl",
           )}
         >
-          <span className="flex-1 text-xl line-clamp-1 break-all">
+          <span className="flex-1 text-lg sm:text-xl line-clamp-1 break-all">
             {capitalize(session.task.name)}
           </span>
-          <span className="text-xl">{formatToHour(session.focus)}</span>
+          <span
+            className={clsx(
+              "text-lg sm:text-xl bg-white/10 border border-white/10 ",
+              "px-2 py-1 rounded-lg shadow",
+            )}
+          >
+            {formatToHour(session.focus)}
+          </span>
         </Stack>
       </div>
       {showSessionDetailsModal && (

@@ -1,7 +1,7 @@
 const MainContentContainer = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex-1 py-20 px-4 w-full transition-all duration-300">
-      <div className="flex flex-col gap-6 max-w-180 mx-auto w-full">
+      <div className="flex flex-col gap-10 max-w-180 mx-auto w-full">
         {children}
       </div>
     </main>

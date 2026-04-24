@@ -13,7 +13,7 @@ const SessionsGroup = ({
 }) => {
   return (
     <Stack align="left" gap={4}>
-      <p className="font-bold">
+      <p className="font-bold text-neutral-20 border-b border-white/10 pb-1">
         {groupName}
         {totalFocus && totalRest && ` (${totalFocus} | ${totalRest})`}
       </p>
