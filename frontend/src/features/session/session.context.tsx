@@ -33,6 +33,7 @@ export const SessionProvider = ({
   const { showError, hideModal } = useModal();
 
   const handleSaveSession = async () => {
+    setSuccess(false);
     try {
       await createSession(taskId, { focus, interruptions });
       setSuccess(true);

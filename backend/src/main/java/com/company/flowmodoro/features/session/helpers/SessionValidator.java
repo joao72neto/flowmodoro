@@ -12,10 +12,6 @@ import com.company.flowmodoro.features.session.exceptions.InvalidSessionExceptio
 public class SessionValidator {
   public void validateSessions(SessionModel session, List<String> errors) {
 
-    if (session.getFocus() <= 0) {
-      errors.add("Focus needs to be greater than 0");
-    }
-
     if (session.getRatio() < 0 || session.getRatio() > 1) {
       errors.add("Ratio needs to be between 0 and 1");
     }
