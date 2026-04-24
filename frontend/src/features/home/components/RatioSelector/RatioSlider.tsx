@@ -28,7 +28,7 @@ function RatioSlider({
           <label htmlFor="ratio-slider" className="font-bold text-neutral-40">
             Perfil de Descanso
           </label>
-          <p className="text-sm text-neutral-40 break-words max-w-[250px]">
+          <p className="text-[13px] sm:text-sm text-neutral-40 break-words max-w-[250px]">
             Ajuste a proporção entre seu esforço e sua recuperação.
           </p>
         </div>
