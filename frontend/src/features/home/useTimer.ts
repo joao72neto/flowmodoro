@@ -129,6 +129,10 @@ const useTimer = () => {
         handleSaveSession();
         hideModal();
       },
+      cancel: () => {
+        setMode(null);
+        hideModal();
+      },
     });
   };
 
