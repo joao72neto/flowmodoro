@@ -6,10 +6,14 @@ import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse
 import RatioSlider from "./RatioSlider";
 import { PRESETS } from "../../ratio.const";
 import { useSessionContext } from "../../../session/session.context";
+import { useTimerContext } from "../../timer.context";
 
 function RatioSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const { restRatio, setRestRatio } = useSessionContext();
+  const { mode } = useTimerContext();
+
+  const isTimerRunning = mode !== null && mode !== "stopped";
 
   const currentPreset =
     PRESETS.find((p) => p.value === restRatio) || PRESETS[1];
@@ -18,10 +22,18 @@ function RatioSelector() {
     <div className="flex flex-col items-center">
       <button
         type="button"
+        disabled={isTimerRunning}
+        title={
+          isTimerRunning
+            ? "Não é possível alterar a razão com o timer rodando"
+            : ""
+        }
         className={clsx(
-          "group flex items-center justify-center cursor-pointer",
-          "h-10 px-4 rounded-xl transition-all duration-300",
-          "border border-white/10",
+          "group flex items-center justify-center transition-all duration-300",
+          "h-10 px-4 rounded-xl border border-white/10",
+          isTimerRunning
+            ? "opacity-50 cursor-not-allowed"
+            : "cursor-pointer hover:bg-white/5",
         )}
         onClick={() => setIsOpen((prev) => !prev)}
       >
@@ -34,24 +46,28 @@ function RatioSelector() {
           {currentPreset.label}
         </span>
 
-        {isOpen ? (
-          <PiCaretUpLight
-            size={24}
-            className={clsx("shrink-0 ml-2", isOpen && "ml-0!")}
-          />
-        ) : (
-          <PiCaretDownLight
-            size={24}
-            className={clsx(
-              "shrink-0 transition-all duration-300",
-              "w-0 opacity-0 group-hover:w-6 group-hover:opacity-100 group-hover:ml-2",
-              isOpen && "ml-0!",
+        {!isTimerRunning && (
+          <>
+            {isOpen ? (
+              <PiCaretUpLight
+                size={24}
+                className={clsx("shrink-0 ml-2", isOpen && "ml-0!")}
+              />
+            ) : (
+              <PiCaretDownLight
+                size={24}
+                className={clsx(
+                  "shrink-0 transition-all duration-300",
+                  "w-0 opacity-0 group-hover:w-6 group-hover:opacity-100 group-hover:ml-2",
+                  isOpen && "ml-0!",
+                )}
+              />
             )}
-          />
+          </>
         )}
       </button>
 
-      <AnimatedCollapse show={isOpen}>
+      <AnimatedCollapse show={isOpen && !isTimerRunning}>
         <div className="pt-2">
           <RatioSlider
             presets={PRESETS as any}

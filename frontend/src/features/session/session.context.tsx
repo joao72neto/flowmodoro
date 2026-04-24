@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import useSessions from "./useSession";
 import { useModal } from "../../shared/modal.context";
+import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 
 interface ISessionContext {
   focus: number;
@@ -34,7 +35,14 @@ export const SessionProvider = ({
   const [success, setSuccess] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
 
-  const [restRatio, setRestRatio] = useState<number>(20);
+  const [restRatio, setRestRatio] = useState<number>(() => {
+    const saved = localStorage.getItem(localStorageKeys.restRatio);
+    return saved ? Number(saved) : 20;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
+  }, [restRatio]);
 
   const handleSaveSession = async () => {
     setSuccess(false);
