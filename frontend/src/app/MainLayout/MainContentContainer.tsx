@@ -10,11 +10,11 @@ const MainContentContainer = ({
   return (
     <div
       className={clsx(
-        "relative px-15 py-20 transition-all duration-300",
+        "relative py-20 transition-all duration-300",
         isOpen ? "w-2/3" : "w-full",
       )}
     >
-      <div className="flex flex-col gap-12 max-w-180 mx-auto w-full">
+      <div className="flex flex-col gap-6 max-w-180 mx-auto w-full">
         {children}
       </div>
     </div>
