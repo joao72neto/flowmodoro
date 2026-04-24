@@ -1,13 +1,10 @@
 import IconButton from "../../features/home/components/buttons/IconButton";
 import SideBar from "./SideBar";
-
-import LayoutContainer from "./LayoutContainer";
 import MainContentContainer from "./MainContentContainer";
 
 import { useTaskContext } from "../../features/task/task.context";
 import { useNotificationPermission } from "../../shared/hooks/useNotificationPermission";
 import SideBarContainer from "./SideBarContainer";
-import ToggleButtonContainer from "./ToggleButtonContainer";
 
 import { PiCaretLeftBold } from "react-icons/pi";
 import clsx from "clsx";
@@ -17,27 +14,35 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
 
   return (
-    <LayoutContainer>
-      <MainContentContainer isOpen={isSidebarOpen}>
-        {children}
-      </MainContentContainer>
+    <div className="relative min-h-screen flex overflow-x-hidden">
+      <MainContentContainer>{children}</MainContentContainer>
+
+      <div
+        className={clsx(
+          "fixed inset-0 bg-black/60 backdrop-blur-sm z-20 transition-opacity duration-300",
+          isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none",
+        )}
+        onClick={() => setIsSidebarOpen(false)}
+      />
 
       <SideBarContainer isOpen={isSidebarOpen}>
-        <SideBar onClick={() => setIsSidebarOpen(!isSidebarOpen)}></SideBar>
+        <SideBar onClick={() => setIsSidebarOpen(false)} />
       </SideBarContainer>
 
-      <ToggleButtonContainer>
-        <IconButton
-          icon={
-            <PiCaretLeftBold
-              size={25}
-              className={clsx("transition duration-200 hover:-translate-x-1")}
-            />
-          }
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        />
-      </ToggleButtonContainer>
-    </LayoutContainer>
+      {!isSidebarOpen && (
+        <div className="fixed top-0 right-0 p-4 z-10">
+          <IconButton
+            icon={
+              <PiCaretLeftBold
+                size={25}
+                className="transition duration-200 hover:-translate-x-1"
+              />
+            }
+            onClick={() => setIsSidebarOpen(true)}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
