@@ -11,8 +11,6 @@ interface ISessionContext {
   handleSaveSession: () => Promise<void>;
   taskId: number;
   setTaskId: (taskId: number) => void;
-  showSaveSessionModal: boolean;
-  setShowSaveSessionModal: (show: boolean) => void;
   success: boolean;
   restRatio: number;
   setRestRatio: (ratio: number) => void;
@@ -29,8 +27,6 @@ export const SessionProvider = ({
   const [focus, setFocus] = useState<number>(0);
   const [interruptions, setInterruptions] = useState<number>(0);
   const [taskId, setTaskId] = useState<number>(0);
-  const [showSaveSessionModal, setShowSaveSessionModal] =
-    useState<boolean>(false);
 
   const [success, setSuccess] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
@@ -74,8 +70,6 @@ export const SessionProvider = ({
         handleSaveSession,
         taskId,
         setTaskId,
-        showSaveSessionModal,
-        setShowSaveSessionModal,
         success,
         restRatio,
         setRestRatio,

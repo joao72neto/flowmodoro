@@ -12,8 +12,7 @@ import {
 import { formatToHour } from "../../shared/utils/number.utils";
 
 const useTimer = () => {
-  const { setFocus, setShowSaveSessionModal, handleSaveSession, restRatio } =
-    useSessionContext();
+  const { setFocus, handleSaveSession, restRatio } = useSessionContext();
   const { activeTask, setIsSidebarOpen } = useTaskContext();
   const { showDefault, showWarning, hideModal } = useModal();
 
@@ -111,6 +110,7 @@ const useTimer = () => {
     baseSecondsRef.current = 0;
     setSeconds(0);
     setMode("focus");
+    setIsSidebarOpen(false);
   };
 
   const stopFocus = () => {
@@ -120,7 +120,7 @@ const useTimer = () => {
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
     setFocus(focus);
-    setShowSaveSessionModal(true);
+    setIsSidebarOpen(false);
 
     showWarning({
       title: "Sessão Finalizada! 🎉",
@@ -140,10 +140,13 @@ const useTimer = () => {
     startTimeRef.current = Date.now();
     baseSecondsRef.current = seconds;
     setMode("break");
+    setIsSidebarOpen(false);
   };
 
   const skipBreak = () => {
     setMode(null);
+    setIsSidebarOpen(false);
+
     setSeconds(0);
     localStorage.removeItem(localStorageKeys.timer);
   };
