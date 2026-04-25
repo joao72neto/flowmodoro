@@ -44,10 +44,8 @@ export const SessionProvider = ({
   }: ISaveSessionData) => {
     setSuccess(false);
     try {
-      const focusInHours = Number((focusSeconds / 3600).toFixed(4));
-
       await createSession(taskId, {
-        focus: focusInHours,
+        focus: focusSeconds,
         interruptions,
         ratio: restRatio / 100,
       });

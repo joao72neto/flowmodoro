@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SessionDTO {
     private Long id;
-    private Double focus;
+    private Long focus;
     private Double ratio;
-    private Double rest;
+    private Long rest;
     private Integer interruptions;
     private TaskDTO task;
 }

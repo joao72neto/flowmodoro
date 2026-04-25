@@ -126,7 +126,7 @@ const useTimer = () => {
 
     showWarning({
       title: "Sessão Finalizada! 🎉",
-      message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds / 60)}?`,
+      message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds)}?`,
       action: () => {
         if (activeTask) {
           handleSaveSession({

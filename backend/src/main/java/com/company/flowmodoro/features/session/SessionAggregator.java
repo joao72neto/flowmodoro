@@ -32,8 +32,8 @@ public class SessionAggregator {
 
     private DailySessionsDTO aggregateSessionsForOneDay(LocalDate date, List<SessionModel> daySessions) {
         Map<Long, SessionDTO> tasksMap = new LinkedHashMap<>();
-        double totalFocus = 0;
-        double totalRest = 0;
+        long totalFocus = 0;
+        long totalRest = 0;
 
         for (SessionModel s : daySessions) {
             totalFocus += s.getFocus();

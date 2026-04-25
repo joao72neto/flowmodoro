@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DailySessionsDTO {
   private LocalDate date;
-  private Double totalFocus;
-  private Double totalRest;
+  private Long totalFocus;
+  private Long totalRest;
   private List<SessionDTO> sessions;
 }

@@ -33,13 +33,13 @@ public class SessionModel {
     private Long id;
 
     @Column(name = "ses_focus")
-    private Double focus;
+    private Long focus;
 
     @Column(name = "ses_ratio")
     private Double ratio;
 
     @Column(name = "ses_rest")
-    private Double rest;
+    private Long rest;
 
     @Column(name = "ses_interruptions")
     private Integer interruptions;

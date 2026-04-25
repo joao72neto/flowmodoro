@@ -9,10 +9,10 @@ public class SessionCalculator {
 
   private static final double RATIO = 0.2;
 
-  public double calculateRatio(double focus, double rest) {
+  public double calculateRatio(long focus, long rest) {
     if (rest == 0)
-      return focus;
-    return focus / rest;
+      return (double) focus;
+    return (double) focus / rest;
   }
 
   public void calculateRest(SessionModel session) {
@@ -20,6 +20,6 @@ public class SessionCalculator {
       session.setRatio(RATIO);
     }
     double rest = session.getFocus() * session.getRatio();
-    session.setRest(Math.round(rest * 100.0) / 100.0);
+    session.setRest(Math.round(rest));
   }
 }

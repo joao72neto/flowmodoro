@@ -1,9 +1,7 @@
-export const formatToHour = (minutes: number) => {
-  const totalSeconds = Math.round(minutes * 60);
-
+export const formatToHour = (totalSeconds: number) => {
   const h = Math.floor(totalSeconds / 3600);
   const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = totalSeconds % 60;
+  const s = Math.floor(totalSeconds % 60);
 
   if (h > 0) {
     return `${h}h ${m}min ${s}s`;
