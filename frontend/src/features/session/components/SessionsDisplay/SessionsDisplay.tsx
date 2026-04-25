@@ -10,6 +10,7 @@ import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useTaskContext } from "../../../task/task.context";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
+import EmptySessions from "./EmptySessions";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();
@@ -43,34 +44,38 @@ const SessionsDisplay = () => {
     }
   }, [success, wasTaskDeleted, fetchSessions, goToPage]);
 
-  if (sessions?.content.length === 0 || !sessions) return null;
-
   return (
-    <div className="flex flex-col gap-6 w-full items-center">
-      <SessionsWrapper>
-        {sessions &&
-          sessions.content.map((sessionGroup) => (
-            <SessionsGroup
-              groupName={formatToBRDate(sessionGroup.date)}
-              totalFocus={formatToHour(sessionGroup.totalFocus)}
-            >
-              {sessionGroup.sessions.map((session, index) => (
-                <Session key={index} session={session} />
-              ))}
-            </SessionsGroup>
-          ))}
-      </SessionsWrapper>
+    <div className="flex  flex-col gap-6 w-full items-center flex-1">
+      {!sessions || sessions.content.length === 0 ? (
+        <EmptySessions />
+      ) : (
+        <>
+          <SessionsWrapper>
+            {sessions.content.map((sessionGroup) => (
+              <SessionsGroup
+                key={sessionGroup.date}
+                groupName={formatToBRDate(sessionGroup.date)}
+                totalFocus={formatToHour(sessionGroup.totalFocus)}
+              >
+                {sessionGroup.sessions.map((session, index) => (
+                  <Session key={index} session={session} />
+                ))}
+              </SessionsGroup>
+            ))}
+          </SessionsWrapper>
 
-      {sessions && sessions.totalElements > SIZE && (
-        <PageSelector
-          goToPage={goToPage}
-          hasNextPage={hasNextPage}
-          hasPrevPage={hasPrevPage}
-          currentPage={currentPage}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          totalPages={totalPages}
-        />
+          {sessions.totalElements > SIZE && (
+            <PageSelector
+              goToPage={goToPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              currentPage={currentPage}
+              prevPage={prevPage}
+              nextPage={nextPage}
+              totalPages={totalPages}
+            />
+          )}
+        </>
       )}
     </div>
   );
