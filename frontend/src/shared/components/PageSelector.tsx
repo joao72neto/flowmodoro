@@ -60,7 +60,7 @@ const PageSelector = ({
         />
       </button>
 
-      <div className="flex gap-1 sm:flex">
+      <div className="flex gap-2 sm:flex">
         {getPageNumbers().map((page) => (
           <button
             type="button"
