@@ -8,10 +8,9 @@ interface ISessionContext {
   interruptions: number;
   setFocus: (focus: number) => void;
   setInterruptions: (interruptions: number) => void;
-  handleSaveSession: () => Promise<void>;
-  taskId: number;
-  setTaskId: (taskId: number) => void;
+  handleSaveSession: (taskId: number) => Promise<void>;
   success: boolean;
+  setSuccess: (success: boolean) => void;
   restRatio: number;
   setRestRatio: (ratio: number) => void;
 }
@@ -26,7 +25,6 @@ export const SessionProvider = ({
   const { createSession } = useSessions();
   const [focus, setFocus] = useState<number>(0);
   const [interruptions, setInterruptions] = useState<number>(0);
-  const [taskId, setTaskId] = useState<number>(0);
 
   const [success, setSuccess] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
@@ -40,7 +38,7 @@ export const SessionProvider = ({
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
   }, [restRatio]);
 
-  const handleSaveSession = async () => {
+  const handleSaveSession = async (taskId: number) => {
     setSuccess(false);
     try {
       await createSession(taskId, {
@@ -49,6 +47,7 @@ export const SessionProvider = ({
         ratio: restRatio / 100,
       });
       setSuccess(true);
+      setTimeout(() => setSuccess(false), 1000);
     } catch (error) {
       console.log(error);
       if (error instanceof Error)
@@ -68,9 +67,8 @@ export const SessionProvider = ({
         setFocus,
         setInterruptions,
         handleSaveSession,
-        taskId,
-        setTaskId,
         success,
+        setSuccess,
         restRatio,
         setRestRatio,
       }}

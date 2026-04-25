@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTaskContext } from "../task.context";
 import clsx from "clsx";
-import { useSessionContext } from "../../session/session.context";
 
 import { FaCaretDown } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
@@ -9,9 +8,13 @@ import { CiCirclePlus } from "react-icons/ci";
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const { selectedTask, setSelectedTask, setIsSidebarOpen, undoneTasks } =
-    useTaskContext();
-  const { setTaskId } = useSessionContext();
+  const {
+    selectedTask,
+    setSelectedTask,
+    setIsSidebarOpen,
+    undoneTasks,
+    setManualActiveTaskId,
+  } = useTaskContext();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -81,7 +84,7 @@ function TaskSelector() {
             key={index}
             onClick={() => {
               setSelectedTask(task.name);
-              setTaskId(task.id);
+              setManualActiveTaskId(task.id);
               setIsOpen(false);
             }}
             className="p-3 hover:bg-black/30 cursor-pointer"

@@ -53,7 +53,6 @@ const SessionsDisplay = () => {
             <SessionsGroup
               groupName={formatToBRDate(sessionGroup.date)}
               totalFocus={formatToHour(sessionGroup.totalFocus)}
-              totalRest={formatToHour(sessionGroup.totalRest)}
             >
               {sessionGroup.sessions.map((session, index) => (
                 <Session key={index} session={session} />

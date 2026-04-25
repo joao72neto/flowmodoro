@@ -14,7 +14,7 @@ import { formatToHour } from "../../shared/utils/number.utils";
 const useTimer = () => {
   const { setFocus, handleSaveSession, restRatio } = useSessionContext();
   const { activeTask, setIsSidebarOpen } = useTaskContext();
-  const { showDefault, showWarning, hideModal } = useModal();
+  const { showDefault, showWarning, hideModal, showError } = useModal();
 
   const BREAK_RATIO = restRatio / 100;
 
@@ -126,8 +126,16 @@ const useTimer = () => {
       title: "Sessão Finalizada! 🎉",
       message: `Deseja salvar a sessão atual de ${formatToHour(focus)}?`,
       action: () => {
-        handleSaveSession();
-        hideModal();
+        if (activeTask) {
+          handleSaveSession(activeTask.id);
+          hideModal();
+          return;
+        }
+        showError({
+          title: "Erro ao salvar sessão",
+          message: "A sessão não foi salvar, descubra o porque",
+          action: hideModal,
+        });
       },
       cancel: () => {
         setMode(null);

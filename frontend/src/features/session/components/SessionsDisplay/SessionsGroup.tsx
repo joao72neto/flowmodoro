@@ -5,11 +5,9 @@ const SessionsGroup = ({
   children,
   groupName,
   totalFocus,
-  totalRest,
 }: {
   children: React.ReactNode;
   totalFocus: number | string;
-  totalRest: number | string;
   groupName: string;
 }) => {
   return (
