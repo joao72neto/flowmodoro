@@ -16,17 +16,7 @@ const SessionsDisplay = () => {
   const { wasTaskDeleted } = useTaskContext();
   const { sessions, fetchSessions } = useSessions();
 
-  const SIZE = 5;
-
-  useEffect(() => {
-    fetchSessions();
-  }, [fetchSessions]);
-
-  useEffect(() => {
-    if (success || wasTaskDeleted) {
-      fetchSessions(1, SIZE);
-    }
-  }, [success, wasTaskDeleted, fetchSessions]);
+  const SIZE = 4;
 
   const {
     currentPage,
@@ -41,6 +31,17 @@ const SessionsDisplay = () => {
     itemsPerPage: SIZE,
     totalItems: sessions?.totalElements ?? 0,
   });
+
+  useEffect(() => {
+    fetchSessions(currentPage, SIZE);
+  }, [currentPage, SIZE, fetchSessions]);
+
+  useEffect(() => {
+    if (success || wasTaskDeleted) {
+      goToPage(1);
+      fetchSessions(1, SIZE);
+    }
+  }, [success, wasTaskDeleted, fetchSessions, goToPage]);
 
   if (sessions?.content.length === 0 || !sessions) return null;
 

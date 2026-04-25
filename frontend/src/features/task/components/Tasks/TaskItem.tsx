@@ -100,15 +100,13 @@ function TaskItem({ task }: TaskItemProps) {
           "line-through text-neutral-500": task.checked,
         },
       )}
+      onClick={() => task.checked && handleCompleteTask(task.id, task.checked)}
     >
       <div
         className={clsx(
           "flex items-center flex-1 mr-4",
           task.checked && "cursor-pointer",
         )}
-        onClick={() =>
-          task.checked && handleCompleteTask(task.id, task.checked)
-        }
       >
         <TaskButton
           taskCompleted={task.checked}
