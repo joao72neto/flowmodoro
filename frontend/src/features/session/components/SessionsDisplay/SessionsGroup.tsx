@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Stack from "../../../../shared/components/Stack";
 
 const SessionsGroup = ({
@@ -12,10 +13,15 @@ const SessionsGroup = ({
   groupName: string;
 }) => {
   return (
-    <Stack align="left" gap={4}>
-      <p className="font-bold text-neutral-20 border-b border-white/10 pb-1">
-        {groupName}
-        {totalFocus && totalRest && ` (${totalFocus} | ${totalRest})`}
+    <Stack className="w-full" gap={4}>
+      <p
+        className={clsx(
+          "flex justify-between items-center gap-2 w-full",
+          "font-bold text-neutral-20 border-b border-white/10 pb-1",
+        )}
+      >
+        <span className="uppercase">{groupName}</span>
+        <span>{totalFocus}</span>
       </p>
       {children}
     </Stack>
