@@ -4,10 +4,12 @@ import clsx from "clsx";
 
 import { FaCaretDown } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
+import { useTimerContext } from "../../home/timer.context";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { mode } = useTimerContext();
   const {
     selectedTask,
     setSelectedTask,
@@ -15,6 +17,8 @@ function TaskSelector() {
     undoneTasks,
     setManualActiveTaskId,
   } = useTaskContext();
+
+  const isFocusing = mode === "focus";
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -29,6 +33,7 @@ function TaskSelector() {
   return (
     <div ref={ref} className="relative inline-block w-70">
       <button
+        disabled={isFocusing}
         onClick={() => {
           undoneTasks.length > 0 ? setIsOpen(!isOpen) : setIsSidebarOpen(true);
         }}
@@ -40,10 +45,12 @@ function TaskSelector() {
           "rounded-xl",
           "w-full",
           "py-3",
-          "cursor-pointer",
           "border",
           "border-white/10",
           "transition",
+          isFocusing
+            ? "cursor-not-allowed opacity-50"
+            : "cursor-pointer hover:border-white/30",
         )}
       >
         <div className="flex-1 line-clamp-1 break-all">{selectedTask}</div>
@@ -60,39 +67,41 @@ function TaskSelector() {
         )}
       </button>
 
-      <ul
-        className={clsx(
-          "absolute",
-          "mt-2",
-          "w-full",
-          "bg-gray",
-          "backdrop-blur-lg",
-          "border",
-          "border-white/10",
-          "rounded-xl",
-          "shadow-lg",
-          "text-center",
-          "overflow-auto z-10",
-          "transition-all duration-200 ease-in-out ",
-          isOpen
-            ? "opacity-100 max-h-80 translate-y-1"
-            : "opacity-0 max-h-0 pointer-events-none translate-y-0",
-        )}
-      >
-        {undoneTasks.map((task, index) => (
-          <li
-            key={index}
-            onClick={() => {
-              setSelectedTask(task.name);
-              setManualActiveTaskId(task.id);
-              setIsOpen(false);
-            }}
-            className="p-3 hover:bg-black/30 cursor-pointer"
-          >
-            <div className="line-clamp-1 break-all">{task.name}</div>
-          </li>
-        ))}
-      </ul>
+      {!isFocusing && (
+        <ul
+          className={clsx(
+            "absolute",
+            "mt-2",
+            "w-full",
+            "bg-gray",
+            "backdrop-blur-lg",
+            "border",
+            "border-white/10",
+            "rounded-xl",
+            "shadow-lg",
+            "text-center",
+            "overflow-auto z-10",
+            "transition-all duration-200 ease-in-out ",
+            isOpen
+              ? "opacity-100 max-h-80 translate-y-1"
+              : "opacity-0 max-h-0 pointer-events-none translate-y-0",
+          )}
+        >
+          {undoneTasks.map((task, index) => (
+            <li
+              key={index}
+              onClick={() => {
+                setSelectedTask(task.name);
+                setManualActiveTaskId(task.id);
+                setIsOpen(false);
+              }}
+              className="p-3 hover:bg-black/30 cursor-pointer"
+            >
+              <div className="line-clamp-1 break-all">{task.name}</div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
