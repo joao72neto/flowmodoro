@@ -22,7 +22,7 @@ const Session = ({ session }: { session: SessionResponse }) => {
           direction="row"
           justify="between"
           className={clsx(
-            "border border-white/10 shadow-lg py-4 sm:py-6 px-4 cursor-pointer rounded-lg w-full ",
+            "border border-white/10 shadow-lg p-3 sm:p-4 cursor-pointer rounded-xl w-full ",
             "hover:scale-102 duration-200 hover:shadow-xl bg-black/20",
           )}
         >
@@ -31,7 +31,7 @@ const Session = ({ session }: { session: SessionResponse }) => {
           </span>
           <span
             className={clsx(
-              "text-lg sm:text-xl bg-white/10 border border-white/10 ",
+              "text-sm sm:text-base bg-white/10 border border-white/10 ",
               "px-2 py-1 rounded-lg shadow",
             )}
           >

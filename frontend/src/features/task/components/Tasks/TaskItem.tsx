@@ -95,7 +95,8 @@ function TaskItem({ task }: TaskItemProps) {
   return (
     <li
       className={clsx(
-        "shadow-xl border-t border-b border-white/10 px-4 py-3 rounded flex justify-between items-center",
+        "shadow-xl border-t border-b border-white/10 px-4 py-3 flex justify-between items-center",
+        "bg-[#222]",
         {
           "line-through text-neutral-500": task.checked,
         },

@@ -15,7 +15,8 @@ const SessionsGroup = ({
       <p
         className={clsx(
           "flex justify-between items-center gap-2 w-full",
-          "font-bold text-neutral-20 border-b border-white/10 pb-1",
+          "font-bold text-neutral-20 border-y  p-4 border-white/10",
+          "shadow-xl bg-[#222]",
         )}
       >
         <span className="uppercase">{groupName}</span>
