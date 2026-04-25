@@ -108,10 +108,13 @@ function TaskItem({ task }: TaskItemProps) {
           task.checked && "cursor-pointer",
         )}
       >
-        <TaskButton
-          taskCompleted={task.checked}
-          onClick={() => handleCompleteTask(task.id, task.checked)}
-        />
+        {mode !== "focus" && (
+          <TaskButton
+            taskCompleted={task.checked}
+            onClick={() => handleCompleteTask(task.id, task.checked)}
+          />
+        )}
+
         {isEditing ? (
           <input
             autoFocus
