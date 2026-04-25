@@ -45,7 +45,7 @@ const SessionsDisplay = () => {
   }, [success, wasTaskDeleted, fetchSessions, goToPage]);
 
   return (
-    <div className="flex  flex-col gap-6 w-full items-center flex-1">
+    <div className="flex flex-col gap-6 w-full items-center">
       {!sessions || sessions.content.length === 0 ? (
         <EmptySessions />
       ) : (

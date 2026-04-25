@@ -14,12 +14,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
 
   return (
-    <div className="relative min-h-screen flex overflow-x-hidden">
+    <div className="relative min-h-screen flex overflow-x-hidden items-center">
       <MainContentContainer>{children}</MainContentContainer>
 
       <div
         className={clsx(
-          "fixed inset-0 bg-black/60 backdrop-blur-sm z-20 transition-opacity duration-300",
+          "fixed inset-0 bg-black/50 backdrop-blur-sm z-20 transition-opacity duration-300",
           isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={() => setIsSidebarOpen(false)}

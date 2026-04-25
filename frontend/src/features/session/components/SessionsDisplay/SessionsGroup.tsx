@@ -38,7 +38,7 @@ const SessionsGroup = ({
       </div>
 
       <AnimatedCollapse show={isOpen}>
-        <div className="pb-4">
+        <div className="py-1 px-1.5 sm:px-2">
           <Stack gap={4}>{children}</Stack>
         </div>
       </AnimatedCollapse>
