@@ -46,7 +46,7 @@ const SessionsDisplay = () => {
   if (sessions?.content.length === 0 || !sessions) return null;
 
   return (
-    <div className="flex flex-col gap-10 w-full items-center">
+    <div className="flex flex-col gap-6 w-full items-center">
       <SessionsWrapper>
         {sessions &&
           sessions.content.map((sessionGroup) => (

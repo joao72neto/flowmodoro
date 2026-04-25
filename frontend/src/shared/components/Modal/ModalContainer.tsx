@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 const sizes = {
   sm: "max-w-md",
@@ -25,18 +26,21 @@ const ModalContainer = ({
     };
   }, []);
 
-  return (
+  const modalRoot = document.body;
+
+  return createPortal(
     <div
       className={clsx(
-        "fixed inset-0 flex items-center justify-center z-50 bg-black/50",
+        "fixed inset-0 flex items-center justify-center z-50 bg-black/50 p-4",
       )}
       onClick={() => close?.()}
     >
       <div
         className={clsx(
           "flex flex-col gap-8 text-center",
-          "p-6 rounded-xl w-full mx-4 relative max-h-[90vh] animate-fade-in bg-white/10",
+          "p-6 rounded-xl w-full relative max-h-[90vh] animate-fade-in bg-white/10",
           "overflow-auto overscroll-contain backdrop-blur-2xl border border-white/10",
+          "shadow-2xl",
           sizes[size],
           className,
         )}
@@ -44,7 +48,8 @@ const ModalContainer = ({
       >
         {children}
       </div>
-    </div>
+    </div>,
+    modalRoot,
   );
 };
 
