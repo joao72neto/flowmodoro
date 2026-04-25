@@ -2,13 +2,12 @@ import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import { IoClose } from "react-icons/io5";
 import Stack from "../../../shared/components/Stack";
 import type { SessionResponse } from "../session.types";
-import {
-  formatToHour,
-  formatToPercentage,
-} from "../../../shared/utils/number.utils";
-import clsx from "clsx";
+import { formatToHour } from "../../../shared/utils/number.utils";
 import { capitalize } from "../../../shared/utils/string.utils";
 import Line from "../../../shared/components/Line";
+
+import { PRESETS } from "../../home/ratio.const";
+import InfoWrapper from "../../../shared/components/InfoWrapper";
 
 const SessionDetailsModal = ({
   session,
@@ -17,52 +16,44 @@ const SessionDetailsModal = ({
   session: SessionResponse;
   close: () => void;
 }) => {
-  return (
-    <ModalContainer>
-      <div>
-        <Stack direction="row" justify="between" className="pb-4">
-          <h1 className="flex-1 font-bold text-xl line-clamp-1 break-all">
-            {capitalize(session.task.name)}
-          </h1>
-          <IoClose size={30} className="cursor-pointer" onClick={close} />
-        </Stack>
+  const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
-        <Stack
-          direction="row"
-          justify="center"
-          align="right"
-          className={clsx(
-            "relative pb-3 border-b border-t border-white/20",
-            "before:absolute",
-            "before:inset-0",
-            "before:border-b before:border-t",
-            "before:border-white/20",
-            "before:animate-pulse",
-            "before:pointer-events-none",
-          )}
-        >
-          <h2>Foco: {formatToHour(session.focus)}</h2>
-          <span className="text-3xl text-white/20 animate-pulse">|</span>
-          <h2>Descanso: {formatToHour(session.rest)}</h2>
-        </Stack>
-      </div>
+  return (
+    <ModalContainer close={close}>
+      <Stack direction="row" justify="between">
+        <h1 className="flex-1 font-bold text-xl line-clamp-1 break-all text-left pl-1">
+          {capitalize(session.task.name)}
+        </h1>
+        <IoClose size={30} className="cursor-pointer" onClick={close} />
+      </Stack>
+
       <div className="flex flex-col gap-3">
         <Stack direction="row" justify="between">
-          <p>Tempo total:</p>
+          <InfoWrapper size="md">Tempo de Foco:</InfoWrapper>
           <Line />
-          <p>{formatToHour(session.focus + session.rest)}</p>
+          <InfoWrapper>{formatToHour(session.focus)}</InfoWrapper>
         </Stack>
 
         <Stack direction="row" justify="between">
-          <p>Interrupções:</p>
+          <InfoWrapper size="md">Descanso calculado:</InfoWrapper>
           <Line />
-          <p> {session.interruptions}</p>
+          <InfoWrapper>{formatToHour(session.rest)}</InfoWrapper>
         </Stack>
 
         <Stack direction="row" justify="between">
-          <p>Razão de Descanso:</p>
+          <InfoWrapper size="md">Tempo total:</InfoWrapper>
           <Line />
-          <p>{formatToPercentage(session.ratio)}</p>
+          <InfoWrapper>
+            {formatToHour(session.focus + session.rest)}
+          </InfoWrapper>
+        </Stack>
+
+        <Stack direction="row" justify="between">
+          <InfoWrapper size="md">Perfil de Descanso:</InfoWrapper>
+          <Line />
+          <InfoWrapper className={preset?.textClass}>
+            {preset?.label}
+          </InfoWrapper>
         </Stack>
       </div>
     </ModalContainer>

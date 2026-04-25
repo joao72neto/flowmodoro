@@ -28,7 +28,7 @@ const ModalContainer = ({
   return (
     <div
       className={clsx(
-        "fixed inset-0 flex items-center justify-center z-50 bg-[#00000085]",
+        "fixed inset-0 flex items-center justify-center z-50 bg-black/50",
       )}
       onClick={() => close?.()}
     >
