@@ -12,9 +12,9 @@ import {
 import { formatToHour } from "../../shared/utils/number.utils";
 
 const useTimer = () => {
-  const { setFocus, handleSaveSession, restRatio } = useSessionContext();
+  const { handleSaveSession, restRatio } = useSessionContext();
   const { activeTask, setIsSidebarOpen } = useTaskContext();
-  const { showDefault, showWarning, hideModal, showError } = useModal();
+  const { showDefault, showWarning, hideModal } = useModal();
 
   const BREAK_RATIO = restRatio / 100;
 
@@ -33,9 +33,10 @@ const useTimer = () => {
     return seconds;
   });
 
+  const [interruptions, setInterruptions] = useState(0);
+
   const startTimeRef = useRef<number>(Date.now());
   const baseSecondsRef = useRef<number>(seconds);
-  const focus = Number((seconds / 60).toFixed(2));
 
   useEffect(() => {
     localStorage.setItem(
@@ -109,33 +110,32 @@ const useTimer = () => {
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
     setSeconds(0);
+    setInterruptions(0);
     setMode("focus");
     setIsSidebarOpen(false);
   };
 
   const stopFocus = () => {
+    const finalFocusSeconds = seconds;
     setMode("stopped");
-    const breakTime = Math.floor(seconds * BREAK_RATIO);
+    const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
     setSeconds(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
-    setFocus(focus);
     setIsSidebarOpen(false);
 
     showWarning({
       title: "Sessão Finalizada! 🎉",
-      message: `Deseja salvar a sessão atual de ${formatToHour(focus)}?`,
+      message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds / 60)}?`,
       action: () => {
         if (activeTask) {
-          handleSaveSession(activeTask.id);
-          hideModal();
-          return;
+          handleSaveSession({
+            taskId: activeTask.id,
+            focusSeconds: finalFocusSeconds,
+            interruptions,
+          });
         }
-        showError({
-          title: "Erro ao salvar sessão",
-          message: "A sessão não foi salvar, descubra o porque",
-          action: hideModal,
-        });
+        hideModal();
       },
       cancel: () => {
         setMode(null);
@@ -175,6 +175,8 @@ const useTimer = () => {
     formatTimer,
     mode,
     seconds,
+    interruptions,
+    setInterruptions,
   };
 };
 

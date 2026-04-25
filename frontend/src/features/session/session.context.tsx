@@ -3,12 +3,14 @@ import useSessions from "./useSession";
 import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 
-interface ISessionContext {
-  focus: number;
+interface ISaveSessionData {
+  taskId: number;
+  focusSeconds: number;
   interruptions: number;
-  setFocus: (focus: number) => void;
-  setInterruptions: (interruptions: number) => void;
-  handleSaveSession: (taskId: number) => Promise<void>;
+}
+
+interface ISessionContext {
+  handleSaveSession: (data: ISaveSessionData) => Promise<void>;
   success: boolean;
   setSuccess: (success: boolean) => void;
   restRatio: number;
@@ -23,9 +25,6 @@ export const SessionProvider = ({
   children: React.ReactNode;
 }) => {
   const { createSession } = useSessions();
-  const [focus, setFocus] = useState<number>(0);
-  const [interruptions, setInterruptions] = useState<number>(0);
-
   const [success, setSuccess] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
 
@@ -38,21 +37,28 @@ export const SessionProvider = ({
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
   }, [restRatio]);
 
-  const handleSaveSession = async (taskId: number) => {
+  const handleSaveSession = async ({
+    taskId,
+    focusSeconds,
+    interruptions,
+  }: ISaveSessionData) => {
     setSuccess(false);
     try {
+      const focusInHours = Number((focusSeconds / 3600).toFixed(4));
+
       await createSession(taskId, {
-        focus,
+        focus: focusInHours,
         interruptions,
         ratio: restRatio / 100,
       });
+
       setSuccess(true);
       setTimeout(() => setSuccess(false), 1000);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof Error)
         showError({
-          title: "Error",
+          title: "Erro ao salvar sessão",
           message: error.message,
           action: hideModal,
         });
@@ -62,10 +68,6 @@ export const SessionProvider = ({
   return (
     <SessionContext.Provider
       value={{
-        focus,
-        interruptions,
-        setFocus,
-        setInterruptions,
         handleSaveSession,
         success,
         setSuccess,

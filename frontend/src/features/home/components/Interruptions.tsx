@@ -1,9 +1,9 @@
-import { useSessionContext } from "../../session/session.context";
+import { useTimerContext } from "../timer.context";
 import { CiCirclePlus } from "react-icons/ci";
 import { CiCircleMinus } from "react-icons/ci";
 
 function Interruptions() {
-  const { setInterruptions, interruptions } = useSessionContext();
+  const { setInterruptions, interruptions } = useTimerContext();
   const isGreaterThanZero = interruptions > 0;
 
   return (
