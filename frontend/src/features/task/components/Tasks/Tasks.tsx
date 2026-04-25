@@ -4,6 +4,9 @@ import { useState, useMemo } from "react";
 import TaskTabs from "./TaskTabs";
 import EmptyTasks from "./EmptyTasks";
 import TaskItem from "./TaskItem";
+import clsx from "clsx";
+
+import { IoIosAdd } from "react-icons/io";
 
 function Tasks() {
   const { handleAddTask, newTask, setNewTask, tasks } = useTaskContext();
@@ -38,7 +41,20 @@ function Tasks() {
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           onKeyDown={handleKeyDown}
+          className="rounded-r-none!"
         />
+        <button
+          onClick={handleAddTask}
+          type="button"
+          title="Adicionar nova tarefa"
+          className={clsx(
+            "flex items-center gap-2",
+            "px-3 text-white rounded-y-md rounded-r-md border-r border-y border-white/10 ",
+            "hover:bg-danger transition-colors duration-200 ease-in-out cursor-pointer",
+          )}
+        >
+          <IoIosAdd size={25} />
+        </button>
       </div>
 
       <TaskTabs
