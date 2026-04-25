@@ -58,7 +58,7 @@ public class SessionService {
     }
 
     @Transactional
-    public SessionModel save(SessionModel session, Long taskId) {
+    public SessionModel save(SessionModel session, Long taskId, String userId) {
 
         List<String> errors = new ArrayList<>();
 
@@ -71,11 +71,15 @@ public class SessionService {
                 .orElseThrow(() -> new InvalidTaskException(
                         TASK_NOT_FOUND, "Task not found"));
 
+        if (!task.getUserId().equals(userId)) {
+            throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
+        }
+
         calculator.calculateRest(session);
         validator.validateSessions(session, errors);
 
         Optional<SessionModel> existingSession = sessionRepository
-                .findByTaskIdAndDate(taskId, session.getDate());
+                .findByUserIdAndTaskIdAndDate(userId, taskId, session.getDate());
 
         if (existingSession.isPresent()) {
             SessionModel existing = existingSession.get();
@@ -87,20 +91,21 @@ public class SessionService {
             return sessionRepository.save(existing);
         } else {
             session.setTask(task);
+            session.setUserId(userId);
             return sessionRepository.save(session);
         }
     }
 
-    public PageResponse<DailySessionsDTO> consult(int page, int size) {
+    public PageResponse<DailySessionsDTO> consult(int page, int size, String userId) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "date"));
 
-        Page<LocalDate> datePage = sessionRepository.findDistinctDates(pageable);
+        Page<LocalDate> datePage = sessionRepository.findDistinctDates(userId, pageable);
 
         if (datePage.isEmpty()) {
             return new PageResponse<>(List.of(), page, size, 0, 0);
         }
 
-        List<SessionModel> sessions = sessionRepository.findByDateInOrderByIdDesc(datePage.getContent());
+        List<SessionModel> sessions = sessionRepository.findByUserIdAndDateInOrderByIdDesc(userId, datePage.getContent());
 
         List<DailySessionsDTO> dailySessions = aggregator.groupSessionsByDate(sessions, datePage.getContent());
 
@@ -113,16 +118,24 @@ public class SessionService {
     }
 
     @Transactional
-    public SessionModel update(Long id, SessionUpdateDTO dto) {
+    public SessionModel update(Long id, SessionUpdateDTO dto, String userId) {
         SessionModel session = sessionRepository.findById(id)
                 .orElseThrow(() -> new InvalidSessionException(
                         SESSION_NOT_FOUND,
                         "Session not found with id: " + id));
 
+        if (!session.getUserId().equals(userId)) {
+            throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");
+        }
+
         TaskModel task = taskRepository.findById(dto.getTask())
                 .orElseThrow(() -> new InvalidTaskException(
                         TASK_NOT_FOUND,
                         "Task not found with id: " + dto.getTask()));
+
+        if (!task.getUserId().equals(userId)) {
+            throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
+        }
 
         sessionUpdateMapper.apply(session, dto);
         session.setTask(task);
@@ -130,11 +143,15 @@ public class SessionService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        sessionRepository.findById(id)
+    public void delete(Long id, String userId) {
+        SessionModel session = sessionRepository.findById(id)
                 .orElseThrow(() -> new InvalidSessionException(
                         SESSION_NOT_FOUND,
                         "Session not found with id: " + id));
+
+        if (!session.getUserId().equals(userId)) {
+            throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");
+        }
 
         sessionRepository.deleteById(id);
     }

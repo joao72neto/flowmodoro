@@ -41,6 +41,9 @@ public class SessionModel {
     @Column(name = "ses_rest")
     private Long rest;
 
+    @Column(name = "ses_user_id")
+    private String userId;
+
     @Column(name = "ses_interruptions")
     private Integer interruptions;
 

@@ -20,6 +20,8 @@ import com.company.flowmodoro.features.task.mappers.TaskMapper;
 import com.company.flowmodoro.features.task.mappers.TaskStatusMapper;
 import com.company.flowmodoro.features.task.mappers.TaskUpdateMapper;
 
+import org.springframework.web.bind.annotation.RequestHeader;
+
 @RestController
 @RequestMapping("/api/task")
 public class TaskController {
@@ -38,31 +40,33 @@ public class TaskController {
   }
 
   @GetMapping
-  public ResponseEntity<List<TaskDTO>> consult() {
-    return ResponseEntity.ok(taskMapper.toDTO(taskService.consult()));
+  public ResponseEntity<List<TaskDTO>> consult(@RequestHeader("X-User-Id") String userId) {
+    return ResponseEntity.ok(taskMapper.toDTO(taskService.consult(userId)));
   }
 
   @PostMapping
-  public ResponseEntity<TaskDTO> save(@RequestBody TaskDTO task) {
-    TaskModel saved = taskService.save(taskMapper.toEntity(task));
+  public ResponseEntity<TaskDTO> save(@RequestBody TaskDTO task, @RequestHeader("X-User-Id") String userId) {
+    TaskModel saved = taskService.save(taskMapper.toEntity(task), userId);
     return ResponseEntity.status(201).body(taskMapper.toDTO(saved));
   }
 
   @PatchMapping("/{id}/status")
-  public ResponseEntity<TaskDTO> updateStatus(@PathVariable Long id, @RequestBody TaskStatusDTO task) {
-    TaskModel taskEntity = taskService.updateStatus(id, taskStatusMapper.toEntity(task));
+  public ResponseEntity<TaskDTO> updateStatus(@PathVariable Long id, @RequestBody TaskStatusDTO task,
+      @RequestHeader("X-User-Id") String userId) {
+    TaskModel taskEntity = taskService.updateStatus(id, taskStatusMapper.toEntity(task), userId);
     return ResponseEntity.ok(taskMapper.toDTO(taskEntity));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<TaskDTO> update(@PathVariable Long id, @RequestBody TaskUpdateDTO task) {
-    TaskModel taskEntity = taskService.update(id, taskUpdateMapper.toEntity(task));
+  public ResponseEntity<TaskDTO> update(@PathVariable Long id, @RequestBody TaskUpdateDTO task,
+      @RequestHeader("X-User-Id") String userId) {
+    TaskModel taskEntity = taskService.update(id, taskUpdateMapper.toEntity(task), userId);
     return ResponseEntity.ok(taskMapper.toDTO(taskEntity));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    taskService.deleteById(id);
+  public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("X-User-Id") String userId) {
+    taskService.deleteById(id, userId);
     return ResponseEntity.noContent().build();
   }
 

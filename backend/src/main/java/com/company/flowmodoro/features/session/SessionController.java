@@ -18,6 +18,8 @@ import com.company.flowmodoro.shared.dto.PageResponse;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
+import org.springframework.web.bind.annotation.RequestHeader;
+
 @RestController
 @RequestMapping("/api/session")
 public class SessionController {
@@ -31,27 +33,30 @@ public class SessionController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<SessionDTO> save(@PathVariable Long id, @RequestBody SessionDTO dto) {
-        SessionModel session = sessionService.save(mapper.toEntity(dto), id);
+    public ResponseEntity<SessionDTO> save(@PathVariable Long id, @RequestBody SessionDTO dto,
+            @RequestHeader("X-User-Id") String userId) {
+        SessionModel session = sessionService.save(mapper.toEntity(dto), id, userId);
         return ResponseEntity.status(201).body(mapper.toDTO(session));
     }
 
     @GetMapping
     public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(sessionService.consult(page - 1, size));
+            @RequestParam(defaultValue = "10") int size,
+            @RequestHeader("X-User-Id") String userId) {
+        return ResponseEntity.ok(sessionService.consult(page - 1, size, userId));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionUpdateDTO dto) {
-        SessionModel session = sessionService.update(id, dto);
+    public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionUpdateDTO dto,
+            @RequestHeader("X-User-Id") String userId) {
+        SessionModel session = sessionService.update(id, dto, userId);
         return ResponseEntity.ok(mapper.toDTO(session));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        sessionService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("X-User-Id") String userId) {
+        sessionService.delete(id, userId);
 
         return ResponseEntity.noContent().build();
     }

@@ -36,6 +36,9 @@ public class TaskModel {
   @Column(name = "tsk_checked")
   private Boolean checked;
 
+  @Column(name = "tsk_user_id")
+  private String userId;
+
   @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
   private List<SessionModel> session;
 
