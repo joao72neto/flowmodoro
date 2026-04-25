@@ -35,7 +35,7 @@ function Tasks() {
   return (
     <div className="w-full max-w-xl flex flex-col h-screen">
       <h2 className="text-2xl mb-4 text-center">Tarefas</h2>
-      <div className="flex mb-4">
+      <div className="group flex mb-4">
         <Input
           placeholder="Adicionar tarefa"
           value={newTask}
@@ -51,6 +51,7 @@ function Tasks() {
             "flex items-center gap-2",
             "px-3 text-white rounded-y-md rounded-r-md border-r border-y border-white/10 ",
             "hover:bg-danger transition-colors duration-200 ease-in-out cursor-pointer",
+            "group-focus-within:border-danger",
           )}
         >
           <IoIosAdd size={25} />
