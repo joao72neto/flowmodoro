@@ -2,7 +2,7 @@ package com.company.flowmodoro.features.session;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public class SessionAggregator {
     }
 
     private DailySessionsDTO aggregateSessionsForOneDay(LocalDate date, List<SessionModel> daySessions) {
-        Map<Long, SessionDTO> tasksMap = new HashMap<>();
+        Map<Long, SessionDTO> tasksMap = new LinkedHashMap<>();
         double totalFocus = 0;
         double totalRest = 0;
 
