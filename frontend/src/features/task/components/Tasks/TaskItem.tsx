@@ -133,24 +133,28 @@ function TaskItem({ task }: TaskItemProps) {
             icon={getTimerIcon()}
             onClick={handleTimerAction}
           />
-          {isEditing ? (
-            <IconButton
-              title="Salvar edição"
-              icon={<FaCheck size={22} className="text-success" />}
-              onClick={saveEditing}
-            />
-          ) : (
-            <IconButton
-              title="Editar tarefa"
-              icon={<MdModeEdit size={22} />}
-              onClick={() => setIsEditing(true)}
-            />
+          {mode !== "focus" && (
+            <>
+              {isEditing ? (
+                <IconButton
+                  title="Salvar edição"
+                  icon={<FaCheck size={22} className="text-success" />}
+                  onClick={saveEditing}
+                />
+              ) : (
+                <IconButton
+                  title="Editar tarefa"
+                  icon={<MdModeEdit size={22} />}
+                  onClick={() => setIsEditing(true)}
+                />
+              )}
+              <IconButton
+                title="Deletar tarefa"
+                icon={<FaTrash size={18} className="transition duration-200" />}
+                onClick={() => handleDeleteTask(task.id)}
+              />
+            </>
           )}
-          <IconButton
-            title="Deletar tarefa"
-            icon={<FaTrash size={18} className="transition duration-200" />}
-            onClick={() => handleDeleteTask(task.id)}
-          />
         </div>
       )}
     </li>
