@@ -174,7 +174,7 @@ const useTimer = () => {
 
     const sec = (totalSeconds % 60).toString().padStart(2, "0");
 
-    if (hours > 0) return `${hours.toString().padStart(2, "0")}:${min}:${sec}`;
+    if (hours > 0) return `${hours}:${min}:${sec}`;
 
     return `${min}:${sec}`;
   };

@@ -10,7 +10,7 @@ const SessionsGroup = ({
   totalFocus,
 }: {
   children: React.ReactNode;
-  totalFocus: number | string;
+  totalFocus: string | undefined;
   groupName: string;
 }) => {
   const [isOpen, setIsOpen] = useState(true);
