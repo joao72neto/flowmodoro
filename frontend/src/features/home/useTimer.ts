@@ -73,6 +73,10 @@ const useTimer = () => {
           if (remaining <= 0) {
             setSeconds(0);
             setMode(null);
+
+            const audio = new Audio("/time-is-up-sound.mp3");
+            audio.play().catch((e) => console.error("Error playing audio:", e));
+
             if (Notification.permission === "granted") {
               new Notification("Pausa Finalizada!", {
                 body: "Sua pausa acabou. Hora de voltar ao foco!",
@@ -142,7 +146,7 @@ const useTimer = () => {
         hideModal();
       },
       confirmLabel: "Salvar",
-      cancelLabel: 'Descartar'
+      cancelLabel: "Descartar",
     });
   };
 
