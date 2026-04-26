@@ -12,6 +12,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     let isMounted = true;
+    let retryTimeout: ReturnType<typeof setTimeout>;
 
     const loadingTimeout = setTimeout(() => {
       if (isMounted) setShowLoading(true);
@@ -20,13 +21,19 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     const checkHealth = async () => {
       try {
         await healthService.getHealth();
-      } catch (error) {
-        console.error("Health check failed:", error);
-      } finally {
+
         if (isMounted) {
           clearTimeout(loadingTimeout);
           setIsReady(true);
           setShowLoading(false);
+        }
+      } catch (error) {
+        console.warn(
+          "Backend não respondeu. Tentando novamente em 5 segundos...",
+        );
+
+        if (isMounted) {
+          retryTimeout = setTimeout(checkHealth, 5000);
         }
       }
     };
@@ -36,6 +43,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     return () => {
       isMounted = false;
       clearTimeout(loadingTimeout);
+      clearTimeout(retryTimeout);
     };
   }, []);
 

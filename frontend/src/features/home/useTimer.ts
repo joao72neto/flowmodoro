@@ -102,18 +102,20 @@ const useTimer = () => {
 
   useEffect(() => {
     if (mode === "focus" || mode === "break") {
-      const keepAliveInterval = setInterval(
-        () => {
-          healthService.getHealth().catch(() => {});
-        },
-        10 * 60 * 1000,
-      );
+      const KEEP_ALIVE_MS = 8 * 60 * 1000;
+
+      const keepAliveInterval = setInterval(() => {
+        console.log("Keep-alive: cutucando o backend...");
+        healthService.getHealth().catch(() => {});
+      }, KEEP_ALIVE_MS);
 
       return () => clearInterval(keepAliveInterval);
     }
   }, [mode]);
 
   const startFocus = () => {
+    healthService.getHealth().catch(() => {});
+
     if (!activeTask) {
       showDefault({
         title: "Nenhuma tarefa selecionada",
@@ -121,7 +123,6 @@ const useTimer = () => {
         action: hideModal,
       });
       setIsSidebarOpen(true);
-      healthService.getHealth().catch(() => {});
       return;
     }
 
