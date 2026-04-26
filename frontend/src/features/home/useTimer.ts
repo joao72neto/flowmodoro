@@ -10,6 +10,7 @@ import {
 } from "../../shared/utils/favicon.utils";
 
 import { formatToHour } from "../../shared/utils/number.utils";
+import healthService from "../../app/health.service";
 
 const useTimer = () => {
   const { handleSaveSession, restRatio } = useSessionContext();
@@ -97,6 +98,19 @@ const useTimer = () => {
       clearInterval(interval);
       document.removeEventListener("visibilitychange", syncTime);
     };
+  }, [mode]);
+
+  useEffect(() => {
+    if (mode === "focus" || mode === "break") {
+      const keepAliveInterval = setInterval(
+        () => {
+          healthService.getHealth().catch(() => {});
+        },
+        10 * 60 * 1000,
+      );
+
+      return () => clearInterval(keepAliveInterval);
+    }
   }, [mode]);
 
   const startFocus = () => {
