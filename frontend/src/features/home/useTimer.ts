@@ -121,6 +121,7 @@ const useTimer = () => {
         action: hideModal,
       });
       setIsSidebarOpen(true);
+      healthService.getHealth().catch(() => {});
       return;
     }
 
