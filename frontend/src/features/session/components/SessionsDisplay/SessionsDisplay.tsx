@@ -11,11 +11,13 @@ import { useTaskContext } from "../../../task/task.context";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import clsx from "clsx";
 
 const SessionsDisplay = () => {
   const { success } = useSessionContext();
   const { wasTaskDeleted } = useTaskContext();
-  const { sessions, fetchSessions } = useSessions();
+  const { sessions, fetchSessions, loading } = useSessions();
 
   const SIZE = 4;
 
@@ -44,8 +46,33 @@ const SessionsDisplay = () => {
     }
   }, [success, wasTaskDeleted, fetchSessions, goToPage]);
 
+  if (loading && !sessions) {
+    return (
+      <div className="flex flex-col gap-6 w-full items-center py-10">
+        <AiOutlineLoading3Quarters
+          size={30}
+          className="animate-spin text-white/20"
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-6 w-full items-center">
+    <div className="flex flex-col gap-6 w-full items-center relative">
+      {loading && sessions && (
+        <div
+          className={clsx(
+            "absolute inset-0 bg-neutral-950/20 backdrop-blur-[1px] ",
+            "flex items-center justify-center z-10 rounded-xl",
+          )}
+        >
+          <AiOutlineLoading3Quarters
+            size={30}
+            className="animate-spin text-white/40"
+          />
+        </div>
+      )}
+
       {!sessions || sessions.content.length === 0 ? (
         <EmptySessions />
       ) : (

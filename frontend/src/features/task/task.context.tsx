@@ -28,6 +28,7 @@ interface TaskContextType {
   activeTask: TaskResponse | undefined;
   isAddingTask: boolean;
   processingTaskId: number | null;
+  isLoadingTasks: boolean;
 }
 
 export const TaskContext = createContext<TaskContextType | null>(null);
@@ -36,9 +37,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [newTask, setNewTask] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAddingTask, setIsAddingTask] = useState(false);
-  const [processingTaskId, setProcessingTaskId] = useState<number | null>(
-    null,
-  );
+  const [processingTaskId, setProcessingTaskId] = useState<number | null>(null);
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const [manualActiveTaskId, setManualActiveTaskId] = useState<number | null>(
     null,
@@ -51,6 +50,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     updateTaskStatus,
     updateTask,
     tasks,
+    loading: isLoadingTasks,
   } = useTasks();
 
   const { showError, hideModal } = useModal();
@@ -176,6 +176,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         setManualActiveTaskId,
         isAddingTask,
         processingTaskId,
+        isLoadingTasks,
       }}
     >
       {children}

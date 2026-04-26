@@ -4,6 +4,7 @@ import clsx from "clsx";
 
 import { FaCaretDown } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useTimerContext } from "../../home/timer.context";
 
 function TaskSelector() {
@@ -16,9 +17,11 @@ function TaskSelector() {
     setIsSidebarOpen,
     undoneTasks,
     setManualActiveTaskId,
+    isLoadingTasks,
   } = useTaskContext();
 
   const isFocusing = mode === "focus";
+  const isDisabled = isFocusing || isLoadingTasks;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -33,7 +36,7 @@ function TaskSelector() {
   return (
     <div ref={ref} className="relative inline-block w-70">
       <button
-        disabled={isFocusing}
+        disabled={isDisabled}
         onClick={() => {
           undoneTasks.length > 0 ? setIsOpen(!isOpen) : setIsSidebarOpen(true);
         }}
@@ -48,13 +51,17 @@ function TaskSelector() {
           "border",
           "border-white/10",
           "transition",
-          isFocusing
+          isDisabled
             ? "cursor-not-allowed opacity-50"
             : "cursor-pointer hover:border-white/30",
         )}
       >
-        <div className="flex-1 line-clamp-1 break-all">{selectedTask}</div>
-        {undoneTasks.length > 0 ? (
+        <div className="flex-1 line-clamp-1 break-all">
+          {isLoadingTasks ? "Carregando tarefas..." : selectedTask}
+        </div>
+        {isLoadingTasks ? (
+          <AiOutlineLoading3Quarters size={20} className="animate-spin" />
+        ) : undoneTasks.length > 0 ? (
           <FaCaretDown
             size={20}
             className={clsx(
