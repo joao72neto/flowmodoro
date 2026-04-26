@@ -160,10 +160,16 @@ const useTimer = () => {
   };
 
   const formatTimer = (totalSeconds: number) => {
+    const hours = Math.floor(totalSeconds / 3600);
+
     const min = Math.floor(totalSeconds / 60)
       .toString()
       .padStart(2, "0");
+
     const sec = (totalSeconds % 60).toString().padStart(2, "0");
+
+    if (hours > 0) return `${hours.toString().padStart(2, "0")}:${min}:${sec}`;
+
     return `${min}:${sec}`;
   };
 
