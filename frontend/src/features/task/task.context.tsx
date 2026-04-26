@@ -27,6 +27,7 @@ interface TaskContextType {
   wasTaskDeleted: boolean;
   activeTask: TaskResponse | undefined;
   isAddingTask: boolean;
+  processingTaskId: number | null;
 }
 
 export const TaskContext = createContext<TaskContextType | null>(null);
@@ -35,6 +36,9 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [newTask, setNewTask] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const [processingTaskId, setProcessingTaskId] = useState<number | null>(
+    null,
+  );
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const [manualActiveTaskId, setManualActiveTaskId] = useState<number | null>(
     null,
@@ -101,6 +105,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleRemoveTask = async (id: number) => {
     setWasTaskDeleted(false);
+    setProcessingTaskId(id);
     try {
       await deleteTask(id);
       await fetchTasks();
@@ -112,10 +117,13 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
           message: error.message,
           action: hideModal,
         });
+    } finally {
+      setProcessingTaskId(null);
     }
   };
 
   const handleUpdateTask = async (id: number, name: string) => {
+    setProcessingTaskId(id);
     try {
       await updateTask(id, { name });
       await fetchTasks();
@@ -126,12 +134,15 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
           message: error.message,
           action: hideModal,
         });
+    } finally {
+      setProcessingTaskId(null);
     }
   };
 
-  const handleCompleteTask = async (index: number, checked: boolean) => {
+  const handleCompleteTask = async (id: number, checked: boolean) => {
+    setProcessingTaskId(id);
     try {
-      await updateTaskStatus(index, { checked: !checked });
+      await updateTaskStatus(id, { checked: !checked });
       await fetchTasks();
     } catch (error: any) {
       if (error instanceof Error)
@@ -140,6 +151,8 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
           message: error.message,
           action: hideModal,
         });
+    } finally {
+      setProcessingTaskId(null);
     }
   };
 
@@ -162,6 +175,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         handleUpdateTask,
         setManualActiveTaskId,
         isAddingTask,
+        processingTaskId,
       }}
     >
       {children}

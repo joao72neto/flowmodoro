@@ -26,6 +26,7 @@ function TaskItem({ task }: TaskItemProps) {
     handleRemoveTask,
     activeTask,
     setManualActiveTaskId,
+    processingTaskId,
   } = useTaskContext();
   const { startFocus, stopFocus, startBreak, skipBreak, mode } =
     useTimerContext();
@@ -34,6 +35,8 @@ function TaskItem({ task }: TaskItemProps) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editingName, setEditingName] = useState(task.name);
+
+  const isProcessing = processingTaskId === task.id;
 
   const isTaskRunning = mode === "focus" && activeTask?.id === task.id;
   const isTaskBreaking = mode === "break" && activeTask?.id === task.id;
@@ -96,23 +99,30 @@ function TaskItem({ task }: TaskItemProps) {
     <li
       className={clsx(
         "shadow-xl border-t border-b border-white/10 px-4 py-3 flex justify-between items-center",
-        "bg-[#222]",
+        "bg-[#222] transition-all duration-200",
         {
           "line-through text-neutral-500": task.checked,
+          "opacity-50 pointer-events-none cursor-not-allowed": isProcessing,
         },
       )}
-      onClick={() => task.checked && handleCompleteTask(task.id, task.checked)}
+      onClick={() =>
+        !isProcessing &&
+        task.checked &&
+        handleCompleteTask(task.id, task.checked)
+      }
     >
       <div
         className={clsx(
           "flex items-center flex-1 mr-4",
-          task.checked && "cursor-pointer",
+          task.checked && !isProcessing && "cursor-pointer",
         )}
       >
         {mode !== "focus" && (
           <TaskButton
             taskCompleted={task.checked}
-            onClick={() => handleCompleteTask(task.id, task.checked)}
+            onClick={() =>
+              !isProcessing && handleCompleteTask(task.id, task.checked)
+            }
           />
         )}
 
@@ -124,6 +134,7 @@ function TaskItem({ task }: TaskItemProps) {
             onChange={(e) => setEditingName(e.target.value)}
             onKeyDown={handleEditKeyDown}
             onBlur={saveEditing}
+            disabled={isProcessing}
           />
         ) : (
           <span className="line-clamp-1 break-all ml-2">{task.name}</span>
@@ -136,6 +147,7 @@ function TaskItem({ task }: TaskItemProps) {
             title="Iniciar timer"
             icon={getTimerIcon()}
             onClick={handleTimerAction}
+            disabled={isProcessing}
           />
           {mode !== "focus" && (
             <>
@@ -144,18 +156,21 @@ function TaskItem({ task }: TaskItemProps) {
                   title="Salvar edição"
                   icon={<FaCheck size={22} className="text-success" />}
                   onClick={saveEditing}
+                  disabled={isProcessing}
                 />
               ) : (
                 <IconButton
                   title="Editar tarefa"
                   icon={<MdModeEdit size={22} />}
                   onClick={() => setIsEditing(true)}
+                  disabled={isProcessing}
                 />
               )}
               <IconButton
                 title="Deletar tarefa"
                 icon={<FaTrash size={18} className="transition duration-200" />}
                 onClick={() => handleDeleteTask(task.id)}
+                disabled={isProcessing}
               />
             </>
           )}
