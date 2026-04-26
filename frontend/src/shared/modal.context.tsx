@@ -8,44 +8,60 @@ interface IModalContext {
     message,
     action,
     cancel,
+    confirmLabel,
+    cancelLabel,
   }: {
     title: string;
     message: string;
     action: () => void;
     cancel?: () => void;
+    confirmLabel?: string;
+    cancelLabel?: string;
   }) => void;
   showWarning: ({
     title,
     message,
     action,
     cancel,
+    confirmLabel,
+    cancelLabel,
   }: {
     title: string;
     message: string;
     action: () => void;
     cancel?: () => void;
+    confirmLabel?: string;
+    cancelLabel?: string;
   }) => void;
   showSuccess: ({
     title,
     message,
     action,
     cancel,
+    confirmLabel,
+    cancelLabel,
   }: {
     title: string;
     message: string;
     action: () => void;
     cancel?: () => void;
+    confirmLabel?: string;
+    cancelLabel?: string;
   }) => void;
   showDefault: ({
     title,
     message,
     action,
     cancel,
+    confirmLabel,
+    cancelLabel,
   }: {
     title: string;
     message: string;
     action: () => void;
     cancel?: () => void;
+    confirmLabel?: string;
+    cancelLabel?: string;
   }) => void;
   hideModal: () => void;
 }
@@ -56,6 +72,10 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   const [modalType, setModalType] = useState<ModalType | null>(null);
   const [modalMessage, setModalMessage] = useState<string>("");
   const [modalTitle, setTitle] = useState<string>("");
+  const [confirmLabel, setConfirmLabel] = useState<string | undefined>(
+    undefined,
+  );
+  const [cancelLabel, setCancelLabel] = useState<string | undefined>(undefined);
   const [onConfirmCallback, setOnConfirmCallback] = useState<() => void>(
     () => {},
   );
@@ -70,16 +90,22 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       message,
       onConfirm,
       onCancel,
+      confirmLabel,
+      cancelLabel,
     }: {
       type: ModalType;
       title: string;
       message: string;
       onConfirm?: () => void;
       onCancel?: () => void;
+      confirmLabel?: string;
+      cancelLabel?: string;
     }) => {
       setModalType(type);
       setTitle(title);
       setModalMessage(message);
+      setConfirmLabel(confirmLabel);
+      setCancelLabel(cancelLabel);
       setOnConfirmCallback(() => onConfirm || (() => {}));
       setOnCancelCallback(() => onCancel || null);
     },
@@ -92,11 +118,15 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       message,
       action,
       cancel,
+      confirmLabel,
+      cancelLabel,
     }: {
       title: string;
       message: string;
       action: () => void;
       cancel?: () => void;
+      confirmLabel?: string;
+      cancelLabel?: string;
     }) => {
       showModal({
         type: "default",
@@ -104,6 +134,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         message,
         onConfirm: action,
         onCancel: cancel,
+        confirmLabel,
+        cancelLabel,
       });
     },
     [showModal],
@@ -115,11 +147,15 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       message,
       action,
       cancel,
+      confirmLabel,
+      cancelLabel,
     }: {
       title: string;
       message: string;
       action: () => void;
       cancel?: () => void;
+      confirmLabel?: string;
+      cancelLabel?: string;
     }) => {
       showModal({
         type: "error",
@@ -127,6 +163,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         message,
         onConfirm: action,
         onCancel: cancel,
+        confirmLabel,
+        cancelLabel,
       });
     },
     [showModal],
@@ -138,11 +176,15 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       message,
       action,
       cancel,
+      confirmLabel,
+      cancelLabel,
     }: {
       title: string;
       message: string;
       action: () => void;
       cancel?: () => void;
+      confirmLabel?: string;
+      cancelLabel?: string;
     }) => {
       showModal({
         type: "warning",
@@ -150,6 +192,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         message,
         onConfirm: action,
         onCancel: cancel,
+        confirmLabel,
+        cancelLabel,
       });
     },
     [showModal],
@@ -161,11 +205,15 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       message,
       action,
       cancel,
+      confirmLabel,
+      cancelLabel,
     }: {
       title: string;
       message: string;
       action: () => void;
       cancel?: () => void;
+      confirmLabel?: string;
+      cancelLabel?: string;
     }) => {
       showModal({
         type: "success",
@@ -173,6 +221,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         message,
         onConfirm: action,
         onCancel: cancel,
+        confirmLabel,
+        cancelLabel,
       });
     },
     [showModal],
@@ -180,6 +230,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
   const hideModal = useCallback(() => {
     setModalType(null);
+    setConfirmLabel(undefined);
+    setCancelLabel(undefined);
     setOnConfirmCallback(() => () => {});
     setOnCancelCallback(null);
   }, []);
@@ -206,27 +258,19 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-      {modalType && ["success", "default", "error"].includes(modalType) ? (
+      {modalType && (
         <Modal
-          closeButtonText="Fechar"
           type={modalType}
-          onClose={handleCancel}
           title={modalTitle}
+          closeButtonText={cancelLabel}
+          confirmButtonText={confirmLabel}
+          onClose={handleCancel}
+          onConfirm={
+            modalType === "warning" || confirmLabel ? handleConfirm : undefined
+          }
         >
           {modalMessage}
         </Modal>
-      ) : (
-        modalType &&
-        ["warning"].includes(modalType) && (
-          <Modal
-            type={modalType}
-            onClose={handleCancel}
-            onConfirm={handleConfirm}
-            title={modalTitle}
-          >
-            {modalMessage}
-          </Modal>
-        )
       )}
     </ModalContext.Provider>
   );

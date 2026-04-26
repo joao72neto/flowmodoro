@@ -141,6 +141,8 @@ const useTimer = () => {
         setMode(null);
         hideModal();
       },
+      confirmLabel: "Salvar",
+      cancelLabel: 'Descartar'
     });
   };
 
