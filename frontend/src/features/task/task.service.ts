@@ -3,7 +3,7 @@ import type {
   UpdateTaskNameRequest,
   UpdateTaskRequest,
 } from "./task.types";
-import api from "../../configs/api";
+import api from "../../configs/api.config";
 
 class TaskService {
   async createTask(data: TaskRequest) {

@@ -41,7 +41,7 @@ body {
   --color-neutral-20: #d6d5d3;
   --color-neutral-10: #f0f0f0;
 
-  /*Animations */
+  /*Tailwind Animations */
 
   @keyframes heartbeat-focus {
     0%,
@@ -115,6 +115,8 @@ body {
   scrollbar-width: none;
 }
 
+/* More Animations */
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -128,4 +130,30 @@ body {
 
 .animate-fade-in {
   animation: fade-in 0.2s ease-out;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+@keyframes loading-bar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-loading-bar {
+  animation: loading-bar 45s linear forwards;
 }
