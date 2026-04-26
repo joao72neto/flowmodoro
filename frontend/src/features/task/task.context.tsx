@@ -26,6 +26,7 @@ interface TaskContextType {
   undoneTasks: TaskResponse[];
   wasTaskDeleted: boolean;
   activeTask: TaskResponse | undefined;
+  isAddingTask: boolean;
 }
 
 export const TaskContext = createContext<TaskContextType | null>(null);
@@ -33,6 +34,7 @@ export const TaskContext = createContext<TaskContextType | null>(null);
 export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [newTask, setNewTask] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAddingTask, setIsAddingTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string>("Select a task...");
   const [manualActiveTaskId, setManualActiveTaskId] = useState<number | null>(
     null,
@@ -79,6 +81,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleAddTask = async () => {
     if (newTask.trim() === "") return;
+    setIsAddingTask(true);
     try {
       await createTask({ name: newTask, checked: false });
       await fetchTasks();
@@ -91,6 +94,8 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
           message: error.message,
           action: hideModal,
         });
+    } finally {
+      setIsAddingTask(false);
     }
   };
 
@@ -156,6 +161,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         activeTask,
         handleUpdateTask,
         setManualActiveTaskId,
+        isAddingTask,
       }}
     >
       {children}

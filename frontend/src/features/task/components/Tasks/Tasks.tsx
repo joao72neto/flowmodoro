@@ -7,9 +7,11 @@ import TaskItem from "./TaskItem";
 import clsx from "clsx";
 
 import { IoIosAdd } from "react-icons/io";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 function Tasks() {
-  const { handleAddTask, newTask, setNewTask, tasks } = useTaskContext();
+  const { handleAddTask, newTask, setNewTask, tasks, isAddingTask } =
+    useTaskContext();
 
   const [activeTab, setActiveTab] = useState<"todo" | "done">("todo");
 
@@ -41,20 +43,27 @@ function Tasks() {
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={isAddingTask}
           className="peer rounded-r-none!"
         />
         <button
           onClick={handleAddTask}
           type="button"
+          disabled={isAddingTask}
           title="Adicionar nova tarefa"
           className={clsx(
-            "flex items-center gap-2",
+            "flex items-center gap-2 min-w-12 justify-center",
             "px-3 text-white rounded-y-md rounded-r-md border-r border-y border-white/10 ",
             "hover:bg-danger transition-colors duration-200 ease-in-out cursor-pointer",
             "peer-focus-within:border-danger",
+            "disabled:opacity-50 disabled:cursor-not-allowed",
           )}
         >
-          <IoIosAdd size={25} />
+          {isAddingTask ? (
+            <AiOutlineLoading3Quarters size={20} className="animate-spin" />
+          ) : (
+            <IoIosAdd size={25} />
+          )}
         </button>
       </div>
 
