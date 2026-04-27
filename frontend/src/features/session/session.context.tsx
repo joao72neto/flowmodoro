@@ -4,7 +4,6 @@ import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 import type { ISessionGroupoResponse } from "./session.types";
 import type { PaginationResponse } from "../../shared/globals.types";
-import { LOADING_TIMEOUT } from "../../app/loading.const";
 
 interface ISaveSessionData {
   taskId: number;
@@ -58,7 +57,7 @@ export const SessionProvider = ({
     interruptions,
   }: ISaveSessionData) => {
     setSuccess(false);
-    let timer = setTimeout(() => setIsSaving(true), LOADING_TIMEOUT);
+    setIsSaving(true);
     try {
       await createSession(taskId, {
         focus: focusSeconds,
@@ -67,7 +66,7 @@ export const SessionProvider = ({
       });
 
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 1000);
+      await new Promise((resolve) => setTimeout(resolve, 600));
     } catch (error) {
       console.error(error);
       if (error instanceof Error)
@@ -78,7 +77,7 @@ export const SessionProvider = ({
         });
     } finally {
       setIsSaving(false);
-      clearTimeout(timer);
+      setTimeout(() => setSuccess(false), 1000);
     }
   };
 
