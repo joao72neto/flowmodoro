@@ -6,13 +6,14 @@ import type {
   UpdateTaskRequest,
   UpdateTaskNameRequest,
 } from "../task.types";
+import { LOADING_TIMOUT } from "../../../app/loading.const";
 
 const useTask = () => {
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
 
   const createTask = useCallback(async (data: TaskRequest) => {
-    setLoading(true);
+    let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
 
     try {
       await tasksService.createTask(data);
@@ -21,11 +22,13 @@ const useTask = () => {
       throw e;
     } finally {
       setLoading(false);
+      clearTimeout(timer);
     }
   }, []);
 
   const fetchTasks = useCallback(async () => {
-    setLoading(true);
+    let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+
     try {
       const res = await tasksService.fetchTasks();
       const data: TaskResponse[] = res.data;
@@ -35,12 +38,14 @@ const useTask = () => {
       throw e;
     } finally {
       setLoading(false);
+      clearTimeout(timer);
     }
   }, []);
 
   const updateTaskStatus = useCallback(
     async (id: number, data: UpdateTaskRequest) => {
-      setLoading(true);
+      let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+
       try {
         await tasksService.updateTaskStatus(id, data);
         return true;
@@ -48,6 +53,7 @@ const useTask = () => {
         throw e;
       } finally {
         setLoading(false);
+        clearTimeout(timer);
       }
     },
     [],
@@ -55,7 +61,8 @@ const useTask = () => {
 
   const updateTask = useCallback(
     async (id: number, data: UpdateTaskNameRequest) => {
-      setLoading(true);
+      let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+
       try {
         await tasksService.updateTask(id, data);
         return true;
@@ -63,13 +70,15 @@ const useTask = () => {
         throw e;
       } finally {
         setLoading(false);
+        clearTimeout(timer);
       }
     },
     [],
   );
 
   const deleteTask = useCallback(async (id: number) => {
-    setLoading(true);
+    let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+
     try {
       await tasksService.deleteTask(id);
       return true;
@@ -77,6 +86,7 @@ const useTask = () => {
       throw e;
     } finally {
       setLoading(false);
+      clearTimeout(timer);
     }
   }, []);
 
