@@ -101,26 +101,7 @@ const useTimer = () => {
               }
             };
 
-            const playAlarm = async () => {
-              try {
-                const response = await fetch("/time-is-up-sound.mp3");
-                const arrayBuffer = await response.arrayBuffer();
-                const audioContext = new (
-                  window.AudioContext || (window as any).webkitAudioContext
-                )();
-                const audioBuffer =
-                  await audioContext.decodeAudioData(arrayBuffer);
-                const source = audioContext.createBufferSource();
-                source.buffer = audioBuffer;
-                source.connect(audioContext.destination);
-                source.start(0);
-              } catch (e) {
-                console.error("Error playing audio:", e);
-              }
-            };
-
             sendNotification();
-            playAlarm();
           } else {
             setSeconds(remaining);
           }

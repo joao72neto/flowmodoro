@@ -20,7 +20,7 @@ const LoadingApplication = () => {
           A API está hospedada em um servidor gratuito que entra em repouso após
           inatividade. Isso pode levar de{" "}
           <span className="text-danger font-semibold text-nowrap">
-            30 a 50 segundos
+            50 segundos a 1min 30 segundos
           </span>
           .
         </p>
