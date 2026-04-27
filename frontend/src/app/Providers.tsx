@@ -19,7 +19,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
     const wakeUp = async () => {
       try {
-        await fetch(`${import.meta.env.VITE_API_URL}/api/health`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/health`, {
           signal: AbortSignal.timeout(10000),
         });
 
