@@ -155,5 +155,5 @@ body {
 }
 
 .animate-loading-bar {
-  animation: loading-bar 90s linear forwards;
+  animation: loading-bar 120s linear forwards;
 }
