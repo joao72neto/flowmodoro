@@ -2,6 +2,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import useSessions from "./useSession";
 import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
+import type { ISessionGroupoResponse } from "./session.types";
+import type { PaginationResponse } from "../../shared/globals.types";
+import { LOADING_TIMEOUT } from "../../app/loading.const";
 
 interface ISaveSessionData {
   taskId: number;
@@ -15,6 +18,12 @@ interface ISessionContext {
   setSuccess: (success: boolean) => void;
   restRatio: number;
   setRestRatio: (ratio: number) => void;
+  sessions: PaginationResponse<ISessionGroupoResponse> | undefined;
+  fetchSessions: (
+    page?: number,
+    size?: number,
+  ) => Promise<PaginationResponse<ISessionGroupoResponse>>;
+  loading: boolean;
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
@@ -24,8 +33,14 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { createSession } = useSessions();
+  const {
+    createSession,
+    fetchSessions,
+    sessions,
+    loading: isLoadingSessions,
+  } = useSessions();
   const [success, setSuccess] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
 
   const [restRatio, setRestRatio] = useState<number>(() => {
@@ -43,6 +58,7 @@ export const SessionProvider = ({
     interruptions,
   }: ISaveSessionData) => {
     setSuccess(false);
+    let timer = setTimeout(() => setIsSaving(true), LOADING_TIMEOUT);
     try {
       await createSession(taskId, {
         focus: focusSeconds,
@@ -60,6 +76,9 @@ export const SessionProvider = ({
           message: error.message,
           action: hideModal,
         });
+    } finally {
+      setIsSaving(false);
+      clearTimeout(timer);
     }
   };
 
@@ -71,6 +90,9 @@ export const SessionProvider = ({
         setSuccess,
         restRatio,
         setRestRatio,
+        sessions,
+        fetchSessions,
+        loading: isLoadingSessions || isSaving,
       }}
     >
       {children}

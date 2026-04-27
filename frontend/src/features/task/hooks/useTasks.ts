@@ -6,14 +6,14 @@ import type {
   UpdateTaskRequest,
   UpdateTaskNameRequest,
 } from "../task.types";
-import { LOADING_TIMOUT } from "../../../app/loading.const";
+import { LOADING_TIMEOUT } from "../../../app/loading.const";
 
 const useTask = () => {
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
 
   const createTask = useCallback(async (data: TaskRequest) => {
-    let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+    let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
 
     try {
       await tasksService.createTask(data);
@@ -27,7 +27,7 @@ const useTask = () => {
   }, []);
 
   const fetchTasks = useCallback(async () => {
-    let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+    let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
 
     try {
       const res = await tasksService.fetchTasks();
@@ -44,7 +44,7 @@ const useTask = () => {
 
   const updateTaskStatus = useCallback(
     async (id: number, data: UpdateTaskRequest) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
 
       try {
         await tasksService.updateTaskStatus(id, data);
@@ -61,7 +61,7 @@ const useTask = () => {
 
   const updateTask = useCallback(
     async (id: number, data: UpdateTaskNameRequest) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
 
       try {
         await tasksService.updateTask(id, data);
@@ -77,7 +77,7 @@ const useTask = () => {
   );
 
   const deleteTask = useCallback(async (id: number) => {
-    let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+    let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
 
     try {
       await tasksService.deleteTask(id);

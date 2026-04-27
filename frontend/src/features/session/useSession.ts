@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import sessionsService from "./session.service";
 import type { ISessionGroupoResponse, SessionRequest } from "./session.types";
 import type { PaginationResponse } from "../../shared/globals.types";
-import { LOADING_TIMOUT } from "../../app/loading.const";
+import { LOADING_TIMEOUT } from "../../app/loading.const";
 
 const useSessions = () => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ const useSessions = () => {
 
   const createSession = useCallback(
     async (id: number, data: SessionRequest) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
       reset();
 
       try {
@@ -38,7 +38,7 @@ const useSessions = () => {
 
   const fetchSessions = useCallback(
     async (page: number = 1, size: number = 10) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMOUT);
+      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
       reset();
 
       try {

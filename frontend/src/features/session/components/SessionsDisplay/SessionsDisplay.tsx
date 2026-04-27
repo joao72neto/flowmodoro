@@ -3,7 +3,6 @@ import SessionsGroup from "./SessionsGroup";
 import Session from "./Session";
 
 import { useSessionContext } from "../../session.context";
-import useSessions from "../../useSession";
 import { useEffect } from "react";
 import { formatToBRDate } from "../../../../shared/utils/date.utils";
 import { formatToHour } from "../../../../shared/utils/number.utils";
@@ -14,9 +13,8 @@ import EmptySessions from "./EmptySessions";
 import SessionsSkeleton from "./SessionsSkeleton";
 
 const SessionsDisplay = () => {
-  const { success } = useSessionContext();
+  const { success, sessions, fetchSessions, loading } = useSessionContext();
   const { wasTaskDeleted } = useTaskContext();
-  const { sessions, fetchSessions, loading } = useSessions();
 
   const SIZE = 4;
 
@@ -45,7 +43,7 @@ const SessionsDisplay = () => {
     }
   }, [success, wasTaskDeleted, fetchSessions, goToPage]);
 
-  if (loading) {
+  if (loading || !sessions) {
     return (
       <div className="flex flex-col gap-6 w-full items-center">
         <SessionsSkeleton />
