@@ -29,23 +29,15 @@ const SessionDetailsModal = ({
 
       <div className="flex flex-col gap-3">
         <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-          <InfoWrapper size="md">Tempo de Foco:</InfoWrapper>
+          <InfoWrapper size="md">Tempo de Foco</InfoWrapper>
           <Line />
           <InfoWrapper>{formatToHour(session.focus)}</InfoWrapper>
         </Stack>
 
         <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-          <InfoWrapper size="md">Descanso calculado:</InfoWrapper>
+          <InfoWrapper size="md">Descanso calculado</InfoWrapper>
           <Line />
           <InfoWrapper>{formatToHour(session.rest)}</InfoWrapper>
-        </Stack>
-
-        <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-          <InfoWrapper size="md">Tempo total:</InfoWrapper>
-          <Line />
-          <InfoWrapper>
-            {formatToHour(session.focus + session.rest)}
-          </InfoWrapper>
         </Stack>
 
         <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
