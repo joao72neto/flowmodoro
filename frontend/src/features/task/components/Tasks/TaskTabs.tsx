@@ -25,16 +25,18 @@ function TaskTabs({
         )}
       >
         A fazer
-        <span
-          className={clsx(
-            "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
-            activeTab === "todo"
-              ? "bg-danger text-white"
-              : "bg-white/10 text-neutral-400",
-          )}
-        >
-          {todoCount}
-        </span>
+        {todoCount > 0 && (
+          <span
+            className={clsx(
+              "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
+              activeTab === "todo"
+                ? "bg-danger text-white"
+                : "bg-white/10 text-neutral-400",
+            )}
+          >
+            {todoCount}
+          </span>
+        )}
       </button>
       <button
         onClick={() => setActiveTab("done")}
@@ -46,16 +48,19 @@ function TaskTabs({
         )}
       >
         Concluído
-        <span
-          className={clsx(
-            "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
-            activeTab === "done"
-              ? "bg-success text-neutral-100"
-              : "bg-white/10 text-neutral-400",
-          )}
-        >
-          {doneCount}
-        </span>
+        {doneCount > 0 && (
+          <span
+            className={clsx(
+              "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
+              activeTab === "done"
+                ? "bg-success text-neutral-100"
+                : "bg-white/10 text-neutral-400",
+            )}
+          >
+            {doneCount}
+          </span>
+      )}
+        
       </button>
     </div>
   );
