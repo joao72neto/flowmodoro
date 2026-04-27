@@ -21,6 +21,7 @@ function Input({
       className={clsx(
         "flex-grow px-4 py-2 text-white rounded-md border border-white/10 ",
         "focus:border-danger focus:outline-none transition-colors duration-200 ease-in-out",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
         className,
       )}
       placeholder={placeholder}
