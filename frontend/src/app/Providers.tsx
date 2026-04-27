@@ -3,7 +3,6 @@ import { ModalProvider } from "../shared/modal.context";
 import { SessionProvider } from "../features/session/session.context";
 import { TaskProvider } from "../features/task/task.context";
 import { TimerProvider } from "../features/home/timer.context";
-import healthService from "./health.service";
 import LoadingApplication from "./LoadingApplication";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
@@ -20,7 +19,9 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
     const wakeUp = async () => {
       try {
-        await healthService.getHealth();
+        await fetch(`${import.meta.env.VITE_API_URL}/api/health`, {
+          signal: AbortSignal.timeout(10000),
+        });
 
         if (isMounted) {
           clearTimeout(loadingTimeout);
@@ -29,11 +30,11 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         }
       } catch (error) {
         console.warn(
-          "Falha grave ao acordar o backend ou timeout de 120s estourou. Tentando novamente...",
+          "Backend ainda em cold start ou timeout atingido. Nova tentativa em 3s...",
         );
 
         if (isMounted) {
-          retryTimeout = setTimeout(wakeUp, 2000);
+          retryTimeout = setTimeout(wakeUp, 3000);
         }
       }
     };
