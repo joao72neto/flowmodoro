@@ -75,6 +75,32 @@ const useTimer = () => {
             setSeconds(0);
             setMode(null);
 
+            const sendNotification = async () => {
+              if (Notification.permission !== "granted") return;
+
+              const notificationData = {
+                body: "Sua pausa acabou. Hora de voltar ao foco!",
+                icon: "/flowmodoro-icon.svg",
+                vibrate: [200, 100, 200],
+                tag: "break-finished",
+                requireInteraction: true,
+              };
+
+              try {
+                if ("serviceWorker" in navigator) {
+                  const registration = await navigator.serviceWorker.ready;
+                  registration.showNotification(
+                    "Pausa Finalizada!",
+                    notificationData,
+                  );
+                } else {
+                  new Notification("Pausa Finalizada!", notificationData);
+                }
+              } catch (error) {
+                console.error("Error showing notification:", error);
+              }
+            };
+
             const playAlarm = async () => {
               try {
                 const response = await fetch("/time-is-up-sound.mp3");
@@ -93,28 +119,8 @@ const useTimer = () => {
               }
             };
 
+            sendNotification();
             playAlarm();
-
-            if (Notification.permission === "granted") {
-              const notificationData = {
-                body: "Sua pausa acabou. Hora de voltar ao foco!",
-                icon: "/flowmodoro-icon.svg",
-                vibrate: [200, 100, 200],
-                tag: "break-finished",
-                silent: true,
-              };
-
-              if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.ready.then((registration) => {
-                  registration.showNotification(
-                    "Pausa Finalizada!",
-                    notificationData,
-                  );
-                });
-              } else {
-                new Notification("Pausa Finalizada!", notificationData);
-              }
-            }
           } else {
             setSeconds(remaining);
           }
