@@ -75,8 +75,25 @@ const useTimer = () => {
             setSeconds(0);
             setMode(null);
 
-            const audio = new Audio("/time-is-up-sound.mp3");
-            audio.play().catch((e) => console.error("Error playing audio:", e));
+            const playAlarm = async () => {
+              try {
+                const response = await fetch("/time-is-up-sound.mp3");
+                const arrayBuffer = await response.arrayBuffer();
+                const audioContext = new (
+                  window.AudioContext || (window as any).webkitAudioContext
+                )();
+                const audioBuffer =
+                  await audioContext.decodeAudioData(arrayBuffer);
+                const source = audioContext.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(audioContext.destination);
+                source.start(0);
+              } catch (e) {
+                console.error("Error playing audio:", e);
+              }
+            };
+
+            playAlarm();
 
             if (Notification.permission === "granted") {
               const notificationData = {
@@ -84,6 +101,7 @@ const useTimer = () => {
                 icon: "/flowmodoro-icon.svg",
                 vibrate: [200, 100, 200],
                 tag: "break-finished",
+                silent: true,
               };
 
               if ("serviceWorker" in navigator) {
