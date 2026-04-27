@@ -75,6 +75,10 @@ public class SessionService {
             throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
         }
 
+        if (session.getDate() == null) {
+            session.setDate(LocalDate.now());
+        }
+
         calculator.calculateRest(session);
         validator.validateSessions(session, errors);
 

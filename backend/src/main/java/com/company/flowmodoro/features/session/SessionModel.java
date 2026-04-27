@@ -2,8 +2,6 @@ package com.company.flowmodoro.features.session;
 
 import java.time.LocalDate;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.company.flowmodoro.features.task.TaskModel;
 
 import jakarta.persistence.JoinColumn;
@@ -48,7 +46,6 @@ public class SessionModel {
     private Integer interruptions;
 
     @Column(name = "ses_date", updatable = false)
-    @CreationTimestamp
     private LocalDate date;
 
     @ManyToOne()
