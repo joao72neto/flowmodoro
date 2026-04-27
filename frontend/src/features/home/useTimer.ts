@@ -79,10 +79,23 @@ const useTimer = () => {
             audio.play().catch((e) => console.error("Error playing audio:", e));
 
             if (Notification.permission === "granted") {
-              new Notification("Pausa Finalizada!", {
+              const notificationData = {
                 body: "Sua pausa acabou. Hora de voltar ao foco!",
                 icon: "/flowmodoro-icon.svg",
-              });
+                vibrate: [200, 100, 200],
+                tag: "break-finished",
+              };
+
+              if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.ready.then((registration) => {
+                  registration.showNotification(
+                    "Pausa Finalizada!",
+                    notificationData,
+                  );
+                });
+              } else {
+                new Notification("Pausa Finalizada!", notificationData);
+              }
             }
           } else {
             setSeconds(remaining);
