@@ -29,7 +29,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         }
       } catch (error) {
         console.warn(
-          "Falha grave ao acordar o backend ou timeout de 60s estourou. Tentando novamente...",
+          "Falha grave ao acordar o backend ou timeout de 120s estourou. Tentando novamente...",
         );
 
         if (isMounted) {
