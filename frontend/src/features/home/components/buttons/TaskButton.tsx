@@ -9,7 +9,7 @@ function TaskButton({
 }) {
   return (
     <div
-      title="Complete Task"
+      title="Completar a tarefa"
       onClick={onClick}
       className="inline-flex items-center justify-center mr-3 cursor-pointer"
     >
