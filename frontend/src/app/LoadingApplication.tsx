@@ -30,7 +30,7 @@ const LoadingApplication = () => {
         </div>
 
         <p className="text-xs text-neutral-500 mt-4 italic">
-          Agradecemos a sua paciência! 🎉
+          Agradeço a sua paciência! 🎉
         </p>
       </div>
     </div>

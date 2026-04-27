@@ -18,7 +18,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       if (isMounted) setShowLoading(true);
     }, 1000);
 
-    const checkHealth = async () => {
+    const wakeUp = async () => {
       try {
         await healthService.getHealth();
 
@@ -29,16 +29,16 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         }
       } catch (error) {
         console.warn(
-          "Backend não respondeu. Tentando novamente em 5 segundos...",
+          "Falha grave ao acordar o backend ou timeout de 60s estourou. Tentando novamente...",
         );
 
         if (isMounted) {
-          retryTimeout = setTimeout(checkHealth, 5000);
+          retryTimeout = setTimeout(wakeUp, 2000);
         }
       }
     };
 
-    checkHealth();
+    wakeUp();
 
     return () => {
       isMounted = false;
