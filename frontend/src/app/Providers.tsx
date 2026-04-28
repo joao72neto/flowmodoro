@@ -18,10 +18,21 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     }, 1000);
 
     const wakeUp = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       try {
-        await fetch(`${import.meta.env.VITE_API_URL}/health`, {
-          signal: AbortSignal.timeout(10000),
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/health`, {
+          signal: controller.signal,
         });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(
+            `Servidor respondendo com status: ${response.status}`,
+          );
+        }
 
         if (isMounted) {
           clearTimeout(loadingTimeout);
@@ -29,12 +40,18 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
           setShowLoading(false);
         }
       } catch (error) {
+        clearTimeout(timeoutId);
+        const isAbortError =
+          error instanceof Error && error.name === "AbortError";
+
         console.warn(
-          "Backend ainda em cold start ou timeout atingido. Nova tentativa em 3s...",
+          isAbortError
+            ? "Timeout na requisição de health check. Backend ainda ocupado..."
+            : "Backend ainda em cold start ou inacessível. Nova tentativa em 5s...",
         );
 
         if (isMounted) {
-          retryTimeout = setTimeout(wakeUp, 3000);
+          retryTimeout = setTimeout(wakeUp, 5000);
         }
       }
     };
