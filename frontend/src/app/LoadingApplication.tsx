@@ -1,6 +1,25 @@
+import { useEffect, useState } from "react";
 import { GiSandsOfTime } from "react-icons/gi";
 
+const getLoadingMessage = (seconds: number) => {
+  if (seconds < 10) return "Preparando tudo pra você...";
+  if (seconds < 40) return "Carregando a experiência...";
+  if (seconds < 70) return "Quase lá, só mais um instante...";
+  if (seconds < 100) return "Ainda trabalhando nisso...";
+  return "Está demorando mais que o esperado, mantendo a conexão ativa...";
+};
+
 const LoadingApplication = () => {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-neutral-950 flex flex-col items-center justify-center z-50 p-4">
       <div className="flex flex-col items-center max-w-sm text-center">
@@ -18,20 +37,31 @@ const LoadingApplication = () => {
 
         <p className="text-neutral-400 mb-6 leading-relaxed">
           A API está hospedada em um servidor gratuito que entra em repouso após
-          inatividade. Isso pode levar de{" "}
+          inatividade. Isso pode levar cerca de{" "}
           <span className="text-danger font-semibold text-nowrap">
-            50 a 120 segundos
+            1 minuto
           </span>
           .
         </p>
+
+        <div className="h-6 mb-6 flex items-center justify-center w-full">
+          <p className="text-sm font-medium text-white/80 animate-pulse text-center">
+            {getLoadingMessage(seconds)}
+          </p>
+        </div>
 
         <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
           <div className="bg-danger h-full animate-loading-bar" />
         </div>
 
-        <p className="text-xs text-neutral-500 mt-4 italic">
-          Agradeço a sua paciência! 🎉
-        </p>
+        <div className="flex items-center justify-between w-full mt-4">
+          <p className="text-xs text-neutral-500 italic">
+            Agradeço a sua paciência! 🎉
+          </p>
+          <span className="text-xs font-mono text-neutral-500 font-semibold">
+            {seconds}s
+          </span>
+        </div>
       </div>
     </div>
   );
