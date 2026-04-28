@@ -5,6 +5,8 @@ import clsx from "clsx";
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
 
+import { useSessionContext } from "../../../session/session.context";
+
 function Timer() {
   const {
     mode,
@@ -15,6 +17,8 @@ function Timer() {
     stopFocus,
     skipBreak,
   } = useTimerContext();
+
+  const { restRatio } = useSessionContext(); 
 
   return (
     <>
@@ -45,6 +49,7 @@ function Timer() {
             onClick={() => stopFocus()}
             variant="danger2"
             icon={<FaStopCircle size={20} />}
+            disabled={(seconds * (restRatio / 100)) < 1}
           >
             Parar
           </Button>
