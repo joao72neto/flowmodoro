@@ -34,19 +34,23 @@ const SessionDetailsModal = ({
           <InfoWrapper>{formatToHour(session.focus)}</InfoWrapper>
         </Stack>
 
-        <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-          <InfoWrapper size="md">Descanso calculado</InfoWrapper>
-          <Line />
-          <InfoWrapper>{formatToHour(session.rest)}</InfoWrapper>
-        </Stack>
+        {session.rest > 0 && (
+          <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
+            <InfoWrapper size="md">Descanso calculado</InfoWrapper>
+            <Line />
+            <InfoWrapper>{formatToHour(session.rest)}</InfoWrapper>
+          </Stack>
+        )}
 
-        <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-          <InfoWrapper size="md">Perfil de Descanso:</InfoWrapper>
-          <Line />
-          <InfoWrapper className={preset?.textClass}>
-            {preset?.label}
-          </InfoWrapper>
-        </Stack>
+        {preset && preset.label && (
+          <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
+            <InfoWrapper size="md">Perfil de Descanso:</InfoWrapper>
+            <Line />
+            <InfoWrapper className={preset?.textClass}>
+              {preset?.label}
+            </InfoWrapper>
+          </Stack>
+        )}
       </div>
     </ModalContainer>
   );
