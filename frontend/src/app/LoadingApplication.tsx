@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { GiSandsOfTime } from "react-icons/gi";
 
 const getLoadingMessage = (seconds: number) => {
-  if (seconds < 10) return "Preparando tudo pra você...";
-  if (seconds < 40) return "Carregando a experiência...";
-  if (seconds < 70) return "Quase lá, só mais um instante...";
-  if (seconds < 100) return "Ainda trabalhando nisso...";
+  if (seconds < 30) return "Preparando tudo pra você...";
+  if (seconds < 60) return "Carregando a experiência...";
+  if (seconds < 90) return "Quase lá, só mais um instante...";
+  if (seconds < 120) return "Ainda trabalhando nisso...";
   return "Está demorando mais que o esperado, mantendo a conexão ativa...";
 };
 
@@ -39,7 +39,7 @@ const LoadingApplication = () => {
           A API está hospedada em um servidor gratuito que entra em repouso após
           inatividade. Isso pode levar cerca de{" "}
           <span className="text-danger font-semibold text-nowrap">
-            1 minuto
+            1 a 2 minutos
           </span>
           .
         </p>
