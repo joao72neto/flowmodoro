@@ -28,10 +28,13 @@ function Tasks() {
     );
   }, [tasks, activeTab]);
 
+  const handleNewTask = () => {
+    handleAddTask();
+    setActiveTab("todo")
+  }
+  
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleAddTask();
-    }
+    if (e.key === "Enter") handleNewTask();
   };
 
   return (
@@ -47,7 +50,7 @@ function Tasks() {
           className="peer rounded-r-none!"
         />
         <button
-          onClick={handleAddTask}
+          onClick={handleNewTask}
           type="button"
           disabled={isAddingTask}
           title="Adicionar nova tarefa"
