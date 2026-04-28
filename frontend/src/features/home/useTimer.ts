@@ -120,20 +120,22 @@ const useTimer = () => {
 
   useEffect(() => {
     if (mode === "focus" || mode === "break") {
-      const KEEP_ALIVE_MS = 8 * 60 * 1000;
-
-      const keepAliveInterval = setInterval(() => {
-        console.log("Keep-alive: cutucando o backend...");
+      const KEEP_ALIVE_MS = 5 * 60 * 1000;
+  
+      const ping = () => {
+        console.log("Keep-alive: mantendo o backend ativo...");
         healthService.getHealth().catch(() => {});
-      }, KEEP_ALIVE_MS);
-
-      return () => clearInterval(keepAliveInterval);
+      };
+  
+      ping();
+  
+      const interval = setInterval(ping, KEEP_ALIVE_MS);
+      
+      return () => clearInterval(interval);
     }
   }, [mode]);
 
   const startFocus = () => {
-    healthService.getHealth().catch(() => {});
-
     if (!activeTask) {
       showDefault({
         title: "Nenhuma tarefa selecionada",
