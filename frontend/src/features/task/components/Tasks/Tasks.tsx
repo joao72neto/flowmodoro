@@ -29,10 +29,12 @@ function Tasks() {
   }, [tasks, activeTab]);
 
   const handleNewTask = () => {
+    if (!newTask) return;
+
     handleAddTask();
-    setActiveTab("todo")
-  }
-  
+    setActiveTab("todo");
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handleNewTask();
   };
