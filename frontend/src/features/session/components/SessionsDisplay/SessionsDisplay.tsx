@@ -1,6 +1,6 @@
 import SessionsWrapper from "./SessionsWrapper";
 import SessionsGroup from "./SessionsGroup";
-import Session from "./Session";
+import TaskGroup from "./TaskGroup";
 
 import { useSessionContext } from "../../session.context";
 import { useEffect } from "react";
@@ -64,8 +64,8 @@ const SessionsDisplay = () => {
                 groupName={formatToBRDate(sessionGroup.date)}
                 totalFocus={formatToHour(sessionGroup.totalFocus)}
               >
-                {sessionGroup.sessions.map((session, index) => (
-                  <Session key={index} session={session} />
+                {sessionGroup.taskGroups.map((taskGroup, index) => (
+                  <TaskGroup key={index} taskGroup={taskGroup} />
                 ))}
               </SessionsGroup>
             ))}

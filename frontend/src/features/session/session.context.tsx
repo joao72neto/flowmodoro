@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import useSessions from "./useSession";
 import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
-import type { ISessionGroupoResponse } from "./session.types";
+import type { ISessionGroupResponse } from "./session.types";
 import type { PaginationResponse } from "../../shared/globals.types";
 
 interface ISaveSessionData {
@@ -17,11 +17,11 @@ interface ISessionContext {
   setSuccess: (success: boolean) => void;
   restRatio: number;
   setRestRatio: (ratio: number) => void;
-  sessions: PaginationResponse<ISessionGroupoResponse> | undefined;
+  sessions: PaginationResponse<ISessionGroupResponse> | undefined;
   fetchSessions: (
     page?: number,
     size?: number,
-  ) => Promise<PaginationResponse<ISessionGroupoResponse>>;
+  ) => Promise<PaginationResponse<ISessionGroupResponse>>;
   loading: boolean;
 }
 

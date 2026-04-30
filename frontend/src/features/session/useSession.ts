@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import sessionsService from "./session.service";
-import type { ISessionGroupoResponse, SessionRequest } from "./session.types";
+import type { ISessionGroupResponse, SessionRequest } from "./session.types";
 import type { PaginationResponse } from "../../shared/globals.types";
 import { LOADING_TIMEOUT } from "../../app/loading.const";
 
@@ -9,7 +9,7 @@ const useSessions = () => {
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
   const [sessions, setSessions] =
-    useState<PaginationResponse<ISessionGroupoResponse>>();
+    useState<PaginationResponse<ISessionGroupResponse>>();
 
   const reset = useCallback(() => {
     setError(null);
@@ -43,7 +43,7 @@ const useSessions = () => {
 
       try {
         const res = await sessionsService.getSessions(page, size);
-        const data: PaginationResponse<ISessionGroupoResponse> = res.data;
+        const data: PaginationResponse<ISessionGroupResponse> = res.data;
         setSessions(data);
         return data;
       } catch (e: any) {

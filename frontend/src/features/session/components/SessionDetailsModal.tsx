@@ -11,9 +11,11 @@ import InfoWrapper from "../../../shared/components/InfoWrapper";
 
 const SessionDetailsModal = ({
   session,
+  task,
   close,
 }: {
   session: SessionResponse;
+  task: { id: number; name: string };
   close: () => void;
 }) => {
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
@@ -22,7 +24,7 @@ const SessionDetailsModal = ({
     <ModalContainer close={close}>
       <Stack direction="row" justify="between">
         <h1 className="flex-1 font-bold text-xl line-clamp-1 break-all text-left pl-1">
-          {capitalize(session.task.name)}
+          {capitalize(task.name)}
         </h1>
         <IoClose size={30} className="cursor-pointer" onClick={close} />
       </Stack>

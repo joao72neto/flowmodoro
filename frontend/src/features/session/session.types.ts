@@ -1,8 +1,19 @@
-export interface ISessionGroupoResponse {
+export interface ITaskGroup {
+  task: {
+    id: number;
+    name: string;
+    checked: boolean;
+  };
+  taskTotalFocus: number;
+  taskTotalRest: number;
+  sessions: SessionResponse[];
+}
+
+export interface ISessionGroupResponse {
   date: string;
   totalFocus: number;
   totalRest: number;
-  sessions: SessionResponse[];
+  taskGroups: ITaskGroup[];
 }
 
 export interface SessionResponse {
@@ -11,7 +22,7 @@ export interface SessionResponse {
   rest: number;
   ratio: number;
   interruptions: number;
-  task: {
+  task?: {
     id: number;
     name: string;
   };

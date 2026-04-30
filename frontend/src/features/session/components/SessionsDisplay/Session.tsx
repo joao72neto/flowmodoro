@@ -5,9 +5,14 @@ import { formatToHour } from "../../../../shared/utils/number.utils";
 import SessionDetailsModal from "../SessionDetailsModal";
 import { useState } from "react";
 import type { SessionResponse } from "../../session.types";
-import { capitalize } from "../../../../shared/utils/string.utils";
 
-const Session = ({ session }: { session: SessionResponse }) => {
+const Session = ({
+  session,
+  task,
+}: {
+  session: SessionResponse;
+  task: { id: number; name: string };
+}) => {
   const [showSessionDetailsModal, setShowSessionDetailsModal] =
     useState<boolean>(false);
 
@@ -22,17 +27,17 @@ const Session = ({ session }: { session: SessionResponse }) => {
           direction="row"
           justify="between"
           className={clsx(
-            "border border-white/10 shadow-lg p-3 sm:p-4 cursor-pointer rounded-xl w-full ",
-            "hover:scale-102 duration-200 hover:shadow-xl bg-black/20",
+            "border border-white/5 shadow-md p-2 sm:p-3 cursor-pointer rounded-lg w-full",
+            "hover:bg-white/4 duration-200 bg-black/10",
           )}
         >
-          <span className="flex-1 text-lg sm:text-xl line-clamp-1 break-all">
-            {capitalize(session.task.name)}
+          <span className="flex-1 text-sm sm:text-base opacity-70">
+            {task.name}
           </span>
           <span
             className={clsx(
-              "text-sm sm:text-base bg-white/10 border border-white/10 ",
-              "px-2 py-1 rounded-lg shadow",
+              "text-xs sm:text-sm bg-white/5 border border-white/5 ",
+              "px-2 py-0.5 rounded-md shadow",
             )}
           >
             {formatToHour(session.focus)}
@@ -40,7 +45,11 @@ const Session = ({ session }: { session: SessionResponse }) => {
         </Stack>
       </div>
       {showSessionDetailsModal && (
-        <SessionDetailsModal session={session} close={handleDetailsModal} />
+        <SessionDetailsModal
+          session={session}
+          task={task}
+          close={handleDetailsModal}
+        />
       )}
     </>
   );
