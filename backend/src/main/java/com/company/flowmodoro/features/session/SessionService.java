@@ -82,22 +82,9 @@ public class SessionService {
         calculator.calculateRest(session);
         validator.validateSessions(session, errors);
 
-        Optional<SessionModel> existingSession = sessionRepository
-                .findByUserIdAndTaskIdAndDate(userId, taskId, session.getDate());
-
-        if (existingSession.isPresent()) {
-            SessionModel existing = existingSession.get();
-            existing.setFocus(existing.getFocus() + session.getFocus());
-            existing.setRest(existing.getRest() + session.getRest());
-            existing.setInterruptions(existing.getInterruptions() + session.getInterruptions());
-            existing.setRatio(calculator.calculateRatio(existing.getFocus(), existing.getRest()));
-
-            return sessionRepository.save(existing);
-        } else {
-            session.setTask(task);
-            session.setUserId(userId);
-            return sessionRepository.save(session);
-        }
+        session.setTask(task);
+        session.setUserId(userId);
+        return sessionRepository.save(session);
     }
 
     public PageResponse<DailySessionsDTO> consult(int page, int size, String userId) {

@@ -55,7 +55,7 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
         </Stack>
       </Stack>
       <AnimatedCollapse show={isOpen}>
-        <Stack gap={2} className="pl-6 border-white/5 w-full">
+        <Stack gap={2} className="px-1 border-white/5 w-full">
           {taskGroup.sessions.map((session) => (
             <Session key={session.id} session={session} task={taskGroup.task} />
           ))}
