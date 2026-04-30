@@ -87,10 +87,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     if (newTask.trim() === "") return;
     setIsAddingTask(true);
     try {
-      await createTask({ name: newTask, checked: false });
+      const res = await createTask({ name: newTask, checked: false });
       await fetchTasks();
       setNewTask("");
       setSelectedTask(newTask);
+      setManualActiveTaskId(res.id);
     } catch (error: any) {
       if (error instanceof Error)
         showError({

@@ -15,11 +15,12 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
   const isTogglable = taskGroup.sessions.length > 1;
 
   return (
-    <div className="flex flex-col gap-2 w-full cursor-pointer hover ">
+    <div className="flex flex-col gap-2 w-full">
       <Stack
         className={clsx(
-          "w-full bg-white/4 rounded-xl p-3 sm:p-4 border border-white/10 hover:bg-white/3",
-          "shadow-xl transition-colors",
+          "w-full bg-white/4 rounded-xl p-3 sm:p-4 border border-white/10",
+          "shadow-xl transition-colors hover:bg-white/3",
+          isTogglable && "cursor-pointer",
         )}
         gap={3}
         onClick={isTogglable ? handleToggle : undefined}

@@ -12,19 +12,22 @@ const useTask = () => {
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
 
-  const createTask = useCallback(async (data: TaskRequest) => {
-    let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
+  const createTask = useCallback(
+    async (data: TaskRequest): Promise<TaskResponse> => {
+      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
 
-    try {
-      await tasksService.createTask(data);
-      return true;
-    } catch (e: any) {
-      throw e;
-    } finally {
-      setLoading(false);
-      clearTimeout(timer);
-    }
-  }, []);
+      try {
+        const res = await tasksService.createTask(data);
+        return res.data;
+      } catch (e: any) {
+        throw e;
+      } finally {
+        setLoading(false);
+        clearTimeout(timer);
+      }
+    },
+    [],
+  );
 
   const fetchTasks = useCallback(async () => {
     let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
