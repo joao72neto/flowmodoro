@@ -28,7 +28,7 @@ const Session = ({
           justify="between"
           className={clsx(
             "border border-white/5 shadow-md p-2 sm:p-3 cursor-pointer rounded-lg w-full",
-            "hover:bg-white/4 duration-200 bg-black/10",
+            "hover:bg-white/4 duration-200 bg-black/20",
           )}
         >
           <span className="flex-1 text-sm sm:text-base opacity-70">

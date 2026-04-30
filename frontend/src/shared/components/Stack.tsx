@@ -24,6 +24,7 @@ interface StackProps {
   gap?: keyof typeof gaps;
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
 const Stack = ({
@@ -34,9 +35,11 @@ const Stack = ({
   wFull,
   className,
   children,
+  onClick,
 }: StackProps) => {
   return (
     <div
+      onClick={onClick}
       className={clsx(
         "flex",
         direction === "col" ? "flex-col" : "flex-row",
