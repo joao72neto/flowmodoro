@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
-
 import com.company.flowmodoro.features.session.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.session.dtos.SessionDTO;
 import com.company.flowmodoro.features.task.dtos.TaskDTO;
+import com.company.flowmodoro.features.task.dtos.TaskGroupDTO;
 
 @Component
 public class SessionAggregator {
@@ -31,42 +31,55 @@ public class SessionAggregator {
     }
 
     private DailySessionsDTO aggregateSessionsForOneDay(LocalDate date, List<SessionModel> daySessions) {
-        Map<Long, SessionDTO> tasksMap = new LinkedHashMap<>();
-        long totalFocus = 0;
-        long totalRest = 0;
+        Map<Long, TaskGroupDTO> tasksMap = new LinkedHashMap<>();
+        long dailyTotalFocus = 0;
+        long dailyTotalRest = 0;
 
-        for (SessionModel s : daySessions) {
-            totalFocus += s.getFocus();
-            totalRest += s.getRest();
-            Long taskId = s.getTask().getId();
+        for (SessionModel sessionModel : daySessions) {
+            dailyTotalFocus += sessionModel.getFocus();
+            dailyTotalRest += sessionModel.getRest();
+
+            Long taskId = sessionModel.getTask().getId();
+
+            SessionDTO currentSessionDTO = SessionDTO.builder()
+                    .id(sessionModel.getId())
+                    .focus(sessionModel.getFocus())
+                    .rest(sessionModel.getRest())
+                    .ratio(sessionModel.getRatio())
+                    .interruptions(sessionModel.getInterruptions())
+                    .build();
 
             if (tasksMap.containsKey(taskId)) {
-                SessionDTO acc = tasksMap.get(taskId);
-                acc.setFocus(acc.getFocus() + s.getFocus());
-                acc.setRest(acc.getRest() + s.getRest());
-                acc.setInterruptions(acc.getInterruptions() + s.getInterruptions());
+                TaskGroupDTO existingGroup = tasksMap.get(taskId);
+                existingGroup.setTaskTotalFocus(existingGroup.getTaskTotalFocus() + sessionModel.getFocus());
+                existingGroup.setTaskTotalRest(existingGroup.getTaskTotalRest() + sessionModel.getRest());
+                existingGroup.getSessions().add(currentSessionDTO);
             } else {
-                SessionDTO dto = SessionDTO.builder()
-                        .id(s.getId())
-                        .focus(s.getFocus())
-                        .rest(s.getRest())
-                        .ratio(s.getRatio())
-                        .interruptions(s.getInterruptions())
-                        .task(TaskDTO.builder()
-                                .id(s.getTask().getId())
-                                .name(s.getTask().getName())
-                                .checked(s.getTask().getChecked())
-                                .build())
+                TaskDTO taskDTO = TaskDTO.builder()
+                        .id(sessionModel.getTask().getId())
+                        .name(sessionModel.getTask().getName())
+                        .checked(sessionModel.getTask().getChecked())
                         .build();
-                tasksMap.put(taskId, dto);
+
+                List<SessionDTO> initialSessionsList = new ArrayList<>();
+                initialSessionsList.add(currentSessionDTO);
+
+                TaskGroupDTO newGroup = TaskGroupDTO.builder()
+                        .task(taskDTO)
+                        .taskTotalFocus(sessionModel.getFocus())
+                        .taskTotalRest(sessionModel.getRest())
+                        .sessions(initialSessionsList)
+                        .build();
+
+                tasksMap.put(taskId, newGroup);
             }
         }
 
         return DailySessionsDTO.builder()
                 .date(date)
-                .totalFocus(totalFocus)
-                .totalRest(totalRest)
-                .sessions(new ArrayList<>(tasksMap.values()))
+                .totalFocus(dailyTotalFocus)
+                .totalRest(dailyTotalRest)
+                .taskGroups(new ArrayList<>(tasksMap.values()))
                 .build();
     }
 }
