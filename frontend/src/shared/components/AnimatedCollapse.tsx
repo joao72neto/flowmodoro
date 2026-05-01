@@ -10,10 +10,11 @@ export const AnimatedCollapse = ({ show, children }: AnimatedCollapseProps) => {
   return (
     <div
       className={clsx(
-        "grid transition-all duration-300 ease-in-out overflow-hidden w-full",
+        "grid overflow-hidden w-full transition-all duration-300 ease-in-out transform-gpu origin-top",
+        "will-change-[grid-template-rows,opacity,transform]",
         show
           ? "grid-rows-[1fr] opacity-100 translate-y-0"
-          : "grid-rows-[0fr] opacity-0 -translate-y-2",
+          : "grid-rows-[0fr] opacity-0 -translate-y-2 pointer-events-none",
       )}
     >
       <div className="min-h-0">{children}</div>
