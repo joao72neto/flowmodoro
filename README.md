@@ -2,6 +2,9 @@
 
 O **Flowmodoro** é uma ferramenta de produtividade desenvolvida para ajudar usuários a equilibrar sessões de trabalho focado com períodos de descanso, utilizando a abordagem de "fluxo" para a gestão de tempo.
 
+<img width="926" height="723" alt="image" src="https://github.com/user-attachments/assets/65b80a9f-d213-4135-92cf-b61f5404998d" />
+
+
 ## 🚀 Funcionalidades
 
 - **Timer de Fluxo:** Acompanhamento dinâmico de sessões de foco e pausas automáticas.
