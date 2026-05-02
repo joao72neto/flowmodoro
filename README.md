@@ -4,13 +4,44 @@ O **Flowmodoro** é uma ferramenta de produtividade desenvolvida para ajudar usu
 
 <img width="926" height="723" alt="image" src="https://github.com/user-attachments/assets/65b80a9f-d213-4135-92cf-b61f5404998d" />
 
-
 ## 🚀 Funcionalidades
 
-- **Timer de Fluxo:** Acompanhamento dinâmico de sessões de foco e pausas automáticas.
-- **Gestão de Tarefas:** Organização e acompanhamento de tarefas integradas ao cronômetro.
-- **Histórico de Sessões:** Visualização detalhada das sessões concluídas e produtividade.
-- **Design Responsivo:** Interface moderna e intuitiva adaptada para diferentes dispositivos.
+### Timer de Fluxo
+
+O timer é o componente principal da aplicação. O diferencial está no cálculo automático de pausas com base no foco total do usuário. 
+
+Além disso, ele é persistente: não perde a contagem mesmo se o usuário trocar de aba ou fechar o navegador. Quando a aplicação é aberta novamente, o último estado é recuperado e o tempo é recalculado com base na data atual, mantendo o timer consistente.
+
+Também é possível selecionar 3 modos de fluxo:
+- **Intenso**: utiliza 10% do foco total como descanso;
+- **Padrão**: utiliza 20% para o descanso;
+- **Leve**: utiliza 30% para o descanso;
+
+Quando o usuário inicia o descanso calculado pelo app, ele pode:
+- esperar até o fim (uma notificação será enviada ao término);
+- ou pular a pausa e iniciar uma nova sessão.
+
+### Gestão de Tarefas
+
+A aplicação possui uma sidebar no lado direito responsável pelo gerenciamento das tarefas.
+
+Nela é possível:
+- criar
+- editar
+- excluir
+- iniciar o tracking de uma tarefa ao clicar no botão de play
+
+### Histórico de Sessões
+
+Quando o timer é finalizado, um modal é exibido perguntando se o usuário deseja salvar ou descartar a sessão.
+
+Caso a sessão seja salva, ela aparece na parte inferior da tela, sendo agrupada por dias conforme o uso da aplicação.
+
+### Design responsivo
+
+A aplicação funciona tanto no desktop quanto no mobile e possui suporte a PWA.
+
+Em navegadores como o Chrome no celular, é possível instalar a aplicação para que ela fique disponível como um app no dispositivo.
 
 ## 🛠️ Tecnologias
 
@@ -26,7 +57,20 @@ O **Flowmodoro** é uma ferramenta de produtividade desenvolvida para ajudar usu
 - **React Context API** para gerenciamento de estado
 - **Axios** para comunicação com a API
 
-## 🏁 Como Começar
+## 🚀 Deploy
+
+O deploy foi realizado em plataformas gratuitas. Por conta disso, em alguns momentos pode haver:
+- **cold start** da API
+- expiração do banco de dados após **90 dias de inatividade**
+
+### Plataformas utilizadas
+- **Frontend:** Vercel
+- **API Spring e banco de dados:** Render
+
+A aplicação pode ser acessada aqui:  
+👉 https://flowmodoro-jsn.vercel.app/
+
+## 🏁 Como rodar localmente
 
 ### Pré-requisitos
 - Docker e Docker Compose
