@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse {
-    private ErrorCode code;
-    private List<String> errors;
+
+	private ErrorCode code;
+
+	private List<String> errors;
+
 }

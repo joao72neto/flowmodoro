@@ -10,18 +10,20 @@ import com.company.flowmodoro.features.session.exceptions.InvalidSessionExceptio
 
 @Component
 public class SessionValidator {
-  public void validateSessions(SessionModel session, List<String> errors) {
 
-    if (session.getRatio() < 0 || session.getRatio() > 1) {
-      errors.add("Ratio needs to be between 0 and 1");
-    }
+	public void validateSessions(SessionModel session, List<String> errors) {
 
-    if (session.getInterruptions() < 0) {
-      errors.add("Interruptions can't be less than 0");
-    }
+		if (session.getRatio() < 0 || session.getRatio() > 1) {
+			errors.add("Ratio needs to be between 0 and 1");
+		}
 
-    if (!errors.isEmpty()) {
-      throw new InvalidSessionException(SessionErrorCode.INVALID_SESSION, errors);
-    }
-  }
+		if (session.getInterruptions() < 0) {
+			errors.add("Interruptions can't be less than 0");
+		}
+
+		if (!errors.isEmpty()) {
+			throw new InvalidSessionException(SessionErrorCode.INVALID_SESSION, errors);
+		}
+	}
+
 }

@@ -121,16 +121,16 @@ const useTimer = () => {
   useEffect(() => {
     if (mode === "focus" || mode === "break") {
       const KEEP_ALIVE_MS = 5 * 60 * 1000;
-  
+
       const ping = () => {
         console.log("Keep-alive: mantendo o backend ativo...");
         healthService.getHealth().catch(() => {});
       };
-  
+
       ping();
-  
+
       const interval = setInterval(ping, KEEP_ALIVE_MS);
-      
+
       return () => clearInterval(interval);
     }
   }, [mode]);

@@ -19,7 +19,7 @@ const baseStyle = clsx(
   "disabled:cursor-not-allowed",
   "disabled:hover:scale-100",
   "disabled:hover:brightness-100",
-  "disabled:active:scale-100"
+  "disabled:active:scale-100",
 );
 
 const variants = {

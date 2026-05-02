@@ -59,8 +59,7 @@ function TaskTabs({
           >
             {doneCount}
           </span>
-      )}
-        
+        )}
       </button>
     </div>
   );

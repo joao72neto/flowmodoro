@@ -11,62 +11,64 @@ import com.company.flowmodoro.features.task.exceptions.InvalidTaskException;
 @Service
 public class TaskService {
 
-  private static final TaskErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
-  private final TaskRepository taskRepository;
+	private static final TaskErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
 
-  public TaskService(TaskRepository taskRepository) {
-    this.taskRepository = taskRepository;
-  }
+	private final TaskRepository taskRepository;
 
-  public List<TaskModel> consult(String userId) {
-    return taskRepository.findAllByUserIdOrderByIdDesc(userId);
-  }
+	public TaskService(TaskRepository taskRepository) {
+		this.taskRepository = taskRepository;
+	}
 
-  public TaskModel save(TaskModel task, String userId) {
-    task.setUserId(userId);
-    return taskRepository.save(task);
-  }
+	public List<TaskModel> consult(String userId) {
+		return taskRepository.findAllByUserIdOrderByIdDesc(userId);
+	}
 
-  @Transactional
-  public void deleteById(Long id, String userId) {
-    TaskModel taskToDelete = taskRepository.findById(id)
-        .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to delete"));
+	public TaskModel save(TaskModel task, String userId) {
+		task.setUserId(userId);
+		return taskRepository.save(task);
+	}
 
-    if (!taskToDelete.getUserId().equals(userId)) {
-      throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to delete this task");
-    }
+	@Transactional
+	public void deleteById(Long id, String userId) {
+		TaskModel taskToDelete = taskRepository.findById(id)
+			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to delete"));
 
-    taskRepository.delete(taskToDelete);
-  }
+		if (!taskToDelete.getUserId().equals(userId)) {
+			throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to delete this task");
+		}
 
-  @Transactional
-  public TaskModel updateStatus(Long id, TaskModel task, String userId) {
-    TaskModel taskToUpdate = taskRepository.findById(id)
-        .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update status"));
+		taskRepository.delete(taskToDelete);
+	}
 
-    if (!taskToUpdate.getUserId().equals(userId)) {
-      throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to update this task");
-    }
+	@Transactional
+	public TaskModel updateStatus(Long id, TaskModel task, String userId) {
+		TaskModel taskToUpdate = taskRepository.findById(id)
+			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update status"));
 
-    taskToUpdate.setChecked(task.getChecked());
+		if (!taskToUpdate.getUserId().equals(userId)) {
+			throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to update this task");
+		}
 
-    return taskToUpdate;
-  }
+		taskToUpdate.setChecked(task.getChecked());
 
-  @Transactional
-  public TaskModel update(Long id, TaskModel task, String userId) {
-    TaskModel taskToUpdate = taskRepository.findById(id)
-        .orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update"));
+		return taskToUpdate;
+	}
 
-    if (!taskToUpdate.getUserId().equals(userId)) {
-      throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to update this task");
-    }
+	@Transactional
+	public TaskModel update(Long id, TaskModel task, String userId) {
+		TaskModel taskToUpdate = taskRepository.findById(id)
+			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update"));
 
-    taskToUpdate.setName(task.getName());
-    if (task.getChecked() != null) {
-      taskToUpdate.setChecked(task.getChecked());
-    }
+		if (!taskToUpdate.getUserId().equals(userId)) {
+			throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to update this task");
+		}
 
-    return taskToUpdate;
-  }
+		taskToUpdate.setName(task.getName());
+		if (task.getChecked() != null) {
+			taskToUpdate.setChecked(task.getChecked());
+		}
+
+		return taskToUpdate;
+	}
+
 }

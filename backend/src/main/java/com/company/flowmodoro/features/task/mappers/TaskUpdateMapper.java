@@ -7,17 +7,13 @@ import com.company.flowmodoro.features.task.dtos.TaskUpdateDTO;
 
 @Component
 public class TaskUpdateMapper {
-  public TaskModel toEntity(TaskUpdateDTO taskUpdateDTO) {
-    return TaskModel.builder()
-        .name(taskUpdateDTO.getName())
-        .checked(taskUpdateDTO.getChecked())
-        .build();
-  }
 
-  public TaskUpdateDTO toDTO(TaskModel task) {
-    return TaskUpdateDTO.builder()
-        .name(task.getName())
-        .checked(task.getChecked())
-        .build();
-  }
+	public TaskModel toEntity(TaskUpdateDTO taskUpdateDTO) {
+		return TaskModel.builder().name(taskUpdateDTO.getName()).checked(taskUpdateDTO.getChecked()).build();
+	}
+
+	public TaskUpdateDTO toDTO(TaskModel task) {
+		return TaskUpdateDTO.builder().name(task.getName()).checked(task.getChecked()).build();
+	}
+
 }

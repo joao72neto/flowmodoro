@@ -24,40 +24,40 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @RequestMapping("/api/session")
 public class SessionController {
 
-    private final SessionService sessionService;
-    private final SessionMapper mapper;
+	private final SessionService sessionService;
 
-    public SessionController(SessionService sessionService, SessionMapper mapper) {
-        this.sessionService = sessionService;
-        this.mapper = mapper;
-    }
+	private final SessionMapper mapper;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<SessionDTO> save(@PathVariable Long id, @RequestBody SessionDTO dto,
-            @RequestHeader("X-User-Id") String userId) {
-        SessionModel session = sessionService.save(mapper.toEntity(dto), id, userId);
-        return ResponseEntity.status(201).body(mapper.toDTO(session));
-    }
+	public SessionController(SessionService sessionService, SessionMapper mapper) {
+		this.sessionService = sessionService;
+		this.mapper = mapper;
+	}
 
-    @GetMapping
-    public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestHeader("X-User-Id") String userId) {
-        return ResponseEntity.ok(sessionService.consult(page - 1, size, userId));
-    }
+	@PostMapping("/{id}")
+	public ResponseEntity<SessionDTO> save(@PathVariable Long id, @RequestBody SessionDTO dto,
+			@RequestHeader("X-User-Id") String userId) {
+		SessionModel session = sessionService.save(mapper.toEntity(dto), id, userId);
+		return ResponseEntity.status(201).body(mapper.toDTO(session));
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionUpdateDTO dto,
-            @RequestHeader("X-User-Id") String userId) {
-        SessionModel session = sessionService.update(id, dto, userId);
-        return ResponseEntity.ok(mapper.toDTO(session));
-    }
+	@GetMapping
+	public ResponseEntity<PageResponse<DailySessionsDTO>> consult(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestHeader("X-User-Id") String userId) {
+		return ResponseEntity.ok(sessionService.consult(page - 1, size, userId));
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("X-User-Id") String userId) {
-        sessionService.delete(id, userId);
+	@PutMapping("/{id}")
+	public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionUpdateDTO dto,
+			@RequestHeader("X-User-Id") String userId) {
+		SessionModel session = sessionService.update(id, dto, userId);
+		return ResponseEntity.ok(mapper.toDTO(session));
+	}
 
-        return ResponseEntity.noContent().build();
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("X-User-Id") String userId) {
+		sessionService.delete(id, userId);
+
+		return ResponseEntity.noContent().build();
+	}
+
 }

@@ -3,26 +3,29 @@ package com.company.flowmodoro.shared.exception;
 import java.util.List;
 
 public class BaseException extends RuntimeException {
-  private final List<String> errors;
-  private final ErrorCode code;
 
-  public BaseException(ErrorCode code, String error) {
-    super(error);
-    this.code = code;
-    this.errors = List.of(error);
-  }
+	private final List<String> errors;
 
-  public BaseException(ErrorCode code, List<String> errors) {
-    super(String.join(", ", errors));
-    this.code = code;
-    this.errors = errors;
-  }
+	private final ErrorCode code;
 
-  public ErrorCode getCode() {
-    return code;
-  }
+	public BaseException(ErrorCode code, String error) {
+		super(error);
+		this.code = code;
+		this.errors = List.of(error);
+	}
 
-  public List<String> getErrors() {
-    return errors;
-  }
+	public BaseException(ErrorCode code, List<String> errors) {
+		super(String.join(", ", errors));
+		this.code = code;
+		this.errors = errors;
+	}
+
+	public ErrorCode getCode() {
+		return code;
+	}
+
+	public List<String> getErrors() {
+		return errors;
+	}
+
 }

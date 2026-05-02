@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskUpdateDTO {
-  private String name;
-  private Boolean checked;
+
+	private String name;
+
+	private Boolean checked;
+
 }

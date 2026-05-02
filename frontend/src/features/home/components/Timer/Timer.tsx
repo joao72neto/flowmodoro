@@ -18,7 +18,7 @@ function Timer() {
     skipBreak,
   } = useTimerContext();
 
-  const { restRatio } = useSessionContext(); 
+  const { restRatio } = useSessionContext();
 
   return (
     <>
@@ -49,7 +49,7 @@ function Timer() {
             onClick={() => stopFocus()}
             variant="danger2"
             icon={<FaStopCircle size={20} />}
-            disabled={(seconds * (restRatio / 100)) < 1}
+            disabled={seconds * (restRatio / 100) < 1}
           >
             Parar
           </Button>

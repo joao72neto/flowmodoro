@@ -2,22 +2,26 @@
 
 O **Flowmodoro** é uma ferramenta de produtividade desenvolvida para ajudar usuários a equilibrar sessões de trabalho focado com períodos de descanso, utilizando a abordagem de "fluxo" para a gestão de tempo.
 
-<img width="926" height="723" alt="image" src="./frontend/docs/flowmodoro-preview.png" />
+<div align="center">
+  <img alt="Flowmodoro preview" src="./frontend/docs/flowmodoro-preview.png" />
+</div>
 
 ## 🚀 Funcionalidades
 
 ### Timer de Fluxo
 
-O timer é o componente principal da aplicação. O diferencial está no cálculo automático de pausas com base no foco total do usuário. 
+O timer é o componente principal da aplicação. O diferencial está no cálculo automático de pausas com base no foco total do usuário.
 
 Além disso, ele é persistente: não perde a contagem mesmo se o usuário trocar de aba ou fechar o navegador. Quando a aplicação é aberta novamente, o último estado é recuperado e o tempo é recalculado com base na data atual, mantendo o timer consistente.
 
 Também é possível selecionar 3 modos de fluxo:
+
 - **Intenso**: utiliza 10% do foco total como descanso;
 - **Padrão**: utiliza 20% para o descanso;
 - **Leve**: utiliza 30% para o descanso;
 
 Quando o usuário inicia o descanso calculado pelo app, ele pode:
+
 - esperar até o fim (uma notificação será enviada ao término);
 - ou pular a pausa e iniciar uma nova sessão.
 
@@ -26,6 +30,7 @@ Quando o usuário inicia o descanso calculado pelo app, ele pode:
 A aplicação possui uma sidebar no lado direito responsável pelo gerenciamento das tarefas.
 
 Nela é possível:
+
 - criar
 - editar
 - excluir
@@ -46,12 +51,14 @@ Em navegadores como o Chrome no celular, é possível instalar a aplicação par
 ## 🛠️ Tecnologias
 
 ### Backend
+
 - **Java 21** com **Spring Boot 3.5.6**
 - **PostgreSQL** para persistência de dados
 - **Spring Data JPA** & **Lombok**
 - **Maven** como gerenciador de dependências
 
 ### Frontend
+
 - **React 19** com **TypeScript** e **Vite**
 - **Tailwind CSS 4** para estilização
 - **React Context API** para gerenciamento de estado
@@ -60,10 +67,12 @@ Em navegadores como o Chrome no celular, é possível instalar a aplicação par
 ## 🚀 Deploy
 
 O deploy foi realizado em plataformas gratuitas. Por conta disso, em alguns momentos pode haver:
+
 - **cold start** da API
 - expiração do banco de dados após **90 dias de inatividade**
 
 ### Plataformas utilizadas
+
 - **Frontend:** Vercel
 - **API Spring e banco de dados:** Render
 
@@ -73,6 +82,7 @@ A aplicação pode ser acessada aqui:
 ## 🏁 Como rodar localmente
 
 ### Pré-requisitos
+
 - Docker e Docker Compose
 - Java 21+
 - Node.js 20+
@@ -80,12 +90,14 @@ A aplicação pode ser acessada aqui:
 ### Instalação
 
 1. **Clonar o repositório:**
+
    ```bash
    git clone https://github.com/seu-usuario/flowmodoro.git
    cd flowmodoro
    ```
 
 2. **Subir o banco de dados:**
+
    ```bash
    docker compose up -d
    ```

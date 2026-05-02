@@ -25,21 +25,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TaskModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "tsk_id")
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "tsk_id")
+	private Long id;
 
-  @Column(name = "tsk_name")
-  private String name;
+	@Column(name = "tsk_name")
+	private String name;
 
-  @Column(name = "tsk_checked")
-  private Boolean checked;
+	@Column(name = "tsk_checked")
+	private Boolean checked;
 
-  @Column(name = "tsk_user_id")
-  private String userId;
+	@Column(name = "tsk_user_id")
+	private String userId;
 
-  @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
-  private List<SessionModel> session;
+	@OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
+	private List<SessionModel> session;
 
 }

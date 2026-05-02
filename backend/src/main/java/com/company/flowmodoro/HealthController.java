@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class HealthController {
-  @GetMapping("/health")
-  public ResponseEntity<Void> healthCheck() {
-    return ResponseEntity.ok().build();
-  }
+
+	@GetMapping("/health")
+	public ResponseEntity<Void> healthCheck() {
+		return ResponseEntity.ok().build();
+	}
+
 }

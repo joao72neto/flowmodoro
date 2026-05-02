@@ -25,30 +25,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SessionModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ses_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ses_id")
+	private Long id;
 
-    @Column(name = "ses_focus")
-    private Long focus;
+	@Column(name = "ses_focus")
+	private Long focus;
 
-    @Column(name = "ses_ratio")
-    private Double ratio;
+	@Column(name = "ses_ratio")
+	private Double ratio;
 
-    @Column(name = "ses_rest")
-    private Long rest;
+	@Column(name = "ses_rest")
+	private Long rest;
 
-    @Column(name = "ses_user_id")
-    private String userId;
+	@Column(name = "ses_user_id")
+	private String userId;
 
-    @Column(name = "ses_interruptions")
-    private Integer interruptions;
+	@Column(name = "ses_interruptions")
+	private Integer interruptions;
 
-    @Column(name = "ses_date", updatable = false)
-    private LocalDate date;
+	@Column(name = "ses_date", updatable = false)
+	private LocalDate date;
 
-    @ManyToOne()
-    @JoinColumn(name = "ses_tsk_id")
-    private TaskModel task;
+	@ManyToOne()
+	@JoinColumn(name = "ses_tsk_id")
+	private TaskModel task;
+
 }
