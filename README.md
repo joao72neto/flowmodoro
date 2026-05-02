@@ -42,6 +42,8 @@ Quando o timer é finalizado, um modal é exibido perguntando se o usuário dese
 
 Caso a sessão seja salva, ela aparece na parte inferior da tela, sendo agrupada por dias conforme o uso da aplicação.
 
+A forma de agrupar e listar as sessões foi inspirada em ferramentas como [Toggl Track](https://toggl.com/) e [Clockify](https://clockify.me/).
+
 ### Design responsivo
 
 A aplicação funciona tanto no desktop quanto no mobile e possui suporte a PWA.
