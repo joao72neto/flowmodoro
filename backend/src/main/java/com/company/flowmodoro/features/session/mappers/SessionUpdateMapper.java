@@ -21,7 +21,7 @@ public class SessionUpdateMapper {
 			.ratio(session.getRatio())
 			.rest(session.getRest())
 			.interruptions(session.getInterruptions())
-			.task(session.getTask().getId())
+			.task(session.getTaskSnapshotId())
 			.build();
 	}
 

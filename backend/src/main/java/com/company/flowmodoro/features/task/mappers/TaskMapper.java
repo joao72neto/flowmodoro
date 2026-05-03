@@ -15,6 +15,9 @@ public class TaskMapper {
 	}
 
 	public TaskDTO toDTO(TaskModel task) {
+		if (task == null) {
+			return null;
+		}
 		return TaskDTO.builder().id(task.getId()).name(task.getName()).checked(task.getChecked()).build();
 	}
 

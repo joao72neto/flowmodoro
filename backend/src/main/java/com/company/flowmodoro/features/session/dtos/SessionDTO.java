@@ -1,7 +1,5 @@
 package com.company.flowmodoro.features.session.dtos;
 
-import com.company.flowmodoro.features.task.dtos.TaskDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +20,5 @@ public class SessionDTO {
 	private Long rest;
 
 	private Integer interruptions;
-
-	private TaskDTO task;
 
 }

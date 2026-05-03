@@ -3,7 +3,6 @@ package com.company.flowmodoro.features.session;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,16 +62,16 @@ public class SessionService {
 
 		List<String> errors = new ArrayList<>();
 
-		if (taskId == null) {
-			errors.add("Task id can't be null");
-			throw new InvalidTaskException(TaskErrorCode.TASK_ID_CAN_NOT_BE_NULL, errors);
-		}
+		if (taskId != null) {
+			TaskModel task = taskRepository.findById(taskId)
+				.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found"));
 
-		TaskModel task = taskRepository.findById(taskId)
-			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found"));
-
-		if (!task.getUserId().equals(userId)) {
-			throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
+			if (!task.getUserId().equals(userId)) {
+				throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
+			}
+			session.setTask(task);
+			session.setTaskSnapshotId(task.getId());
+			session.setTaskSnapshotName(task.getName());
 		}
 
 		if (session.getDate() == null) {
@@ -82,7 +81,6 @@ public class SessionService {
 		calculator.calculateRest(session);
 		validator.validateSessions(session, errors);
 
-		session.setTask(task);
 		session.setUserId(userId);
 		return sessionRepository.save(session);
 	}
@@ -123,6 +121,8 @@ public class SessionService {
 
 		sessionUpdateMapper.apply(session, dto);
 		session.setTask(task);
+		session.setTaskSnapshotId(task.getId());
+		session.setTaskSnapshotName(task.getName());
 		return sessionRepository.save(session);
 	}
 

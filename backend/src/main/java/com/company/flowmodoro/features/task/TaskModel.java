@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.company.flowmodoro.features.session.SessionModel;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +14,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "tasks")
@@ -39,7 +40,9 @@ public class TaskModel {
 	@Column(name = "tsk_user_id")
 	private String userId;
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
-	private List<SessionModel> session;
+	@OneToMany(mappedBy = "task")
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private List<SessionModel> sessions;
 
 }

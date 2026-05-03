@@ -2,18 +2,13 @@ package com.company.flowmodoro.features.session.mappers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.company.flowmodoro.features.session.SessionModel;
 import com.company.flowmodoro.features.session.dtos.SessionDTO;
-import com.company.flowmodoro.features.task.mappers.TaskMapper;
 
 @Component
 public class SessionMapper {
-
-	@Autowired
-	private TaskMapper mapper;
 
 	public SessionModel toEntity(SessionDTO sessionDTO) {
 		return SessionModel.builder()
@@ -35,7 +30,6 @@ public class SessionMapper {
 			.ratio(session.getRatio())
 			.rest(session.getRest())
 			.interruptions(session.getInterruptions())
-			.task(mapper.toDTO(session.getTask()))
 			.build();
 	}
 
