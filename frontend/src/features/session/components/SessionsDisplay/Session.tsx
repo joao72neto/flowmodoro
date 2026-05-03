@@ -6,11 +6,9 @@ import type { SessionResponse } from "../../session.types";
 
 const Session = ({
   session,
-  task,
   onClick,
 }: {
   session: SessionResponse;
-  task: { id: number; name: string };
   onClick?: () => void;
 }) => {
   return (
@@ -23,7 +21,7 @@ const Session = ({
           "hover:bg-black/30 duration-200 bg-black/20",
         )}
       >
-        <span className="flex-1 text-sm sm:text-base">{task.name}</span>
+        <span className="flex-1 text-sm sm:text-base">{session.name}</span>
         <span
           className={clsx(
             "text-sm bg-white/5 border border-white/5 ",

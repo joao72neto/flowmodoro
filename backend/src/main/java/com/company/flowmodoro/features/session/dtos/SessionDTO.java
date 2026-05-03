@@ -13,6 +13,8 @@ public class SessionDTO {
 
 	private Long id;
 
+	private String name;
+
 	private Long focus;
 
 	private Double ratio;

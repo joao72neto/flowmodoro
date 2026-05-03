@@ -64,7 +64,7 @@ public class SessionService {
 
 		if (taskId != null) {
 			TaskModel task = taskRepository.findById(taskId)
-				.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found"));
+					.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found"));
 
 			if (!task.getUserId().equals(userId)) {
 				throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
@@ -72,6 +72,7 @@ public class SessionService {
 			session.setTask(task);
 			session.setTaskSnapshotId(task.getId());
 			session.setTaskSnapshotName(task.getName());
+			session.setName(task.getName());
 		}
 
 		if (session.getDate() == null) {
@@ -106,14 +107,14 @@ public class SessionService {
 	@Transactional
 	public SessionModel update(Long id, SessionUpdateDTO dto, String userId) {
 		SessionModel session = sessionRepository.findById(id)
-			.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
+				.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
 
 		if (!session.getUserId().equals(userId)) {
 			throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");
 		}
 
 		TaskModel task = taskRepository.findById(dto.getTask())
-			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found with id: " + dto.getTask()));
+				.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found with id: " + dto.getTask()));
 
 		if (!task.getUserId().equals(userId)) {
 			throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
@@ -129,7 +130,7 @@ public class SessionService {
 	@Transactional
 	public void delete(Long id, String userId) {
 		SessionModel session = sessionRepository.findById(id)
-			.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
+				.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
 
 		if (!session.getUserId().equals(userId)) {
 			throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");

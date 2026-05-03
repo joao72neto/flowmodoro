@@ -35,6 +35,9 @@ public class SessionModel {
 	@Column(name = "ses_id")
 	private Long id;
 
+	@Column(name = "ses_name")
+	private String name;
+
 	@Column(name = "ses_focus")
 	private Long focus;
 

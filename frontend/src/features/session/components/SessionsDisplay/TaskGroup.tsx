@@ -71,7 +71,6 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
               <Session
                 key={session.id}
                 session={session}
-                task={taskGroup.task}
                 onClick={() => {
                   setSelectedSession(session);
                   setShowSessionDetailsModal(true);
