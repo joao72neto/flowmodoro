@@ -28,7 +28,7 @@ function Timer() {
           seconds >= 3600 ? "text-5xl" : "text-6xl",
         )}
       >
-        {formatTimer(seconds)}
+        {mode ? formatTimer(seconds) : "00:00"}
       </div>
       <div className="flex gap-4">
         {mode === null ? (
