@@ -6,17 +6,11 @@ import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
 
 import { useSessionContext } from "../../../session/session.context";
+import { formatToHour } from "../../../../shared/utils/number.utils";
 
 function Timer() {
-  const {
-    mode,
-    seconds,
-    formatTimer,
-    startBreak,
-    startFocus,
-    stopFocus,
-    skipBreak,
-  } = useTimerContext();
+  const { mode, seconds, startBreak, startFocus, stopFocus, skipBreak } =
+    useTimerContext();
 
   const { restRatio } = useSessionContext();
 
@@ -33,7 +27,7 @@ function Timer() {
             "animate-[sonar-break_2.5s_ease-in-out_infinite] border-success!",
         )}
       >
-        {mode ? formatTimer(seconds) : "00:00"}
+        {mode ? formatToHour(seconds) : "00:00"}
       </div>
       <div className="flex gap-4">
         {mode === null ? (
