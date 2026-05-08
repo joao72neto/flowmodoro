@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,13 +33,15 @@ public class TaskModel {
 	@Column(name = "tsk_id")
 	private Long id;
 
-	@Column(name = "tsk_name")
+	@NotBlank(message = "Task name is required")
+	@Column(name = "tsk_name", nullable = false)
 	private String name;
 
-	@Column(name = "tsk_checked")
+	@NotNull(message = "Task checked is required")
+	@Column(name = "tsk_checked", nullable = false)
 	private Boolean checked;
 
-	@Column(name = "tsk_user_id")
+	@Column(name = "tsk_user_id", nullable = false)
 	private String userId;
 
 	@OneToMany(mappedBy = "task")

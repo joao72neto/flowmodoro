@@ -20,6 +20,8 @@ import com.company.flowmodoro.features.task.mappers.TaskMapper;
 import com.company.flowmodoro.features.task.mappers.TaskStatusMapper;
 import com.company.flowmodoro.features.task.mappers.TaskUpdateMapper;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
@@ -48,20 +50,20 @@ public class TaskController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TaskDTO> save(@RequestBody TaskDTO task, @RequestHeader("X-User-Id") String userId) {
+	public ResponseEntity<TaskDTO> save(@Valid @RequestBody TaskDTO task, @RequestHeader("X-User-Id") String userId) {
 		TaskModel saved = taskService.save(taskMapper.toEntity(task), userId);
 		return ResponseEntity.status(201).body(taskMapper.toDTO(saved));
 	}
 
 	@PatchMapping("/{id}/status")
-	public ResponseEntity<TaskDTO> updateStatus(@PathVariable Long id, @RequestBody TaskStatusDTO task,
+	public ResponseEntity<TaskDTO> updateStatus(@PathVariable Long id, @Valid @RequestBody TaskStatusDTO task,
 			@RequestHeader("X-User-Id") String userId) {
 		TaskModel taskEntity = taskService.updateStatus(id, taskStatusMapper.toEntity(task), userId);
 		return ResponseEntity.ok(taskMapper.toDTO(taskEntity));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<TaskDTO> update(@PathVariable Long id, @RequestBody TaskUpdateDTO task,
+	public ResponseEntity<TaskDTO> update(@PathVariable Long id, @Valid @RequestBody TaskUpdateDTO task,
 			@RequestHeader("X-User-Id") String userId) {
 		TaskModel taskEntity = taskService.update(id, taskUpdateMapper.toEntity(task), userId);
 		return ResponseEntity.ok(taskMapper.toDTO(taskEntity));
