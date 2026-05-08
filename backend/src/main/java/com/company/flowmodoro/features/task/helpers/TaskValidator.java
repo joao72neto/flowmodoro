@@ -29,4 +29,12 @@ public class TaskValidator {
 		}
 	}
 
+	public void validateStatusUpdate(TaskModel task, List<String> errors) {
+
+		if (task.getChecked() == null) {
+			errors.add("Task checked status is required");
+			throw new InvalidTaskException(TaskErrorCode.INVALID_TASK_CHECKED_STATUS, errors);
+		}
+	}
+
 }

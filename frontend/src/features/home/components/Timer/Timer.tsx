@@ -6,7 +6,7 @@ import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
 
 import { useSessionContext } from "../../../session/session.context";
-import { formatToHour } from "../../../../shared/utils/number.utils";
+import { formatTimer } from "../../../../shared/utils/number.utils";
 
 function Timer() {
   const { mode, seconds, startBreak, startFocus, stopFocus, skipBreak } =
@@ -19,15 +19,16 @@ function Timer() {
       <div
         className={clsx(
           "flex justify-center items-center",
-          "text-6xl font-mono aspect-square p-7 border rounded-full border-white/10",
+          "font-mono aspect-square p-7 border rounded-full border-white/10",
           "transition-colors transform-gpu",
           mode === "focus" &&
             "animate-[sonar-focus_2.5s_ease-in-out_infinite] border-danger!",
           mode === "break" &&
             "animate-[sonar-break_2.5s_ease-in-out_infinite] border-success!",
+          seconds >= 3600 ? "text-5xl" : "text-6xl",
         )}
       >
-        {mode ? formatToHour(seconds) : "00:00"}
+        {formatTimer(seconds)}
       </div>
       <div className="flex gap-4">
         {mode === null ? (

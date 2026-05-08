@@ -58,7 +58,7 @@ public class TaskService {
 		}
 
 		List<String> errors = new ArrayList<>();
-		taskValidator.validateTask(task, errors);
+		taskValidator.validateStatusUpdate(task, errors);
 
 		taskToUpdate.setChecked(task.getChecked());
 
