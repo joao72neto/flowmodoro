@@ -16,6 +16,8 @@ import com.company.flowmodoro.features.session.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.session.mappers.SessionMapper;
 import com.company.flowmodoro.shared.dto.PageResponse;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -34,7 +36,7 @@ public class SessionController {
 	}
 
 	@PostMapping("/{id}")
-	public ResponseEntity<SessionDTO> save(@PathVariable Long id, @RequestBody SessionDTO dto,
+	public ResponseEntity<SessionDTO> save(@PathVariable Long id, @Valid @RequestBody SessionDTO dto,
 			@RequestHeader("X-User-Id") String userId) {
 		SessionModel session = sessionService.save(mapper.toEntity(dto), id, userId);
 		return ResponseEntity.status(201).body(mapper.toDTO(session));
@@ -47,7 +49,7 @@ public class SessionController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<SessionDTO> update(@PathVariable Long id, @RequestBody SessionUpdateDTO dto,
+	public ResponseEntity<SessionDTO> update(@PathVariable Long id, @Valid @RequestBody SessionUpdateDTO dto,
 			@RequestHeader("X-User-Id") String userId) {
 		SessionModel session = sessionService.update(id, dto, userId);
 		return ResponseEntity.ok(mapper.toDTO(session));

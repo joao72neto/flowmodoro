@@ -31,15 +31,15 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
 		List<String> errors = ex.getBindingResult()
-				.getFieldErrors()
-				.stream()
-				.map(error -> error.getDefaultMessage())
-				.collect(Collectors.toList());
+			.getFieldErrors()
+			.stream()
+			.map(error -> error.getDefaultMessage())
+			.collect(Collectors.toList());
 
 		ErrorResponse errorResponse = ErrorResponse.builder()
-				.code(CommonErrorCode.VALIDATION_ERROR)
-				.errors(errors)
-				.build();
+			.code(CommonErrorCode.VALIDATION_ERROR)
+			.errors(errors)
+			.build();
 
 		return ResponseEntity.badRequest().body(errorResponse);
 	}

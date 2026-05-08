@@ -39,7 +39,7 @@ public class TaskService {
 	@Transactional
 	public void deleteById(Long id, String userId) {
 		TaskModel taskToDelete = taskRepository.findById(id)
-				.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to delete"));
+			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to delete"));
 
 		if (!taskToDelete.getUserId().equals(userId)) {
 			throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to delete this task");
@@ -51,7 +51,7 @@ public class TaskService {
 	@Transactional
 	public TaskModel updateStatus(Long id, TaskModel task, String userId) {
 		TaskModel taskToUpdate = taskRepository.findById(id)
-				.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update status"));
+			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update status"));
 
 		if (!taskToUpdate.getUserId().equals(userId)) {
 			throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to update this task");
@@ -68,7 +68,7 @@ public class TaskService {
 	@Transactional
 	public TaskModel update(Long id, TaskModel task, String userId) {
 		TaskModel taskToUpdate = taskRepository.findById(id)
-				.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update"));
+			.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found to update"));
 
 		if (!taskToUpdate.getUserId().equals(userId)) {
 			throw new InvalidTaskException(TASK_NOT_FOUND, "You don't have permission to update this task");

@@ -79,6 +79,10 @@ public class SessionService {
 			session.setDate(LocalDate.now());
 		}
 
+		if (session.getInterruptions() == null) {
+			session.setInterruptions(0);
+		}
+
 		calculator.calculateRest(session);
 		validator.validateSessions(session, errors);
 
@@ -121,6 +125,14 @@ public class SessionService {
 		}
 
 		sessionUpdateMapper.apply(session, dto);
+
+		if (session.getInterruptions() == null) {
+			session.setInterruptions(0);
+		}
+
+		List<String> errors = new ArrayList<>();
+		validator.validateSessions(session, errors);
+
 		session.setTask(task);
 		session.setTaskSnapshotId(task.getId());
 		session.setTaskSnapshotName(task.getName());

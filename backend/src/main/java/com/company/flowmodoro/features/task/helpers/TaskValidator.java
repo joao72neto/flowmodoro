@@ -28,4 +28,5 @@ public class TaskValidator {
 			throw new InvalidTaskException(TaskErrorCode.INVALID_TASK_CHECKED_STATUS, errors);
 		}
 	}
+
 }

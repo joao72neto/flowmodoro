@@ -13,11 +13,15 @@ public class SessionValidator {
 
 	public void validateSessions(SessionModel session, List<String> errors) {
 
-		if (session.getRatio() < 0 || session.getRatio() > 1) {
+		if (session.getFocus() == null || session.getFocus() <= 0) {
+			errors.add("Focus time must be greater than 0");
+		}
+
+		if (session.getRatio() != null && (session.getRatio() < 0 || session.getRatio() > 1)) {
 			errors.add("Ratio needs to be between 0 and 1");
 		}
 
-		if (session.getInterruptions() < 0) {
+		if (session.getInterruptions() != null && session.getInterruptions() < 0) {
 			errors.add("Interruptions can't be less than 0");
 		}
 
