@@ -22,6 +22,10 @@ public class TaskValidator {
 			errors.add("Task checked status is required");
 			throw new InvalidTaskException(TaskErrorCode.INVALID_TASK_CHECKED_STATUS, errors);
 		}
-	}
 
+		if (task.getChecked() == true) {
+			errors.add("Task name can't be checked");
+			throw new InvalidTaskException(TaskErrorCode.INVALID_TASK_CHECKED_STATUS, errors);
+		}
+	}
 }

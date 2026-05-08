@@ -25,7 +25,7 @@ public class SessionAggregator {
 
 	public List<DailySessionsDTO> groupSessionsByDate(List<SessionModel> sessions, List<LocalDate> orderedDates) {
 		Map<LocalDate, List<SessionModel>> sessionsByDay = sessions.stream()
-			.collect(Collectors.groupingBy(SessionModel::getDate));
+				.collect(Collectors.groupingBy(SessionModel::getDate));
 
 		List<DailySessionsDTO> result = new ArrayList<>();
 
@@ -56,34 +56,33 @@ public class SessionAggregator {
 				existingGroup.setTaskTotalFocus(existingGroup.getTaskTotalFocus() + sessionModel.getFocus());
 				existingGroup.setTaskTotalRest(existingGroup.getTaskTotalRest() + sessionModel.getRest());
 				existingGroup.getSessions().add(currentSessionDTO);
-			}
-			else {
+			} else {
 				TaskDTO taskDTO = TaskDTO.builder()
-					.id(tskId)
-					.name(sessionModel.getTaskSnapshotName())
-					.checked(sessionModel.getTask() != null ? sessionModel.getTask().getChecked() : false)
-					.build();
+						.id(tskId)
+						.name(sessionModel.getTaskSnapshotName())
+						.checked(sessionModel.getTask() != null ? sessionModel.getTask().getChecked() : false)
+						.build();
 
 				List<SessionDTO> initialSessionsList = new ArrayList<>();
 				initialSessionsList.add(currentSessionDTO);
 
 				TaskGroupDTO newGroup = TaskGroupDTO.builder()
-					.task(taskDTO)
-					.taskTotalFocus(sessionModel.getFocus())
-					.taskTotalRest(sessionModel.getRest())
-					.sessions(initialSessionsList)
-					.build();
+						.task(taskDTO)
+						.taskTotalFocus(sessionModel.getFocus())
+						.taskTotalRest(sessionModel.getRest())
+						.sessions(initialSessionsList)
+						.build();
 
 				tasksMap.put(groupKey, newGroup);
 			}
 		}
 
 		return DailySessionsDTO.builder()
-			.date(date)
-			.totalFocus(dailyTotalFocus)
-			.totalRest(dailyTotalRest)
-			.taskGroups(new ArrayList<>(tasksMap.values()))
-			.build();
+				.date(date)
+				.totalFocus(dailyTotalFocus)
+				.totalRest(dailyTotalRest)
+				.taskGroups(new ArrayList<>(tasksMap.values()))
+				.build();
 	}
 
 }
