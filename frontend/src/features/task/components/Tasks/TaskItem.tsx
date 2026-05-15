@@ -71,15 +71,23 @@ function TaskItem({ task }: TaskItemProps) {
 
   const getTimerIcon = () => {
     if (isTaskRunning) {
-      return <FaStop size={18} className="text-danger-2" />;
+      return <FaStop title="Parar timer" size={18} className="text-danger-2" />;
     }
     if (isTaskStopped) {
-      return <FaPlay size={18} className="text-success" />;
+      return (
+        <FaPlay title="Iniciar pausa" size={18} className="text-success" />
+      );
     }
     if (isTaskBreaking) {
-      return <FaForwardStep size={18} className="text-success-2" />;
+      return (
+        <FaForwardStep
+          title="Pular pausa"
+          size={18}
+          className="text-success-2"
+        />
+      );
     }
-    return <FaPlay size={18} className="text-danger" />;
+    return <FaPlay title="Iniciar timer" size={18} className="text-danger" />;
   };
 
   const handleTimerAction = () => {
@@ -144,7 +152,6 @@ function TaskItem({ task }: TaskItemProps) {
       {!task.checked && (
         <div className="flex gap-5">
           <IconButton
-            title="Iniciar timer"
             icon={getTimerIcon()}
             onClick={handleTimerAction}
             disabled={isProcessing}
