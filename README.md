@@ -10,45 +10,42 @@ O **Flowmodoro** é uma ferramenta de produtividade desenvolvida para ajudar usu
 
 ### Timer de Fluxo
 
-O timer é o componente principal da aplicação. O diferencial está no cálculo automático de pausas com base no foco total do usuário.
+O timer é o componente principal da aplicação. O diferencial está no cálculo automático de pausas baseado no tempo de foco total do usuário.
 
-Além disso, ele é persistente: não perde a contagem mesmo se o usuário trocar de aba ou fechar o navegador. Quando a aplicação é aberta novamente, o último estado é recuperado e o tempo é recalculado com base na data atual, mantendo o timer consistente.
+Além disso, ele é persistente: a contagem não é interrompida mesmo que o usuário troque de aba ou feche o navegador. Ao abrir a aplicação novamente, o último estado é recuperado e o tempo é recalculado com base na data atual, mantendo o timer consistente.
 
-Também é possível selecionar 3 modos de fluxo:
+Também é possível selecionar três modos de fluxo:
 
-- **Intenso**: utiliza 10% do foco total como descanso;
+- **Intenso**: utiliza 10% do foco total para o descanso;
 - **Padrão**: utiliza 20% para o descanso;
 - **Leve**: utiliza 30% para o descanso;
 
 Quando o usuário inicia o descanso calculado pelo app, ele pode:
 
-- esperar até o fim (uma notificação será enviada ao término);
+- esperar até o término (uma notificação será enviada ao finalizar);
 - ou pular a pausa e iniciar uma nova sessão.
 
 ### Gestão de Tarefas
 
-A aplicação possui uma sidebar no lado direito responsável pelo gerenciamento das tarefas.
+A aplicação conta com uma barra lateral (*sidebar*) à direita para o gerenciamento de tarefas.
 
 Nela é possível:
 
-- criar
-- editar
-- excluir
-- iniciar o tracking de uma tarefa ao clicar no botão de play
+- Criar novas tarefas;
+- Editar e excluir tarefas existentes;
+- Iniciar o *tracking* de uma tarefa ao clicar no botão de *play*.
 
 ### Histórico de Sessões
 
-Quando o timer é finalizado, um modal é exibido perguntando se o usuário deseja salvar ou descartar a sessão.
+Ao finalizar o timer, um modal é exibido perguntando se o usuário deseja salvar ou descartar a sessão.
 
-Caso a sessão seja salva, ela aparece na parte inferior da tela, sendo agrupada por dias conforme o uso da aplicação.
+Caso a sessão seja salva, ela aparecerá na parte inferior da tela, agrupada por dia. A forma de listagem e agrupamento foi inspirada em ferramentas como [Toggl Track](https://toggl.com/) e [Clockify](https://clockify.me/).
 
-A forma de agrupar e listar as sessões foi inspirada em ferramentas como [Toggl Track](https://toggl.com/) e [Clockify](https://clockify.me/).
+### Design Responsivo
 
-### Design responsivo
+A aplicação funciona tanto em desktop quanto em dispositivos móveis e possui suporte completo a PWA.
 
-A aplicação funciona tanto no desktop quanto no mobile e possui suporte a PWA.
-
-Em navegadores como o Chrome no celular, é possível instalar a aplicação para que ela fique disponível como um app no dispositivo.
+Em navegadores como o Chrome no celular, é possível instalar a aplicação para que ela fique disponível como um app nativo no dispositivo.
 
 ## 🛠️ Tecnologias
 
@@ -71,12 +68,13 @@ Em navegadores como o Chrome no celular, é possível instalar a aplicação par
 O deploy foi realizado em plataformas gratuitas. Por conta disso, em alguns momentos pode haver:
 
 - **cold start** da API
-- expiração do banco de dados após **90 dias de inatividade**
+- **sleep** do banco de dados por falta de uso
 
 ### Plataformas utilizadas
 
 - **Frontend:** Vercel
-- **API Spring e banco de dados:** Render
+- **API Spring:** Render
+- **Banco de Dados:** Aiven
 
 A aplicação pode ser acessada aqui:  
 👉 https://flowmodoro-jsn.vercel.app/
