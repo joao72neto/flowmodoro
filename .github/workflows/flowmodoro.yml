@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: chmod +x mvnw && ./mvnw -B package
+        run: chmod +x mvnw && ./mvnw -B package -Dspring.profiles.active=test
         working-directory: backend
 
   frontend-build:
