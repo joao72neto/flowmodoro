@@ -14,6 +14,7 @@ import { FaTrash } from "react-icons/fa6";
 import { MdSave, MdModeEdit } from "react-icons/md";
 
 import clsx from "clsx";
+import { useRef, useState } from "react";
 
 const SessionDetailsModal = ({
   session,
@@ -26,15 +27,49 @@ const SessionDetailsModal = ({
 }) => {
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
+  const [title, setTitle] = useState<string>(task.name);
+  const [isEditing, setIsEditing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const isReadyToSave = title.trim() !== task.name.trim();
+
+  const handleEditTitle = () => {
+    setIsEditing(true);
+
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+  };
+
   return (
     <ModalContainer close={close}>
       <Stack direction="row" justify="between">
-        <h1 className="flex-1 font-bold text-xl line-clamp-1 break-all text-left pl-1">
+        <h1 className="flex-1 font-bold text-md sm:text-xl line-clamp-1 break-all text-left pl-1">
           <div className="flex items-center gap-3">
-            {capitalize(task.name)}
+            <div className="inline-grid items-center font-bold min-w-0 max-w-md line-clamp-1">
+              <span className="invisible col-start-1 row-start-1 whitespace-pre pb-2 line-clamp-1">
+                {title}
+              </span>
+              <input
+                type="text"
+                value={capitalize(title)}
+                onChange={(e) => setTitle(e.target.value)}
+                size={1}
+                className={clsx(
+                  "col-start-1 row-start-1 w-full focus:outline-none pb-1 bg-transparent focus:border-b",
+                  "transition duration-200 ease-in-out w-fit focus:border-primary",
+                )}
+                ref={inputRef}
+                onBlur={() => setIsEditing(false)}
+                disabled={!isEditing}
+              />
+            </div>
             <MdModeEdit
-              size={22}
-              className="cursor-pointer hover:scale-110 hover:text-primary transition duration-100"
+              onClick={handleEditTitle}
+              className={clsx(
+                "text-xl sm:text-2xl cursor-pointer shrink-0 hover:scale-110 hover:text-primary transition duration-100",
+                isEditing && "text-primary",
+              )}
             />
           </div>
         </h1>
@@ -75,18 +110,20 @@ const SessionDetailsModal = ({
           icon={<FaTrash />}
           className={clsx(
             "w-full! hover:bg-danger hover:border-danger! bg-transparent ",
-            "border border-white/10",
+            "border border-white/10 text-sm! sm:text-base!",
           )}
           variant="danger"
         >
           Deletar
         </Button>
         <Button
-          icon={<MdSave size={20} />}
+          icon={<MdSave className="text-lg! sm:text-xl!" />}
           variant="secondary"
+          disabled={!isReadyToSave}
           className={clsx(
-            "w-full! hover:bg-success hover:text-black/80 hover:border-success! bg-transparent ",
-            "border border-white/10",
+            "w-full! not-disabled:hover:bg-success not-disabled:hover:text-black/80 ",
+            "not-disabled:hover:border-success! border border-white/10 bg-transparent",
+            "disabled:scale-100 text-sm! sm:text-base!",
           )}
         >
           Salvar
