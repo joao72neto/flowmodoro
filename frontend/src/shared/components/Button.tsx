@@ -38,6 +38,7 @@ function Button({
   onClick,
   className,
   disabled,
+  title,
 }: {
   icon?: React.ReactNode;
   variant?: VariantType;
@@ -45,9 +46,11 @@ function Button({
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
+  title?: string;
 }) {
   return (
     <button
+      title={title}
       onClick={onClick}
       disabled={disabled}
       className={clsx(variants[variant || "primary"], className)}

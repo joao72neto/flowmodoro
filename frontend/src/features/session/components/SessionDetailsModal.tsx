@@ -15,18 +15,21 @@ import { MdSave, MdModeEdit } from "react-icons/md";
 
 import clsx from "clsx";
 import { useRef, useState } from "react";
+import { useModal } from "../../../shared/modal.context";
 
 const SessionDetailsModal = ({
+  isOpen,
+  setIsOpen,
   session,
   task,
-  close,
-  deleteSession,
 }: {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
   session: SessionResponse;
   task: { id: number; name: string };
-  close: () => void;
-  deleteSession: () => void;
 }) => {
+  if (!isOpen) return null;
+
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
   const [title, setTitle] = useState<string>(task.name);
@@ -43,8 +46,38 @@ const SessionDetailsModal = ({
     });
   };
 
+  const { showWarning, hideModal } = useModal();
+
+  const handleSave = () => {
+    setIsOpen(false);
+  };
+
+  const handleDeleteSession = () => {
+    setIsOpen(false);
+    showWarning({
+      title: "Deseja mesmo excluir essa sessão?",
+      message: "Esta operação não pode ser desfeita.",
+      cancel: () => setIsOpen(true),
+      action: hideModal,
+    });
+  };
+
+  const handleClose = () => {
+    if (isReadyToSave) {
+      setIsOpen(false);
+      showWarning({
+        title: "Deseja mesmo fechar sem salvar?",
+        message: "Seus dados não serão salvos.",
+        cancel: () => setIsOpen(true),
+        action: hideModal,
+      });
+      return;
+    }
+    setIsOpen(false);
+  };
+
   return (
-    <ModalContainer close={close}>
+    <ModalContainer close={handleClose}>
       <Stack direction="row" justify="between">
         <h1 className="flex-1 font-bold text-md sm:text-xl line-clamp-1 break-all text-left pl-1">
           <div className="flex items-center gap-3">
@@ -78,7 +111,7 @@ const SessionDetailsModal = ({
         <IoClose
           size={30}
           className="cursor-pointer hover:scale-110 hover:text-danger transition duration-100"
-          onClick={close}
+          onClick={handleClose}
         />
       </Stack>
 
@@ -109,13 +142,14 @@ const SessionDetailsModal = ({
       </div>
       <div className="flex gap-3 flex-col sm:flex-row">
         <Button
-          onClick={deleteSession}
+          onClick={handleDeleteSession}
           icon={<FaTrash />}
           className={clsx(
             "w-full! hover:bg-danger hover:border-danger! bg-transparent ",
             "border border-white/10 text-sm! sm:text-base!",
           )}
           variant="danger"
+          title="Excluir sessão"
         >
           Deletar
         </Button>
@@ -123,6 +157,12 @@ const SessionDetailsModal = ({
           icon={<MdSave className="text-lg! sm:text-xl!" />}
           variant="secondary"
           disabled={!isReadyToSave}
+          onClick={handleSave}
+          title={
+            isReadyToSave
+              ? "Salvar alterações"
+              : "Edite o nome da sessão para poder salvar"
+          }
           className={clsx(
             "w-full! not-disabled:hover:bg-success not-disabled:hover:text-black/80 ",
             "not-disabled:hover:border-success! border border-white/10 bg-transparent",
