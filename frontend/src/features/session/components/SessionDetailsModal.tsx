@@ -20,10 +20,12 @@ const SessionDetailsModal = ({
   session,
   task,
   close,
+  deleteSession,
 }: {
   session: SessionResponse;
   task: { id: number; name: string };
   close: () => void;
+  deleteSession: () => void;
 }) => {
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
@@ -107,6 +109,7 @@ const SessionDetailsModal = ({
       </div>
       <div className="flex gap-3 flex-col sm:flex-row">
         <Button
+          onClick={deleteSession}
           icon={<FaTrash />}
           className={clsx(
             "w-full! hover:bg-danger hover:border-danger! bg-transparent ",

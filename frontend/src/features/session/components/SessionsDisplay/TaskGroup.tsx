@@ -8,6 +8,7 @@ import Session from "./Session";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { useState } from "react";
 import SessionDetailsModal from "../SessionDetailsModal";
+import { useModal } from "../../../../shared/modal.context";
 
 const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +17,20 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
     taskGroup.sessions[0],
   );
 
+  const { showWarning, hideModal } = useModal();
+
   const handleToggle = () => setIsOpen(!isOpen);
   const isTogglable = taskGroup.sessions.length > 1;
+
+  const handleDeleteSession = () => {
+    setShowSessionDetailsModal(false);
+    showWarning({
+      title: "Deseja mesmo excluir essa sessão?",
+      message: "Esta operação nao pode ser desfeita.",
+      cancel: () => setShowSessionDetailsModal(true),
+      action: hideModal,
+    });
+  };
 
   return (
     <>
@@ -83,6 +96,7 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
 
       {showSessionDetailsModal && (
         <SessionDetailsModal
+          deleteSession={handleDeleteSession}
           session={selectedSession}
           task={taskGroup.task}
           close={() => setShowSessionDetailsModal(false)}
