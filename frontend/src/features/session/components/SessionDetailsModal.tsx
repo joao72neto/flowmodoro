@@ -22,24 +22,22 @@ const SessionDetailsModal = ({
   isOpen,
   setIsOpen,
   session,
-  task,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   session: SessionResponse;
-  task: { id: number; name: string };
 }) => {
   if (!isOpen) return null;
 
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
   const [title, setTitle] = useState<string>(
-    sessionStorage.getItem(localStorageKeys.sessionTitle) || task.name,
+    sessionStorage.getItem(localStorageKeys.sessionTitle) || session.name,
   );
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const isReadyToSave = title.trim() !== task.name.trim();
+  const isReadyToSave = title.trim() !== session.name.trim();
 
   const handleEditTitle = () => {
     setIsEditing(true);

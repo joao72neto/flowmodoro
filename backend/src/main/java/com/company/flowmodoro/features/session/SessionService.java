@@ -69,9 +69,6 @@ public class SessionService {
 			if (!task.getUserId().equals(userId)) {
 				throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
 			}
-			session.setTask(task);
-			session.setTaskSnapshotId(task.getId());
-			session.setTaskSnapshotName(task.getName());
 			session.setName(task.getName());
 		}
 

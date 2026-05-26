@@ -4,7 +4,7 @@ import Stack from "../../../../shared/components/Stack";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { FaChevronDown } from "react-icons/fa6";
 
-const SessionsGroup = ({
+const DailySessions = ({
   children,
   groupName,
   totalFocus,
@@ -46,4 +46,4 @@ const SessionsGroup = ({
   );
 };
 
-export default SessionsGroup;
+export default DailySessions;

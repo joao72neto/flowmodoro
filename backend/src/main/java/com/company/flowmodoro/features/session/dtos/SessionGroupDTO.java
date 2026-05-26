@@ -1,25 +1,23 @@
 package com.company.flowmodoro.features.session.dtos;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailySessionsDTO {
+public class SessionGroupDTO {
 
-	private LocalDate date;
+	private String name;
 
-	private Long totalFocus;
+	private long totalFocus;
 
-	private Long totalRest;
+	private long totalRest;
 
-	private List<SessionGroupDTO> sessionGroups;
+	private List<SessionDTO> sessions;
 
 }

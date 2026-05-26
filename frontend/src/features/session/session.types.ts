@@ -1,11 +1,7 @@
-export interface ITaskGroup {
-  task: {
-    id: number;
-    name: string;
-    checked: boolean;
-  };
-  taskTotalFocus: number;
-  taskTotalRest: number;
+export interface ISessionGroup {
+  name: string;
+  totalFocus: number;
+  totalRest: number;
   sessions: SessionResponse[];
 }
 
@@ -13,7 +9,7 @@ export interface ISessionGroupResponse {
   date: string;
   totalFocus: number;
   totalRest: number;
-  taskGroups: ITaskGroup[];
+  sessionGroups: ISessionGroup[];
 }
 
 export interface SessionResponse {
@@ -23,10 +19,6 @@ export interface SessionResponse {
   rest: number;
   ratio: number;
   interruptions: number;
-  task?: {
-    id: number;
-    name: string;
-  };
 }
 
 export interface SessionRequest {

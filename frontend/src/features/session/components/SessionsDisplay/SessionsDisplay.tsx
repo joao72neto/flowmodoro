@@ -1,6 +1,6 @@
 import SessionsWrapper from "./SessionsWrapper";
-import SessionsGroup from "./SessionsGroup";
-import TaskGroup from "./TaskGroup";
+import DailySessions from "./DailySessions";
+import SessionGroup from "./SessionGroup";
 
 import { useSessionContext } from "../../session.context";
 import { useEffect } from "react";
@@ -59,15 +59,15 @@ const SessionsDisplay = () => {
         <>
           <SessionsWrapper>
             {sessions.content.map((sessionGroup) => (
-              <SessionsGroup
+              <DailySessions
                 key={sessionGroup.date}
                 groupName={formatToBRDate(sessionGroup.date)}
                 totalFocus={formatToHour(sessionGroup.totalFocus)}
               >
-                {sessionGroup.taskGroups.map((taskGroup, index) => (
-                  <TaskGroup key={index} taskGroup={taskGroup} />
+                {sessionGroup.sessionGroups.map((group, index) => (
+                  <SessionGroup key={index} sessionGroup={group} />
                 ))}
-              </SessionsGroup>
+              </DailySessions>
             ))}
           </SessionsWrapper>
 

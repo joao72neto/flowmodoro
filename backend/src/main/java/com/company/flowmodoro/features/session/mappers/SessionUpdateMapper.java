@@ -24,4 +24,5 @@ public class SessionUpdateMapper {
 				.interruptions(session.getInterruptions())
 				.build();
 	}
+
 }

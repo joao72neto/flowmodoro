@@ -2,22 +2,22 @@ import clsx from "clsx";
 import Stack from "../../../../shared/components/Stack";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { capitalize } from "../../../../shared/utils/string.utils";
-import type { ITaskGroup, SessionResponse } from "../../session.types";
+import type { ISessionGroup, SessionResponse } from "../../session.types";
 import Session from "./Session";
 
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { useState } from "react";
 import SessionDetailsModal from "../SessionDetailsModal";
 
-const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
+const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSessionDetailsModal, setShowSessionDetailsModal] = useState(false);
   const [selectedSession, setSelectedSession] = useState<SessionResponse>(
-    taskGroup.sessions[0],
+    sessionGroup.sessions[0],
   );
 
   const handleToggle = () => setIsOpen(!isOpen);
-  const isTogglable = taskGroup.sessions.length > 1;
+  const isTogglable = sessionGroup.sessions.length > 1;
 
   return (
     <>
@@ -48,11 +48,11 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
                   )}
                   title="Expandir sessões"
                 >
-                  {taskGroup.sessions.length}
+                  {sessionGroup.sessions.length}
                 </span>
               )}
               <span className="text-lg sm:text-xl font-medium line-clamp-1 break-all">
-                {capitalize(taskGroup.task.name)}
+                {capitalize(sessionGroup.name)}
               </span>
             </div>
             <span
@@ -61,13 +61,13 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
                 "px-3 py-1 rounded-lg shadow font-semibold",
               )}
             >
-              {formatToHour(taskGroup.taskTotalFocus)}
+              {formatToHour(sessionGroup.totalFocus)}
             </span>
           </Stack>
         </Stack>
         <AnimatedCollapse show={isOpen}>
           <Stack gap={2} className="px-1 border-white/5 w-full">
-            {taskGroup.sessions.map((session) => (
+            {sessionGroup.sessions.map((session) => (
               <Session
                 key={session.id}
                 session={session}
@@ -86,11 +86,10 @@ const TaskGroup = ({ taskGroup }: { taskGroup: ITaskGroup }) => {
           isOpen={showSessionDetailsModal}
           setIsOpen={setShowSessionDetailsModal}
           session={selectedSession}
-          task={taskGroup.task}
         />
       )}
     </>
   );
 };
 
-export default TaskGroup;
+export default SessionGroup;

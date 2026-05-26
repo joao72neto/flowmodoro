@@ -2,13 +2,6 @@ package com.company.flowmodoro.features.session;
 
 import java.time.LocalDate;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.company.flowmodoro.features.task.TaskModel;
-
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,9 +11,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Table(name = "sessions")
@@ -55,18 +46,5 @@ public class SessionModel {
 
 	@Column(name = "ses_date", updatable = false)
 	private LocalDate date;
-
-	@Column(name = "ses_tsk_snapshot_id")
-	private Long taskSnapshotId;
-
-	@Column(name = "ses_tsk_snapshot_name")
-	private String taskSnapshotName;
-
-	@ManyToOne(optional = true)
-	@JoinColumn(name = "ses_tsk_id", nullable = true)
-	@OnDelete(action = OnDeleteAction.SET_NULL)
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	private TaskModel task;
 
 }
