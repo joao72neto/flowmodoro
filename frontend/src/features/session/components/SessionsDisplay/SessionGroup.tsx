@@ -6,7 +6,7 @@ import type { ISessionGroup, SessionResponse } from "../../session.types";
 import Session from "./Session";
 
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SessionDetailsModal from "../SessionDetailsModal";
 
 const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
@@ -18,6 +18,12 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
 
   const handleToggle = () => setIsOpen(!isOpen);
   const isTogglable = sessionGroup.sessions.length > 1;
+
+  useEffect(() => {
+    if (!isTogglable) {
+      setIsOpen(false);
+    }
+  }, [isTogglable]);
 
   return (
     <>

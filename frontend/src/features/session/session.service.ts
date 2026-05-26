@@ -1,4 +1,7 @@
-import type { SessionRequest } from "./session.types";
+import type {
+  CreateSessionRequest,
+  UpdateSessionRequest,
+} from "./session.types";
 import api from "../../configs/api.config";
 
 class SessionService {
@@ -6,7 +9,7 @@ class SessionService {
     return await api.get("/session", { params: { page, size } });
   }
 
-  async createSession(id: number, data: SessionRequest) {
+  async createSession(id: number, data: CreateSessionRequest) {
     return await api.post(`/session/${id}`, data);
   }
 
@@ -14,8 +17,8 @@ class SessionService {
     return await api.delete(`/session/${id}`);
   }
 
-  async updateSession(id: number, data: SessionRequest) {
-    return await api.patch(`/session/${id}`, data);
+  async updateSession(id: number, data: UpdateSessionRequest) {
+    return await api.put(`/session/${id}`, data);
   }
 }
 

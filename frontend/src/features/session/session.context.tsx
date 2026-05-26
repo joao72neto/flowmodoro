@@ -2,7 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import useSessions from "./useSession";
 import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
-import type { ISessionGroupResponse } from "./session.types";
+import type {
+  ISessionGroupResponse,
+  UpdateSessionRequest,
+} from "./session.types";
 import type { PaginationResponse } from "../../shared/globals.types";
 
 interface ISaveSessionData {
@@ -23,6 +26,8 @@ interface ISessionContext {
     size?: number,
   ) => Promise<PaginationResponse<ISessionGroupResponse>>;
   loading: boolean;
+  updateSession: (id: number, data: UpdateSessionRequest) => Promise<any>;
+  deleteSession: (id: number) => Promise<any>;
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
@@ -36,6 +41,8 @@ export const SessionProvider = ({
     createSession,
     fetchSessions,
     sessions,
+    updateSession: updateSessionHook,
+    deleteSession: deleteSessionHook,
     loading: isLoadingSessions,
   } = useSessions();
   const [success, setSuccess] = useState<boolean>(false);
@@ -81,6 +88,40 @@ export const SessionProvider = ({
     }
   };
 
+  const updateSession = async (id: number, data: UpdateSessionRequest) => {
+    try {
+      const res = await updateSessionHook(id, data);
+      await fetchSessions();
+      return res;
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error)
+        showError({
+          title: "Erro ao atualizar sessão",
+          message: error.message,
+          action: hideModal,
+        });
+      throw error;
+    }
+  };
+
+  const deleteSession = async (id: number) => {
+    try {
+      const res = await deleteSessionHook(id);
+      await fetchSessions();
+      return res;
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error)
+        showError({
+          title: "Erro ao deletar sessão",
+          message: error.message,
+          action: hideModal,
+        });
+      throw error;
+    }
+  };
+
   return (
     <SessionContext.Provider
       value={{
@@ -92,6 +133,8 @@ export const SessionProvider = ({
         sessions,
         fetchSessions,
         loading: isLoadingSessions || isSaving,
+        updateSession,
+        deleteSession,
       }}
     >
       {children}

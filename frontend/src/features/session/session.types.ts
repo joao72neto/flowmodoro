@@ -21,8 +21,18 @@ export interface SessionResponse {
   interruptions: number;
 }
 
-export interface SessionRequest {
+export interface CreateSessionRequest {
   focus: number;
-  interruptions: number;
+  name?: string;
   ratio?: number;
+  rest?: number;
+  interruptions?: number;
+}
+
+export interface UpdateSessionRequest {
+  name: string;
+  focus?: number;
+  ratio?: number;
+  rest?: number;
+  interruptions?: number;
 }

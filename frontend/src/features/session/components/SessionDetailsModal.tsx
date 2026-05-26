@@ -17,6 +17,7 @@ import clsx from "clsx";
 import { useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
+import { useSessionContext } from "../session.context";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -48,13 +49,15 @@ const SessionDetailsModal = ({
   };
 
   const { showWarning, hideModal } = useModal();
+  const { updateSession, deleteSession } = useSessionContext();
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
     sessionStorage.setItem(localStorageKeys.sessionTitle, e.target.value);
   };
 
-  const handleConfirm = () => {
+  const handleConfirmDelete = async () => {
+    await deleteSession(session.id);
     hideModal();
     sessionStorage.removeItem(localStorageKeys.sessionTitle);
   };
@@ -65,7 +68,7 @@ const SessionDetailsModal = ({
       title: "Deseja mesmo excluir essa sessão?",
       message: "Esta operação não pode ser desfeita.",
       cancel: () => setIsOpen(true),
-      action: handleConfirm,
+      action: handleConfirmDelete,
     });
   };
 
@@ -76,14 +79,18 @@ const SessionDetailsModal = ({
         title: "Deseja mesmo fechar sem salvar?",
         message: "Seus dados não serão salvos.",
         cancel: () => setIsOpen(true),
-        action: handleConfirm,
+        action: () => {
+          hideModal();
+          sessionStorage.removeItem(localStorageKeys.sessionTitle);
+        },
       });
       return;
     }
     setIsOpen(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    await updateSession(session.id, { name: title });
     setIsOpen(false);
     sessionStorage.removeItem(localStorageKeys.sessionTitle);
   };
