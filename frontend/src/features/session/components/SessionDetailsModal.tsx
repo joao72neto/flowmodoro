@@ -16,6 +16,7 @@ import { MdSave, MdModeEdit } from "react-icons/md";
 import clsx from "clsx";
 import { useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
+import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -32,7 +33,9 @@ const SessionDetailsModal = ({
 
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
-  const [title, setTitle] = useState<string>(task.name);
+  const [title, setTitle] = useState<string>(
+    sessionStorage.getItem(localStorageKeys.sessionTitle) || task.name,
+  );
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,8 +51,14 @@ const SessionDetailsModal = ({
 
   const { showWarning, hideModal } = useModal();
 
-  const handleSave = () => {
-    setIsOpen(false);
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    sessionStorage.setItem(localStorageKeys.sessionTitle, e.target.value);
+  };
+
+  const handleConfirm = () => {
+    hideModal();
+    sessionStorage.removeItem(localStorageKeys.sessionTitle);
   };
 
   const handleDeleteSession = () => {
@@ -58,7 +67,7 @@ const SessionDetailsModal = ({
       title: "Deseja mesmo excluir essa sessão?",
       message: "Esta operação não pode ser desfeita.",
       cancel: () => setIsOpen(true),
-      action: hideModal,
+      action: handleConfirm,
     });
   };
 
@@ -69,11 +78,16 @@ const SessionDetailsModal = ({
         title: "Deseja mesmo fechar sem salvar?",
         message: "Seus dados não serão salvos.",
         cancel: () => setIsOpen(true),
-        action: hideModal,
+        action: handleConfirm,
       });
       return;
     }
     setIsOpen(false);
+  };
+
+  const handleSave = () => {
+    setIsOpen(false);
+    sessionStorage.removeItem(localStorageKeys.sessionTitle);
   };
 
   return (
@@ -88,7 +102,7 @@ const SessionDetailsModal = ({
               <input
                 type="text"
                 value={capitalize(title)}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={handleChangeTitle}
                 size={1}
                 className={clsx(
                   "col-start-1 row-start-1 w-full focus:outline-none pb-1 bg-transparent focus:border-b",
