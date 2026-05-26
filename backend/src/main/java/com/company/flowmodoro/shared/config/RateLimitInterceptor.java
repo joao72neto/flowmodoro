@@ -19,34 +19,35 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class RateLimitInterceptor implements HandlerInterceptor {
 
-  private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+	private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
-  private Bucket createNewBucket() {
-    Bandwidth limit = Bandwidth.classic(20, Refill.greedy(20, Duration.ofMinutes(1)));
-    return Bucket.builder().addLimit(limit).build();
-  }
+	private Bucket createNewBucket() {
+		Bandwidth limit = Bandwidth.classic(20, Refill.greedy(20, Duration.ofMinutes(1)));
+		return Bucket.builder().addLimit(limit).build();
+	}
 
-  @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-      throws Exception {
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 
-    String userId = request.getHeader("X-User-Id");
+		String userId = request.getHeader("X-User-Id");
 
-    if (userId == null || userId.isBlank()) {
-      userId = request.getRemoteAddr();
-    }
+		if (userId == null || userId.isBlank()) {
+			userId = request.getRemoteAddr();
+		}
 
-    Bucket bucket = buckets.computeIfAbsent(userId, k -> createNewBucket());
+		Bucket bucket = buckets.computeIfAbsent(userId, k -> createNewBucket());
 
-    if (bucket.tryConsume(1)) {
-      return true;
-    } else {
-      response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-      response.setContentType("application/json");
-      response.getWriter().write("{\"error\": \"Too many requests!\"}");
+		if (bucket.tryConsume(1)) {
+			return true;
+		}
+		else {
+			response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+			response.setContentType("application/json");
+			response.getWriter().write("{\"error\": \"Too many requests!\"}");
 
-      return false;
-    }
-  }
+			return false;
+		}
+	}
 
 }

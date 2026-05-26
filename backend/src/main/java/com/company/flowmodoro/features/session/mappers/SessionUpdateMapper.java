@@ -9,20 +9,19 @@ import com.company.flowmodoro.features.session.dtos.SessionUpdateDTO;
 public class SessionUpdateMapper {
 
 	public void apply(SessionModel session, SessionUpdateDTO dto) {
-		session.setFocus(dto.getFocus());
-		session.setRatio(dto.getRatio());
-		session.setRest(dto.getRest());
-		session.setInterruptions(dto.getInterruptions());
+		session.setName(dto.getName() != null ? dto.getName() : session.getName());
+		session.setFocus(dto.getFocus() != null ? dto.getFocus() : session.getFocus());
+		session.setRatio(dto.getRatio() != null ? dto.getRatio() : session.getRatio());
+		session.setRest(dto.getRest() != null ? dto.getRest() : session.getRest());
+		session.setInterruptions(dto.getInterruptions() != null ? dto.getInterruptions() : session.getInterruptions());
 	}
 
 	public SessionUpdateDTO toDTO(SessionModel session) {
 		return SessionUpdateDTO.builder()
-			.focus(session.getFocus())
-			.ratio(session.getRatio())
-			.rest(session.getRest())
-			.interruptions(session.getInterruptions())
-			.task(session.getTaskSnapshotId())
-			.build();
+				.focus(session.getFocus())
+				.ratio(session.getRatio())
+				.rest(session.getRest())
+				.interruptions(session.getInterruptions())
+				.build();
 	}
-
 }
