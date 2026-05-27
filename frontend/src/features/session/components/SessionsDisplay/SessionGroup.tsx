@@ -16,6 +16,10 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
     sessionGroup.sessions[0],
   );
 
+  useEffect(() => {
+    setSelectedSession(sessionGroup.sessions[0]);
+  }, [sessionGroup.sessions]);
+
   const handleToggle = () => setIsOpen(!isOpen);
   const isTogglable = sessionGroup.sessions.length > 1;
 

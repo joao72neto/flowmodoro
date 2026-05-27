@@ -13,7 +13,8 @@ import EmptySessions from "./EmptySessions";
 import SessionsSkeleton from "./SessionsSkeleton";
 
 const SessionsDisplay = () => {
-  const { success, sessions, fetchSessions, loading } = useSessionContext();
+  const { success, sessions, fetchSessions, loading, refreshToggle } =
+    useSessionContext();
   const { wasTaskDeleted } = useTaskContext();
 
   const SIZE = 4;
@@ -34,7 +35,7 @@ const SessionsDisplay = () => {
 
   useEffect(() => {
     fetchSessions(currentPage, SIZE);
-  }, [currentPage, SIZE, fetchSessions]);
+  }, [currentPage, SIZE, fetchSessions, refreshToggle]);
 
   useEffect(() => {
     if (success || wasTaskDeleted) {
@@ -64,8 +65,11 @@ const SessionsDisplay = () => {
                 groupName={formatToBRDate(sessionGroup.date)}
                 totalFocus={formatToHour(sessionGroup.totalFocus)}
               >
-                {sessionGroup.sessionGroups.map((group, index) => (
-                  <SessionGroup key={index} sessionGroup={group} />
+                {sessionGroup.sessionGroups.map((group) => (
+                  <SessionGroup
+                    key={`${sessionGroup.date}-${group.name}`}
+                    sessionGroup={group}
+                  />
                 ))}
               </DailySessions>
             ))}

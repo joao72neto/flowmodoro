@@ -26,6 +26,8 @@ interface ISessionContext {
     size?: number,
   ) => Promise<PaginationResponse<ISessionGroupResponse>>;
   loading: boolean;
+  refreshSessions: () => void;
+  refreshToggle: boolean;
   updateSession: (id: number, data: UpdateSessionRequest) => Promise<any>;
   deleteSession: (id: number) => Promise<any>;
 }
@@ -47,12 +49,15 @@ export const SessionProvider = ({
   } = useSessions();
   const [success, setSuccess] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [refreshToggle, setRefreshToggle] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
 
   const [restRatio, setRestRatio] = useState<number>(() => {
     const saved = localStorage.getItem(localStorageKeys.restRatio);
     return saved ? Number(saved) : 20;
   });
+
+  const refreshSessions = () => setRefreshToggle((prev) => !prev);
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
@@ -91,7 +96,7 @@ export const SessionProvider = ({
   const updateSession = async (id: number, data: UpdateSessionRequest) => {
     try {
       const res = await updateSessionHook(id, data);
-      await fetchSessions();
+      refreshSessions();
       return res;
     } catch (error) {
       console.error(error);
@@ -108,7 +113,7 @@ export const SessionProvider = ({
   const deleteSession = async (id: number) => {
     try {
       const res = await deleteSessionHook(id);
-      await fetchSessions();
+      refreshSessions();
       return res;
     } catch (error) {
       console.error(error);
@@ -135,6 +140,8 @@ export const SessionProvider = ({
         loading: isLoadingSessions || isSaving,
         updateSession,
         deleteSession,
+        refreshSessions,
+        refreshToggle,
       }}
     >
       {children}

@@ -87,7 +87,7 @@ const useSessions = () => {
       reset();
 
       try {
-        const res = await sessionsService.deleleSession(id);
+        const res = await sessionsService.deleteSession(id);
         setSuccess("Session deleted successfully");
         return res;
       } catch (e: any) {

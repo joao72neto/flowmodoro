@@ -13,7 +13,7 @@ class SessionService {
     return await api.post(`/session/${id}`, data);
   }
 
-  async deleleSession(id: number) {
+  async deleteSession(id: number) {
     return await api.delete(`/session/${id}`);
   }
 

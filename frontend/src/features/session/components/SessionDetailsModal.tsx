@@ -14,7 +14,7 @@ import { FaTrash } from "react-icons/fa6";
 import { MdSave, MdModeEdit } from "react-icons/md";
 
 import clsx from "clsx";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
 import { useSessionContext } from "../session.context";
@@ -31,12 +31,18 @@ const SessionDetailsModal = ({
   if (!isOpen) return null;
 
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
+  const draftKey = `${localStorageKeys.sessionTitle}-${session.id}`;
 
   const [title, setTitle] = useState<string>(
-    sessionStorage.getItem(localStorageKeys.sessionTitle) || session.name,
+    sessionStorage.getItem(draftKey) || session.name,
   );
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const draft = sessionStorage.getItem(draftKey);
+    setTitle(draft || session.name);
+  }, [session.id, session.name, draftKey]);
 
   const isReadyToSave = title.trim() !== session.name.trim();
 
@@ -53,13 +59,13 @@ const SessionDetailsModal = ({
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-    sessionStorage.setItem(localStorageKeys.sessionTitle, e.target.value);
+    sessionStorage.setItem(draftKey, e.target.value);
   };
 
   const handleConfirmDelete = async () => {
     await deleteSession(session.id);
+    sessionStorage.removeItem(draftKey);
     hideModal();
-    sessionStorage.removeItem(localStorageKeys.sessionTitle);
   };
 
   const handleDeleteSession = () => {
@@ -80,8 +86,8 @@ const SessionDetailsModal = ({
         message: "Seus dados não serão salvos.",
         cancel: () => setIsOpen(true),
         action: () => {
+          sessionStorage.removeItem(draftKey);
           hideModal();
-          sessionStorage.removeItem(localStorageKeys.sessionTitle);
         },
       });
       return;
@@ -91,8 +97,8 @@ const SessionDetailsModal = ({
 
   const handleSave = async () => {
     await updateSession(session.id, { name: title });
+    sessionStorage.removeItem(draftKey);
     setIsOpen(false);
-    sessionStorage.removeItem(localStorageKeys.sessionTitle);
   };
 
   return (
