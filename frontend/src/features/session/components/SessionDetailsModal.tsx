@@ -175,7 +175,7 @@ const SessionDetailsModal = ({
           </Stack>
         )}
       </div>
-      <div className="flex gap-3 flex-col sm:flex-row">
+      <div className="flex gap-3 flex-col-reverse sm:flex-row">
         <Button
           onClick={handleDeleteSession}
           icon={<FaTrash />}
