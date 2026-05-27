@@ -113,7 +113,7 @@ const SessionDetailsModal = ({
 
   return (
     <ModalContainer close={handleClose}>
-      <Stack direction="row" justify="between">
+      <Stack direction="row" justify="between" gap={5}>
         <h1 className="flex-1 font-bold text-md sm:text-xl line-clamp-1 break-all text-left pl-1">
           <div className="flex items-center gap-3">
             <div className="inline-grid items-center font-bold min-w-0 max-w-md line-clamp-1">
