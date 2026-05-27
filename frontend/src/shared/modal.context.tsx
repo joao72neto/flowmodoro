@@ -64,6 +64,7 @@ interface IModalContext {
     cancelLabel?: string;
   }) => void;
   hideModal: () => void;
+  setModalLoading: (isLoading: boolean) => void;
 }
 
 export const ModalContext = createContext<IModalContext | null>(null);
@@ -82,6 +83,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   const [onCancelCallback, setOnCancelCallback] = useState<(() => void) | null>(
     null,
   );
+  const [isModalLoading, setIsModalLoading] = useState<boolean>(false);
 
   const showModal = useCallback(
     ({
@@ -108,6 +110,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       setCancelLabel(cancelLabel);
       setOnConfirmCallback(() => onConfirm || (() => {}));
       setOnCancelCallback(() => onCancel || null);
+      setIsModalLoading(false);
     },
     [],
   );
@@ -234,6 +237,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     setCancelLabel(undefined);
     setOnConfirmCallback(() => () => {});
     setOnCancelCallback(null);
+    setIsModalLoading(false);
   }, []);
 
   const handleConfirm = () => {
@@ -255,6 +259,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         showSuccess,
         showDefault,
         hideModal,
+        setModalLoading: setIsModalLoading,
       }}
     >
       {children}
@@ -268,6 +273,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
           onConfirm={
             modalType === "warning" || confirmLabel ? handleConfirm : undefined
           }
+          isLoading={isModalLoading}
         >
           {modalMessage}
         </Modal>

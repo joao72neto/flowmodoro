@@ -39,6 +39,7 @@ function Button({
   className,
   disabled,
   title,
+  loading,
 }: {
   icon?: React.ReactNode;
   variant?: VariantType;
@@ -47,16 +48,21 @@ function Button({
   className?: string;
   disabled?: boolean;
   title?: string;
+  loading?: boolean;
 }) {
   return (
     <button
       title={title}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
       className={clsx(variants[variant || "primary"], className)}
     >
       <div className="flex items-center justify-center gap-2">
-        {icon}
+        {loading ? (
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+        ) : (
+          icon
+        )}
         {children}
       </div>
     </button>

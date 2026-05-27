@@ -14,6 +14,7 @@ const BaseModal = ({
   confirmButtonVariant,
   onClose,
   onConfirm,
+  isLoading,
 }: {
   title: string;
   children: React.ReactNode;
@@ -23,6 +24,7 @@ const BaseModal = ({
   confirmButtonText?: string;
   onClose?: () => void;
   onConfirm?: () => void;
+  isLoading?: boolean;
 }) => {
   return (
     <ModalContainer>
@@ -36,6 +38,7 @@ const BaseModal = ({
             icon={<MdOutlineCancel size={20} />}
             className="w-full"
             onClick={onClose}
+            disabled={isLoading}
             variant={closeButtonVariant || "danger"}
           >
             {closeButtonText ?? "Close"}
@@ -46,6 +49,7 @@ const BaseModal = ({
             icon={<GiConfirmed size={20} />}
             className="w-full"
             onClick={onConfirm}
+            loading={isLoading}
             variant={confirmButtonVariant || "primary"}
           >
             {confirmButtonText ?? "Confirm"}

@@ -12,6 +12,7 @@ const Modal = ({
   children,
   onClose,
   onConfirm,
+  isLoading,
 }: {
   type?: ModalType;
   title?: string;
@@ -22,6 +23,7 @@ const Modal = ({
   children?: React.ReactNode;
   onClose?: () => void;
   onConfirm?: () => void;
+  isLoading?: boolean;
 }) => {
   const config = modalConfig[type];
   return (
@@ -33,6 +35,7 @@ const Modal = ({
       onConfirm={onConfirm}
       confirmButtonVariant={confirmButtonVariant ?? config.confirmButtonVariant}
       closeButtonVariant={closeButtonVariant ?? config.closeButtonVariant}
+      isLoading={isLoading}
     >
       {children ?? config.children}
     </BaseModal>

@@ -48,7 +48,11 @@ export const SessionProvider = ({
     loading: isLoadingSessions,
   } = useSessions();
   const [success, setSuccess] = useState<boolean>(false);
+
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
   const [refreshToggle, setRefreshToggle] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
 
@@ -94,6 +98,7 @@ export const SessionProvider = ({
   };
 
   const updateSession = async (id: number, data: UpdateSessionRequest) => {
+    setIsUpdating(true);
     try {
       const res = await updateSessionHook(id, data);
       refreshSessions();
@@ -107,10 +112,13 @@ export const SessionProvider = ({
           action: hideModal,
         });
       throw error;
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   const deleteSession = async (id: number) => {
+    setIsDeleting(true);
     try {
       const res = await deleteSessionHook(id);
       refreshSessions();
@@ -124,6 +132,8 @@ export const SessionProvider = ({
           action: hideModal,
         });
       throw error;
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -137,7 +147,7 @@ export const SessionProvider = ({
         setRestRatio,
         sessions,
         fetchSessions,
-        loading: isLoadingSessions || isSaving,
+        loading: isLoadingSessions || isSaving || isUpdating || isDeleting,
         updateSession,
         deleteSession,
         refreshSessions,
