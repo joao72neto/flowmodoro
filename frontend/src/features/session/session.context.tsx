@@ -26,6 +26,7 @@ interface ISessionContext {
     size?: number,
   ) => Promise<PaginationResponse<ISessionGroupResponse>>;
   loading: boolean;
+  pending: boolean;
   refreshSessions: () => void;
   refreshToggle: boolean;
   updateSession: (id: number, data: UpdateSessionRequest) => Promise<any>;
@@ -147,7 +148,8 @@ export const SessionProvider = ({
         setRestRatio,
         sessions,
         fetchSessions,
-        loading: isLoadingSessions || isSaving || isUpdating || isDeleting,
+        loading: isLoadingSessions || isSaving,
+        pending: isUpdating || isDeleting,
         updateSession,
         deleteSession,
         refreshSessions,

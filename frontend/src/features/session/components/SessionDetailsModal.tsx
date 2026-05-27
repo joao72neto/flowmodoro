@@ -55,7 +55,7 @@ const SessionDetailsModal = ({
   };
 
   const { showWarning, hideModal, setModalLoading } = useModal();
-  const { updateSession, deleteSession, loading } = useSessionContext();
+  const { updateSession, deleteSession, pending } = useSessionContext();
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -102,9 +102,13 @@ const SessionDetailsModal = ({
   };
 
   const handleSave = async () => {
-    await updateSession(session.id, { name: title });
-    sessionStorage.removeItem(draftKey);
-    setIsOpen(false);
+    try {
+      await updateSession(session.id, { name: title });
+      sessionStorage.removeItem(draftKey);
+      hideModal();
+    } finally {
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -187,8 +191,8 @@ const SessionDetailsModal = ({
         <Button
           icon={<MdSave className="text-lg! sm:text-xl!" />}
           variant="secondary"
-          disabled={!isReadyToSave || loading}
-          loading={loading}
+          disabled={!isReadyToSave || pending}
+          loading={pending}
           onClick={handleSave}
           title={
             isReadyToSave
