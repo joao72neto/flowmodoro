@@ -21,8 +21,8 @@ const DailySessions = ({
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
           "flex justify-between items-center gap-2 w-full cursor-pointer group",
-          "font-bold text-neutral-20 border-y p-4 border-white/10",
-          "shadow-xl bg-[#222] hover:bg-[#282828] transition-colors",
+          "font-bold text-neutral-20 border-b p-4 border-white/10",
+          "transition-colors",
         )}
       >
         <div className="flex items-center gap-3">
@@ -38,9 +38,7 @@ const DailySessions = ({
       </div>
 
       <AnimatedCollapse show={isOpen}>
-        <div className="py-1 px-1.5 sm:px-2">
-          <Stack gap={4}>{children}</Stack>
-        </div>
+        <Stack gap={4}>{children}</Stack>
       </AnimatedCollapse>
     </Stack>
   );

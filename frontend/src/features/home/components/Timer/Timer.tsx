@@ -18,7 +18,7 @@ function Timer() {
     <>
       <div
         className={clsx(
-          "flex justify-center items-center",
+          "flex justify-center items-center bg-[#222]/80",
           "font-mono aspect-square p-7 border rounded-full border-white/10",
           "transition-colors transform-gpu",
           mode === "focus" &&

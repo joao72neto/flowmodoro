@@ -20,7 +20,7 @@ function RatioSlider({
     <div
       className={clsx(
         "flex flex-col w-full mx-auto max-w-sm space-y-3 animate-fade-in",
-        "border border-white/10 rounded-xl py-4 px-5",
+        "border border-white/10 rounded-xl py-4 px-5 bg-[#222]/80",
       )}
     >
       <div className="flex justify-between items-end px-1 gap-2">

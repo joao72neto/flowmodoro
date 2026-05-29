@@ -18,11 +18,11 @@ public class SessionUpdateMapper {
 
 	public SessionUpdateDTO toDTO(SessionModel session) {
 		return SessionUpdateDTO.builder()
-				.focus(session.getFocus())
-				.ratio(session.getRatio())
-				.rest(session.getRest())
-				.interruptions(session.getInterruptions())
-				.build();
+			.focus(session.getFocus())
+			.ratio(session.getRatio())
+			.rest(session.getRest())
+			.interruptions(session.getInterruptions())
+			.build();
 	}
 
 }

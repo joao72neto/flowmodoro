@@ -7,7 +7,7 @@ import { PiCaretRightBold } from "react-icons/pi";
 
 function SideBar({ onClick }: { onClick?: () => void }) {
   return (
-    <div className="border-l bg-[#222] border-l-white/10 h-screen p-3 shadow-2xl">
+    <div className="border-l bg-[#111] border-l-white/10 h-screen p-3 shadow-2xl">
       <IconButton
         icon={
           <PiCaretRightBold

@@ -32,7 +32,7 @@ function RatioSelector() {
         }
         className={clsx(
           "group flex items-center justify-center transition-all duration-300",
-          "h-10 px-4 rounded-xl border border-white/10",
+          "h-10 px-4 rounded-xl border border-white/10 bg-[#222]/80",
           isFocusRunning
             ? "opacity-50 cursor-not-allowed"
             : "cursor-pointer hover:bg-white/5",
