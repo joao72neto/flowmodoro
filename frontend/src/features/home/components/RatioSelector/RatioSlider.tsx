@@ -19,17 +19,20 @@ function RatioSlider({
   return (
     <div
       className={clsx(
-        "flex flex-col w-full mx-auto max-w-sm space-y-3 animate-fade-in",
-        "border border-white/10 rounded-xl py-4 px-5 bg-[#222]/80",
+        "flex flex-col w-full mx-auto max-w-sm space-y-4 animate-fade-in",
+        "border border-white/5 rounded-2xl py-5 px-6 bg-neutral-80/80 backdrop-blur-xl shadow-2xl",
       )}
     >
-      <div className="flex justify-between items-end px-1 gap-2">
+      <div className="flex justify-between items-start px-1 gap-4">
         <div className="flex flex-col gap-1">
-          <label htmlFor="ratio-slider" className="font-bold text-neutral-40">
+          <label
+            htmlFor="ratio-slider"
+            className="font-bold text-[12px]"
+          >
             Perfil de Descanso
           </label>
-          <p className="text-[13px] sm:text-sm text-neutral-40 break-words max-w-[250px]">
-            Ajuste a proporção entre seu esforço e sua recuperação.
+          <p className="text-[12px] leading-tight max-w-[180px]">
+            Ajuste o equilíbrio entre foco e recuperação.
           </p>
         </div>
         <div className="flex flex-col items-end text-right">
@@ -41,7 +44,7 @@ function RatioSlider({
           >
             {restRatio}%
           </span>
-          <span className="text-[10px] text-neutral-60 font-medium whitespace-nowrap">
+          <span className="text-[10px] font-medium whitespace-nowrap">
             ex: 60m foco = {Math.round(60 * (restRatio / 100))}m pausa
           </span>
         </div>
@@ -90,7 +93,7 @@ function RatioSlider({
               "hover:brightness-125 active:scale-95 text-sm sm:text-[16px]",
               restRatio === preset.value
                 ? preset.textClass
-                : "text-neutral-60 hover:text-neutral-40",
+                : "text-neutral-20 hover:text-neutral-10",
             )}
           >
             {preset.label}

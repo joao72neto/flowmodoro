@@ -36,7 +36,7 @@ function TaskSelector() {
   return (
     <div
       ref={ref}
-      className="relative inline-block w-70 bg-[#222]/80 rounded-xl"
+      className="relative inline-block w-70 bg-neutral-80/80 rounded-xl"
     >
       <button
         disabled={isDisabled}
@@ -81,7 +81,7 @@ function TaskSelector() {
         <ul
           className={clsx(
             "absolute",
-            "bg-[#222]/80",
+            "bg-neutral-80/80",
             "mt-2",
             "w-full",
             "bg-gray",

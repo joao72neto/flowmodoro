@@ -13,7 +13,7 @@ const SessionItemSkeleton = () => (
 
 const SessionsGroupSkeleton = () => (
   <Stack className="w-full" gap={4}>
-    <div className="flex justify-between items-center w-full border-y p-4 border-white/10 bg-[#222]/50">
+    <div className="flex justify-between items-center w-full border-y p-4 border-white/10 bg-neutral-80/50">
       <div className="flex items-center gap-3 w-1/3">
         <Skeleton className="h-4 w-4 rounded-full" />
         <Skeleton className="h-5 w-full" />

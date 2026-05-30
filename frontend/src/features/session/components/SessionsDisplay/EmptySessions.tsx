@@ -7,7 +7,7 @@ function EmptySessions() {
         <GiEmptyHourglass size={40} />
         <h2 className="text-xl text-center m-0!">Nenhuma sessão registrada</h2>
       </div>
-      <p className="text-neutral-40 max-w-[300px] text-center text-sm">
+      <p className="text-neutral-10 max-w-[300px] text-center text-sm">
         Inicie o timer e complete seu primeiro ciclo de foco para ver suas
         estatísticas aqui.
       </p>

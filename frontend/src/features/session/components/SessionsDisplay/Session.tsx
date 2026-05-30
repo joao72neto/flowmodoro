@@ -20,8 +20,8 @@ const Session = ({
         direction="row"
         justify="between"
         className={clsx(
-          "border border-white/5 shadow-md p-2 sm:p-3 cursor-pointer rounded-lg w-full",
-          "hover:bg-white/5 transition duration-100 bg-[#222]/80",
+          "border border-white/5 shadow-md p-3 sm:p-4 cursor-pointer rounded-xl w-full",
+          "hover:bg-neutral-40/50 transition duration-200 bg-neutral-60/40 backdrop-blur-sm",
         )}
       >
         <span className={"flex-1 text-sm sm:text-base"}>{session.name}</span>

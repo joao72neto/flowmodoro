@@ -106,11 +106,12 @@ function TaskItem({ task }: TaskItemProps) {
   return (
     <li
       className={clsx(
-        "shadow-xl border-t border rounded-xl border-white/10 px-4 py-3 flex justify-between items-center",
-        "transition-all duration-200 bg-[#222]",
+        "shadow-xl border rounded-2xl border-white/5 px-4 py-4 flex justify-between items-center",
+        "transition-all duration-300 bg-neutral-80/60 backdrop-blur-md",
         {
-          "line-through text-neutral-500 cursor-pointer": task.checked,
-          "opacity-50 pointer-events-none cursor-not-allowed": isProcessing,
+          "hover:bg-neutral-60/80 cursor-pointer": !task.checked && !isProcessing,
+          "line-through text-neutral-500": task.checked,
+          "opacity-50 pointer-events-none": isProcessing,
         },
       )}
       onClick={() =>

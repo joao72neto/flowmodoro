@@ -32,7 +32,9 @@ const DailySessions = ({
               isOpen && "rotate-180",
             )}
           />
-          <span className="uppercase tracking-wider">{groupName}</span>
+          <span className="uppercase text-neutral-300 tracking-wider">
+            {groupName}
+          </span>
         </div>
         <span className="text-neutral-300">{totalFocus}</span>
       </div>

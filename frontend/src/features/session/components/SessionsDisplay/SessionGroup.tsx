@@ -39,8 +39,8 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
       <div className="flex flex-col w-full">
         <Stack
           className={clsx(
-            "w-full bg-[#333]/80 rounded-xl p-3 sm:p-4 border border-white/10",
-            "shadow-xl transition-colors hover:bg-white/8 cursor-pointer min-h-[70px]",
+            "w-full bg-neutral-80/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/5",
+            "shadow-xl transition-all hover:bg-neutral-60/80 cursor-pointer min-h-[80px]",
           )}
           gap={3}
           onClick={

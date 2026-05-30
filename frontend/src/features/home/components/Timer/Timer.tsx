@@ -18,13 +18,17 @@ function Timer() {
     <>
       <div
         className={clsx(
-          "flex justify-center items-center bg-[#222]/80",
-          "font-mono aspect-square p-7 border rounded-full border-white/10",
-          "transition-colors transform-gpu",
-          mode === "focus" &&
-            "animate-[sonar-focus_2.5s_ease-in-out_infinite] border-danger!",
-          mode === "break" &&
-            "animate-[sonar-break_2.5s_ease-in-out_infinite] border-success!",
+          "flex justify-center items-center bg-neutral-80/80 backdrop-blur-md",
+          "font-mono aspect-square p-7 border rounded-full border-white/5 shadow-2xl",
+          "transition-all duration-500 transform-gpu",
+          mode === "focus" && [
+            "animate-[sonar-focus_3s_ease-in-out_infinite] border-danger/50 shadow-danger/20",
+            "text-danger drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]",
+          ],
+          mode === "break" && [
+            "animate-[sonar-break_3s_ease-in-out_infinite] border-success/50 shadow-success/20",
+            "text-success drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]",
+          ],
           seconds >= 3600 ? "text-5xl" : "text-6xl",
         )}
       >
