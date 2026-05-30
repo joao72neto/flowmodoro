@@ -40,7 +40,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
         <Stack
           className={clsx(
             "w-full bg-neutral-80/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/5",
-            "shadow-xl transition-all hover:bg-neutral-60/80 cursor-pointer min-h-[80px]",
+            "shadow-xl transition-all hover:bg-neutral-60/20 cursor-pointer min-h-[80px]",
           )}
           gap={3}
           onClick={

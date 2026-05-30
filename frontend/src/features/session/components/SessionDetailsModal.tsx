@@ -7,7 +7,6 @@ import { capitalize } from "../../../shared/utils/string.utils";
 import Line from "../../../shared/components/Line";
 
 import { PRESETS } from "../../home/ratio.const";
-import InfoWrapper from "../../../shared/components/InfoWrapper";
 import Button from "../../../shared/components/Button";
 
 import { FaTrash } from "react-icons/fa6";
@@ -18,6 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
 import { useSessionContext } from "../session.context";
+import IconButton from "../../home/components/buttons/IconButton";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -112,13 +112,13 @@ const SessionDetailsModal = ({
   };
 
   return (
-    <ModalContainer close={handleClose}>
-      <Stack direction="row" justify="between" gap={5}>
-        <h1 className="flex-1 font-bold text-md sm:text-xl line-clamp-1 break-all text-left pl-1">
-          <div className="flex items-center gap-3">
-            <div className="inline-grid items-center font-bold min-w-0 max-w-md line-clamp-1">
-              <span className="invisible col-start-1 row-start-1 whitespace-pre pb-2 line-clamp-1">
-                {title}
+    <ModalContainer close={handleClose} className="!gap-10">
+      <Stack direction="row" justify="between" gap={5} className="w-full">
+        <div className="flex-1 flex items-center gap-4 min-w-0">
+          <div className="relative flex-1 min-w-0 group">
+            <div className="inline-grid items-center font-bold w-full">
+              <span className="invisible col-start-1 row-start-1 whitespace-pre pb-1 text-lg sm:text-2xl">
+                {title || "Sessão sem nome"}
               </span>
               <input
                 type="text"
@@ -126,86 +126,105 @@ const SessionDetailsModal = ({
                 onChange={handleChangeTitle}
                 size={1}
                 className={clsx(
-                  "col-start-1 row-start-1 w-full focus:outline-none pb-1 bg-transparent focus:border-b",
-                  "transition duration-200 ease-in-out w-fit focus:border-primary",
+                  "col-start-1 row-start-1 w-full focus:outline-none bg-transparent",
+                  "text-lg sm:text-2xl font-bold transition-all duration-300 pb-1",
+                  isEditing
+                    ? "border-b-2 border-primary text-white"
+                    : "border-b-2 border-transparent text-neutral-40 cursor-default",
                 )}
                 ref={inputRef}
                 onBlur={() => setIsEditing(false)}
                 disabled={!isEditing}
+                placeholder="Nome da sessão"
               />
             </div>
-            <MdModeEdit
-              onClick={handleEditTitle}
-              className={clsx(
-                "text-xl sm:text-2xl cursor-pointer shrink-0 hover:scale-110 hover:text-primary transition duration-100",
-                isEditing && "text-primary",
-              )}
-            />
           </div>
-        </h1>
-        <IoClose
-          size={30}
-          className="cursor-pointer hover:scale-110 hover:text-danger transition duration-100"
+          <IconButton
+            icon={
+              isEditing ? (
+                <MdSave className="text-success animate-fade-in" size={24} />
+              ) : (
+                <MdModeEdit
+                  className="text-neutral-40 hover:text-primary transition-colors"
+                  size={24}
+                />
+              )
+            }
+            onClick={isEditing ? () => setIsEditing(false) : handleEditTitle}
+          />
+        </div>
+        <IconButton
+          icon={
+            <IoClose
+              size={32}
+              className="text-neutral-40 hover:text-danger hover:rotate-90 transition-all duration-300"
+            />
+          }
           onClick={handleClose}
         />
       </Stack>
 
-      <div className="flex flex-col gap-3">
-        <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-          <InfoWrapper size="md">Tempo de Foco</InfoWrapper>
-          <Line />
-          <InfoWrapper>{formatToHour(session.focus)}</InfoWrapper>
+      <div className="flex flex-col gap-4 bg-neutral-60/30 p-5 rounded-2xl border border-white/5">
+        <Stack direction="row" justify="between" className="w-full">
+          <span className="text-neutral-40 font-medium text-sm sm:text-base">
+            Tempo de Foco
+          </span>
+          <span className="font-mono text-lg sm:text-xl text-white">
+            {formatToHour(session.focus)}
+          </span>
         </Stack>
 
+        <Line className="opacity-30" />
+
         {session.rest > 0 && (
-          <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-            <InfoWrapper size="md">Descanso calculado</InfoWrapper>
-            <Line />
-            <InfoWrapper>{formatToHour(session.rest)}</InfoWrapper>
-          </Stack>
+          <>
+            <Stack direction="row" justify="between" className="w-full">
+              <span className="text-neutral-40 font-medium text-sm sm:text-base">
+                Descanso calculado
+              </span>
+              <span className="font-mono text-lg sm:text-xl text-success">
+                {formatToHour(session.rest)}
+              </span>
+            </Stack>
+            <Line className="opacity-30" />
+          </>
         )}
 
-        {preset && preset.label && (
-          <Stack className="gap-0! sm:gap-2!" direction="row" justify="between">
-            <InfoWrapper size="md">Perfil de Descanso:</InfoWrapper>
-            <Line />
-            <InfoWrapper className={preset?.textClass}>
-              {preset?.label}
-            </InfoWrapper>
+        {preset && (
+          <Stack direction="row" justify="between" className="w-full">
+            <span className="text-neutral-40 font-medium text-sm sm:text-base">
+              Perfil de Descanso
+            </span>
+            <span
+              className={clsx(
+                "font-bold text-sm sm:text-base px-3 py-1 rounded-lg bg-white/5 border border-white/5",
+                preset.textClass,
+              )}
+            >
+              {preset.label}
+            </span>
           </Stack>
         )}
       </div>
-      <div className="flex gap-3 flex-col-reverse sm:flex-row">
+
+      <div className="flex gap-4 flex-col sm:flex-row w-full">
         <Button
           onClick={handleDeleteSession}
-          icon={<FaTrash />}
-          className={clsx(
-            "w-full! hover:bg-danger hover:border-danger! bg-transparent ",
-            "border border-white/10 text-sm! sm:text-base!",
-          )}
+          icon={<FaTrash size={16} />}
           variant="danger"
-          title="Excluir sessão"
+          className="flex-1 !bg-neutral-60/50 !border-white/5 hover:!bg-danger hover:!text-white transition-all"
         >
-          Deletar
+          Excluir
         </Button>
         <Button
-          icon={<MdSave className="text-lg! sm:text-xl!" />}
-          variant="secondary"
+          icon={<MdSave size={20} />}
+          variant="primary"
           disabled={!isReadyToSave || pending}
           loading={pending}
           onClick={handleSave}
-          title={
-            isReadyToSave
-              ? "Salvar alterações"
-              : "Edite o nome da sessão para poder salvar"
-          }
-          className={clsx(
-            "w-full! not-disabled:hover:bg-success not-disabled:hover:text-black/80 ",
-            "not-disabled:hover:border-success! border border-white/10 bg-transparent",
-            "disabled:scale-100 text-sm! sm:text-base!",
-          )}
+          className="flex-[2] shadow-lg shadow-primary/20"
         >
-          Salvar
+          Salvar Alterações
         </Button>
       </div>
     </ModalContainer>

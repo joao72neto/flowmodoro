@@ -35,11 +35,11 @@ body {
   --color-success-2: #16a34a;
 
   --color-neutral-100: #0c0b0a;
-  --color-neutral-80: #171614;
-  --color-neutral-60: #23221f;
-  --color-neutral-40: #33312e;
-  --color-neutral-20: #44403c;
-  --color-neutral-10: #56534f;
+  --color-neutral-80: #1c1a17;
+  --color-neutral-60: #33312e;
+  --color-neutral-40: #a8a29e;
+  --color-neutral-20: #d6d3d1;
+  --color-neutral-10: #fafaf9;
 
   /*Tailwind Animations */
 

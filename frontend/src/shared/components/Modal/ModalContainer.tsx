@@ -31,16 +31,16 @@ const ModalContainer = ({
   return createPortal(
     <div
       className={clsx(
-        "fixed inset-0 flex items-center justify-center z-50 bg-black/50 p-4",
+        "fixed inset-0 flex items-center justify-center z-50 bg-black/60 p-4 backdrop-blur-sm",
       )}
       onClick={() => close?.()}
     >
       <div
         className={clsx(
           "flex flex-col gap-8 text-center",
-          "p-6 rounded-xl w-full relative max-h-[90vh] animate-fade-in bg-white/10",
-          "overflow-auto overscroll-contain backdrop-blur-2xl border border-white/10",
-          "shadow-2xl",
+          "p-6 sm:p-8 rounded-3xl w-full relative max-h-[90vh] animate-fade-in bg-neutral-80/90",
+          "overflow-auto overscroll-contain backdrop-blur-3xl border border-white/5",
+          "shadow-[0_0_50px_rgba(0,0,0,0.5)]",
           sizes[size],
           className,
         )}
