@@ -21,7 +21,7 @@ const LoadingApplication = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-neutral-950 flex flex-col items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-neutral-100 flex flex-col items-center justify-center z-50 p-4">
       <div className="flex flex-col items-center max-w-sm text-center">
         <div className="relative mb-8">
           <div className="absolute inset-0 bg-danger/20 blur-3xl rounded-full animate-pulse" />
@@ -31,11 +31,11 @@ const LoadingApplication = () => {
           />
         </div>
 
-        <h1 className="text-2xl font-bold text-white mb-4">
+        <h1 className="text-2xl font-bold text-neutral-10 mb-4">
           Acordando o Servidor
         </h1>
 
-        <p className="text-neutral-400 mb-6 leading-relaxed">
+        <p className="text-neutral-40 mb-6 leading-relaxed">
           A API está hospedada em um servidor gratuito que entra em repouso após
           inatividade. Isso pode levar cerca de{" "}
           <span className="text-danger font-semibold text-nowrap">
@@ -45,20 +45,20 @@ const LoadingApplication = () => {
         </p>
 
         <div className="h-6 mb-6 flex items-center justify-center w-full">
-          <p className="text-sm font-medium text-white/80 animate-pulse text-center">
+          <p className="text-sm font-medium text-neutral-20 animate-pulse text-center">
             {getLoadingMessage(seconds)}
           </p>
         </div>
 
-        <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+        <div className="w-full bg-neutral-80/50 h-1.5 rounded-full overflow-hidden">
           <div className="bg-danger h-full animate-loading-bar" />
         </div>
 
         <div className="flex items-center justify-between w-full mt-4">
-          <p className="text-xs text-neutral-500 italic">
+          <p className="text-xs text-neutral-40 italic">
             Agradeço a sua paciência! 🎉
           </p>
-          <span className="text-xs font-mono text-neutral-500 font-semibold">
+          <span className="text-xs font-mono text-neutral-40 font-semibold">
             {seconds}s
           </span>
         </div>

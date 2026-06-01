@@ -19,7 +19,7 @@ function Input({
     <input
       disabled={disabled}
       className={clsx(
-        "flex-grow px-4 py-2 text-white rounded-md border border-white/10 ",
+        "flex-grow px-4 py-2 text-neutral-10 rounded-md border border-border bg-neutral-80/50",
         "focus:border-danger focus:outline-none transition-colors duration-200 ease-in-out",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         className,

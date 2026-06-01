@@ -18,7 +18,7 @@ const InfoWrapper = ({
   return (
     <div
       className={clsx(
-        "p-2 border border-white/5 rounded-xl text-center w-full",
+        "p-2 border border-border rounded-xl text-center w-full",
         "bg-neutral-80/40 backdrop-blur-sm text-neutral-40 text-sm sm:text-base",
         className,
         sizes[size],

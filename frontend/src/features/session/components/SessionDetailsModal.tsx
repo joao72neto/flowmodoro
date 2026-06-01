@@ -4,7 +4,6 @@ import Stack from "../../../shared/components/Stack";
 import type { SessionResponse } from "../session.types";
 import { formatToHour } from "../../../shared/utils/number.utils";
 import { capitalize } from "../../../shared/utils/string.utils";
-import Line from "../../../shared/components/Line";
 
 import { PRESETS } from "../../home/ratio.const";
 import Button from "../../../shared/components/Button";
@@ -130,7 +129,7 @@ const SessionDetailsModal = ({
                   "text-lg sm:text-2xl font-bold transition-all duration-300 pb-1",
                   isEditing
                     ? "border-b-2 border-primary text-white"
-                    : "border-b-2 border-transparent text-neutral-40 cursor-default",
+                    : "border-b-2 border-transparent text-neutral-20 cursor-default",
                 )}
                 ref={inputRef}
                 onBlur={() => setIsEditing(false)}
@@ -164,9 +163,9 @@ const SessionDetailsModal = ({
         />
       </Stack>
 
-      <div className="flex flex-col gap-4 bg-neutral-60/30 p-5 rounded-2xl border border-white/5">
+      <div className="flex flex-col gap-8 bg-neutral-60/30 p-5 rounded-2xl border border-border">
         <Stack direction="row" justify="between" className="w-full">
-          <span className="text-neutral-40 font-medium text-sm sm:text-base">
+          <span className="text-neutral-20 font-medium text-sm sm:text-base">
             Tempo de Foco
           </span>
           <span className="font-mono text-lg sm:text-xl text-white">
@@ -174,30 +173,27 @@ const SessionDetailsModal = ({
           </span>
         </Stack>
 
-        <Line className="opacity-30" />
-
         {session.rest > 0 && (
           <>
             <Stack direction="row" justify="between" className="w-full">
-              <span className="text-neutral-40 font-medium text-sm sm:text-base">
+              <span className="text-neutral-20 font-medium text-sm sm:text-base">
                 Descanso calculado
               </span>
               <span className="font-mono text-lg sm:text-xl text-success">
                 {formatToHour(session.rest)}
               </span>
             </Stack>
-            <Line className="opacity-30" />
           </>
         )}
 
         {preset && (
           <Stack direction="row" justify="between" className="w-full">
-            <span className="text-neutral-40 font-medium text-sm sm:text-base">
+            <span className="text-neutral-20 font-medium text-sm sm:text-base">
               Perfil de Descanso
             </span>
             <span
               className={clsx(
-                "font-bold text-sm sm:text-base px-3 py-1 rounded-lg bg-white/5 border border-white/5",
+                "font-bold text-sm sm:text-base px-3 py-1 rounded-lg bg-neutral-80/50 border border-border",
                 preset.textClass,
               )}
             >
@@ -212,7 +208,7 @@ const SessionDetailsModal = ({
           onClick={handleDeleteSession}
           icon={<FaTrash size={16} />}
           variant="danger"
-          className="flex-1 !bg-neutral-60/50 !border-white/5 hover:!bg-danger hover:!text-white transition-all"
+          className="flex-1 !bg-neutral-60/50 !border-border hover:!bg-danger hover:!text-white transition-all"
         >
           Excluir
         </Button>

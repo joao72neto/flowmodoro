@@ -106,11 +106,11 @@ function TaskItem({ task }: TaskItemProps) {
   return (
     <li
       className={clsx(
-        "shadow-xl border rounded-2xl border-white/5 px-4 py-4 flex justify-between items-center",
+        "shadow-xl border rounded-2xl border-border px-4 py-4 flex justify-between items-center",
         "transition-all duration-300 bg-neutral-80/60 backdrop-blur-md",
         {
           "hover:bg-neutral-60/80 cursor-pointer": !task.checked && !isProcessing,
-          "line-through text-neutral-500": task.checked,
+          "line-through text-neutral-40": task.checked,
           "opacity-50 pointer-events-none": isProcessing,
         },
       )}

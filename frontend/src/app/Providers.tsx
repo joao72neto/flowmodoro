@@ -5,6 +5,8 @@ import { TaskProvider } from "../features/task/task.context";
 import { TimerProvider } from "../features/home/timer.context";
 import LoadingApplication from "./LoadingApplication";
 
+import { ThemeProvider } from "../shared/contexts/theme.context";
+
 const Providers = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
@@ -75,11 +77,13 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ModalProvider>
-      <SessionProvider>
-        <TaskProvider>
-          <TimerProvider>{children}</TimerProvider>
-        </TaskProvider>
-      </SessionProvider>
+      <ThemeProvider>
+        <SessionProvider>
+          <TaskProvider>
+            <TimerProvider>{children}</TimerProvider>
+          </TaskProvider>
+        </SessionProvider>
+      </ThemeProvider>
     </ModalProvider>
   );
 };

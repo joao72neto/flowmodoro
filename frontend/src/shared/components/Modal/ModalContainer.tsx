@@ -39,7 +39,7 @@ const ModalContainer = ({
         className={clsx(
           "flex flex-col gap-8 text-center",
           "p-6 sm:p-8 rounded-3xl w-full relative max-h-[90vh] animate-fade-in bg-neutral-80/90",
-          "overflow-auto overscroll-contain backdrop-blur-3xl border border-white/5",
+          "overflow-auto overscroll-contain backdrop-blur-3xl border border-border",
           "shadow-[0_0_50px_rgba(0,0,0,0.5)]",
           sizes[size],
           className,

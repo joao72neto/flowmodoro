@@ -3,6 +3,7 @@ export const localStorageKeys = {
   restRatio: "flowmodoro_rest_ratio",
   userId: "flowmodoro_anonymous_user_id",
   sessionTitle: "flowmodoro_session_title",
+  theme: "flowmodoro_theme",
 };
 
 export const getAnonymousUserId = (): string => {

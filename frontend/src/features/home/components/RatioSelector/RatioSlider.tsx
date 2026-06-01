@@ -20,7 +20,7 @@ function RatioSlider({
     <div
       className={clsx(
         "flex flex-col w-full mx-auto max-w-sm space-y-4 animate-fade-in",
-        "border border-white/5 rounded-2xl py-5 px-6 bg-neutral-80/80 backdrop-blur-xl shadow-2xl",
+        "border border-border rounded-2xl py-5 px-6 bg-neutral-80/80 backdrop-blur-xl shadow-2xl",
       )}
     >
       <div className="flex justify-between items-start px-1 gap-4">
@@ -48,7 +48,7 @@ function RatioSlider({
       </div>
 
       <div className="relative flex items-center h-6 group px-1">
-        <div className="absolute left-0 right-0 h-1.5 sm:h-2 bg-white/10 rounded-lg" />
+        <div className="absolute left-0 right-0 h-1.5 sm:h-2 bg-neutral-60 rounded-lg" />
 
         <div
           className={clsx(
@@ -60,7 +60,7 @@ function RatioSlider({
 
         <div
           className={clsx(
-            "absolute w-4 h-4 rounded-full shadow-lg transition-all ",
+            "absolute w-4 h-4 rounded-full shadow-lg transition-all",
             "duration-300 ease-out pointer-events-none z-10",
             currentPreset.bgClass,
           )}

@@ -52,11 +52,11 @@ function TaskSelector() {
           "w-full",
           "py-3",
           "border",
-          "border-white/10",
+          "border-border",
           "transition",
           isDisabled
             ? "cursor-not-allowed opacity-50"
-            : "cursor-pointer hover:border-white/30",
+            : "cursor-pointer hover:border-neutral-40",
         )}
       >
         <div className="flex-1 line-clamp-1 break-all">
@@ -68,12 +68,12 @@ function TaskSelector() {
           <FaCaretDown
             size={20}
             className={clsx(
-              "text-white/60 transition duration-200",
+              "text-neutral-40 transition duration-200",
               isOpen && "rotate-180",
             )}
           />
         ) : (
-          <CiCirclePlus size={25} className="text-white/60" />
+          <CiCirclePlus size={25} className="text-neutral-40" />
         )}
       </button>
 
@@ -87,7 +87,7 @@ function TaskSelector() {
             "bg-gray",
             "backdrop-blur-lg",
             "border",
-            "border-white/10",
+            "border-border",
             "rounded-xl",
             "shadow-lg",
             "text-center",
@@ -106,7 +106,7 @@ function TaskSelector() {
                 setManualActiveTaskId(task.id);
                 setIsOpen(false);
               }}
-              className="p-3 hover:bg-black/30 cursor-pointer"
+              className="p-3 hover:bg-neutral-60/50 cursor-pointer"
             >
               <div className="line-clamp-1 break-all">{task.name}</div>
             </li>

@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { RxCaretLeft } from "react-icons/rx";
-import { RxCaretRight } from "react-icons/rx";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 interface PageSelectorProps {
   currentPage: number;
@@ -45,12 +44,12 @@ const PageSelector = ({
         onClick={prevPage}
         disabled={!hasPrevPage}
         className={clsx(
-          "group px-3 py-1",
+          "group px-3 py-1 cursor-pointer",
           "disabled:cursor-not-allowed disabled:opacity-50",
         )}
         title="Primeira página"
       >
-        <RxCaretLeft
+        <IoChevronBack
           size={30}
           className={clsx(
             "block origin-center transition-all duration-300 ease-out",
@@ -67,11 +66,11 @@ const PageSelector = ({
             key={page}
             onClick={() => goToPage(page)}
             className={clsx(
-              "px-3 py-1 rounded-md text-sm font-medium transition-colors text-white",
-              "border-neutral-600 cursor-pointer",
+              "px-4 py-1 rounded-md text-sm font-medium transition-colors text-neutral-10",
+              "border-border cursor-pointer",
               currentPage === page
-                ? "bg-danger-2"
-                : "border hover:bg-gray-600/20",
+                ? "bg-danger-2 !text-white"
+                : "border hover:bg-neutral-60/50",
             )}
           >
             {page}
@@ -83,12 +82,12 @@ const PageSelector = ({
         onClick={nextPage}
         disabled={!hasNextPage}
         className={clsx(
-          "group px-3 py-1",
+          "group px-3 py-1 cursor-pointer",
           "disabled:cursor-not-allowed disabled:opacity-50",
         )}
         title="Última página"
       >
-        <RxCaretRight
+        <IoChevronForward
           size={30}
           className={clsx(
             "block origin-center transition-all duration-300 ease-out",

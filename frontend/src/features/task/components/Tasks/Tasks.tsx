@@ -58,7 +58,7 @@ function Tasks() {
           title="Adicionar nova tarefa"
           className={clsx(
             "flex items-center gap-2 min-w-12 justify-center",
-            "px-3 text-white rounded-y-md rounded-r-md border-r border-y border-white/10 ",
+            "px-3 text-white rounded-y-md rounded-r-md border-r border-y border-border ",
             "hover:bg-danger transition-colors duration-200 ease-in-out cursor-pointer",
             "peer-focus-within:border-danger",
             "disabled:opacity-50 disabled:cursor-not-allowed",

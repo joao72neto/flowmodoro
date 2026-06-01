@@ -14,14 +14,14 @@ function TaskTabs({
   doneCount,
 }: TaskTabsProps) {
   return (
-    <div className="flex border-b border-white/10 mb-4">
+    <div className="flex border-b border-border mb-4">
       <button
         onClick={() => setActiveTab("todo")}
         className={clsx(
           "flex-1 py-2 text-sm font-medium transition-colors border-b-2 cursor-pointer flex items-center justify-center gap-2",
           activeTab === "todo"
             ? "border-danger text-danger"
-            : "border-transparent text-neutral-400 hover:text-white",
+            : "border-transparent text-neutral-40 hover:text-white",
         )}
       >
         A fazer
@@ -31,7 +31,7 @@ function TaskTabs({
               "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
               activeTab === "todo"
                 ? "bg-danger text-white"
-                : "bg-white/10 text-neutral-400",
+                : "bg-neutral-60/50 text-neutral-40",
             )}
           >
             {todoCount}
@@ -44,7 +44,7 @@ function TaskTabs({
           "flex-1 py-2 text-sm font-medium transition-colors border-b-2 cursor-pointer flex items-center justify-center gap-2",
           activeTab === "done"
             ? "border-success text-success"
-            : "border-transparent text-neutral-400 hover:text-white",
+            : "border-transparent text-neutral-40 hover:text-white",
         )}
       >
         Concluído
@@ -54,7 +54,7 @@ function TaskTabs({
               "px-2 py-1 flex items-center justify-center rounded-full text-[10px] font-bold",
               activeTab === "done"
                 ? "bg-success text-neutral-100"
-                : "bg-white/10 text-neutral-400",
+                : "bg-neutral-60/50 text-neutral-40",
             )}
           >
             {doneCount}

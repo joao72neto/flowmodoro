@@ -21,22 +21,24 @@ const DailySessions = ({
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
           "flex justify-between items-center gap-2 w-full cursor-pointer group",
-          "font-bold text-neutral-20 border-b p-4 border-white/10",
+          "font-bold text-neutral-20 border-b p-4 border-border",
           "transition-colors",
         )}
       >
-        <div className="flex items-center gap-3">
+        <div className="group flex items-center gap-3">
           <FaChevronDown
             className={clsx(
-              "transition-transform duration-300 text-neutral-400 group-hover:text-white",
+              "transition-transform duration-300 text-neutral-40 group-hover:text-neutral-20",
               isOpen && "rotate-180",
             )}
           />
-          <span className="uppercase text-neutral-300 tracking-wider">
+          <span className="uppercase text-neutral-40 tracking-wider group-hover:text-neutral-20">
             {groupName}
           </span>
         </div>
-        <span className="text-neutral-300">{totalFocus}</span>
+        <span className="text-neutral-40 group-hover:text-neutral-20">
+          {totalFocus}
+        </span>
       </div>
 
       <AnimatedCollapse show={isOpen}>

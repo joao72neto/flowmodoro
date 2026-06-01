@@ -39,7 +39,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
       <div className="flex flex-col w-full">
         <Stack
           className={clsx(
-            "w-full bg-neutral-80/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/5",
+            "w-full bg-neutral-80/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-border",
             "shadow-xl transition-all hover:bg-neutral-60/20 cursor-pointer min-h-[80px]",
           )}
           gap={3}
@@ -58,8 +58,8 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
                 <span
                   className={clsx(
                     "cursor-pointer text-md sm:text-lg font-medium line-clamp-1",
-                    "break-all border border-white/10 rounded-lg px-3 py-1",
-                    "hover:bg-black/20 transition-colors bg-black/30",
+                    "break-all border border-border rounded-lg px-3 py-1",
+                    "hover:bg-neutral-60/50 transition-colors bg-neutral-60/50",
                   )}
                   title="Expandir sessões"
                 >
@@ -72,7 +72,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
             </div>
             <span
               className={clsx(
-                "text-sm sm:text-base bg-white/10 border border-white/10 ",
+                "text-sm sm:text-base bg-neutral-80/50 border border-border ",
                 "px-3 py-1 rounded-lg shadow font-semibold",
                 !isTogglable && preset?.textClass,
               )}
@@ -82,7 +82,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
           </Stack>
         </Stack>
         <AnimatedCollapse show={isOpen}>
-          <Stack gap={4} className="border-white/5 w-full pt-4">
+          <Stack gap={4} className="border-border w-full pt-4">
             {sessionGroup.sessions.map((session) => (
               <Session
                 key={session.id}

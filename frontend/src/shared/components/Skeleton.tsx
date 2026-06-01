@@ -6,7 +6,9 @@ interface SkeletonProps {
 
 const Skeleton = ({ className }: SkeletonProps) => {
   return (
-    <div className={clsx("animate-pulse bg-white/5 rounded-md", className)} />
+    <div
+      className={clsx("animate-pulse bg-neutral-60 rounded-md", className)}
+    />
   );
 };
 
