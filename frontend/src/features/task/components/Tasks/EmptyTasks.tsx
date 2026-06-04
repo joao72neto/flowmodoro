@@ -15,7 +15,7 @@ function EmptyTasks({ activeTab }: EmptyTasksProps) {
             : "Nenhuma tarefa concluída"}
         </h2>
       </div>
-      <p className="text-neutral-40 max-w-[280px] text-center">
+      <p className="text-neutral-20 max-w-[280px] text-center">
         {activeTab === "todo"
           ? "Aproveite seu tempo livre ou adicione uma nova tarefa."
           : "As tarefas que você terminar aparecerão aqui."}

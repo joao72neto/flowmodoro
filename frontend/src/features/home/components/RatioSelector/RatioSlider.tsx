@@ -20,7 +20,7 @@ function RatioSlider({
     <div
       className={clsx(
         "flex flex-col w-full mx-auto max-w-sm space-y-4 animate-fade-in",
-        "border border-border rounded-2xl py-5 px-6 bg-neutral-80/80 backdrop-blur-xl shadow-2xl",
+        "border border-border rounded-2xl py-5 px-6 bg-neutral-80/80 shadow-2xl",
       )}
     >
       <div className="flex justify-between items-start px-1 gap-4">
@@ -28,7 +28,7 @@ function RatioSlider({
           <label htmlFor="ratio-slider" className="font-bold text-[12px]">
             Perfil de Descanso
           </label>
-          <p className="text-[12px] leading-tight text-neutral-40 max-w-[180px]">
+          <p className="text-[12px] leading-tight text-neutral-20 max-w-[180px]">
             Ajuste o equilíbrio entre foco e recuperação.
           </p>
         </div>
@@ -41,7 +41,7 @@ function RatioSlider({
           >
             {restRatio}%
           </span>
-          <span className="text-[10px] text-neutral-40 font-medium whitespace-nowrap">
+          <span className="text-[10px] text-neutral-20 font-medium whitespace-nowrap">
             ex: 60m foco = {Math.round(60 * (restRatio / 100))}m pausa
           </span>
         </div>

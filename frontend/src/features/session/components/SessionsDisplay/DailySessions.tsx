@@ -28,21 +28,21 @@ const DailySessions = ({
         <div className="group flex items-center gap-3">
           <FaChevronDown
             className={clsx(
-              "transition-transform duration-300 text-neutral-40 group-hover:text-neutral-20",
+              "transition-transform duration-300 text-neutral-20 group-hover:text-neutral-10",
               isOpen && "rotate-180",
             )}
           />
-          <span className="uppercase text-neutral-40 tracking-wider group-hover:text-neutral-20">
+          <span className="uppercase text-neutral-20 tracking-wider group-hover:text-neutral-10">
             {groupName}
           </span>
         </div>
-        <span className="text-neutral-40 group-hover:text-neutral-20">
+        <span className="text-neutral-20 group-hover:text-neutral-10">
           {totalFocus}
         </span>
       </div>
 
       <AnimatedCollapse show={isOpen}>
-        <Stack gap={4}>{children}</Stack>
+        <Stack gap={2}>{children}</Stack>
       </AnimatedCollapse>
     </Stack>
   );

@@ -107,9 +107,10 @@ function TaskItem({ task }: TaskItemProps) {
     <li
       className={clsx(
         "shadow-xl border rounded-2xl border-border px-4 py-4 flex justify-between items-center",
-        "transition-all duration-300 bg-neutral-80/60 backdrop-blur-md",
+        "transition-all duration-300 bg-neutral-80/60 hover:scale-[1.01]",
         {
-          "hover:bg-neutral-60/80 cursor-pointer": !task.checked && !isProcessing,
+          "hover:bg-neutral-80": !task.checked && !isProcessing,
+          "cursor-pointer": task.checked,
           "line-through text-neutral-40": task.checked,
           "opacity-50 pointer-events-none": isProcessing,
         },

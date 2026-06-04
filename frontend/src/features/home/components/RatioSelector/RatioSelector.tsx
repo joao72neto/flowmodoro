@@ -32,10 +32,10 @@ function RatioSelector() {
         }
         className={clsx(
           "group flex items-center justify-center transition-all duration-300",
-          "h-10 px-4 rounded-xl border border-border bg-neutral-80/60 backdrop-blur-md shadow-lg",
+          "h-10 px-4 rounded-xl border border-border bg-neutral-80/60 shadow-lg",
           isFocusRunning
             ? "opacity-50 cursor-not-allowed"
-            : "cursor-pointer hover:bg-neutral-60/80 hover:border-border",
+            : "cursor-pointer hover:bg-neutral-80 hover:border-border",
         )}
         onClick={() => setIsOpen((prev) => !prev)}
       >

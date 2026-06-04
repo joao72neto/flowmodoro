@@ -41,45 +41,49 @@ function Tasks() {
 
   return (
     <div className="w-full max-w-xl flex flex-col h-screen">
-      <h2 className="text-2xl mb-4 text-center">Tarefas</h2>
-      <div className="flex mb-4">
-        <Input
-          placeholder="Adicionar tarefa"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={isAddingTask}
-          className="peer rounded-r-none!"
+      <div className="mx-3">
+        <h2 className="text-2xl mb-4 text-center">Tarefas</h2>
+        <div className="flex mb-4">
+          <Input
+            placeholder="Adicionar tarefa"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={isAddingTask}
+            className="peer rounded-r-none!"
+          />
+          <button
+            onClick={handleNewTask}
+            type="button"
+            disabled={isAddingTask}
+            title="Adicionar nova tarefa"
+            className={clsx(
+              "group flex items-center gap-2 min-w-12 justify-center",
+              "px-3 text-white rounded-y-md rounded-r-md border-r border-y border-border ",
+              "hover:bg-danger transition-colors duration-200 ease-in-out cursor-pointer",
+              "peer-focus-within:border-danger",
+              "disabled:opacity-50 disabled:cursor-not-allowed",
+            )}
+          >
+            {isAddingTask ? (
+              <AiOutlineLoading3Quarters size={20} className="animate-spin" />
+            ) : (
+              <IoIosAdd
+                size={25}
+                className="text-neutral-20 group-hover:text-white"
+              />
+            )}
+          </button>
+        </div>
+        <TaskTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          todoCount={todoCount}
+          doneCount={doneCount}
         />
-        <button
-          onClick={handleNewTask}
-          type="button"
-          disabled={isAddingTask}
-          title="Adicionar nova tarefa"
-          className={clsx(
-            "flex items-center gap-2 min-w-12 justify-center",
-            "px-3 text-white rounded-y-md rounded-r-md border-r border-y border-border ",
-            "hover:bg-danger transition-colors duration-200 ease-in-out cursor-pointer",
-            "peer-focus-within:border-danger",
-            "disabled:opacity-50 disabled:cursor-not-allowed",
-          )}
-        >
-          {isAddingTask ? (
-            <AiOutlineLoading3Quarters size={20} className="animate-spin" />
-          ) : (
-            <IoIosAdd size={25} />
-          )}
-        </button>
       </div>
 
-      <TaskTabs
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        todoCount={todoCount}
-        doneCount={doneCount}
-      />
-
-      <div className="flex flex-col flex-1 min-h-0 overflow-auto mb-15 scrollbar-hidden">
+      <div className="flex flex-col flex-1 min-h-0 overflow-auto mb-15 scrollbar-hidden px-3">
         {filteredTasks.length === 0 ? (
           <EmptyTasks activeTab={activeTab} />
         ) : (

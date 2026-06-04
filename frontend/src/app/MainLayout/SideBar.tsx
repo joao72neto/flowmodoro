@@ -4,11 +4,12 @@ import Tasks from "../../features/task/components/Tasks/Tasks";
 import Stack from "../../shared/components/Stack";
 
 import { PiCaretRightBold } from "react-icons/pi";
+import ThemeToggle from "../../shared/components/ThemeToggle";
 
 function SideBar({ onClick }: { onClick?: () => void }) {
   return (
-    <div className="border-l bg-neutral-100 border-l-border h-screen p-3 shadow-2xl flex flex-col">
-      <div className="flex justify-between items-center mb-4">
+    <div className="border-l bg-neutral-80/90 border-l-border h-screen shadow-2xl flex flex-col">
+      <div className="flex justify-between items-center mb-4 p-3">
         <IconButton
           icon={
             <PiCaretRightBold
@@ -18,6 +19,7 @@ function SideBar({ onClick }: { onClick?: () => void }) {
           }
           onClick={onClick}
         />
+        <ThemeToggle />
       </div>
       <Stack className="flex-1 overflow-hidden">
         <Tasks />

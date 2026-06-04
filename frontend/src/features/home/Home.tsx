@@ -9,7 +9,6 @@ import RatioSelector from "./components/RatioSelector/RatioSelector";
 function Home() {
   return (
     <MainLayout>
-      {/* <ThemeToggle /> */}
       <TimerContainer>
         <TaskSelector />
         <Timer />

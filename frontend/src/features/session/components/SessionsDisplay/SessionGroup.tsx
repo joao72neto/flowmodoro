@@ -39,8 +39,8 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
       <div className="flex flex-col w-full">
         <Stack
           className={clsx(
-            "w-full bg-neutral-80/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-border",
-            "shadow-xl transition-all hover:bg-neutral-60/20 cursor-pointer min-h-[80px]",
+            "w-full shadow-lg bg-neutral-80/90 rounded-2xl p-4 sm:p-5 border border-border",
+            "transition-all hover:bg-neutral-80/50 cursor-pointer min-h-[80px]",
           )}
           gap={3}
           onClick={
@@ -82,7 +82,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
           </Stack>
         </Stack>
         <AnimatedCollapse show={isOpen}>
-          <Stack gap={4} className="border-border w-full pt-4">
+          <Stack gap={2} className="border-border w-full pt-2">
             {sessionGroup.sessions.map((session) => (
               <Session
                 key={session.id}

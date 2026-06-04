@@ -128,8 +128,8 @@ const SessionDetailsModal = ({
                   "col-start-1 row-start-1 w-full focus:outline-none bg-transparent",
                   "text-lg sm:text-2xl font-bold transition-all duration-300 pb-1",
                   isEditing
-                    ? "border-b-2 border-primary text-white"
-                    : "border-b-2 border-transparent text-neutral-20 cursor-default",
+                    ? "border-b-2 border-primary text-neutral-10"
+                    : "border-b-2 border-transparent text-neutral-10 cursor-default",
                 )}
                 ref={inputRef}
                 onBlur={() => setIsEditing(false)}
@@ -144,7 +144,7 @@ const SessionDetailsModal = ({
                 <MdSave className="text-success animate-fade-in" size={24} />
               ) : (
                 <MdModeEdit
-                  className="text-neutral-40 hover:text-primary transition-colors"
+                  className="text-neutral-20 hover:text-primary transition-colors"
                   size={24}
                 />
               )
@@ -156,19 +156,19 @@ const SessionDetailsModal = ({
           icon={
             <IoClose
               size={32}
-              className="text-neutral-40 hover:text-danger hover:rotate-90 transition-all duration-300"
+              className="text-neutral-20 hover:text-danger hover:rotate-90 transition-all duration-300"
             />
           }
           onClick={handleClose}
         />
       </Stack>
 
-      <div className="flex flex-col gap-8 bg-neutral-60/30 p-5 rounded-2xl border border-border">
+      <div className="flex flex-col gap-8 bg-neutral-80/50 p-5 rounded-2xl border border-border">
         <Stack direction="row" justify="between" className="w-full">
           <span className="text-neutral-20 font-medium text-sm sm:text-base">
             Tempo de Foco
           </span>
-          <span className="font-mono text-lg sm:text-xl text-white">
+          <span className="font-mono text-lg sm:text-xl text-neutral-20">
             {formatToHour(session.focus)}
           </span>
         </Stack>
@@ -208,7 +208,7 @@ const SessionDetailsModal = ({
           onClick={handleDeleteSession}
           icon={<FaTrash size={16} />}
           variant="danger"
-          className="flex-1 !bg-neutral-60/50 !border-border hover:!bg-danger hover:!text-white transition-all"
+          className="flex-1 bg-neutral-20/30 !border-border hover:!bg-danger hover:!text-white transition-all"
         >
           Excluir
         </Button>

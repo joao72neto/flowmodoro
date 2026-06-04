@@ -19,7 +19,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
       <div
         className={clsx(
-          "fixed inset-0 bg-black/50 backdrop-blur-sm z-20 transition-opacity duration-300",
+          "fixed inset-0 bg-black/50 backdrop-blur-lg z-20 transition-opacity duration-300",
           isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={() => setIsSidebarOpen(false)}

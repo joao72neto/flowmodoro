@@ -3,7 +3,7 @@ import Stack from "../../../../shared/components/Stack";
 import SessionsWrapper from "./SessionsWrapper";
 
 const SessionItemSkeleton = () => (
-  <div className="w-full border border-border p-3 sm:p-4 rounded-xl bg-neutral-60/50">
+  <div className="w-full border border-border p-3 sm:p-4 rounded-xl bg-neutral-80/50">
     <Stack direction="row" justify="between" align="center">
       <Skeleton className="h-6 w-1/2" />
       <Skeleton className="h-7 w-16 rounded-lg" />
