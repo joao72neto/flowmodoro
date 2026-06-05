@@ -116,7 +116,7 @@ const SessionDetailsModal = ({
         <div className="flex-1 flex items-center gap-4 min-w-0">
           <div className="relative flex-1 min-w-0 group">
             <div className="inline-grid items-center font-bold w-full">
-              <span className="invisible col-start-1 row-start-1 whitespace-pre pb-1 text-lg sm:text-2xl">
+              <span className="invisible col-start-1 row-start-1 whitespace-pre pb-1 text-lg sm:text-2xl line-clamp-1">
                 {title || "Sessão sem nome"}
               </span>
               <input
@@ -203,7 +203,7 @@ const SessionDetailsModal = ({
         )}
       </div>
 
-      <div className="flex gap-4 flex-col sm:flex-row w-full">
+      <div className="flex gap-4 flex-col-reverse sm:flex-row w-full">
         <Button
           onClick={handleDeleteSession}
           icon={<FaTrash size={16} />}
