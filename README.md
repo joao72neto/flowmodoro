@@ -2,8 +2,16 @@
 
 O **Flowmodoro** é uma ferramenta de produtividade desenvolvida para ajudar usuários a equilibrar sessões de trabalho focado com períodos de descanso, utilizando a abordagem de "fluxo" para a gestão de tempo.
 
+## 🎨 Interface
+
+A aplicação conta com um design moderno e minimalista, com suporte completo a temas claro e escuro.
+
 <div align="center">
-  <img alt="Flowmodoro preview" src="./frontend/docs/flowmodoro-preview.png" />
+  <p><strong>Tema Escuro</strong></p>
+  <img alt="Flowmodoro Dark Theme" src="./frontend/docs/dark-theme.png" />
+  <br/>
+  <p><strong>Tema Claro</strong></p>
+  <img alt="Flowmodoro Light Theme" src="./frontend/docs/light-theme.png" />
 </div>
 
 ## 🚀 Funcionalidades
