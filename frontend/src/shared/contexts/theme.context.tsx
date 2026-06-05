@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { localStorageKeys } from "../utils/local-storage.utils";
 
 type Theme = "light" | "dark";
@@ -18,10 +24,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (savedTheme === "light" || savedTheme === "dark") {
       return savedTheme;
     }
-    return "dark";
-    // return window.matchMedia("(prefers-color-scheme: light)").matches
-    //   ? "light"
-    //   : "dark";
+
+    return window.matchMedia("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark";
   });
 
   useEffect(() => {
@@ -35,8 +41,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  const contextValue = useMemo(() => ({ theme, toggleTheme }), [theme]);
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );
