@@ -16,13 +16,13 @@ const DailySessions = ({
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <Stack className="w-full" gap={4}>
+    <div className="w-full">
       <div
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
           "flex justify-between items-center gap-2 w-full cursor-pointer group",
           "font-bold text-neutral-20 border-b p-4 border-border",
-          "transition-colors",
+          "transition-colors mb-4",
         )}
       >
         <div className="group flex items-center gap-3">
@@ -44,7 +44,7 @@ const DailySessions = ({
       <AnimatedCollapse show={isOpen}>
         <Stack gap={2}>{children}</Stack>
       </AnimatedCollapse>
-    </Stack>
+    </div>
   );
 };
 

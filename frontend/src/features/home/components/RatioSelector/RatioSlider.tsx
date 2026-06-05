@@ -19,7 +19,7 @@ function RatioSlider({
   return (
     <div
       className={clsx(
-        "flex flex-col w-full mx-auto max-w-sm space-y-4 animate-fade-in",
+        "flex flex-col w-full mx-auto max-w-sm space-y-4 animate-fade-in mb-10",
         "border border-border rounded-2xl py-5 px-6 bg-neutral-80/80 shadow-2xl",
       )}
     >
