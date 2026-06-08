@@ -3,7 +3,7 @@ import DailySessions from "./DailySessions";
 import SessionGroup from "./SessionGroup";
 
 import { useSessionContext } from "../../session.context";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { formatToBRDate } from "../../../../shared/utils/date.utils";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useTaskContext } from "../../../task/task.context";
@@ -11,38 +11,33 @@ import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
 import SessionsSkeleton from "./SessionsSkeleton";
+import { useFetchSessions } from "../../useSessions";
 
 const SessionsDisplay = () => {
-  const { success, sessions, fetchSessions, loading, refreshToggle } =
-    useSessionContext();
-  const { wasTaskDeleted } = useTaskContext();
+  // const { wasTaskDeleted } = useTaskContext();
+  const SIZE = 5;
 
-  const SIZE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const {
-    currentPage,
-    prevPage,
-    nextPage,
-    totalPages,
-    goToPage,
-    hasNextPage,
-    hasPrevPage,
-  } = usePagination({
-    initialPage: 1,
-    itemsPerPage: SIZE,
-    totalItems: sessions?.totalElements ?? 0,
+  const { data: sessions, isLoading: loading } = useFetchSessions({
+    page: currentPage,
+    size: SIZE,
   });
 
-  useEffect(() => {
-    fetchSessions(currentPage, SIZE);
-  }, [currentPage, SIZE, fetchSessions, refreshToggle]);
+  const { prevPage, nextPage, totalPages, goToPage, hasNextPage, hasPrevPage } =
+    usePagination({
+      itemsPerPage: SIZE,
+      totalItems: sessions?.totalElements ?? 0,
+      currentPage,
+      setCurrentPage,
+    });
 
-  useEffect(() => {
-    if (success || wasTaskDeleted) {
-      goToPage(1);
-      fetchSessions(1, SIZE);
-    }
-  }, [success, wasTaskDeleted, fetchSessions, goToPage]);
+  // useEffect(() => {
+  //   if (success || wasTaskDeleted) {
+  //     goToPage(1);
+  //     fetchSessions(1, SIZE);
+  //   }
+  // }, [success, wasTaskDeleted, fetchSessions, goToPage]);
 
   if (loading || !sessions) {
     return (

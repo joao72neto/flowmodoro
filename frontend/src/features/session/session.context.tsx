@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import useSessions from "./useSession";
+import { useSessions } from "./useSessions";
 import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 import type {

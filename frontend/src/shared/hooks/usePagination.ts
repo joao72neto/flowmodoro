@@ -1,18 +1,18 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 
 interface UsePaginationProps {
   totalItems: number;
   itemsPerPage: number;
-  initialPage?: number;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
 }
 
 export function usePagination({
-  initialPage = 1,
   itemsPerPage,
   totalItems,
+  currentPage,
+  setCurrentPage,
 }: UsePaginationProps) {
-  const [currentPage, setCurrentPage] = useState(initialPage);
-
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const goToPage = useCallback(

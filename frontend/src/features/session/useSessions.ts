@@ -7,8 +7,10 @@ import type {
 } from "./session.types";
 import type { PaginationResponse } from "../../shared/globals.types";
 import { LOADING_TIMEOUT } from "../../app/loading.const";
+import { useModal } from "../../shared/modal.context";
+import { useQuery } from "@tanstack/react-query";
 
-const useSessions = () => {
+export const useSessions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
@@ -46,9 +48,9 @@ const useSessions = () => {
       reset();
 
       try {
-        const res = await sessionsService.getSessions(page, size);
-        const data: PaginationResponse<ISessionGroupResponse> = res.data;
-        setSessions(data);
+        const data = await sessionsService.getSessions({ page, size });
+        const sessions: PaginationResponse<ISessionGroupResponse> = data;
+        setSessions(sessions);
         return data;
       } catch (e: any) {
         setError(e.message);
@@ -113,4 +115,31 @@ const useSessions = () => {
   };
 };
 
-export default useSessions;
+export const useFetchSessions = ({
+  page,
+  size,
+}: {
+  page: number;
+  size: number;
+}) => {
+  const { showError, hideModal } = useModal();
+
+  return useQuery({
+    queryKey: ["sessions", page, size],
+    queryFn: async () => {
+      try {
+        return await sessionsService.getSessions({ page, size });
+      } catch (error) {
+        if (error instanceof Error) {
+          showError({
+            title: "Error fetching sessions",
+            message: error.message,
+            action: hideModal,
+          });
+        }
+        console.error(error);
+        throw error;
+      }
+    },
+  });
+};
