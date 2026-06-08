@@ -2,16 +2,14 @@ import SessionsWrapper from "./SessionsWrapper";
 import DailySessions from "./DailySessions";
 import SessionGroup from "./SessionGroup";
 
-import { useSessionContext } from "../../session.context";
-import { useEffect, useState } from "react";
 import { formatToBRDate } from "../../../../shared/utils/date.utils";
 import { formatToHour } from "../../../../shared/utils/number.utils";
-import { useTaskContext } from "../../../task/task.context";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
 import SessionsSkeleton from "./SessionsSkeleton";
 import { useFetchSessions } from "../../useSessions";
+import { useState } from "react";
 
 const SessionsDisplay = () => {
   // const { wasTaskDeleted } = useTaskContext();
