@@ -1,6 +1,7 @@
 import type {
   CreateSessionRequest,
   ISessionGroupResponse,
+  SessionResponse,
   UpdateSessionRequest,
 } from "./session.types";
 import api from "../../configs/api.config";
@@ -21,8 +22,15 @@ class SessionService {
     return res.data;
   }
 
-  async createSession(id: number, data: CreateSessionRequest) {
-    return await api.post(`/session/${id}`, data);
+  async createSession({
+    id,
+    data,
+  }: {
+    id: number;
+    data: CreateSessionRequest;
+  }): Promise<SessionResponse> {
+    const res = await api.post<SessionResponse>(`/session/${id}`, data);
+    return res.data;
   }
 
   async deleteSession(id: number) {

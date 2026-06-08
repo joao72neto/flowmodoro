@@ -54,7 +54,7 @@ const SessionDetailsModal = ({
   };
 
   const { showWarning, hideModal, setModalLoading } = useModal();
-  const { updateSession, deleteSession, pending } = useSessionContext();
+  const { updateSession, deleteSession } = useSessionContext();
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -215,8 +215,7 @@ const SessionDetailsModal = ({
         <Button
           icon={<MdSave size={20} />}
           variant="primary"
-          disabled={!isReadyToSave || pending}
-          loading={pending}
+          disabled={!isReadyToSave}
           onClick={handleSave}
           className="flex-[2] shadow-lg shadow-primary/20"
         >

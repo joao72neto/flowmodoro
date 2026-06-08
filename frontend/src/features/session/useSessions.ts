@@ -2,11 +2,12 @@ import { useCallback, useState } from "react";
 import sessionsService from "./session.service";
 import type {
   CreateSessionRequest,
+  SessionResponse,
   UpdateSessionRequest,
 } from "./session.types";
 import { LOADING_TIMEOUT } from "../../app/loading.const";
 import { useModal } from "../../shared/modal.context";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useSessions = () => {
   const [loading, setLoading] = useState(false);
@@ -17,26 +18,6 @@ export const useSessions = () => {
     setError(null);
     setSuccess(null);
   }, []);
-
-  const createSession = useCallback(
-    async (id: number, data: CreateSessionRequest) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
-      reset();
-
-      try {
-        const res = await sessionsService.createSession(id, data);
-        setSuccess("Session created successfully");
-        return res;
-      } catch (e: any) {
-        setError(e.message);
-        throw e;
-      } finally {
-        setLoading(false);
-        clearTimeout(timer);
-      }
-    },
-    [reset],
-  );
 
   const updateSession = useCallback(
     async (id: number, data: UpdateSessionRequest) => {
@@ -81,11 +62,31 @@ export const useSessions = () => {
   return {
     loading,
     error,
-    createSession,
     success,
     updateSession,
     deleteSession,
   };
+};
+
+export const useCreateSession = () => {
+  const { showError, hideModal } = useModal();
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: CreateSessionRequest;
+    }): Promise<SessionResponse> => sessionsService.createSession({ id, data }),
+
+    onError: (error: any) => {
+      showError({
+        title: "Error creating session",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+  });
 };
 
 export const useFetchSessions = ({
