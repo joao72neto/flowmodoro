@@ -33,12 +33,19 @@ class SessionService {
     return res.data;
   }
 
-  async deleteSession(id: number) {
-    return await api.delete(`/session/${id}`);
+  async updateSession({
+    id,
+    data,
+  }: {
+    id: number;
+    data: UpdateSessionRequest;
+  }): Promise<SessionResponse> {
+    const res = await api.put<SessionResponse>(`/session/${id}`, data);
+    return res.data;
   }
 
-  async updateSession(id: number, data: UpdateSessionRequest) {
-    return await api.put(`/session/${id}`, data);
+  async deleteSession(id: number) {
+    return await api.delete(`/session/${id}`);
   }
 }
 

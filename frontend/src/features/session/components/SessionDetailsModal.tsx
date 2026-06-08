@@ -29,6 +29,10 @@ const SessionDetailsModal = ({
 }) => {
   if (!isOpen) return null;
 
+  const { showWarning, hideModal, setModalLoading } = useModal();
+  const { handleUpdateSession, handleDeleteSession, isDeleting, isUpdating } =
+    useSessionContext();
+
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
   const draftKey = `${localStorageKeys.sessionTitle}-${session.id}`;
 
@@ -53,23 +57,15 @@ const SessionDetailsModal = ({
     });
   };
 
-  const { showWarning, hideModal, setModalLoading } = useModal();
-  const { updateSession, handleDeleteSession, isDeleting } =
-    useSessionContext();
-
-  useEffect(() => {
-    isDeleting ? setModalLoading(true) : setModalLoading(false);
-  }, [isDeleting]);
-
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
     sessionStorage.setItem(draftKey, e.target.value);
   };
 
-  const handleConfirmDelete = () => {
-    handleDeleteSession(session.id);
+  const handleSave = () => {
+    handleUpdateSession({ id: session.id, data: { name: title } });
     sessionStorage.removeItem(draftKey);
-    hideModal();
+    setIsOpen(false);
   };
 
   const handleDelete = () => {
@@ -81,6 +77,16 @@ const SessionDetailsModal = ({
       action: handleConfirmDelete,
     });
   };
+
+  const handleConfirmDelete = () => {
+    handleDeleteSession(session.id);
+    sessionStorage.removeItem(draftKey);
+    hideModal();
+  };
+
+  useEffect(() => {
+    setModalLoading(isDeleting);
+  }, [isDeleting]);
 
   const handleClose = () => {
     if (isReadyToSave) {
@@ -97,16 +103,6 @@ const SessionDetailsModal = ({
       return;
     }
     setIsOpen(false);
-  };
-
-  const handleSave = async () => {
-    try {
-      await updateSession(session.id, { name: title });
-      sessionStorage.removeItem(draftKey);
-      hideModal();
-    } finally {
-      setIsOpen(false);
-    }
   };
 
   return (
@@ -214,7 +210,7 @@ const SessionDetailsModal = ({
         <Button
           icon={<MdSave size={20} />}
           variant="primary"
-          disabled={!isReadyToSave}
+          disabled={!isReadyToSave || isUpdating}
           onClick={handleSave}
           className="flex-[2] shadow-lg shadow-primary/20"
         >
