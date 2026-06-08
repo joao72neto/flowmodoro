@@ -3,6 +3,7 @@ import { useCreateSession, useSessions } from "./useSessions";
 import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 import type { UpdateSessionRequest } from "./session.types";
+import { useQueryClient } from "@tanstack/react-query";
 
 export interface ISaveSessionData {
   taskId: number;
@@ -11,7 +12,7 @@ export interface ISaveSessionData {
 }
 
 interface ISessionContext {
-  handleSaveSession: (data: ISaveSessionData) => Promise<void>;
+  handleSaveSession: (data: ISaveSessionData) => void;
   restRatio: number;
   setRestRatio: (ratio: number) => void;
   updateSession: (id: number, data: UpdateSessionRequest) => Promise<any>;
@@ -37,6 +38,7 @@ export const SessionProvider = ({
     return saved ? Number(saved) : 20;
   });
 
+  const queryClient = useQueryClient();
   const { mutate: createSession, isPending: isSavingSession } =
     useCreateSession();
 
@@ -44,19 +46,28 @@ export const SessionProvider = ({
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
   }, [restRatio]);
 
-  const handleSaveSession = async ({
+  const handleSaveSession = ({
     taskId,
     focusSeconds,
     interruptions,
   }: ISaveSessionData) => {
-    createSession({
-      id: taskId,
-      data: {
-        focus: focusSeconds,
-        interruptions,
-        ratio: restRatio / 100,
+    createSession(
+      {
+        id: taskId,
+        data: {
+          focus: focusSeconds,
+          interruptions,
+          ratio: restRatio / 100,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["sessions"],
+          });
+        },
+      },
+    );
   };
 
   const updateSession = async (id: number, data: UpdateSessionRequest) => {
