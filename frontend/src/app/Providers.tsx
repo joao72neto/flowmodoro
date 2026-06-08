@@ -6,6 +6,7 @@ import { TimerProvider } from "../features/home/timer.context";
 import LoadingApplication from "./LoadingApplication";
 
 import { ThemeProvider } from "../shared/contexts/theme.context";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
@@ -75,16 +76,27 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     return null;
   }
 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
+
   return (
-    <ModalProvider>
-      <ThemeProvider>
-        <SessionProvider>
-          <TaskProvider>
-            <TimerProvider>{children}</TimerProvider>
-          </TaskProvider>
-        </SessionProvider>
-      </ThemeProvider>
-    </ModalProvider>
+    <QueryClientProvider client={queryClient}>
+      <ModalProvider>
+        <ThemeProvider>
+          <SessionProvider>
+            <TaskProvider>
+              <TimerProvider>{children}</TimerProvider>
+            </TaskProvider>
+          </SessionProvider>
+        </ThemeProvider>
+      </ModalProvider>
+    </QueryClientProvider>
   );
 };
 
