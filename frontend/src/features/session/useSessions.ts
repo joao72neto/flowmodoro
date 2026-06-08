@@ -1,11 +1,9 @@
 import { useCallback, useState } from "react";
 import sessionsService from "./session.service";
 import type {
-  ISessionGroupResponse,
   CreateSessionRequest,
   UpdateSessionRequest,
 } from "./session.types";
-import type { PaginationResponse } from "../../shared/globals.types";
 import { LOADING_TIMEOUT } from "../../app/loading.const";
 import { useModal } from "../../shared/modal.context";
 import { useQuery } from "@tanstack/react-query";
@@ -14,8 +12,6 @@ export const useSessions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>();
   const [success, setSuccess] = useState<string | null>();
-  const [sessions, setSessions] =
-    useState<PaginationResponse<ISessionGroupResponse>>();
 
   const reset = useCallback(() => {
     setError(null);
@@ -31,27 +27,6 @@ export const useSessions = () => {
         const res = await sessionsService.createSession(id, data);
         setSuccess("Session created successfully");
         return res;
-      } catch (e: any) {
-        setError(e.message);
-        throw e;
-      } finally {
-        setLoading(false);
-        clearTimeout(timer);
-      }
-    },
-    [reset],
-  );
-
-  const fetchSessions = useCallback(
-    async (page: number = 1, size: number = 10) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
-      reset();
-
-      try {
-        const data = await sessionsService.getSessions({ page, size });
-        const sessions: PaginationResponse<ISessionGroupResponse> = data;
-        setSessions(sessions);
-        return data;
       } catch (e: any) {
         setError(e.message);
         throw e;
@@ -108,8 +83,6 @@ export const useSessions = () => {
     error,
     createSession,
     success,
-    fetchSessions,
-    sessions,
     updateSession,
     deleteSession,
   };

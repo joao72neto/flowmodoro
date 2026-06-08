@@ -2,11 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useSessions } from "./useSessions";
 import { useModal } from "../../shared/modal.context";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
-import type {
-  ISessionGroupResponse,
-  UpdateSessionRequest,
-} from "./session.types";
-import type { PaginationResponse } from "../../shared/globals.types";
+import type { UpdateSessionRequest } from "./session.types";
 
 interface ISaveSessionData {
   taskId: number;
@@ -20,15 +16,8 @@ interface ISessionContext {
   setSuccess: (success: boolean) => void;
   restRatio: number;
   setRestRatio: (ratio: number) => void;
-  sessions: PaginationResponse<ISessionGroupResponse> | undefined;
-  fetchSessions: (
-    page?: number,
-    size?: number,
-  ) => Promise<PaginationResponse<ISessionGroupResponse>>;
   loading: boolean;
   pending: boolean;
-  refreshSessions: () => void;
-  refreshToggle: boolean;
   updateSession: (id: number, data: UpdateSessionRequest) => Promise<any>;
   deleteSession: (id: number) => Promise<any>;
 }
@@ -42,8 +31,6 @@ export const SessionProvider = ({
 }) => {
   const {
     createSession,
-    fetchSessions,
-    sessions,
     updateSession: updateSessionHook,
     deleteSession: deleteSessionHook,
     loading: isLoadingSessions,
@@ -54,15 +41,12 @@ export const SessionProvider = ({
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  const [refreshToggle, setRefreshToggle] = useState<boolean>(false);
   const { showError, hideModal } = useModal();
 
   const [restRatio, setRestRatio] = useState<number>(() => {
     const saved = localStorage.getItem(localStorageKeys.restRatio);
     return saved ? Number(saved) : 20;
   });
-
-  const refreshSessions = () => setRefreshToggle((prev) => !prev);
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
@@ -102,7 +86,6 @@ export const SessionProvider = ({
     setIsUpdating(true);
     try {
       const res = await updateSessionHook(id, data);
-      refreshSessions();
       return res;
     } catch (error) {
       console.error(error);
@@ -122,7 +105,6 @@ export const SessionProvider = ({
     setIsDeleting(true);
     try {
       const res = await deleteSessionHook(id);
-      refreshSessions();
       return res;
     } catch (error) {
       console.error(error);
@@ -146,14 +128,10 @@ export const SessionProvider = ({
         setSuccess,
         restRatio,
         setRestRatio,
-        sessions,
-        fetchSessions,
         loading: isLoadingSessions || isSaving,
         pending: isUpdating || isDeleting,
         updateSession,
         deleteSession,
-        refreshSessions,
-        refreshToggle,
       }}
     >
       {children}

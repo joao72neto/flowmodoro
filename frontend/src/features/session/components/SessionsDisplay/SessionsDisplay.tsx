@@ -12,7 +12,6 @@ import { useFetchSessions } from "../../useSessions";
 import { useState } from "react";
 
 const SessionsDisplay = () => {
-  // const { wasTaskDeleted } = useTaskContext();
   const SIZE = 5;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,13 +28,6 @@ const SessionsDisplay = () => {
       currentPage,
       setCurrentPage,
     });
-
-  // useEffect(() => {
-  //   if (success || wasTaskDeleted) {
-  //     goToPage(1);
-  //     fetchSessions(1, SIZE);
-  //   }
-  // }, [success, wasTaskDeleted, fetchSessions, goToPage]);
 
   if (loading || !sessions) {
     return (
