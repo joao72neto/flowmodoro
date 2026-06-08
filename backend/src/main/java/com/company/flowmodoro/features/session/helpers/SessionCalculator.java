@@ -7,17 +7,15 @@ import com.company.flowmodoro.features.session.SessionModel;
 @Component
 public class SessionCalculator {
 
-	private static final double RATIO = 0.2;
-
 	public double calculateRatio(long focus, long rest) {
 		if (rest == 0)
 			return (double) focus;
 		return (double) focus / rest;
 	}
 
-	public void calculateRest(SessionModel session) {
+	public void calculateRest(SessionModel session, double ratio) {
 		if (session.getRatio() == null) {
-			session.setRatio(RATIO);
+			session.setRatio(ratio);
 		}
 		double rest = session.getFocus() * session.getRatio();
 		session.setRest(Math.round(rest));
