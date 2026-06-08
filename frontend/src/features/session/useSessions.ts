@@ -39,33 +39,28 @@ export const useSessions = () => {
     [reset],
   );
 
-  const deleteSession = useCallback(
-    async (id: number) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
-      reset();
-
-      try {
-        const res = await sessionsService.deleteSession(id);
-        setSuccess("Session deleted successfully");
-        return res;
-      } catch (e: any) {
-        setError(e.message);
-        throw e;
-      } finally {
-        setLoading(false);
-        clearTimeout(timer);
-      }
-    },
-    [reset],
-  );
-
   return {
     loading,
     error,
     success,
     updateSession,
-    deleteSession,
   };
+};
+
+export const useDeleteSession = () => {
+  const { showError, hideModal } = useModal();
+
+  return useMutation({
+    mutationFn: (id: number) => sessionsService.deleteSession(id),
+
+    onError: (error: any) => {
+      showError({
+        title: "Erro ao deletar sessão",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+  });
 };
 
 export const useCreateSession = () => {
@@ -81,7 +76,7 @@ export const useCreateSession = () => {
 
     onError: (error: any) => {
       showError({
-        title: "Error creating session",
+        title: "Erro ao criar sessão",
         message: error.message,
         action: hideModal,
       });
@@ -106,7 +101,7 @@ export const useFetchSessions = ({
       } catch (error) {
         if (error instanceof Error) {
           showError({
-            title: "Error fetching sessions",
+            title: "Erro ao carregar sessões",
             message: error.message,
             action: hideModal,
           });

@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useCreateSession, useSessions } from "./useSessions";
-import { useModal } from "../../shared/modal.context";
+import { useCreateSession, useDeleteSession, useSessions } from "./useSessions";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 import type { UpdateSessionRequest } from "./session.types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,9 +15,9 @@ interface ISessionContext {
   restRatio: number;
   setRestRatio: (ratio: number) => void;
   updateSession: (id: number, data: UpdateSessionRequest) => Promise<any>;
-  deleteSession: (id: number) => Promise<any>;
+  handleDeleteSession: (id: number) => void;
 
-  isSavingSession: boolean;
+  isDeleting: boolean;
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
@@ -28,10 +27,7 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { updateSession: updateSessionHook, deleteSession: deleteSessionHook } =
-    useSessions();
-
-  const { showError, hideModal } = useModal();
+  const { updateSession: updateSessionHook } = useSessions();
 
   const [restRatio, setRestRatio] = useState<number>(() => {
     const saved = localStorage.getItem(localStorageKeys.restRatio);
@@ -39,8 +35,8 @@ export const SessionProvider = ({
   });
 
   const queryClient = useQueryClient();
-  const { mutate: createSession, isPending: isSavingSession } =
-    useCreateSession();
+  const { mutate: createSession } = useCreateSession();
+  const { mutate: deleteSession, isPending: isDeleting } = useDeleteSession();
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
@@ -76,30 +72,18 @@ export const SessionProvider = ({
       return res;
     } catch (error) {
       console.error(error);
-      if (error instanceof Error)
-        showError({
-          title: "Erro ao atualizar sessão",
-          message: error.message,
-          action: hideModal,
-        });
       throw error;
     }
   };
 
-  const deleteSession = async (id: number) => {
-    try {
-      const res = await deleteSessionHook(id);
-      return res;
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error)
-        showError({
-          title: "Erro ao deletar sessão",
-          message: error.message,
-          action: hideModal,
+  const handleDeleteSession = (id: number) => {
+    deleteSession(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["sessions"],
         });
-      throw error;
-    }
+      },
+    });
   };
 
   return (
@@ -109,9 +93,8 @@ export const SessionProvider = ({
         restRatio,
         setRestRatio,
         updateSession,
-        deleteSession,
-
-        isSavingSession,
+        handleDeleteSession,
+        isDeleting,
       }}
     >
       {children}

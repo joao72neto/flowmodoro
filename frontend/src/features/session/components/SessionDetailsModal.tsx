@@ -54,26 +54,25 @@ const SessionDetailsModal = ({
   };
 
   const { showWarning, hideModal, setModalLoading } = useModal();
-  const { updateSession, deleteSession } = useSessionContext();
+  const { updateSession, handleDeleteSession, isDeleting } =
+    useSessionContext();
+
+  useEffect(() => {
+    isDeleting ? setModalLoading(true) : setModalLoading(false);
+  }, [isDeleting]);
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
     sessionStorage.setItem(draftKey, e.target.value);
   };
 
-  const handleConfirmDelete = async () => {
-    setModalLoading(true);
-    try {
-      await deleteSession(session.id);
-      sessionStorage.removeItem(draftKey);
-      hideModal();
-    } catch (error) {
-      console.error(error);
-      setModalLoading(false);
-    }
+  const handleConfirmDelete = () => {
+    handleDeleteSession(session.id);
+    sessionStorage.removeItem(draftKey);
+    hideModal();
   };
 
-  const handleDeleteSession = () => {
+  const handleDelete = () => {
     setIsOpen(false);
     showWarning({
       title: "Deseja mesmo excluir essa sessão?",
@@ -205,7 +204,7 @@ const SessionDetailsModal = ({
 
       <div className="flex gap-4 flex-col-reverse sm:flex-row w-full">
         <Button
-          onClick={handleDeleteSession}
+          onClick={handleDelete}
           icon={<FaTrash size={16} />}
           variant="danger"
           className="flex-1 bg-neutral-20/30 !border-border hover:!bg-danger hover:!text-white transition-all"
