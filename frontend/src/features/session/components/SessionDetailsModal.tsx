@@ -15,8 +15,9 @@ import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
-import { useSessionContext } from "../session.context";
 import IconButton from "../../home/components/buttons/IconButton";
+import { useDeleteSession, useUpdateSession } from "../useSessions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -30,8 +31,10 @@ const SessionDetailsModal = ({
   if (!isOpen) return null;
 
   const { showWarning, hideModal, setModalLoading } = useModal();
-  const { handleUpdateSession, handleDeleteSession, isDeleting, isUpdating } =
-    useSessionContext();
+
+  const queryClient = useQueryClient();
+  const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
+  const { mutate: deleteSession } = useDeleteSession();
 
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
   const draftKey = `${localStorageKeys.sessionTitle}-${session.id}`;
@@ -63,30 +66,44 @@ const SessionDetailsModal = ({
   };
 
   const handleSave = () => {
-    handleUpdateSession({ id: session.id, data: { name: title } });
-    sessionStorage.removeItem(draftKey);
-    setIsOpen(false);
+    updateSession(
+      { id: session.id, data: { name: title } },
+      {
+        onSuccess: () => {
+          sessionStorage.removeItem(draftKey);
+          queryClient.invalidateQueries({
+            queryKey: ["sessions"],
+          });
+          setIsOpen(false);
+        },
+      },
+    );
   };
 
   const handleDelete = () => {
-    setIsOpen(false);
     showWarning({
       title: "Deseja mesmo excluir essa sessão?",
       message: "Esta operação não pode ser desfeita.",
-      cancel: () => setIsOpen(true),
+      cancel: () => {},
       action: handleConfirmDelete,
     });
   };
 
   const handleConfirmDelete = () => {
-    handleDeleteSession(session.id);
-    sessionStorage.removeItem(draftKey);
-    hideModal();
-  };
+    setModalLoading(true);
+    deleteSession(session.id, {
+      onSuccess: () => {
+        sessionStorage.removeItem(draftKey);
+        queryClient.invalidateQueries({
+          queryKey: ["sessions"],
+        });
 
-  useEffect(() => {
-    setModalLoading(isDeleting);
-  }, [isDeleting]);
+        setModalLoading(false);
+        setIsOpen(false);
+        hideModal();
+      },
+    });
+  };
 
   const handleClose = () => {
     if (isReadyToSave) {

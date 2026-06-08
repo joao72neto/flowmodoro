@@ -10,11 +10,14 @@ import EmptySessions from "./EmptySessions";
 import SessionsSkeleton from "./SessionsSkeleton";
 import { useFetchSessions } from "../../useSessions";
 import { useState } from "react";
+import { useSessionContext } from "../../session.context";
 
 const SessionsDisplay = () => {
   const SIZE = 5;
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const { isSaving } = useSessionContext();
 
   const { data: sessions, isLoading: loading } = useFetchSessions({
     page: currentPage,
@@ -29,7 +32,7 @@ const SessionsDisplay = () => {
       setCurrentPage,
     });
 
-  if (loading || !sessions) {
+  if (loading || !sessions || isSaving) {
     return (
       <div className="flex flex-col gap-6 w-full items-center">
         <SessionsSkeleton />

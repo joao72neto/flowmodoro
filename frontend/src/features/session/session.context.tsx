@@ -1,11 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {
-  useCreateSession,
-  useDeleteSession,
-  useUpdateSession,
-} from "./useSessions";
+import { useCreateSession } from "./useSessions";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
-import type { UpdateSessionRequest } from "./session.types";
 import { useQueryClient } from "@tanstack/react-query";
 
 export interface ISaveSessionData {
@@ -18,18 +13,8 @@ interface ISessionContext {
   restRatio: number;
   setRestRatio: (ratio: number) => void;
   handleSaveSession: (data: ISaveSessionData) => void;
-  handleUpdateSession: ({
-    id,
-    data,
-  }: {
-    id: number;
-    data: UpdateSessionRequest;
-  }) => void;
-  handleDeleteSession: (id: number) => void;
 
   isSaving: boolean;
-  isDeleting: boolean;
-  isUpdating: boolean;
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
@@ -46,8 +31,6 @@ export const SessionProvider = ({
 
   const queryClient = useQueryClient();
   const { mutate: createSession, isPending: isSaving } = useCreateSession();
-  const { mutate: deleteSession, isPending: isDeleting } = useDeleteSession();
-  const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
@@ -77,46 +60,13 @@ export const SessionProvider = ({
     );
   };
 
-  const handleUpdateSession = ({
-    id,
-    data,
-  }: {
-    id: number;
-    data: UpdateSessionRequest;
-  }) => {
-    updateSession(
-      { id, data },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ["sessions"],
-          });
-        },
-      },
-    );
-  };
-
-  const handleDeleteSession = (id: number) => {
-    deleteSession(id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["sessions"],
-        });
-      },
-    });
-  };
-
   return (
     <SessionContext.Provider
       value={{
         handleSaveSession,
         restRatio,
         setRestRatio,
-        handleUpdateSession,
-        handleDeleteSession,
         isSaving,
-        isUpdating,
-        isDeleting,
       }}
     >
       {children}
