@@ -1,51 +1,11 @@
-import { useCallback, useState } from "react";
 import sessionsService from "./session.service";
 import type {
   CreateSessionRequest,
   SessionResponse,
   UpdateSessionRequest,
 } from "./session.types";
-import { LOADING_TIMEOUT } from "../../app/loading.const";
 import { useModal } from "../../shared/modal.context";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
-export const useSessions = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>();
-  const [success, setSuccess] = useState<string | null>();
-
-  const reset = useCallback(() => {
-    setError(null);
-    setSuccess(null);
-  }, []);
-
-  const updateSession = useCallback(
-    async (id: number, data: UpdateSessionRequest) => {
-      let timer = setTimeout(() => setLoading(true), LOADING_TIMEOUT);
-      reset();
-
-      try {
-        const res = await sessionsService.updateSession({ id, data });
-        setSuccess("Session updated successfully");
-        return res;
-      } catch (e: any) {
-        setError(e.message);
-        throw e;
-      } finally {
-        setLoading(false);
-        clearTimeout(timer);
-      }
-    },
-    [reset],
-  );
-
-  return {
-    loading,
-    error,
-    success,
-    updateSession,
-  };
-};
 
 export const useFetchSessions = ({
   page,

@@ -8,7 +8,7 @@ import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
 import SessionsSkeleton from "./SessionsSkeleton";
-import { useFetchSessions } from "../../useSessions";
+import { useFetchSessions } from "../../useSession";
 import { useState } from "react";
 import { useSessionContext } from "../../session.context";
 

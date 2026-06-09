@@ -6,7 +6,7 @@ import type {
   UpdateTaskRequest,
   UpdateTaskNameRequest,
 } from "../task.types";
-import { LOADING_TIMEOUT } from "../../../app/loading.const";
+import { LOADING_TIMEOUT } from "../loading.const";
 
 const useTask = () => {
   const [loading, setLoading] = useState(false);

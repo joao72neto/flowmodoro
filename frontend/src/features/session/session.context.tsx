@@ -1,8 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useCreateSession } from "./useSessions";
+import { useCreateSession } from "./useSession";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { LOADING_TIMEOUT } from "../../app/loading.const";
 
 export interface ISaveSessionData {
   taskId: number;
@@ -30,10 +29,8 @@ export const SessionProvider = ({
     return saved ? Number(saved) : 20;
   });
 
-  const [isSaving, setIsSaving] = useState(false);
-
   const queryClient = useQueryClient();
-  const { mutate: createSession } = useCreateSession();
+  const { mutate: createSession, isPending: isSaving } = useCreateSession();
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
@@ -44,7 +41,6 @@ export const SessionProvider = ({
     focusSeconds,
     interruptions,
   }: ISaveSessionData) => {
-    let timer = setTimeout(() => setIsSaving(true), LOADING_TIMEOUT);
     createSession(
       {
         id: taskId,
@@ -59,8 +55,6 @@ export const SessionProvider = ({
           queryClient.invalidateQueries({
             queryKey: ["sessions"],
           });
-          setIsSaving(false);
-          clearTimeout(timer);
         },
       },
     );
