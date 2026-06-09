@@ -2,13 +2,13 @@ import clsx from "clsx";
 import Stack from "../../../../shared/components/Stack";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { capitalize } from "../../../../shared/utils/string.utils";
-import type { ISessionGroup, SessionResponse } from "../../session.types";
-import Session from "./Session";
 
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { useEffect, useState } from "react";
+import { PRESETS } from "../../../timer/ratio.const";
+import type { ISessionGroup, SessionResponse } from "../../sessions.types";
 import SessionDetailsModal from "../SessionDetailsModal";
-import { PRESETS } from "../../../home/ratio.const";
+import Session from "./Session";
 
 const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
   const [isOpen, setIsOpen] = useState(false);

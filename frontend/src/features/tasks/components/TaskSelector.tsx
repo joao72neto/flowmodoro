@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useTaskContext } from "../task.context";
+import { useTaskContext } from "../tasks.context";
 import clsx from "clsx";
 
 import { FaCaretDown } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useTimerContext } from "../../home/timer.context";
+import { useTimerContext } from "../../timer/timer.context";
 
 function TaskSelector() {
   const [isOpen, setIsOpen] = useState(false);

@@ -8,12 +8,12 @@ import {
   FaForwardStep,
 } from "react-icons/fa6";
 import { MdModeEdit } from "react-icons/md";
-import IconButton from "../../../home/components/buttons/IconButton";
-import TaskButton from "../../../home/components/buttons/TaskButton";
-import { useTaskContext } from "../../task.context";
-import { useTimerContext } from "../../../home/timer.context";
-import type { TaskResponse } from "../../task.types";
+import IconButton from "../../../../shared/components/buttons/IconButton";
+import { useTaskContext } from "../../tasks.context";
+import { useTimerContext } from "../../../timer/timer.context";
+import type { TaskResponse } from "../../tasks.types";
 import { useModal } from "../../../../shared/modal.context";
+import TaskButton from "../TaskButton";
 
 interface TaskItemProps {
   task: TaskResponse;

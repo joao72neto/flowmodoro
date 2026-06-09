@@ -5,8 +5,8 @@ import { PiCaretDownLight, PiCaretUpLight } from "react-icons/pi";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import RatioSlider from "./RatioSlider";
 import { PRESETS } from "../../ratio.const";
-import { useSessionContext } from "../../../session/session.context";
 import { useTimerContext } from "../../timer.context";
+import { useSessionContext } from "../../../sessions/sessions.context";
 
 function RatioSelector() {
   const [isOpen, setIsOpen] = useState(false);

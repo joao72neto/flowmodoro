@@ -1,12 +1,11 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import { IoClose } from "react-icons/io5";
 import Stack from "../../../shared/components/Stack";
-import type { SessionResponse } from "../session.types";
 import { formatToHour } from "../../../shared/utils/number.utils";
 import { capitalize } from "../../../shared/utils/string.utils";
 
-import { PRESETS } from "../../home/ratio.const";
-import Button from "../../../shared/components/Button";
+import { PRESETS } from "../../timer/ratio.const";
+import Button from "../../../shared/components/buttons/Button";
 
 import { FaTrash } from "react-icons/fa6";
 import { MdSave, MdModeEdit } from "react-icons/md";
@@ -15,9 +14,10 @@ import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
-import IconButton from "../../home/components/buttons/IconButton";
-import { useDeleteSession, useUpdateSession } from "../useSession";
+import IconButton from "../../../shared/components/buttons/IconButton";
+import { useDeleteSession, useUpdateSession } from "../useSessions";
 import { useQueryClient } from "@tanstack/react-query";
+import type { SessionResponse } from "../sessions.types";
 
 const SessionDetailsModal = ({
   isOpen,

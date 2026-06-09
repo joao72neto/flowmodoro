@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
-import tasksService from "../task.service";
+import tasksService from "../tasks.service";
 import type {
   TaskResponse,
   TaskRequest,
   UpdateTaskRequest,
   UpdateTaskNameRequest,
-} from "../task.types";
+} from "../tasks.types";
 import { LOADING_TIMEOUT } from "../loading.const";
 
 const useTask = () => {

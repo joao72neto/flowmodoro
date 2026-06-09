@@ -1,16 +1,16 @@
-import SessionsWrapper from "./SessionsWrapper";
 import DailySessions from "./DailySessions";
-import SessionGroup from "./SessionGroup";
 
 import { formatToBRDate } from "../../../../shared/utils/date.utils";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
-import SessionsSkeleton from "./SessionsSkeleton";
-import { useFetchSessions } from "../../useSession";
+import { useFetchSessions } from "../../useSessions";
 import { useState } from "react";
-import { useSessionContext } from "../../session.context";
+import { useSessionContext } from "../../sessions.context";
+import SessionsSkeleton from "./SessionsSkeleton";
+import SessionGroup from "./SessionGroup";
+import SessionsWrapper from "./SessionsWrapper";
 
 const SessionsDisplay = () => {
   const SIZE = 5;

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { TaskResponse } from "../task.types";
+import type { TaskResponse } from "../tasks.types";
 
 const useActiveTask = (tasks: TaskResponse[]) => {
   const activeTask = useMemo(

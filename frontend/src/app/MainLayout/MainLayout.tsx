@@ -1,8 +1,8 @@
-import IconButton from "../../features/home/components/buttons/IconButton";
+import IconButton from "../../shared/components/buttons/IconButton";
 import SideBar from "./SideBar";
 import MainContentContainer from "./MainContentContainer";
 
-import { useTaskContext } from "../../features/task/task.context";
+import { useTaskContext } from "../../features/tasks/tasks.context";
 import { useNotificationPermission } from "../../shared/hooks/useNotificationPermission";
 import SideBarContainer from "./SideBarContainer";
 

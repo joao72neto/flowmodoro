@@ -1,9 +1,9 @@
-import sessionsService from "./session.service";
+import sessionsService from "./sessions.service";
 import type {
   CreateSessionRequest,
   SessionResponse,
   UpdateSessionRequest,
-} from "./session.types";
+} from "./sessions.types";
 import { useModal } from "../../shared/modal.context";
 import { useMutation, useQuery } from "@tanstack/react-query";
 

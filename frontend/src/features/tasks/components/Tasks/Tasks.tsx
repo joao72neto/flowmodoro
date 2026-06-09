@@ -1,13 +1,13 @@
 import Input from "../../../../shared/components/Input";
-import { useTaskContext } from "../../task.context";
+import { useTaskContext } from "../../tasks.context";
 import { useState, useMemo } from "react";
-import TaskTabs from "./TaskTabs";
 import EmptyTasks from "./EmptyTasks";
-import TaskItem from "./TaskItem";
 import clsx from "clsx";
 
 import { IoIosAdd } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import TaskTabs from "./TaskTabs";
+import TaskItem from "./TaskItem";
 
 function Tasks() {
   const { handleAddTask, newTask, setNewTask, tasks, isAddingTask } =

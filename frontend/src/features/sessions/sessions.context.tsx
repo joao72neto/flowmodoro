@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useCreateSession } from "./useSession";
+import { useCreateSession } from "./useSessions";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 import { useQueryClient } from "@tanstack/react-query";
 

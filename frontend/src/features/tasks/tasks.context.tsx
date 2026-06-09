@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import useTasks from "./hooks/useTasks";
-import type { TaskResponse } from "./task.types";
+import type { TaskResponse } from "./tasks.types";
 import useActiveTask from "./hooks/useActiveTask";
 import { useModal } from "../../shared/modal.context";
 

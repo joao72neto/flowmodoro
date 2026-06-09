@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import IconButton from "../../features/home/components/buttons/IconButton";
-import Tasks from "../../features/task/components/Tasks/Tasks";
+import IconButton from "../../shared/components/buttons/IconButton";
 import Stack from "../../shared/components/Stack";
 
 import { PiCaretRightBold } from "react-icons/pi";
 import ThemeToggle from "../../shared/components/ThemeToggle";
+import Tasks from "../../features/tasks/components/Tasks/Tasks";
 
 function SideBar({ onClick }: { onClick?: () => void }) {
   return (

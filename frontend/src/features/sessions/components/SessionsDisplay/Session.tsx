@@ -2,8 +2,8 @@ import clsx from "clsx";
 import Stack from "../../../../shared/components/Stack";
 
 import { formatToHour } from "../../../../shared/utils/number.utils";
-import type { SessionResponse } from "../../session.types";
-import { PRESETS } from "../../../home/ratio.const";
+import type { SessionResponse } from "../../sessions.types";
+import { PRESETS } from "../../../timer/ratio.const";
 
 const Session = ({
   session,

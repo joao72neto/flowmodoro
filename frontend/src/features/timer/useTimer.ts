@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSessionContext } from "../session/session.context";
-import { useTaskContext } from "../task/task.context";
+import { useTaskContext } from "../tasks/tasks.context";
 import { useModal } from "../../shared/modal.context";
 
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
@@ -10,7 +9,8 @@ import {
 } from "../../shared/utils/favicon.utils";
 
 import { formatToHour } from "../../shared/utils/number.utils";
-import healthService from "../../app/health.service";
+import healthService from "../../shared/health.service";
+import { useSessionContext } from "../sessions/sessions.context";
 
 const useTimer = () => {
   const { handleSaveSession, restRatio } = useSessionContext();

@@ -1,12 +1,12 @@
-import Button from "../../../../shared/components/Button";
+import Button from "../../../../shared/components/buttons/Button";
 import { useTimerContext } from "../../timer.context";
 import clsx from "clsx";
 
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
 
-import { useSessionContext } from "../../../session/session.context";
 import { formatTimer } from "../../../../shared/utils/number.utils";
+import { useSessionContext } from "../../../sessions/sessions.context";
 
 function Timer() {
   const { mode, seconds, startBreak, startFocus, stopFocus, skipBreak } =
