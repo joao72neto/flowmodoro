@@ -18,7 +18,6 @@ export interface SessionResponse {
   focus: number;
   rest: number;
   ratio: number;
-  interruptions: number;
 }
 
 export interface CreateSessionRequest {
@@ -26,7 +25,6 @@ export interface CreateSessionRequest {
   name?: string;
   ratio?: number;
   rest?: number;
-  interruptions?: number;
 }
 
 export interface UpdateSessionRequest {
@@ -34,5 +32,4 @@ export interface UpdateSessionRequest {
   focus?: number;
   ratio?: number;
   rest?: number;
-  interruptions?: number;
 }

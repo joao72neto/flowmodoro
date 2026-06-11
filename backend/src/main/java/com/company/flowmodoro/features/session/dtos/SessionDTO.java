@@ -25,6 +25,4 @@ public class SessionDTO {
 
 	private Long rest;
 
-	private Integer interruptions;
-
 }

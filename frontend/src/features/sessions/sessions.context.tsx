@@ -7,7 +7,6 @@ import type { CreateSessionRequest } from "./sessions.types";
 export interface ISaveSessionData {
   name: string;
   focusSeconds: number;
-  interruptions: number;
 }
 
 interface ISessionContext {
@@ -37,15 +36,10 @@ export const SessionProvider = ({
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
   }, [restRatio]);
 
-  const handleSaveSession = ({
-    name,
-    focusSeconds,
-    interruptions,
-  }: ISaveSessionData) => {
+  const handleSaveSession = ({ name, focusSeconds }: ISaveSessionData) => {
     const data: CreateSessionRequest = {
       name,
       focus: focusSeconds,
-      interruptions,
       ratio: restRatio / 100,
     };
 

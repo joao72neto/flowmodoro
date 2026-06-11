@@ -23,10 +23,6 @@ public class SessionValidator {
 			errors.add("Ratio needs to be 0.1, 0.2 or 0.3");
 		}
 
-		if (session.getInterruptions() != null && session.getInterruptions() < 0) {
-			errors.add("Interruptions can't be less than 0");
-		}
-
 		if (!errors.isEmpty()) {
 			throw new InvalidSessionException(SessionErrorCode.INVALID_SESSION, errors);
 		}

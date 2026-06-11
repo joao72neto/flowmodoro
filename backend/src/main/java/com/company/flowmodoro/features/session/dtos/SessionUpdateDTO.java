@@ -23,6 +23,4 @@ public class SessionUpdateDTO {
 
 	private Long rest;
 
-	private Integer interruptions;
-
 }

@@ -32,8 +32,6 @@ const useTimer = () => {
     return seconds;
   });
 
-  const [interruptions, setInterruptions] = useState(0);
-
   const startTimeRef = useRef<number>(Date.now());
   const baseSecondsRef = useRef<number>(seconds);
 
@@ -138,7 +136,6 @@ const useTimer = () => {
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
     setSeconds(0);
-    setInterruptions(0);
     setMode("focus");
   };
 
@@ -157,7 +154,6 @@ const useTimer = () => {
         handleSaveSession({
           name: "Session",
           focusSeconds: finalFocusSeconds,
-          interruptions,
         });
 
         hideModal();
@@ -191,8 +187,6 @@ const useTimer = () => {
     skipBreak,
     mode,
     seconds,
-    interruptions,
-    setInterruptions,
   };
 };
 

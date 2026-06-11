@@ -56,10 +56,6 @@ public class SessionService {
 			session.setDate(LocalDate.now());
 		}
 
-		if (session.getInterruptions() == null) {
-			session.setInterruptions(0);
-		}
-
 		calculator.calculateRest(session, session.getRatio());
 		validator.validateSessions(session, errors);
 

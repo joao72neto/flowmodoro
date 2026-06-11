@@ -12,12 +12,11 @@ public class SessionMapper {
 
 	public SessionModel toEntity(SessionDTO sessionDTO) {
 		return SessionModel.builder()
-			.id(sessionDTO.getId())
-			.name(sessionDTO.getName())
-			.focus(sessionDTO.getFocus())
-			.ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
-			.interruptions(sessionDTO.getInterruptions())
-			.build();
+				.id(sessionDTO.getId())
+				.name(sessionDTO.getName())
+				.focus(sessionDTO.getFocus())
+				.ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
+				.build();
 	}
 
 	public List<SessionModel> toEntity(List<SessionDTO> sessionDTOs) {
@@ -26,13 +25,12 @@ public class SessionMapper {
 
 	public SessionDTO toDTO(SessionModel session) {
 		return SessionDTO.builder()
-			.id(session.getId())
-			.name(session.getName())
-			.focus(session.getFocus())
-			.ratio(session.getRatio())
-			.rest(session.getRest())
-			.interruptions(session.getInterruptions())
-			.build();
+				.id(session.getId())
+				.name(session.getName())
+				.focus(session.getFocus())
+				.ratio(session.getRatio())
+				.rest(session.getRest())
+				.build();
 	}
 
 	public List<SessionDTO> toDTO(List<SessionModel> sessions) {
