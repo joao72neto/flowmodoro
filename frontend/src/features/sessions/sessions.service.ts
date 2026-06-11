@@ -22,14 +22,8 @@ class SessionService {
     return res.data;
   }
 
-  async createSession({
-    id,
-    data,
-  }: {
-    id: number;
-    data: CreateSessionRequest;
-  }): Promise<SessionResponse> {
-    const res = await api.post<SessionResponse>(`/session/${id}`, data);
+  async createSession(data: CreateSessionRequest): Promise<SessionResponse> {
+    const res = await api.post<SessionResponse>("/session", data);
     return res.data;
   }
 

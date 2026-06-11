@@ -2,9 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useCreateSession } from "./useSessions";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 import { useQueryClient } from "@tanstack/react-query";
+import type { CreateSessionRequest } from "./sessions.types";
 
 export interface ISaveSessionData {
-  taskId: number;
+  name: string;
   focusSeconds: number;
   interruptions: number;
 }
@@ -37,27 +38,24 @@ export const SessionProvider = ({
   }, [restRatio]);
 
   const handleSaveSession = ({
-    taskId,
+    name,
     focusSeconds,
     interruptions,
   }: ISaveSessionData) => {
-    createSession(
-      {
-        id: taskId,
-        data: {
-          focus: focusSeconds,
-          interruptions,
-          ratio: restRatio / 100,
-        },
+    const data: CreateSessionRequest = {
+      name,
+      focus: focusSeconds,
+      interruptions,
+      ratio: restRatio / 100,
+    };
+
+    createSession(data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["sessions"],
+        });
       },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ["sessions"],
-          });
-        },
-      },
-    );
+    });
   };
 
   return (

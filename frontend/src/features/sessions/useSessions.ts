@@ -39,13 +39,8 @@ export const useFetchSessions = ({
 export const useCreateSession = () => {
   const { showError, hideModal } = useModal();
   return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: number;
-      data: CreateSessionRequest;
-    }): Promise<SessionResponse> => sessionsService.createSession({ id, data }),
+    mutationFn: (data: CreateSessionRequest): Promise<SessionResponse> =>
+      sessionsService.createSession(data),
 
     onError: (error: any) => {
       showError({

@@ -18,10 +18,6 @@ import com.company.flowmodoro.features.session.exceptions.InvalidSessionExceptio
 import com.company.flowmodoro.features.session.helpers.SessionCalculator;
 import com.company.flowmodoro.features.session.helpers.SessionValidator;
 import com.company.flowmodoro.features.session.mappers.SessionUpdateMapper;
-import com.company.flowmodoro.features.task.TaskModel;
-import com.company.flowmodoro.features.task.TaskRepository;
-import com.company.flowmodoro.features.task.enums.TaskErrorCode;
-import com.company.flowmodoro.features.task.exceptions.InvalidTaskException;
 import com.company.flowmodoro.shared.dto.PageResponse;
 
 @Service
@@ -29,11 +25,7 @@ public class SessionService {
 
 	private static final SessionErrorCode SESSION_NOT_FOUND = SessionErrorCode.SESSION_NOT_FOUND;
 
-	private static final TaskErrorCode TASK_NOT_FOUND = TaskErrorCode.TASK_NOT_FOUND;
-
 	private final SessionRespository sessionRepository;
-
-	private final TaskRepository taskRepository;
 
 	private final SessionUpdateMapper sessionUpdateMapper;
 
@@ -43,13 +35,11 @@ public class SessionService {
 
 	private final SessionValidator validator;
 
-	public SessionService(SessionRespository sessionRepository, TaskRepository taskRepository,
-			SessionUpdateMapper sessionUpdateMapper,
+	public SessionService(SessionRespository sessionRepository, SessionUpdateMapper sessionUpdateMapper,
 
 			SessionAggregator aggregator, SessionCalculator calculator, SessionValidator validator) {
 
 		this.sessionRepository = sessionRepository;
-		this.taskRepository = taskRepository;
 		this.sessionUpdateMapper = sessionUpdateMapper;
 
 		this.aggregator = aggregator;
@@ -58,19 +48,9 @@ public class SessionService {
 	}
 
 	@Transactional
-	public SessionModel save(SessionModel session, Long taskId, String userId) {
+	public SessionModel save(SessionModel session, String userId) {
 
 		List<String> errors = new ArrayList<>();
-
-		if (taskId != null) {
-			TaskModel task = taskRepository.findById(taskId)
-				.orElseThrow(() -> new InvalidTaskException(TASK_NOT_FOUND, "Task not found"));
-
-			if (!task.getUserId().equals(userId)) {
-				throw new InvalidTaskException(TASK_NOT_FOUND, "Task not found for this user");
-			}
-			session.setName(task.getName());
-		}
 
 		if (session.getDate() == null) {
 			session.setDate(LocalDate.now());
@@ -108,7 +88,7 @@ public class SessionService {
 	@Transactional
 	public SessionModel update(Long id, SessionUpdateDTO dto, String userId) {
 		SessionModel session = sessionRepository.findById(id)
-			.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
+				.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
 
 		if (!session.getUserId().equals(userId)) {
 			throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");
@@ -125,7 +105,7 @@ public class SessionService {
 	@Transactional
 	public void delete(Long id, String userId) {
 		SessionModel session = sessionRepository.findById(id)
-			.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
+				.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
 
 		if (!session.getUserId().equals(userId)) {
 			throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");

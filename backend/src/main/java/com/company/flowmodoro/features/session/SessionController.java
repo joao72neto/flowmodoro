@@ -35,10 +35,10 @@ public class SessionController {
 		this.mapper = mapper;
 	}
 
-	@PostMapping("/{id}")
-	public ResponseEntity<SessionDTO> save(@PathVariable Long id, @Valid @RequestBody SessionDTO dto,
+	@PostMapping
+	public ResponseEntity<SessionDTO> save(@Valid @RequestBody SessionDTO dto,
 			@RequestHeader("X-User-Id") String userId) {
-		SessionModel session = sessionService.save(mapper.toEntity(dto), id, userId);
+		SessionModel session = sessionService.save(mapper.toEntity(dto), userId);
 		return ResponseEntity.status(201).body(mapper.toDTO(session));
 	}
 
