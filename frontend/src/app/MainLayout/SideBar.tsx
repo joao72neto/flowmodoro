@@ -4,7 +4,6 @@ import Stack from "../../shared/components/Stack";
 
 import { PiCaretRightBold } from "react-icons/pi";
 import ThemeToggle from "../../shared/components/ThemeToggle";
-import Tasks from "../../features/tasks/components/Tasks/Tasks";
 
 function SideBar({ onClick }: { onClick?: () => void }) {
   return (
@@ -22,7 +21,7 @@ function SideBar({ onClick }: { onClick?: () => void }) {
         <ThemeToggle />
       </div>
       <Stack className="flex-1 overflow-hidden">
-        <Tasks />
+        <div>Nothing to see here</div>
       </Stack>
     </div>
   );

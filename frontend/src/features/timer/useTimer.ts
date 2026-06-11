@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useTaskContext } from "../tasks/tasks.context";
 import { useModal } from "../../shared/modal.context";
 
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
@@ -13,9 +12,8 @@ import healthService from "../../shared/health.service";
 import { useSessionContext } from "../sessions/sessions.context";
 
 const useTimer = () => {
-  const { handleSaveSession, restRatio } = useSessionContext();
-  const { activeTask, setIsSidebarOpen } = useTaskContext();
-  const { showDefault, showWarning, hideModal } = useModal();
+  const { restRatio } = useSessionContext();
+  const { showWarning, hideModal } = useModal();
 
   const BREAK_RATIO = restRatio / 100;
 
@@ -136,23 +134,12 @@ const useTimer = () => {
   }, [mode]);
 
   const startFocus = () => {
-    if (!activeTask) {
-      showDefault({
-        title: "Nenhuma tarefa selecionada",
-        message: "Crie ou selecione uma tarefa para dar início ao timer.",
-        action: hideModal,
-      });
-      setIsSidebarOpen(true);
-      return;
-    }
-
     const now = Date.now();
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
     setSeconds(0);
     setInterruptions(0);
     setMode("focus");
-    setIsSidebarOpen(false);
   };
 
   const stopFocus = () => {
@@ -162,19 +149,18 @@ const useTimer = () => {
     setSeconds(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
-    setIsSidebarOpen(false);
 
     showWarning({
       title: "Sessão Finalizada! 🎉",
       message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds)}?`,
       action: () => {
-        if (activeTask) {
-          handleSaveSession({
-            taskId: activeTask.id,
-            focusSeconds: finalFocusSeconds,
-            interruptions,
-          });
-        }
+        // if (activeTask) {
+        //   handleSaveSession({
+        //     taskId: activeTask.id,
+        //     focusSeconds: finalFocusSeconds,
+        //     interruptions,
+        //   });
+        // }
         hideModal();
       },
       cancel: () => {
@@ -190,12 +176,10 @@ const useTimer = () => {
     startTimeRef.current = Date.now();
     baseSecondsRef.current = seconds;
     setMode("break");
-    setIsSidebarOpen(false);
   };
 
   const skipBreak = () => {
     setMode(null);
-    setIsSidebarOpen(false);
 
     setSeconds(0);
     localStorage.removeItem(localStorageKeys.timer);

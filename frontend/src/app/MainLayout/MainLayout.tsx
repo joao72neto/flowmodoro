@@ -2,16 +2,16 @@ import IconButton from "../../shared/components/buttons/IconButton";
 import SideBar from "./SideBar";
 import MainContentContainer from "./MainContentContainer";
 
-import { useTaskContext } from "../../features/tasks/tasks.context";
 import { useNotificationPermission } from "../../shared/hooks/useNotificationPermission";
 import SideBarContainer from "./SideBarContainer";
 
 import { PiCaretLeftBold } from "react-icons/pi";
 import clsx from "clsx";
+import { useState } from "react";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isSidebarOpen, setIsSidebarOpen } = useTaskContext();
   useNotificationPermission();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className="relative min-h-screen flex overflow-x-hidden items-center">

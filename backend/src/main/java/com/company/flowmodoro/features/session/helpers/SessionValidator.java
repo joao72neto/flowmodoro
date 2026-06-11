@@ -19,10 +19,7 @@ public class SessionValidator {
 
 		Double ratio = session.getRatio();
 
-		if (ratio != null
-				&& ratio != 0.1
-				&& ratio != 0.2
-				&& ratio != 0.3) {
+		if (ratio != null && ratio != 0.1 && ratio != 0.2 && ratio != 0.3) {
 			errors.add("Ratio needs to be 0.1, 0.2 or 0.3");
 		}
 
