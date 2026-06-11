@@ -17,8 +17,13 @@ public class SessionValidator {
 			errors.add("Focus time must be greater than 0");
 		}
 
-		if (session.getRatio() != null && (session.getRatio() < 0 || session.getRatio() > 1)) {
-			errors.add("Ratio needs to be between 0 and 1");
+		Double ratio = session.getRatio();
+
+		if (ratio != null
+				&& ratio != 0.1
+				&& ratio != 0.2
+				&& ratio != 0.3) {
+			errors.add("Ratio needs to be 0.1, 0.2 or 0.3");
 		}
 
 		if (session.getInterruptions() != null && session.getInterruptions() < 0) {
