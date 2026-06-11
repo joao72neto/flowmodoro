@@ -1,5 +1,6 @@
-package com.company.flowmodoro.features.session.dtos;
+package com.company.flowmodoro.features.sessions.dtos;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,14 +11,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SessionUpdateDTO {
+public class SessionDTO {
 
 	private Long id;
 
-	private Long focus;
-
 	@NotBlank(message = "Session name is required")
 	private String name;
+
+	@NotNull(message = "Session focus time is required")
+	private Long focus;
 
 	private Double ratio;
 

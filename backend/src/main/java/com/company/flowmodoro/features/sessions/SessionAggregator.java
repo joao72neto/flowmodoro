@@ -1,4 +1,4 @@
-package com.company.flowmodoro.features.session;
+package com.company.flowmodoro.features.sessions;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
-import com.company.flowmodoro.features.session.dtos.DailySessionsDTO;
-import com.company.flowmodoro.features.session.dtos.SessionDTO;
-import com.company.flowmodoro.features.session.dtos.SessionGroupDTO;
-import com.company.flowmodoro.features.session.mappers.SessionMapper;
+import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
+import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
+import com.company.flowmodoro.features.sessions.dtos.SessionGroupDTO;
+import com.company.flowmodoro.features.sessions.mappers.SessionMapper;
 
 @Component
 public class SessionAggregator {

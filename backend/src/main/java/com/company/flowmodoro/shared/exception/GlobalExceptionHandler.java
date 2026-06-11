@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.company.flowmodoro.features.session.exceptions.InvalidSessionException;
+import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
 import com.company.flowmodoro.features.task.exceptions.InvalidTaskException;
 
 @RestControllerAdvice

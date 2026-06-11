@@ -1,4 +1,4 @@
-package com.company.flowmodoro.features.session;
+package com.company.flowmodoro.features.sessions;
 
 import java.time.LocalDate;
 import java.util.List;

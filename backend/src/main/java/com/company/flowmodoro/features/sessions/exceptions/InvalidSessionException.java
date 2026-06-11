@@ -1,8 +1,8 @@
-package com.company.flowmodoro.features.session.exceptions;
+package com.company.flowmodoro.features.sessions.exceptions;
 
 import java.util.List;
 
-import com.company.flowmodoro.features.session.enums.SessionErrorCode;
+import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
 import com.company.flowmodoro.shared.exception.BaseException;
 
 public class InvalidSessionException extends BaseException {

@@ -1,8 +1,8 @@
-package com.company.flowmodoro.features.session.helpers;
+package com.company.flowmodoro.features.sessions.helpers;
 
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.features.session.SessionModel;
+import com.company.flowmodoro.features.sessions.SessionModel;
 
 @Component
 public class SessionCalculator {

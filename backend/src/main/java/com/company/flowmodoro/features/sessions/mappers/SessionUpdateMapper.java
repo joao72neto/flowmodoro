@@ -1,9 +1,9 @@
-package com.company.flowmodoro.features.session.mappers;
+package com.company.flowmodoro.features.sessions.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.features.session.SessionModel;
-import com.company.flowmodoro.features.session.dtos.SessionUpdateDTO;
+import com.company.flowmodoro.features.sessions.SessionModel;
+import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 
 @Component
 public class SessionUpdateMapper {
@@ -17,9 +17,10 @@ public class SessionUpdateMapper {
 
 	public SessionUpdateDTO toDTO(SessionModel session) {
 		return SessionUpdateDTO.builder()
-				.focus(session.getFocus())
-				.ratio(session.getRatio())
-				.rest(session.getRest())
-				.build();
+			.focus(session.getFocus())
+			.ratio(session.getRatio())
+			.rest(session.getRest())
+			.build();
 	}
+
 }

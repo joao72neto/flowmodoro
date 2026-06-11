@@ -1,4 +1,4 @@
-package com.company.flowmodoro.features.session.enums;
+package com.company.flowmodoro.features.sessions.enums;
 
 import com.company.flowmodoro.shared.exception.ErrorCode;
 

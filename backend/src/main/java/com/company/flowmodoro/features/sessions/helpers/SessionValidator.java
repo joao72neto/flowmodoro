@@ -1,12 +1,12 @@
-package com.company.flowmodoro.features.session.helpers;
+package com.company.flowmodoro.features.sessions.helpers;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.features.session.SessionModel;
-import com.company.flowmodoro.features.session.enums.SessionErrorCode;
-import com.company.flowmodoro.features.session.exceptions.InvalidSessionException;
+import com.company.flowmodoro.features.sessions.SessionModel;
+import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
+import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
 
 @Component
 public class SessionValidator {

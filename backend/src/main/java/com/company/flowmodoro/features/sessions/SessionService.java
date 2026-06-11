@@ -1,4 +1,4 @@
-package com.company.flowmodoro.features.session;
+package com.company.flowmodoro.features.sessions;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,13 +11,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.company.flowmodoro.features.session.dtos.DailySessionsDTO;
-import com.company.flowmodoro.features.session.dtos.SessionUpdateDTO;
-import com.company.flowmodoro.features.session.enums.SessionErrorCode;
-import com.company.flowmodoro.features.session.exceptions.InvalidSessionException;
-import com.company.flowmodoro.features.session.helpers.SessionCalculator;
-import com.company.flowmodoro.features.session.helpers.SessionValidator;
-import com.company.flowmodoro.features.session.mappers.SessionUpdateMapper;
+import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
+import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
+import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
+import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
+import com.company.flowmodoro.features.sessions.helpers.SessionCalculator;
+import com.company.flowmodoro.features.sessions.helpers.SessionValidator;
+import com.company.flowmodoro.features.sessions.mappers.SessionUpdateMapper;
 import com.company.flowmodoro.shared.dto.PageResponse;
 
 @Service
@@ -84,7 +84,7 @@ public class SessionService {
 	@Transactional
 	public SessionModel update(Long id, SessionUpdateDTO dto, String userId) {
 		SessionModel session = sessionRepository.findById(id)
-				.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
+			.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
 
 		if (!session.getUserId().equals(userId)) {
 			throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");
@@ -101,7 +101,7 @@ public class SessionService {
 	@Transactional
 	public void delete(Long id, String userId) {
 		SessionModel session = sessionRepository.findById(id)
-				.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
+			.orElseThrow(() -> new InvalidSessionException(SESSION_NOT_FOUND, "Session not found with id: " + id));
 
 		if (!session.getUserId().equals(userId)) {
 			throw new InvalidSessionException(SESSION_NOT_FOUND, "Session not found for this user");

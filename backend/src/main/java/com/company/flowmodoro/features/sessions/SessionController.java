@@ -1,4 +1,4 @@
-package com.company.flowmodoro.features.session;
+package com.company.flowmodoro.features.sessions;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.flowmodoro.features.session.dtos.DailySessionsDTO;
-import com.company.flowmodoro.features.session.dtos.SessionDTO;
-import com.company.flowmodoro.features.session.dtos.SessionUpdateDTO;
-import com.company.flowmodoro.features.session.mappers.SessionMapper;
+import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
+import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
+import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
+import com.company.flowmodoro.features.sessions.mappers.SessionMapper;
 import com.company.flowmodoro.shared.dto.PageResponse;
 
 import jakarta.validation.Valid;

@@ -1,22 +1,22 @@
-package com.company.flowmodoro.features.session.mappers;
+package com.company.flowmodoro.features.sessions.mappers;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.company.flowmodoro.features.session.SessionModel;
-import com.company.flowmodoro.features.session.dtos.SessionDTO;
+import com.company.flowmodoro.features.sessions.SessionModel;
+import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
 
 @Component
 public class SessionMapper {
 
 	public SessionModel toEntity(SessionDTO sessionDTO) {
 		return SessionModel.builder()
-				.id(sessionDTO.getId())
-				.name(sessionDTO.getName())
-				.focus(sessionDTO.getFocus())
-				.ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
-				.build();
+			.id(sessionDTO.getId())
+			.name(sessionDTO.getName())
+			.focus(sessionDTO.getFocus())
+			.ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
+			.build();
 	}
 
 	public List<SessionModel> toEntity(List<SessionDTO> sessionDTOs) {
@@ -25,12 +25,12 @@ public class SessionMapper {
 
 	public SessionDTO toDTO(SessionModel session) {
 		return SessionDTO.builder()
-				.id(session.getId())
-				.name(session.getName())
-				.focus(session.getFocus())
-				.ratio(session.getRatio())
-				.rest(session.getRest())
-				.build();
+			.id(session.getId())
+			.name(session.getName())
+			.focus(session.getFocus())
+			.ratio(session.getRatio())
+			.rest(session.getRest())
+			.build();
 	}
 
 	public List<SessionDTO> toDTO(List<SessionModel> sessions) {
