@@ -1,0 +1,63 @@
+package com.company.flowmodoro.features.tags;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.company.flowmodoro.features.projects.ProjectModel;
+import com.company.flowmodoro.features.projects.ProjectService;
+import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
+import com.company.flowmodoro.features.tags.enums.TagErrorCode;
+import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
+import com.company.flowmodoro.features.tags.mappers.TagUpdateMapper;
+
+@Service
+public class TagService {
+
+	private final TagRepository tagRepository;
+
+	private final ProjectService projectService;
+
+	private final TagUpdateMapper tagUpdateMapper;
+
+	public TagService(TagRepository tagRepository, ProjectService projectService, TagUpdateMapper tagUpdateMapper) {
+		this.tagRepository = tagRepository;
+		this.projectService = projectService;
+		this.tagUpdateMapper = tagUpdateMapper;
+	}
+
+	@Transactional
+	public TagModel save(TagModel tag, Long projectId, String userId) {
+		ProjectModel project = projectService.findById(projectId, userId);
+		tag.setProject(project);
+		return tagRepository.save(tag);
+	}
+
+	public List<TagModel> findAllByProject(Long projectId, String userId) {
+		projectService.findById(projectId, userId);
+		return tagRepository.findByProjectId(projectId);
+	}
+
+	@Transactional
+	public TagModel update(Long id, TagUpdateDTO dto, String userId) {
+		TagModel tag = tagRepository.findById(id)
+				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+
+		projectService.findById(tag.getProject().getId(), userId);
+
+		tagUpdateMapper.apply(tag, dto);
+		return tagRepository.save(tag);
+	}
+
+	@Transactional
+	public void delete(Long id, String userId) {
+		TagModel tag = tagRepository.findById(id)
+				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+
+		projectService.findById(tag.getProject().getId(), userId);
+
+		tagRepository.delete(tag);
+	}
+
+}
