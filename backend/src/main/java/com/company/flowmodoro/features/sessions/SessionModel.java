@@ -2,11 +2,16 @@ package com.company.flowmodoro.features.sessions;
 
 import java.time.LocalDate;
 
+import com.company.flowmodoro.features.projects.ProjectModel;
+import com.company.flowmodoro.features.tags.TagModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,5 +48,13 @@ public class SessionModel {
 
 	@Column(name = "ses_date", updatable = false)
 	private LocalDate date;
+
+	@ManyToOne
+	@JoinColumn(name = "ses_pro_id")
+	private ProjectModel project;
+
+	@ManyToOne
+	@JoinColumn(name = "ses_tag_id")
+	private TagModel tag;
 
 }

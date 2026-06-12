@@ -23,4 +23,8 @@ public class SessionUpdateDTO {
 
 	private Long rest;
 
+	private Long projectId;
+
+	private Long tagId;
+
 }

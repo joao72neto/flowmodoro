@@ -16,6 +16,7 @@ import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
 import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
+import com.company.flowmodoro.features.sessions.helpers.ProjectTagValidator;
 import com.company.flowmodoro.features.sessions.helpers.SessionCalculator;
 import com.company.flowmodoro.features.sessions.helpers.SessionValidator;
 import com.company.flowmodoro.features.sessions.mappers.SessionUpdateMapper;
@@ -35,9 +36,12 @@ public class SessionService {
 
 	private final SessionValidator validator;
 
+	private final ProjectTagValidator projectTagValidator;
+
 	public SessionService(SessionRespository sessionRepository, SessionUpdateMapper sessionUpdateMapper,
 
-			SessionAggregator aggregator, SessionCalculator calculator, SessionValidator validator) {
+			SessionAggregator aggregator, SessionCalculator calculator, SessionValidator validator,
+			ProjectTagValidator projectTagValidator) {
 
 		this.sessionRepository = sessionRepository;
 		this.sessionUpdateMapper = sessionUpdateMapper;
@@ -45,6 +49,7 @@ public class SessionService {
 		this.aggregator = aggregator;
 		this.calculator = calculator;
 		this.validator = validator;
+		this.projectTagValidator = projectTagValidator;
 	}
 
 	@Transactional
@@ -56,6 +61,11 @@ public class SessionService {
 			session.setDate(LocalDate.now());
 		}
 
+		if (session.getRatio() == null) {
+			session.setRatio(0.2);
+		}
+
+		projectTagValidator.validateProjectAndTag(session, userId);
 		calculator.calculateRest(session, session.getRatio());
 		validator.validateSessions(session, errors);
 
@@ -91,6 +101,8 @@ public class SessionService {
 		}
 
 		sessionUpdateMapper.apply(session, dto);
+
+		projectTagValidator.validateProjectAndTag(session, userId);
 
 		List<String> errors = new ArrayList<>();
 		validator.validateSessions(session, errors);

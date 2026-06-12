@@ -42,7 +42,7 @@ public class TagService {
 	@Transactional
 	public TagModel update(Long id, TagUpdateDTO dto, String userId) {
 		TagModel tag = tagRepository.findById(id)
-				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+			.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
 
 		projectService.findById(tag.getProject().getId(), userId);
 
@@ -53,7 +53,7 @@ public class TagService {
 	@Transactional
 	public void delete(Long id, String userId) {
 		TagModel tag = tagRepository.findById(id)
-				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+			.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
 
 		projectService.findById(tag.getProject().getId(), userId);
 
