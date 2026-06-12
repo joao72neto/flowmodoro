@@ -1,4 +1,4 @@
-package com.company.flowmodoro.shared.exception;
+package com.company.flowmodoro.exception;
 
 public enum CommonErrorCode implements ErrorCode {
 

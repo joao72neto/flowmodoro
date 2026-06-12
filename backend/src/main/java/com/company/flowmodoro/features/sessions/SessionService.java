@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.company.flowmodoro.common.dto.PageResponse;
 import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
@@ -18,7 +19,6 @@ import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionExcepti
 import com.company.flowmodoro.features.sessions.helpers.SessionCalculator;
 import com.company.flowmodoro.features.sessions.helpers.SessionValidator;
 import com.company.flowmodoro.features.sessions.mappers.SessionUpdateMapper;
-import com.company.flowmodoro.shared.dto.PageResponse;
 
 @Service
 public class SessionService {

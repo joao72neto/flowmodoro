@@ -1,4 +1,4 @@
-package com.company.flowmodoro.shared.dto;
+package com.company.flowmodoro.common.dto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.company.flowmodoro;
+package com.company.flowmodoro.health;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

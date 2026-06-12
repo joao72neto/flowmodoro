@@ -1,4 +1,4 @@
-package com.company.flowmodoro.shared.config;
+package com.company.flowmodoro.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

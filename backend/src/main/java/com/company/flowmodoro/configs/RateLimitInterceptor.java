@@ -1,4 +1,4 @@
-package com.company.flowmodoro.shared.config;
+package com.company.flowmodoro.configs;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;

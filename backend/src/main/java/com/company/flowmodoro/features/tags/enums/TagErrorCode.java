@@ -1,6 +1,6 @@
 package com.company.flowmodoro.features.tags.enums;
 
-import com.company.flowmodoro.shared.exception.ErrorCode;
+import com.company.flowmodoro.exception.ErrorCode;
 
 public enum TagErrorCode implements ErrorCode {
 

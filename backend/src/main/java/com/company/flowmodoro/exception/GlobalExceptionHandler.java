@@ -1,4 +1,4 @@
-package com.company.flowmodoro.shared.exception;
+package com.company.flowmodoro.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { useModal } from "../../shared/modal.context";
+import { useModal } from "../../../shared/modal.context";
 
-import { localStorageKeys } from "../../shared/utils/local-storage.utils";
+import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
 import {
   updateFaviconWithTime,
   resetFavicon,
-} from "../../shared/utils/favicon.utils";
+} from "../../../shared/utils/favicon.utils";
 
-import { formatToHour } from "../../shared/utils/number.utils";
-import healthService from "../../shared/health.service";
-import { useSessionContext } from "../sessions/sessions.context";
+import { formatToHour } from "../../../shared/utils/number.utils";
+import healthService from "../../../shared/health.service";
+import { useSessionContext } from "../../sessions/sessions.context";
 
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();

@@ -1,10 +1,10 @@
-import sessionsService from "./sessions.service";
+import sessionsService from "../sessions.service";
 import type {
   CreateSessionRequest,
   SessionResponse,
   UpdateSessionRequest,
-} from "./sessions.types";
-import { useModal } from "../../shared/modal.context";
+} from "../sessions.types";
+import { useModal } from "../../../shared/modal.context";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useFetchSessions = ({

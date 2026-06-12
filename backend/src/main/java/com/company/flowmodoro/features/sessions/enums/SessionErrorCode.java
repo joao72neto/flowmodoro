@@ -1,6 +1,6 @@
 package com.company.flowmodoro.features.sessions.enums;
 
-import com.company.flowmodoro.shared.exception.ErrorCode;
+import com.company.flowmodoro.exception.ErrorCode;
 
 public enum SessionErrorCode implements ErrorCode {
 

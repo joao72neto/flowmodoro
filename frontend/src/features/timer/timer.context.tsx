@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import useTimer from "./useTimer";
+import useTimer from "./hooks/useTimer";
 
 type TimerContextType = ReturnType<typeof useTimer>;
 

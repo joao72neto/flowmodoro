@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
 import IconButton from "../../../shared/components/buttons/IconButton";
-import { useDeleteSession, useUpdateSession } from "../useSessions";
+import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
 import { useQueryClient } from "@tanstack/react-query";
 import type { SessionResponse } from "../sessions.types";
 

@@ -1,7 +1,7 @@
 package com.company.flowmodoro.features.projects.exceptions;
 
-import com.company.flowmodoro.shared.exception.BaseException;
-import com.company.flowmodoro.shared.exception.ErrorCode;
+import com.company.flowmodoro.exception.BaseException;
+import com.company.flowmodoro.exception.ErrorCode;
 
 public class InvalidProjectException extends BaseException {
 
