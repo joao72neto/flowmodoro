@@ -8,13 +8,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler(InvalidSessionException.class)
-	public ResponseEntity<ErrorResponse> handleInvalidSession(InvalidSessionException ex) {
+	@ExceptionHandler(BaseException.class)
+	public ResponseEntity<ErrorResponse> handleBaseException(BaseException ex) {
 		ErrorResponse errorResponse = ErrorResponse.builder().code(ex.getCode()).errors(ex.getErrors()).build();
 
 		return ResponseEntity.badRequest().body(errorResponse);

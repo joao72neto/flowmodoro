@@ -23,16 +23,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TagModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "tag_id")
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "tag_id")
+	private Long id;
 
-  @Column(name = "tag_name")
-  private String name;
+	@Column(name = "tag_name")
+	private String name;
 
-  @ManyToOne
-  @JoinColumn(name = "tag_pro_id")
-  private ProjectModel project;
+	@ManyToOne
+	@JoinColumn(name = "tag_pro_id")
+	private ProjectModel project;
 
 }

@@ -25,15 +25,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "pro_id")
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "pro_id")
+	private Long id;
 
-  @Column(name = "pro_name")
-  private String name;
+	@Column(name = "pro_name")
+	private String name;
 
-  @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<TagModel> tags;
+	@Column(name = "pro_user_id")
+	private String userId;
+
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TagModel> tags;
 
 }

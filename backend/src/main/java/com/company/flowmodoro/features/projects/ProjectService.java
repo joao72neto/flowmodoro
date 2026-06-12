@@ -1,0 +1,59 @@
+package com.company.flowmodoro.features.projects;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
+import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
+import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
+import com.company.flowmodoro.features.projects.mappers.ProjectUpdateMapper;
+
+@Service
+public class ProjectService {
+
+	private final ProjectRepository projectRepository;
+
+	private final ProjectUpdateMapper projectUpdateMapper;
+
+	public ProjectService(ProjectRepository projectRepository, ProjectUpdateMapper projectUpdateMapper) {
+		this.projectRepository = projectRepository;
+		this.projectUpdateMapper = projectUpdateMapper;
+	}
+
+	@Transactional
+	public ProjectModel save(ProjectModel project, String userId) {
+		project.setUserId(userId);
+		return projectRepository.save(project);
+	}
+
+	public List<ProjectModel> findAll(String userId) {
+		return projectRepository.findByUserId(userId);
+	}
+
+	public ProjectModel findById(Long id, String userId) {
+		ProjectModel project = projectRepository.findById(id)
+			.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
+
+		if (!project.getUserId().equals(userId)) {
+			throw new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found for this user");
+		}
+
+		return project;
+	}
+
+	@Transactional
+	public ProjectModel update(Long id, ProjectUpdateDTO dto, String userId) {
+		ProjectModel project = findById(id, userId);
+		projectUpdateMapper.apply(project, dto);
+		return projectRepository.save(project);
+	}
+
+	@Transactional
+	public void delete(Long id, String userId) {
+		ProjectModel project = findById(id, userId);
+		projectRepository.delete(project);
+	}
+
+}

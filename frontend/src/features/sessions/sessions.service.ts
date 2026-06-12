@@ -16,14 +16,14 @@ class SessionService {
     size: number;
   }): Promise<PaginationResponse<ISessionGroupResponse>> {
     const res = await api.get<PaginationResponse<ISessionGroupResponse>>(
-      "/session",
+      "/sessions",
       { params: { page, size } },
     );
     return res.data;
   }
 
   async createSession(data: CreateSessionRequest): Promise<SessionResponse> {
-    const res = await api.post<SessionResponse>("/session", data);
+    const res = await api.post<SessionResponse>("/sessions", data);
     return res.data;
   }
 
@@ -34,12 +34,12 @@ class SessionService {
     id: number;
     data: UpdateSessionRequest;
   }): Promise<SessionResponse> {
-    const res = await api.put<SessionResponse>(`/session/${id}`, data);
+    const res = await api.put<SessionResponse>(`/sessions/${id}`, data);
     return res.data;
   }
 
   async deleteSession(id: number) {
-    return await api.delete(`/session/${id}`);
+    return await api.delete(`/sessions/${id}`);
   }
 }
 

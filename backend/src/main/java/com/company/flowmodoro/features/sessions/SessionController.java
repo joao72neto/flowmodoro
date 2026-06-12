@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
-@RequestMapping("/api/session")
+@RequestMapping("/api/sessions")
 public class SessionController {
 
 	private final SessionService sessionService;
