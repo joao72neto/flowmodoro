@@ -5,12 +5,21 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.company.flowmodoro.features.projects.ProjectModel;
+import com.company.flowmodoro.features.projects.mappers.ProjectMapper;
 import com.company.flowmodoro.features.sessions.SessionModel;
 import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
 import com.company.flowmodoro.features.tags.TagModel;
+import com.company.flowmodoro.features.tags.mappers.TagSessionMapper;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class SessionMapper {
+
+	private final ProjectMapper projectMapper;
+
+	private final TagSessionMapper tagMapper;
 
 	public SessionModel toEntity(SessionDTO sessionDTO) {
 		return SessionModel.builder()
@@ -18,9 +27,10 @@ public class SessionMapper {
 			.name(sessionDTO.getName())
 			.focus(sessionDTO.getFocus())
 			.ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
-			.project(sessionDTO.getProjectId() != null ? ProjectModel.builder().id(sessionDTO.getProjectId()).build()
-					: null)
-			.tag(sessionDTO.getTagId() != null ? TagModel.builder().id(sessionDTO.getTagId()).build() : null)
+			.project(sessionDTO.getProject() != null && sessionDTO.getProject().getId() != null
+					? ProjectModel.builder().id(sessionDTO.getProject().getId()).build() : null)
+			.tag(sessionDTO.getTag() != null && sessionDTO.getTag().getId() != null
+					? TagModel.builder().id(sessionDTO.getTag().getId()).build() : null)
 			.build();
 	}
 
@@ -35,8 +45,8 @@ public class SessionMapper {
 			.focus(session.getFocus())
 			.ratio(session.getRatio())
 			.rest(session.getRest())
-			.projectId(session.getProject() != null ? session.getProject().getId() : null)
-			.tagId(session.getTag() != null ? session.getTag().getId() : null)
+			.project(session.getProject() != null ? projectMapper.toDTO(session.getProject()) : null)
+			.tag(session.getTag() != null ? tagMapper.toDTO(session.getTag()) : null)
 			.build();
 	}
 

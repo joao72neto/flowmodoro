@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.flowmodoro.common.dto.PageResponse;
 import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
+import com.company.flowmodoro.features.sessions.dtos.SessionCreateDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
+import com.company.flowmodoro.features.sessions.mappers.SessionCreateMapper;
 import com.company.flowmodoro.features.sessions.mappers.SessionMapper;
 
 import jakarta.validation.Valid;
@@ -30,15 +32,18 @@ public class SessionController {
 
 	private final SessionMapper mapper;
 
-	public SessionController(SessionService sessionService, SessionMapper mapper) {
+	private final SessionCreateMapper createMapper;
+
+	public SessionController(SessionService sessionService, SessionMapper mapper, SessionCreateMapper createMapper) {
 		this.sessionService = sessionService;
 		this.mapper = mapper;
+		this.createMapper = createMapper;
 	}
 
 	@PostMapping
-	public ResponseEntity<SessionDTO> save(@Valid @RequestBody SessionDTO dto,
+	public ResponseEntity<SessionDTO> save(@Valid @RequestBody SessionCreateDTO dto,
 			@RequestHeader("X-User-Id") String userId) {
-		SessionModel session = sessionService.save(mapper.toEntity(dto), userId);
+		SessionModel session = sessionService.save(createMapper.toEntity(dto), userId);
 		return ResponseEntity.status(201).body(mapper.toDTO(session));
 	}
 

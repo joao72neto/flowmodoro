@@ -1,8 +1,5 @@
 package com.company.flowmodoro.features.sessions.dtos;
 
-import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
-import com.company.flowmodoro.features.tags.dtos.TagSessionDTO;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -14,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SessionDTO {
+public class SessionCreateDTO {
 
 	private Long id;
 
@@ -28,8 +25,8 @@ public class SessionDTO {
 
 	private Long rest;
 
-	private ProjectDTO project;
+	private Long projectId;
 
-	private TagSessionDTO tag;
+	private Long tagId;
 
 }
