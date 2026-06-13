@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "../../../../shared/components/buttons/Button";
 
 import Input from "../../../../shared/components/Input";
@@ -5,9 +6,21 @@ import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
 import CreateProjectModal from "../CreateProjectModal";
 import Project from "./Project";
 
+import type { CreateProjectType, ProjectType } from "../../projects.types";
+
 const Projects = () => {
   const { Modal: CreateProject, openModal: openProjectModal } =
     useModalFactory(CreateProjectModal);
+  const [projects, setProjects] = useState<ProjectType[]>([
+    { id: 1, name: "Violin" },
+    { id: 2, name: "Flowmodoro" },
+    { id: 3, name: "Piano" },
+    { id: 4, name: "Coding" },
+  ]);
+
+  const handleCreateProject = (project: CreateProjectType) => {
+    setProjects([{ id: projects.length + 1, name: project.name }, ...projects]);
+  };
 
   return (
     <>
@@ -19,12 +32,12 @@ const Projects = () => {
           <Input placeholder="Pesquisar projeto" className="border w-full" />
         </div>
         <div className="flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-            <Project key={item} name={`Project ${item}`} />
+          {projects.map((item) => (
+            <Project key={item.id} name={item.name} />
           ))}
         </div>
       </div>
-      <CreateProject />
+      <CreateProject confirm={handleCreateProject} />
     </>
   );
 };
