@@ -7,11 +7,19 @@ import SideBarContainer from "./SideBarContainer";
 
 import { PiCaretLeftBold } from "react-icons/pi";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isSidebarOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isSidebarOpen]);
 
   return (
     <div className="relative min-h-screen flex overflow-x-hidden items-center">
@@ -19,7 +27,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
       <div
         className={clsx(
-          "fixed inset-0 bg-black/50 backdrop-blur-lg z-20 transition-opacity duration-300",
+          "fixed inset-0 bg-black/50 backdrop-blur-md z-20 transition-opacity duration-300",
           isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={() => setIsSidebarOpen(false)}

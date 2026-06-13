@@ -1,11 +1,12 @@
 import clsx from "clsx";
 import IconButton from "../../shared/components/buttons/IconButton";
-import Stack from "../../shared/components/Stack";
 
 import { PiCaretRightBold } from "react-icons/pi";
 import ThemeToggle from "../../shared/components/ThemeToggle";
 
-function SideBar({ onClick }: { onClick?: () => void }) {
+import Projects from "../../features/projects/components/Projects";
+
+const SideBar = ({ onClick }: { onClick?: () => void }) => {
   return (
     <div className="border-l bg-neutral-100 border-l-border h-screen shadow-2xl flex flex-col">
       <div className="flex justify-between items-center mb-4 p-3">
@@ -20,11 +21,11 @@ function SideBar({ onClick }: { onClick?: () => void }) {
         />
         <ThemeToggle />
       </div>
-      <Stack className="flex-1 overflow-hidden">
-        <div>Nothing to see here</div>
-      </Stack>
+      <div className="flex-1 min-h-0">
+        <Projects />
+      </div>
     </div>
   );
-}
+};
 
 export default SideBar;
