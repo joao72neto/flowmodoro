@@ -1,4 +1,4 @@
-import DropDownMenu from "../../../shared/components/DropDownMenu";
+import DropDownMenu from "../../../../shared/components/DropDownMenu";
 
 const Project = ({ name = "Project" }: { name: string }) => {
   return (

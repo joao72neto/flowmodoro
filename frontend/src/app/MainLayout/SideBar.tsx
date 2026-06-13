@@ -4,7 +4,7 @@ import IconButton from "../../shared/components/buttons/IconButton";
 import { PiCaretRightBold } from "react-icons/pi";
 import ThemeToggle from "../../shared/components/ThemeToggle";
 
-import Projects from "../../features/projects/components/Projects";
+import Projects from "../../features/projects/components/Projects/Projects";
 
 const SideBar = ({ onClick }: { onClick?: () => void }) => {
   return (
