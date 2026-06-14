@@ -4,7 +4,7 @@ import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
 import ProjectModal from "../ProjectModal";
 import type { ProjectType } from "../../projects.types";
 
-import { GrUpdate } from "react-icons/gr";
+import { RxUpdate } from "react-icons/rx";
 
 const Project = ({
   projectData,
@@ -36,7 +36,7 @@ const Project = ({
         confirm={onEdit}
         defaultValues={projectData}
         inputLabel="Novo nome"
-        confirmButtonIcon={<GrUpdate />}
+        confirmButtonIcon={<RxUpdate />}
         confirmButtonText="Atualizar"
       />
     </>

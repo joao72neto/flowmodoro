@@ -4,7 +4,7 @@ import Button from "../../../shared/components/buttons/Button";
 import type { CreateProjectType, ProjectType } from "../projects.types";
 import { useState } from "react";
 
-import { GoPlus } from "react-icons/go";
+import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
 import { GoProject } from "react-icons/go";
 
@@ -13,16 +13,16 @@ const ProjectModal = ({
   defaultValues,
 
   title = "Novo projeto",
-  titleIcon = <GoProject size={30} />,
+  titleIcon = <GoProject />,
 
   inputLabel = "Nome",
 
   confirm,
   confirmButtonText = "Criar",
-  confirmButtonIcon = <GoPlus size={26} />,
+  confirmButtonIcon = <MdOutlineAdd />,
 
   cancelButtonText = "Cancelar",
-  cancelButtonIcon = <MdOutlineCancel size={26} />,
+  cancelButtonIcon = <MdOutlineCancel />,
   close,
 }: {
   isOpen: boolean;
@@ -47,9 +47,9 @@ const ProjectModal = ({
 
   return (
     <ModalContainer close={!name ? close : undefined}>
-      <div className="flex items-center gap-3">
-        {titleIcon}
-        <h1 className="font-bold text-xl">{title}</h1>
+      <div className="flex items-center gap-3 text-xl">
+        <span className="text-3xl">{titleIcon}</span>
+        <h1 className="font-bold">{title}</h1>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -63,7 +63,7 @@ const ProjectModal = ({
 
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
         <Button
-          icon={confirmButtonIcon}
+          icon={<span className="text-xl">{confirmButtonIcon}</span>}
           className="w-full text-sm! p-1.5! sm:w-[150px] sm:p-2!"
           onClick={() => {
             confirm(defaultValues ? { id: defaultValues.id, name } : { name });
@@ -73,8 +73,8 @@ const ProjectModal = ({
           {confirmButtonText}
         </Button>
         <Button
-          icon={cancelButtonIcon}
-          className="w-full text-sm! p-1.5! sm:w-[150px] sm:p-2!"
+          icon={<span className="text-xl">{cancelButtonIcon}</span>}
+          className="w-full text-sm! p-1.5! sm:w-[150px] sm:p-2! sm:text-base!"
           variant="danger"
           onClick={close}
         >
