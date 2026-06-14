@@ -57,6 +57,14 @@ const ProjectModal = ({
         <Input
           placeholder="Nome do projeto"
           onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && name.trim()) {
+              confirm(
+                defaultValues ? { id: defaultValues.id, name } : { name },
+              );
+              close();
+            }
+          }}
           value={name}
         />
       </div>

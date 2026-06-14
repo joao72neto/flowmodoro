@@ -3,8 +3,10 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
 import ProjectModal from "../ProjectModal";
 import type { ProjectType } from "../../projects.types";
+import { MdModeEditOutline } from "react-icons/md";
 
 import { RxUpdate } from "react-icons/rx";
+import { RxTrash } from "react-icons/rx";
 
 const Project = ({
   projectData,
@@ -24,8 +26,12 @@ const Project = ({
         <span>{projectData.name}</span>
         <DropDownMenu
           items={[
-            { label: "Editar", onClick: openProjectModal },
-            { label: "Excluir", onClick: onDelete },
+            {
+              label: "Editar",
+              onClick: openProjectModal,
+              icon: <MdModeEditOutline />,
+            },
+            { label: "Excluir", onClick: onDelete, icon: <RxTrash /> },
           ]}
         >
           <BsThreeDotsVertical size={20} />

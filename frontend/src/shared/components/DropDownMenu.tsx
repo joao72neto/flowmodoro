@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface Item {
   label: string;
+  icon?: React.ReactNode;
   onClick?: () => void;
 }
 
@@ -52,7 +53,10 @@ const DropdownMenu = ({
               }}
               className="block w-full px-4 py-2 text-left hover:bg-neutral-60"
             >
-              {item.label}
+              <div className="flex items-center gap-2">
+                {item.icon && <span>{item.icon}</span>}
+                <span>{item.label}</span>
+              </div>
             </button>
           ))}
         </div>
