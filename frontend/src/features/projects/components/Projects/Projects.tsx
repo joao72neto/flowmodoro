@@ -3,7 +3,7 @@ import Button from "../../../../shared/components/buttons/Button";
 
 import Input from "../../../../shared/components/Input";
 import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
-import CreateProjectModal from "../CreateProjectModal";
+import CreateProjectModal from "../ProjectModal";
 import Project from "./Project";
 
 import { GoPlus } from "react-icons/go";
