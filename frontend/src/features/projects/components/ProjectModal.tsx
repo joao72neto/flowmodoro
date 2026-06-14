@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { CreateProjectType } from "../projects.types";
+import type { CreateProjectType, ProjectType } from "../projects.types";
 import { useState } from "react";
 
 import { GoPlus } from "react-icons/go";
@@ -10,8 +10,12 @@ import { GoProject } from "react-icons/go";
 
 const ProjectModal = ({
   isOpen,
+  defaultValues,
+
   title = "Novo projeto",
   titleIcon = <GoProject size={30} />,
+
+  inputLabel = "Nome",
 
   confirm,
   confirmButtonText = "Criar",
@@ -22,10 +26,14 @@ const ProjectModal = ({
   close,
 }: {
   isOpen: boolean;
+  defaultValues?: ProjectType;
+
   title: string;
   titleIcon?: React.ReactNode;
 
-  confirm: (project: CreateProjectType) => void;
+  inputLabel?: string;
+
+  confirm: (project: CreateProjectType | ProjectType) => void;
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
 
@@ -35,7 +43,7 @@ const ProjectModal = ({
 }) => {
   if (!isOpen) return null;
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(defaultValues?.name || "");
 
   return (
     <ModalContainer close={!name ? close : undefined}>
@@ -45,10 +53,11 @@ const ProjectModal = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="font-bold text-left text-[18px]">Nome</label>
+        <label className="font-bold text-left text-[18px]">{inputLabel}</label>
         <Input
           placeholder="Nome do projeto"
           onChange={(e) => setName(e.target.value)}
+          value={name}
         />
       </div>
 
@@ -57,7 +66,7 @@ const ProjectModal = ({
           icon={confirmButtonIcon}
           className="w-full text-sm! p-1.5! sm:w-[150px] sm:p-2!"
           onClick={() => {
-            confirm({ name });
+            confirm(defaultValues ? { id: defaultValues.id, name } : { name });
             close();
           }}
         >

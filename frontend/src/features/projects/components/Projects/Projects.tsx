@@ -3,7 +3,7 @@ import Button from "../../../../shared/components/buttons/Button";
 
 import Input from "../../../../shared/components/Input";
 import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
-import CreateProjectModal from "../ProjectModal";
+import ProjectModal from "../ProjectModal";
 import Project from "./Project";
 
 import { GoPlus } from "react-icons/go";
@@ -11,7 +11,8 @@ import type { CreateProjectType, ProjectType } from "../../projects.types";
 
 const Projects = () => {
   const { Modal: CreateProject, openModal: openProjectModal } =
-    useModalFactory(CreateProjectModal);
+    useModalFactory(ProjectModal);
+
   const [projects, setProjects] = useState<ProjectType[]>([
     { id: 1, name: "Violin" },
     { id: 2, name: "Flowmodoro" },
@@ -52,8 +53,9 @@ const Projects = () => {
           {projects.map((item) => (
             <Project
               key={item.id}
-              name={item.name}
+              projectData={item}
               onDelete={() => handleDeleteProject(item)}
+              onEdit={handleEditProject}
             />
           ))}
         </div>
