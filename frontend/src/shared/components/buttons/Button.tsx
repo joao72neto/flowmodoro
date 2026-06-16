@@ -31,29 +31,26 @@ export const variants = {
   success2: clsx(baseStyle, "bg-success-2"),
 };
 
+import { type ButtonHTMLAttributes } from "react";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  icon?: React.ReactNode;
+  variant?: VariantType;
+  loading?: boolean;
+}
+
 function Button({
   icon,
   variant,
   children,
-  onClick,
   className,
   disabled,
-  title,
   loading,
-}: {
-  icon?: React.ReactNode;
-  variant?: VariantType;
-  children: React.ReactNode;
-  onClick?: () => void;
-  className?: string;
-  disabled?: boolean;
-  title?: string;
-  loading?: boolean;
-}) {
+  ...props
+}: ButtonProps) {
   return (
     <button
-      title={title}
-      onClick={onClick}
+      {...props}
       disabled={disabled || loading}
       className={clsx(variants[variant || "primary"], className)}
     >

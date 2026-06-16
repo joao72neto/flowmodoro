@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { VariantType } from "../globals.types";
+import { forwardRef, type InputHTMLAttributes } from "react";
 
 const focusVariants = {
   primary: "focus-within:border-primary!",
@@ -19,60 +20,70 @@ const iconFocusVariants = {
   success2: "group-focus-within:text-success-2",
 };
 
-interface InputProps {
-  placeholder: string;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
-  className?: string;
-  disabled?: boolean;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   variant?: VariantType;
   icon?: React.ReactNode;
+  error?: string;
 }
 
-function Input({
-  placeholder,
-  onKeyDown,
-  onChange,
-  value,
-  className,
-  disabled,
-  variant = "primary",
-  icon,
-}: InputProps) {
-  return (
-    <div
-      className={clsx(
-        "group relative flex items-center w-full transition-all duration-200",
-        "rounded-md border border-border bg-neutral-80/50",
-        focusVariants[variant],
-        disabled && "opacity-50 cursor-not-allowed",
-        className,
-      )}
-    >
-      {icon && (
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      placeholder,
+      className,
+      disabled,
+      variant = "primary",
+      icon,
+      error,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <div className="flex flex-col gap-1 w-full">
         <div
           className={clsx(
-            "absolute left-3 transition-colors duration-200 text-neutral-40",
-            iconFocusVariants[variant],
+            "group relative flex items-center w-full transition-all duration-200",
+            "rounded-md border bg-neutral-80/50",
+            error ? "border-danger!" : "border-border",
+            !error && focusVariants[variant],
+            disabled && "opacity-50 cursor-not-allowed",
+            className,
           )}
         >
-          {icon}
+          {icon && (
+            <div
+              className={clsx(
+                "absolute left-3 transition-colors duration-200",
+                error
+                  ? "text-danger!"
+                  : clsx("text-neutral-40", iconFocusVariants[variant]),
+              )}
+            >
+              {icon}
+            </div>
+          )}
+          <input
+            {...props}
+            ref={ref}
+            disabled={disabled}
+            className={clsx(
+              "w-full py-2 bg-transparent text-neutral-10 focus:outline-none",
+              icon ? "pl-10 pr-4" : "px-4",
+            )}
+            placeholder={placeholder}
+          />
         </div>
-      )}
-      <input
-        disabled={disabled}
-        className={clsx(
-          "w-full py-2 bg-transparent text-neutral-10 focus:outline-none",
-          icon ? "pl-10 pr-4" : "px-4",
+        {error && (
+          <span className="text-xs text-danger text-left font-medium animate-in fade-in slide-in-from-top-1">
+            {error}
+          </span>
         )}
-        placeholder={placeholder}
-        onKeyDown={onKeyDown}
-        onChange={onChange}
-        value={value}
-      />
-    </div>
-  );
-}
+      </div>
+    );
+  },
+);
+
+Input.displayName = "Input";
 
 export default Input;

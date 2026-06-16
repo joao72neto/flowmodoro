@@ -2,14 +2,12 @@ import clsx from "clsx";
 import type { VariantType } from "../../globals.types";
 import { variants } from "./Button";
 
-interface ExpandableButtonProps {
+import { type ButtonHTMLAttributes } from "react";
+
+interface ExpandableButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: React.ReactNode;
   children: React.ReactNode;
   variant?: VariantType;
-  onClick?: () => void;
-  className?: string;
-  disabled?: boolean;
-  title?: string;
   loading?: boolean;
 }
 
@@ -17,16 +15,14 @@ function ExpandableButton({
   icon,
   variant,
   children,
-  onClick,
   className,
   disabled,
-  title,
   loading,
+  ...props
 }: ExpandableButtonProps) {
   return (
     <button
-      title={title}
-      onClick={onClick}
+      {...props}
       disabled={disabled || loading}
       className={clsx(
         variants[variant || "primary"],
