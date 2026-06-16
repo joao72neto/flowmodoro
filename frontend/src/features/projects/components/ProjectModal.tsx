@@ -72,7 +72,7 @@ const ProjectModal = ({
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
         <Button
           icon={<span className="text-xl">{confirmButtonIcon}</span>}
-          className="w-full text-sm! p-1.5! sm:w-[150px] sm:p-2!"
+          className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2!"
           onClick={() => {
             confirm(defaultValues ? { id: defaultValues.id, name } : { name });
             close();
@@ -82,7 +82,7 @@ const ProjectModal = ({
         </Button>
         <Button
           icon={<span className="text-xl">{cancelButtonIcon}</span>}
-          className="w-full text-sm! p-1.5! sm:w-[150px] sm:p-2! sm:text-base!"
+          className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2! sm:text-base!"
           variant="danger"
           onClick={close}
         >
