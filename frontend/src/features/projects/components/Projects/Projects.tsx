@@ -31,15 +31,12 @@ const Projects = () => {
           >
             Novo Projeto
           </ExpandableButton>
-          <div className="relative flex items-center w-full">
-            <GoSearch size={20} className="absolute left-3 text-neutral-40" />
-            <Input
-              placeholder="Pesquisar projeto"
-              className="w-full pl-10!"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          <Input
+            placeholder="Pesquisar projeto"
+            icon={<GoSearch size={20} />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
         <div className="flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden">
           {projects.map((item) => (
