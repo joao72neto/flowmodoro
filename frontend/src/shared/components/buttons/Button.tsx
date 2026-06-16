@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import type { VariantType } from "../../globals.types";
 
-const baseStyle = clsx(
+export const baseStyle = clsx(
   "px-5",
   "py-2",
   "rounded-lg",
@@ -22,7 +22,7 @@ const baseStyle = clsx(
   "disabled:active:scale-100",
 );
 
-const variants = {
+export const variants = {
   primary: clsx(baseStyle, "bg-primary"),
   secondary: clsx(baseStyle, "bg-secondary"),
   danger: clsx(baseStyle, "bg-danger"),
@@ -59,7 +59,7 @@ function Button({
     >
       <div className="flex items-center justify-center gap-2">
         {loading ? (
-          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-border border-t-transparent" />
         ) : (
           icon
         )}

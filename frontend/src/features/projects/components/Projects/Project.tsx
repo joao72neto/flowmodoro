@@ -28,7 +28,6 @@ const Project = ({
         className={clsx(
           "p-4 rounded-xl bg-neutral-80/50 flex justify-between items-center border border-border",
           "hover:border-neutral-70 hover:bg-neutral-80 transition-all duration-200 group shadow-md",
-          "hover:scale-101",
         )}
       >
         <span className="font-medium text-neutral-10 truncate mr-4 flex-1">
