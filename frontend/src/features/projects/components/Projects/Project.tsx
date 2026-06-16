@@ -8,6 +8,8 @@ import { MdModeEditOutline } from "react-icons/md";
 import { RxUpdate } from "react-icons/rx";
 import { RxTrash } from "react-icons/rx";
 
+import clsx from "clsx";
+
 const Project = ({
   projectData,
   onDelete,
@@ -22,8 +24,16 @@ const Project = ({
 
   return (
     <>
-      <div className="p-4 rounded-lg bg-neutral-80 flex justify-between items-center border border-border">
-        <span>{projectData.name}</span>
+      <div
+        className={clsx(
+          "p-4 rounded-xl bg-neutral-80/50 flex justify-between items-center border border-border",
+          "hover:border-neutral-70 hover:bg-neutral-80 transition-all duration-200 group shadow-md",
+          "hover:scale-101",
+        )}
+      >
+        <span className="font-medium text-neutral-10 truncate mr-4 flex-1">
+          {projectData.name}
+        </span>
         <DropDownMenu
           items={[
             {
@@ -34,7 +44,14 @@ const Project = ({
             { label: "Excluir", onClick: onDelete, icon: <RxTrash /> },
           ]}
         >
-          <BsThreeDotsVertical size={20} />
+          <div
+            className={clsx(
+              "p-1 rounded-md hover:bg-neutral-70 transition-colors text-neutral-40",
+              "group-hover:text-neutral-10",
+            )}
+          >
+            <BsThreeDotsVertical size={20} />
+          </div>
         </DropDownMenu>
       </div>
       <EditProject

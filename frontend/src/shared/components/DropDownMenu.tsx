@@ -6,6 +6,8 @@ interface Item {
   onClick?: () => void;
 }
 
+import clsx from "clsx";
+
 const DropdownMenu = ({
   children,
   items,
@@ -34,31 +36,46 @@ const DropdownMenu = ({
   }, []);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className={clsx("relative inline-block text-left")} ref={dropdownRef}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="p-2 rounded hover:bg-neutral-60 hover:cursor-pointer"
+        className={clsx(
+          "flex items-center justify-center rounded-lg transition-colors cursor-pointer",
+        )}
       >
         {children}
       </button>
 
       {open && items.length > 0 && (
-        <div className="absolute right-0 mt-2 w-40 bg-neutral-100 border border-border rounded shadow-lg z-10">
-          {items.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => {
-                item.onClick?.();
-                setOpen(false);
-              }}
-              className="block w-full px-4 py-2 text-left hover:bg-neutral-60"
-            >
-              <div className="flex items-center gap-2">
-                {item.icon && <span>{item.icon}</span>}
+        <div
+          className={clsx(
+            "absolute right-0 mt-2 w-48 origin-top-right z-50 overflow-hidden",
+            "bg-neutral-80 border border-border rounded-xl shadow-xl",
+            "animate-in fade-in zoom-in duration-100",
+          )}
+        >
+          <div>
+            {items.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => {
+                  item.onClick?.();
+                  setOpen(false);
+                }}
+                className={clsx(
+                  "flex items-center w-full px-4 py-2.5 gap-3 group transition-colors",
+                  "text-sm font-medium text-neutral-10 hover:bg-neutral-60",
+                )}
+              >
+                {item.icon && (
+                  <span className="text-neutral-40 group-hover:text-neutral-10 transition-colors">
+                    {item.icon}
+                  </span>
+                )}
                 <span>{item.label}</span>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>
