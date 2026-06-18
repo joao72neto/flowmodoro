@@ -40,10 +40,8 @@ const Projects = () => {
             selectedProject ? "-translate-x-1/2" : "translate-x-0",
           )}
         >
-          <div className="w-1/2 h-full flex flex-col gap-4 px-3 pb-4 min-h-0 shrink-0 relative">
-            <h1 className="text-2xl text-neutral-20 text-center border-b border-border py-3">
-              Projetos
-            </h1>
+          <div className="w-1/2 h-full flex flex-col gap-4 px-3 py-4 min-h-0 shrink-0 relative">
+            <h2 className="text-xl text-neutral-20">Projetos</h2>
 
             <div className="flex flex-col gap-4 items-center">
               <ExpandableButton

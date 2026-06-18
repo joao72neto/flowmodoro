@@ -34,15 +34,15 @@ const Tags = ({
   return (
     <>
       <div className="relative flex flex-col gap-4 px-3 pb-4 w-full h-full min-h-0">
-        <div className="relative flex items-center justify-center border-b border-border py-3 min-h-[65px]">
+        <div className="relative flex items-center gap-2 pt-4">
           <button
             onClick={onBack}
-            className="absolute left-0 p-1 text-neutral-40 hover:text-neutral-10 hover:bg-neutral-80 rounded-md transition-all cursor-pointer"
+            className="p-1 text-neutral-40 hover:text-neutral-10 hover:-translate-x-1 transition-transform cursor-pointer"
             aria-label="Voltar para projetos"
           >
             <PiCaretLeftBold size={24} />
           </button>
-          <h1 className="text-2xl text-neutral-20 truncate font-semibold px-8">
+          <h1 className="text-xl text-neutral-20 truncate font-semibold">
             {project.name}
           </h1>
         </div>

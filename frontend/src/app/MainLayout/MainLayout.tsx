@@ -1,4 +1,4 @@
-import IconButton from "../../shared/components/buttons/IconButton";
+import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
 import SideBar from "./SideBar";
 import MainContentContainer from "./MainContentContainer";
 
@@ -8,16 +8,20 @@ import SideBarContainer from "./SideBarContainer";
 import { PiCaretLeftBold } from "react-icons/pi";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = isSidebarOpen ? "hidden" : "";
-
+    if (isSidebarOpen) {
+      lockScroll();
+    }
     return () => {
-      document.body.style.overflow = "";
+      if (isSidebarOpen) {
+        unlockScroll();
+      }
     };
   }, [isSidebarOpen]);
 
@@ -39,15 +43,18 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
       {!isSidebarOpen && (
         <div className="fixed top-0 right-0 p-4 z-10">
-          <IconButton
+          <ExpandableButton
             icon={
               <PiCaretLeftBold
                 size={25}
                 className="transition duration-200 hover:-translate-x-1"
               />
             }
+            className="rounded-full!"
             onClick={() => setIsSidebarOpen(true)}
-          />
+          >
+            Projetos e Tags
+          </ExpandableButton>
         </div>
       )}
     </div>

@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { lockScroll, unlockScroll } from "../../utils/scroll-lock.utils";
 
 const sizes = {
   sm: "max-w-md",
@@ -20,9 +21,9 @@ const ModalContainer = ({
   close?: () => void;
 }) => {
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    lockScroll();
     return () => {
-      document.body.style.overflow = "";
+      unlockScroll();
     };
   }, []);
 
