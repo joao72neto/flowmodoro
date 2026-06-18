@@ -1,36 +1,29 @@
 import DropDownMenu from "../../../../shared/components/DropDownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
-import ProjectModal from "../ProjectModal";
-import type { ProjectType } from "../../projects.types";
+import TagModal from "../TagModal";
+import type { TagType } from "../../tags.types";
 import { MdModeEditOutline } from "react-icons/md";
-
-import { RxUpdate } from "react-icons/rx";
-import { RxTrash } from "react-icons/rx";
-
+import { RxUpdate, RxTrash } from "react-icons/rx";
 import clsx from "clsx";
 import { useModal } from "../../../../shared/modal.context";
-import { IoMdPricetag } from "react-icons/io";
 
-const Project = ({
-  projectData,
+const Tag = ({
+  tagData,
   onDelete,
   onEdit,
-  onSelectTags,
 }: {
-  projectData: ProjectType;
+  tagData: TagType;
   onDelete?: () => void;
-  onEdit?: (project: ProjectType) => void;
-  onSelectTags?: (project: ProjectType) => void;
+  onEdit?: (tag: TagType) => void;
 }) => {
-  const { Modal: EditProject, openModal: openProjectModal } =
-    useModalFactory(ProjectModal);
+  const { Modal: EditTag, openModal: openTagModal } = useModalFactory(TagModal);
 
   const { showWarning, hideModal } = useModal();
 
   const handleDelete = () => {
     showWarning({
-      title: "Deseja mesmo excluir este projeto?",
+      title: "Deseja mesmo excluir esta tag?",
       message: "Esta operação não pode ser desfeita.",
       cancel: hideModal,
       action: () => {
@@ -45,25 +38,18 @@ const Project = ({
       <div
         className={clsx(
           "p-4 rounded-xl bg-neutral-80/50 flex justify-between items-center border border-border",
-          "hover:border-neutral-70 hover:bg-neutral-80 transition-all duration-100 group shadow-md",
+          "hover:border-secondary/40 hover:bg-neutral-80 transition-all duration-100 group shadow-md",
         )}
       >
         <span className="font-medium text-neutral-10 truncate mr-4 flex-1">
-          {projectData.name}
+          {tagData.name}
         </span>
         <span className="flex-1 text-neutral-40">100h</span>
-        <span
-          onClick={() => onSelectTags?.(projectData)}
-          className="flex-1 flex items-center gap-2 hover:cursor-pointer"
-        >
-          <IoMdPricetag />
-          <span>Tag</span>
-        </span>
         <DropDownMenu
           items={[
             {
               label: "Editar",
-              onClick: openProjectModal,
+              onClick: openTagModal,
               icon: <MdModeEditOutline />,
             },
             { label: "Excluir", onClick: handleDelete, icon: <RxTrash /> },
@@ -79,10 +65,10 @@ const Project = ({
           </div>
         </DropDownMenu>
       </div>
-      <EditProject
-        title="Atualizar Projeto"
+      <EditTag
+        title="Atualizar Tag"
         confirm={onEdit}
-        defaultValues={projectData}
+        defaultValues={tagData}
         inputLabel="Novo nome"
         confirmButtonIcon={<RxUpdate />}
         confirmButtonText="Atualizar"
@@ -91,4 +77,4 @@ const Project = ({
   );
 };
 
-export default Project;
+export default Tag;

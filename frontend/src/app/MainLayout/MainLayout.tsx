@@ -34,10 +34,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       />
 
       <SideBarContainer isOpen={isSidebarOpen}>
-        <SideBar
-          onClick={() => setIsSidebarOpen(false)}
-          title="Projetos e Tags"
-        />
+        <SideBar onClick={() => setIsSidebarOpen(false)} />
       </SideBarContainer>
 
       {!isSidebarOpen && (

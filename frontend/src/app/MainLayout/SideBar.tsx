@@ -6,16 +6,10 @@ import ThemeToggle from "../../shared/components/ThemeToggle";
 
 import Projects from "../../features/projects/components/Projects/Projects";
 
-const SideBar = ({
-  onClick,
-  title,
-}: {
-  onClick?: () => void;
-  title?: string;
-}) => {
+const SideBar = ({ onClick }: { onClick?: () => void }) => {
   return (
     <div className="border-l bg-neutral-100 border-l-border h-screen shadow-2xl flex flex-col">
-      <div className="flex justify-between items-center px-3 py-6 bg-neutral-80 border-b border-border">
+      <div className="flex justify-between items-center px-3 pt-3">
         <IconButton
           icon={
             <PiCaretRightBold
@@ -25,9 +19,6 @@ const SideBar = ({
           }
           onClick={onClick}
         />
-        {title && (
-          <h1 className="text-xl font-bold text-neutral-20">{title}</h1>
-        )}
         <ThemeToggle />
       </div>
       <div className="flex-1 min-h-0">

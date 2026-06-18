@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
 
 import Input from "../../../../shared/components/Input";
@@ -8,8 +9,14 @@ import EmptyProjects from "./EmptyProjects";
 import { useProjects } from "../../hooks/useProjects";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
+import type { ProjectType } from "../../projects.types";
+import Tags from "../../../tags/components/Tags/Tags";
 
 const Projects = () => {
+  const [selectedProject, setSelectedProject] = useState<ProjectType | null>(
+    null,
+  );
+
   const { Modal: CreateProject, openModal: openProjectModal } =
     useModalFactory(ProjectModal);
 
@@ -26,47 +33,68 @@ const Projects = () => {
 
   return (
     <>
-      <div className="relative flex flex-col gap-4 px-3 py-4 w-full h-full min-h-0">
-        <div className="flex flex-col gap-4 items-center">
-          <ExpandableButton
-            icon={<GoPlus size={25} />}
-            className="fixed bottom-4 right-4 z-10 rounded-full!"
-            onClick={openProjectModal}
-          >
-            Novo Projeto
-          </ExpandableButton>
-          <Input
-            placeholder="Pesquisar projeto"
-            icon={<GoSearch size={20} />}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      <div className="relative w-full h-full overflow-hidden">
         <div
           className={clsx(
-            "flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden",
-            isEmpty && "justify-center",
+            "flex w-[200%] h-full transition-transform duration-300 ease-in-out",
+            selectedProject ? "-translate-x-1/2" : "translate-x-0",
           )}
         >
-          {isEmpty ? (
-            <EmptyProjects
-              title={searchQuery ? "Nenhum resultado" : "Sem projetos"}
-              message={
-                searchQuery
-                  ? `Não encontramos nada para "${searchQuery}".`
-                  : "Crie seu primeiro projeto para começar a organizar seu tempo."
-              }
-            />
-          ) : (
-            projects.map((item) => (
-              <Project
-                key={item.id}
-                projectData={item}
-                onDelete={() => handleDeleteProject(item.id)}
-                onEdit={handleEditProject}
+          <div className="w-1/2 h-full flex flex-col gap-4 px-3 pb-4 min-h-0 shrink-0 relative">
+            <h1 className="text-2xl text-neutral-20 text-center border-b border-border py-3">
+              Projetos
+            </h1>
+
+            <div className="flex flex-col gap-4 items-center">
+              <ExpandableButton
+                icon={<GoPlus size={25} />}
+                className="absolute bottom-4 right-4 z-10 rounded-full!"
+                onClick={openProjectModal}
+              >
+                Novo Projeto
+              </ExpandableButton>
+              <Input
+                placeholder="Pesquisar projeto"
+                icon={<GoSearch size={20} />}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-            ))
-          )}
+            </div>
+            <div
+              className={clsx(
+                "flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden",
+                isEmpty && "justify-center",
+              )}
+            >
+              {isEmpty ? (
+                <EmptyProjects
+                  title={searchQuery ? "Nenhum resultado" : "Sem projetos"}
+                  message={
+                    searchQuery
+                      ? `Não encontramos nada para "${searchQuery}".`
+                      : "Crie seu primeiro projeto para começar a organizar seu tempo."
+                  }
+                />
+              ) : (
+                projects.map((item) => (
+                  <Project
+                    key={item.id}
+                    projectData={item}
+                    onDelete={() => handleDeleteProject(item.id)}
+                    onEdit={handleEditProject}
+                    onSelectTags={setSelectedProject}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="w-1/2 h-full shrink-0 relative">
+            <Tags
+              project={selectedProject || { id: 0, name: "" }}
+              onBack={() => setSelectedProject(null)}
+            />
+          </div>
         </div>
       </div>
       <CreateProject confirm={handleCreateProject} />
