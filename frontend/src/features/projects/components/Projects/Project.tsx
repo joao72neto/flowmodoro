@@ -1,16 +1,13 @@
 import DropDownMenu from "../../../../shared/components/DropDownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
-import ProjectModal from "../ProjectModal";
 import type { ProjectType } from "../../projects.types";
 import { MdModeEditOutline } from "react-icons/md";
-
-import { RxUpdate } from "react-icons/rx";
 import { RxTrash } from "react-icons/rx";
-
 import clsx from "clsx";
 import { useModal } from "../../../../shared/modal.context";
 import { IoMdPricetag } from "react-icons/io";
+import { GoProject } from "react-icons/go";
+import { IoTimeOutline } from "react-icons/io5";
 
 const Project = ({
   projectData,
@@ -20,12 +17,9 @@ const Project = ({
 }: {
   projectData: ProjectType;
   onDelete?: () => void;
-  onEdit?: (project: ProjectType) => void;
+  onEdit?: () => void;
   onSelectTags?: (project: ProjectType) => void;
 }) => {
-  const { Modal: EditProject, openModal: openProjectModal } =
-    useModalFactory(ProjectModal);
-
   const { showWarning, hideModal } = useModal();
 
   const handleDelete = () => {
@@ -41,29 +35,44 @@ const Project = ({
   };
 
   return (
-    <>
-      <div
-        className={clsx(
-          "p-4 rounded-xl bg-neutral-80/50 flex justify-between items-center border border-border",
-          "hover:border-neutral-70 hover:bg-neutral-80 transition-all duration-100 group shadow-md",
-        )}
-      >
-        <span className="font-medium text-neutral-10 truncate mr-4 flex-1">
-          {projectData.name}
-        </span>
-        <span className="flex-1 text-neutral-40">100h</span>
-        <span
-          onClick={() => onSelectTags?.(projectData)}
-          className="flex-1 flex items-center gap-2 hover:cursor-pointer"
-        >
-          <IoMdPricetag />
-          <span>Tag</span>
-        </span>
+    <div
+      className={clsx(
+        "p-4 rounded-xl bg-neutral-80/40 border border-border flex items-center justify-between",
+        "hover:border-neutral-60 hover:bg-neutral-80/85 hover:shadow-lg transition-all duration-200 group relative",
+      )}
+    >
+      <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <GoProject className="text-primary/70 shrink-0" size={18} />
+          <span className="font-semibold text-neutral-10 text-sm sm:text-base truncate pr-2">
+            {projectData.name}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-neutral-40">
+          <span className="flex items-center gap-1">
+            <IoTimeOutline className="shrink-0" size={13} />
+            <span>100h</span>
+          </span>
+          <span className="text-neutral-40/40">•</span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectTags?.(projectData);
+            }}
+            className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors cursor-pointer"
+          >
+            <IoMdPricetag className="shrink-0" size={13} />
+            <span>Ver Tags</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 shrink-0">
         <DropDownMenu
           items={[
             {
               label: "Editar",
-              onClick: openProjectModal,
+              onClick: onEdit,
               icon: <MdModeEditOutline />,
             },
             { label: "Excluir", onClick: handleDelete, icon: <RxTrash /> },
@@ -71,23 +80,15 @@ const Project = ({
         >
           <div
             className={clsx(
-              "p-1 rounded-md hover:bg-neutral-70 transition-colors text-neutral-40",
-              "group-hover:text-neutral-10",
+              "p-1.5 rounded-md hover:bg-neutral-70/60 transition-colors text-neutral-40",
+              "group-hover:text-neutral-10 cursor-pointer",
             )}
           >
-            <BsThreeDotsVertical size={20} />
+            <BsThreeDotsVertical size={18} />
           </div>
         </DropDownMenu>
       </div>
-      <EditProject
-        title="Atualizar Projeto"
-        confirm={onEdit}
-        defaultValues={projectData}
-        inputLabel="Novo nome"
-        confirmButtonIcon={<RxUpdate />}
-        confirmButtonText="Atualizar"
-      />
-    </>
+    </div>
   );
 };
 

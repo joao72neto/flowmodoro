@@ -1,12 +1,12 @@
 import DropDownMenu from "../../../../shared/components/DropDownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
-import TagModal from "../TagModal";
 import type { TagType } from "../../tags.types";
 import { MdModeEditOutline } from "react-icons/md";
-import { RxUpdate, RxTrash } from "react-icons/rx";
+import { RxTrash } from "react-icons/rx";
 import clsx from "clsx";
 import { useModal } from "../../../../shared/modal.context";
+import { IoMdPricetag } from "react-icons/io";
+import { IoTimeOutline } from "react-icons/io5";
 
 const Tag = ({
   tagData,
@@ -15,10 +15,8 @@ const Tag = ({
 }: {
   tagData: TagType;
   onDelete?: () => void;
-  onEdit?: (tag: TagType) => void;
+  onEdit?: () => void;
 }) => {
-  const { Modal: EditTag, openModal: openTagModal } = useModalFactory(TagModal);
-
   const { showWarning, hideModal } = useModal();
 
   const handleDelete = () => {
@@ -34,22 +32,33 @@ const Tag = ({
   };
 
   return (
-    <>
-      <div
-        className={clsx(
-          "p-4 rounded-xl bg-neutral-80/50 flex justify-between items-center border border-border",
-          "hover:border-secondary/40 hover:bg-neutral-80 transition-all duration-100 group shadow-md",
-        )}
-      >
-        <span className="font-medium text-neutral-10 truncate mr-4 flex-1">
-          {tagData.name}
-        </span>
-        <span className="flex-1 text-neutral-40">100h</span>
+    <div
+      className={clsx(
+        "p-4 rounded-xl bg-neutral-80/40 border border-border flex items-center justify-between",
+        "hover:border-secondary/40 hover:bg-neutral-80/85 hover:shadow-lg transition-all duration-200 group relative",
+      )}
+    >
+      <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <IoMdPricetag className="text-secondary shrink-0" size={16} />
+          <span className="font-semibold text-neutral-10 text-sm sm:text-base truncate pr-2">
+            {tagData.name}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-neutral-40">
+          <span className="flex items-center gap-1">
+            <IoTimeOutline className="shrink-0" size={13} />
+            <span>100h</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 shrink-0">
         <DropDownMenu
           items={[
             {
               label: "Editar",
-              onClick: openTagModal,
+              onClick: onEdit,
               icon: <MdModeEditOutline />,
             },
             { label: "Excluir", onClick: handleDelete, icon: <RxTrash /> },
@@ -57,23 +66,15 @@ const Tag = ({
         >
           <div
             className={clsx(
-              "p-1 rounded-md hover:bg-neutral-70 transition-colors text-neutral-40",
-              "group-hover:text-neutral-10",
+              "p-1.5 rounded-md hover:bg-neutral-70/60 transition-colors text-neutral-40",
+              "group-hover:text-neutral-10 cursor-pointer",
             )}
           >
-            <BsThreeDotsVertical size={20} />
+            <BsThreeDotsVertical size={18} />
           </div>
         </DropDownMenu>
       </div>
-      <EditTag
-        title="Atualizar Tag"
-        confirm={onEdit}
-        defaultValues={tagData}
-        inputLabel="Novo nome"
-        confirmButtonIcon={<RxUpdate />}
-        confirmButtonText="Atualizar"
-      />
-    </>
+    </div>
   );
 };
 

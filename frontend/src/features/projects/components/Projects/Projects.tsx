@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
+import { RxUpdate } from "react-icons/rx";
 
 import Input from "../../../../shared/components/Input";
 import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
@@ -16,8 +17,14 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectType | null>(
     null,
   );
+  const [editingProject, setEditingProject] = useState<ProjectType | null>(
+    null,
+  );
 
   const { Modal: CreateProject, openModal: openProjectModal } =
+    useModalFactory(ProjectModal);
+
+  const { Modal: EditProject, openModal: openEditModal } =
     useModalFactory(ProjectModal);
 
   const {
@@ -36,7 +43,7 @@ const Projects = () => {
       <div className="relative w-full h-full overflow-hidden">
         <div
           className={clsx(
-            "flex w-[200%] h-full transition-transform duration-300 ease-in-out",
+            "flex w-[200%] h-full transition-transform duration-300 ease-in-out transform-gpu will-change-transform",
             selectedProject ? "-translate-x-1/2" : "translate-x-0",
           )}
         >
@@ -79,7 +86,10 @@ const Projects = () => {
                     key={item.id}
                     projectData={item}
                     onDelete={() => handleDeleteProject(item.id)}
-                    onEdit={handleEditProject}
+                    onEdit={() => {
+                      setEditingProject(item);
+                      openEditModal();
+                    }}
                     onSelectTags={setSelectedProject}
                   />
                 ))
@@ -96,6 +106,14 @@ const Projects = () => {
         </div>
       </div>
       <CreateProject confirm={handleCreateProject} />
+      <EditProject
+        title="Atualizar Projeto"
+        confirm={handleEditProject}
+        defaultValues={editingProject || undefined}
+        inputLabel="Novo nome"
+        confirmButtonIcon={<RxUpdate />}
+        confirmButtonText="Atualizar"
+      />
     </>
   );
 };

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
 import { PiCaretLeftBold } from "react-icons/pi";
+import { RxUpdate } from "react-icons/rx";
 import Input from "../../../../shared/components/Input";
 import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
 import TagModal from "../TagModal";
@@ -9,6 +11,7 @@ import { useTags } from "../../hooks/useTags";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
 import type { ProjectType } from "../../../projects/projects.types";
+import type { TagType } from "../../tags.types";
 
 const Tags = ({
   project,
@@ -17,7 +20,12 @@ const Tags = ({
   project: ProjectType;
   onBack: () => void;
 }) => {
+  const [editingTag, setEditingTag] = useState<TagType | null>(null);
+
   const { Modal: CreateTag, openModal: openTagModal } =
+    useModalFactory(TagModal);
+
+  const { Modal: EditTag, openModal: openEditModal } =
     useModalFactory(TagModal);
 
   const {
@@ -85,13 +93,24 @@ const Tags = ({
                 key={item.id}
                 tagData={item}
                 onDelete={() => handleDeleteTag(item.id)}
-                onEdit={handleEditTag}
+                onEdit={() => {
+                  setEditingTag(item);
+                  openEditModal();
+                }}
               />
             ))
           )}
         </div>
       </div>
       <CreateTag confirm={handleCreateTag} />
+      <EditTag
+        title="Atualizar Tag"
+        confirm={handleEditTag}
+        defaultValues={editingTag || undefined}
+        inputLabel="Novo nome"
+        confirmButtonIcon={<RxUpdate />}
+        confirmButtonText="Atualizar"
+      />
     </>
   );
 };
