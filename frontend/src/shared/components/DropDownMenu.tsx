@@ -46,38 +46,39 @@ const DropdownMenu = ({
         {children}
       </button>
 
-      {open && items.length > 0 && (
-        <div
-          className={clsx(
-            "absolute right-0 mt-2 w-48 origin-top-right z-50 overflow-hidden",
-            "bg-neutral-80 border border-border rounded-xl shadow-xl",
-            "animate-in fade-in zoom-in duration-100",
-          )}
-        >
-          <div>
-            {items.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => {
-                  item.onClick?.();
-                  setOpen(false);
-                }}
-                className={clsx(
-                  "flex items-center w-full px-4 py-2.5 gap-3 group transition-colors",
-                  "text-sm font-medium text-neutral-10 hover:bg-neutral-60",
-                )}
-              >
-                {item.icon && (
-                  <span className="text-neutral-40 group-hover:text-neutral-10 transition-colors">
-                    {item.icon}
-                  </span>
-                )}
-                <span>{item.label}</span>
-              </button>
-            ))}
-          </div>
+      <div
+        className={clsx(
+          "absolute right-0 mt-2 w-48 origin-top-right z-50",
+          "bg-neutral-80 border border-border rounded-xl shadow-xl",
+          "transition-all duration-200 ease-out",
+          open && items.length > 0
+            ? "opacity-100 scale-100 translate-y-0 visible"
+            : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none",
+        )}
+      >
+        <div>
+          {items.map((item) => (
+            <button
+              key={item.label}
+              onClick={() => {
+                item.onClick?.();
+                setOpen(false);
+              }}
+              className={clsx(
+                "flex items-center w-full px-4 py-2.5 gap-3 group transition-colors",
+                "text-sm font-medium text-neutral-10 hover:bg-neutral-60",
+              )}
+            >
+              {item.icon && (
+                <span className="text-neutral-40 group-hover:text-neutral-10 transition-colors">
+                  {item.icon}
+                </span>
+              )}
+              <span>{item.label}</span>
+            </button>
+          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 };
