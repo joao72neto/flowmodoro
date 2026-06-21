@@ -8,14 +8,15 @@ import SessionSelector from "./SessionSelector";
 
 const SessionCreation = () => {
   const [sessionText, setSessionText] = useState("");
+  const hasContent = sessionText.trim().length > 0;
 
   return (
     <div
       className={clsx(
         "flex items-center justify-between border border-border p-4 rounded-xl",
-        "min-w-20 max-w-70 w-full",
+        "min-w-20 max-w-70 w-full shadow-md",
         "transition-all duration-300",
-        sessionText ? "max-w-150" : "max-w-70",
+        hasContent ? "max-w-150" : "max-w-70",
       )}
     >
       <input
@@ -25,7 +26,7 @@ const SessionCreation = () => {
         onChange={(e) => setSessionText(e.target.value)}
       />
 
-      {sessionText && (
+      {hasContent && (
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">
             <SessionSelector icon={<GoProject />}>Projetos</SessionSelector>

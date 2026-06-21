@@ -1,4 +1,3 @@
-import DropDownMenu from "../../../../shared/components/DropDownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import type { ProjectType } from "../../projects.types";
 import { MdModeEditOutline } from "react-icons/md";
@@ -8,6 +7,7 @@ import { useModal } from "../../../../shared/modal.context";
 import { IoMdPricetag } from "react-icons/io";
 import { GoProject } from "react-icons/go";
 import { IoTimeOutline } from "react-icons/io5";
+import DropdownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 
 const Project = ({
   projectData,
@@ -68,7 +68,7 @@ const Project = ({
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
-        <DropDownMenu
+        <DropdownMenu
           items={[
             {
               label: "Editar",
@@ -86,7 +86,7 @@ const Project = ({
           >
             <BsThreeDotsVertical size={18} />
           </div>
-        </DropDownMenu>
+        </DropdownMenu>
       </div>
     </div>
   );

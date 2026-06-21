@@ -1,4 +1,4 @@
-import DropDownMenu from "../../../../shared/components/DropDownMenu";
+import DropDownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import type { TagType } from "../../tags.types";
 import { MdModeEditOutline } from "react-icons/md";

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface Item {
   label: string;
@@ -7,6 +7,8 @@ interface Item {
 }
 
 import clsx from "clsx";
+import DropdownContainer from "./DropdownContainer";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 const DropdownMenu = ({
   children,
@@ -18,22 +20,9 @@ const DropdownMenu = ({
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
+  const isOpen = items.length > 0 && open;
 
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useClickOutside(dropdownRef, () => setOpen(false));
 
   return (
     <div className={clsx("relative inline-block text-left")} ref={dropdownRef}>
@@ -46,16 +35,7 @@ const DropdownMenu = ({
         {children}
       </button>
 
-      <div
-        className={clsx(
-          "absolute right-0 mt-2 w-48 origin-top-right z-50",
-          "bg-neutral-80 border border-border rounded-xl shadow-xl",
-          "transition-all duration-200 ease-out",
-          open && items.length > 0
-            ? "opacity-100 scale-100 translate-y-0 visible"
-            : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none",
-        )}
-      >
+      <DropdownContainer isOpen={isOpen}>
         <div>
           {items.map((item) => (
             <button
@@ -78,7 +58,7 @@ const DropdownMenu = ({
             </button>
           ))}
         </div>
-      </div>
+      </DropdownContainer>
     </div>
   );
 };
