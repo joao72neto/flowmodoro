@@ -1,5 +1,5 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
-import Input from "../../../shared/components/Input";
+import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
 import type { CreateTagType, TagType } from "../tags.types";
 

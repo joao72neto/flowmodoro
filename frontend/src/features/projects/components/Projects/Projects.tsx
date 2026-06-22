@@ -2,7 +2,7 @@ import { useState } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
 import { RxUpdate } from "react-icons/rx";
 
-import Input from "../../../../shared/components/Input";
+import Input from "../../../../shared/components/inputs/Input";
 import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
 import ProjectModal from "../ProjectModal";
 import Project from "./Project";

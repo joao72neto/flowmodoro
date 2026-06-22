@@ -13,36 +13,69 @@ const SessionCreation = () => {
   return (
     <div
       className={clsx(
-        "flex items-center justify-between border border-border p-4 rounded-xl",
-        "min-w-20 max-w-70 w-full shadow-md",
-        "transition-all duration-300",
+        "border border-border p-4 rounded-xl shadow-md",
+        "transition-all duration-300 bg-neutral-80/50",
         hasContent ? "max-w-150" : "max-w-70",
+        "w-full",
       )}
     >
-      <input
-        className="flex-1 w-full focus:outline-none"
-        placeholder="Insira uma descrição..."
-        value={sessionText}
-        onChange={(e) => setSessionText(e.target.value)}
-      />
+      <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+        <input
+          className="flex-1 focus:outline-none min-w-0"
+          placeholder="Insira uma descrição..."
+          value={sessionText}
+          onChange={(e) => setSessionText(e.target.value)}
+        />
 
-      {hasContent && (
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-4">
-            <SessionSelector icon={<GoProject />}>Projetos</SessionSelector>
-            <SessionSelector icon={<IoMdPricetag />}>Tags</SessionSelector>
+        {hasContent && (
+          <div className="flex items-center justify-between sm:justify-start gap-8">
+            <div className="flex items-center gap-4">
+              <SessionSelector
+                title="Projetos"
+                variant="primary"
+                items={[
+                  { id: 1, name: "Violin" },
+                  { id: 2, name: "Coding" },
+                  { id: 3, name: "Piano" },
+                  { id: 4, name: "Flowmodoro" },
+                  { id: 5, name: "College" },
+                  { id: 6, name: "Work" },
+                ]}
+                placeholder="Pesquisar projeto..."
+                icon={<GoProject />}
+              >
+                Projetos
+              </SessionSelector>
+              <SessionSelector
+                title="Tags"
+                variant="secondary"
+                items={[
+                  { id: 1, name: "Scales" },
+                  { id: 2, name: "Integration" },
+                  { id: 3, name: "Backend" },
+                  { id: 4, name: "Frontend" },
+                  { id: 5, name: "Meeting" },
+                  { id: 6, name: "Planning" },
+                ]}
+                placeholder="Pesquisar tag..."
+                icon={<IoMdPricetag />}
+              >
+                Tags
+              </SessionSelector>
+            </div>
+
+            <button
+              type="button"
+              className={clsx(
+                "text-3xl hover:scale-110 active:scale-95",
+                "transition duration-100 hover:cursor-pointer",
+              )}
+            >
+              <FaPlayCircle />
+            </button>
           </div>
-          <button
-            type="button"
-            className={clsx(
-              "hover:cursor-pointer text-3xl hover:scale-110 transition duration-100",
-              "active:scale-95",
-            )}
-          >
-            <FaPlayCircle />
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
