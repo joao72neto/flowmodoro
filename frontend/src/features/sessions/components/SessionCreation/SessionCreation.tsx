@@ -13,26 +13,29 @@ const SessionCreation = () => {
   return (
     <div
       className={clsx(
-        "border border-border p-4 rounded-xl shadow-md",
-        "transition-all duration-300 bg-neutral-80/50",
-        hasContent ? "max-w-150" : "max-w-70",
+        "relative z-20",
+        "border border-border p-4 rounded-2xl shadow-lg",
+        "transition-all duration-300 bg-neutral-80/40",
+        "hover:border-neutral-60/80 focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
+        hasContent ? "max-w-full" : "max-w-xs",
         "w-full",
       )}
     >
       <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
         <input
-          className="flex-1 focus:outline-none min-w-0"
-          placeholder="Insira uma descrição..."
+          className="flex-1 bg-transparent text-neutral-10 text-base sm:text-lg focus:outline-none placeholder:text-neutral-40 min-w-0 py-1"
+          placeholder="Em que você está trabalhando?"
           value={sessionText}
           onChange={(e) => setSessionText(e.target.value)}
         />
 
         {hasContent && (
           <div className="flex items-center justify-between sm:justify-start gap-8">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <SessionSelector
                 title="Projetos"
                 variant="primary"
+                align="left"
                 items={[
                   { id: 1, name: "Violin" },
                   { id: 2, name: "Coding" },
@@ -49,6 +52,7 @@ const SessionCreation = () => {
               <SessionSelector
                 title="Tags"
                 variant="secondary"
+                align="right"
                 items={[
                   { id: 1, name: "Scales" },
                   { id: 2, name: "Integration" },
@@ -67,8 +71,8 @@ const SessionCreation = () => {
             <button
               type="button"
               className={clsx(
-                "text-3xl hover:scale-110 active:scale-95",
-                "transition duration-100 hover:cursor-pointer",
+                "text-primary text-3xl hover:scale-110 active:scale-95",
+                "transition duration-150 hover:cursor-pointer hover:text-primary/90",
               )}
             >
               <FaPlayCircle />
