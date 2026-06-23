@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import DropdownContainer from "../../../../shared/components/Dropdown/DropdownContainer";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
@@ -8,6 +8,7 @@ import type { ProjectType } from "../../../projects/projects.types";
 import type { TagType } from "../../../tags/tags.types";
 import Button from "../../../../shared/components/buttons/Button";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
+import { useFloating, offset, flip, shift } from "@floating-ui/react";
 
 const SessionSelector = ({
   children,
@@ -27,7 +28,11 @@ const SessionSelector = ({
   align?: "left" | "right";
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { refs, floatingStyles } = useFloating({
+    placement: align === "left" ? "bottom-start" : "bottom-end",
+    middleware: [offset(8), flip(), shift()],
+  });
 
   const [activeItemId, setActiveItemId] = useState(0);
   const [selectedItem, setSelectedItem] = useState<
@@ -35,7 +40,7 @@ const SessionSelector = ({
   >(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  useClickOutside(dropdownRef, () => {
+  useClickOutside(refs.floating, () => {
     setIsOpen(false);
     setSearchQuery("");
   });
@@ -59,7 +64,7 @@ const SessionSelector = ({
   );
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative" ref={refs.setReference}>
       <div
         onClick={() => setIsOpen((prev) => !prev)}
         className={clsx(
@@ -77,10 +82,9 @@ const SessionSelector = ({
         </span>
       </div>
       <DropdownContainer
-        className={clsx(
-          "p-4 w-56 sm:w-60",
-          align === "left" ? "left-0! right-auto!" : "right-0! left-auto!",
-        )}
+        ref={refs.setFloating}
+        style={floatingStyles}
+        className={clsx("p-4 w-56 sm:w-60")}
         isOpen={isOpen}
       >
         <div className="flex flex-col">
