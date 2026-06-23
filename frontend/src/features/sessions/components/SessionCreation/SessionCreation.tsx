@@ -13,7 +13,7 @@ const SessionCreation = () => {
   return (
     <div
       className={clsx(
-        "relative z-20",
+        "relative z-10",
         "border border-border p-4 rounded-2xl shadow-lg",
         "transition-all duration-300 bg-neutral-80/40",
         "hover:border-neutral-60/80 focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
@@ -52,7 +52,7 @@ const SessionCreation = () => {
               <SessionSelector
                 title="Tags"
                 variant="secondary"
-                align="right"
+                align="left"
                 items={[
                   { id: 1, name: "Scales" },
                   { id: 2, name: "Integration" },

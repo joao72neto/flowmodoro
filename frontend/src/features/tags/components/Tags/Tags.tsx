@@ -56,14 +56,6 @@ const Tags = ({
         </div>
 
         <div className="flex flex-col gap-4 items-center">
-          <ExpandableButton
-            icon={<GoPlus size={25} />}
-            variant="secondary"
-            className="absolute bottom-4 right-4 z-10 rounded-full!"
-            onClick={openTagModal}
-          >
-            Nova Tag
-          </ExpandableButton>
           <Input
             placeholder="Pesquisar tag"
             icon={<GoSearch size={20} />}
@@ -101,6 +93,14 @@ const Tags = ({
             ))
           )}
         </div>
+        <ExpandableButton
+          icon={<GoPlus size={25} />}
+          variant="secondary"
+          className="absolute bottom-4 right-4 z-10 rounded-full!"
+          onClick={openTagModal}
+        >
+          Nova Tag
+        </ExpandableButton>
       </div>
       <CreateTag confirm={handleCreateTag} />
       <EditTag

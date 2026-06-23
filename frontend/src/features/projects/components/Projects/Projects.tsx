@@ -51,13 +51,6 @@ const Projects = () => {
             <h2 className="text-xl text-neutral-20">Projetos</h2>
 
             <div className="flex flex-col gap-4 items-center">
-              <ExpandableButton
-                icon={<GoPlus size={25} />}
-                className="absolute bottom-4 right-4 z-10 rounded-full!"
-                onClick={openProjectModal}
-              >
-                Novo Projeto
-              </ExpandableButton>
               <Input
                 placeholder="Pesquisar projeto"
                 icon={<GoSearch size={20} />}
@@ -95,6 +88,13 @@ const Projects = () => {
                 ))
               )}
             </div>
+            <ExpandableButton
+              icon={<GoPlus size={25} />}
+              className="absolute bottom-4 right-4 z-10 rounded-full!"
+              onClick={openProjectModal}
+            >
+              Novo Projeto
+            </ExpandableButton>
           </div>
 
           <div className="w-1/2 h-full shrink-0 relative">

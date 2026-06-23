@@ -7,7 +7,7 @@ import Projects from "../../features/projects/components/Projects/Projects";
 
 const SideBar = ({ onClick }: { onClick?: () => void }) => {
   return (
-    <div className="border-l bg-neutral-100 border-l-border h-screen shadow-2xl flex flex-col">
+    <div className="border-l bg-neutral-100 border-l-border h-full shadow-2xl flex flex-col">
       <div className="flex justify-between items-center px-4 py-4 border-b border-border">
         <div className="flex items-center gap-3">
           <IconButton
