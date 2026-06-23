@@ -2,15 +2,21 @@ import clsx from "clsx";
 import { useState } from "react";
 
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
+import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
+
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
 import type { ProjectType } from "../../../projects/projects.types";
 import type { TagType } from "../../../tags/tags.types";
+import { useTimerContext } from "../../../timer/timer.context";
 
 const SessionCreation = () => {
+  const { mode, startBreak, startFocus, stopFocus, skipBreak } =
+    useTimerContext();
+
   const [sessionText, setSessionText] = useState("");
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const isTimerRunning = mode === "focus" || mode === "break";
 
   const hasContent = sessionText.trim().length > 0;
   const isExpanded = hasContent && !isTimerRunning;
@@ -20,21 +26,16 @@ const SessionCreation = () => {
   );
   const [selectedTag, setSelectedTag] = useState<TagType | null>(null);
 
-  const handleStartTimer = () => {
-    if (hasContent) {
-      setIsTimerRunning(true);
-    }
-  };
-
-  const handleStopTimer = () => {
-    setIsTimerRunning(false);
-  };
-
   const showProjectSelector = !isTimerRunning || selectedProject !== null;
   const showTagSelector = !isTimerRunning || selectedTag !== null;
   const showSelectorsContainer =
     isExpanded ||
     (isTimerRunning && (selectedProject !== null || selectedTag !== null));
+
+  const buttonClasses = clsx(
+    "text-primary text-3xl hover:scale-110 active:scale-95",
+    "transition duration-150 hover:cursor-pointer hover:text-primary/90",
+  );
 
   return (
     <div
@@ -122,28 +123,24 @@ const SessionCreation = () => {
             )}
           </div>
 
-          {!isTimerRunning ? (
+          {mode === null ? (
             <button
-              onClick={handleStartTimer}
-              type="button"
-              className={clsx(
-                "text-primary text-3xl hover:scale-110 active:scale-95",
-                "transition duration-150 hover:cursor-pointer hover:text-primary/90",
-                !isExpanded && "hidden",
-              )}
+              onClick={() => startFocus()}
+              className={clsx(buttonClasses, !isExpanded && "hidden")}
             >
               <FaPlayCircle />
             </button>
-          ) : (
-            <button
-              onClick={handleStopTimer}
-              type="button"
-              className={clsx(
-                "text-primary text-3xl hover:scale-110 active:scale-95",
-                "transition duration-150 hover:cursor-pointer hover:text-primary/90",
-              )}
-            >
+          ) : mode === "focus" ? (
+            <button onClick={() => stopFocus()} className={buttonClasses}>
               <FaStopCircle />
+            </button>
+          ) : mode === "stopped" ? (
+            <button onClick={() => startBreak()} className={buttonClasses}>
+              <FaPlayCircle />
+            </button>
+          ) : (
+            <button onClick={() => skipBreak()} className={buttonClasses}>
+              <IoPlaySkipForwardCircleSharp />
             </button>
           )}
         </div>
