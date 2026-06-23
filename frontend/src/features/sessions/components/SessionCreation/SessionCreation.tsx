@@ -14,17 +14,17 @@ const SessionCreation = () => {
     <div
       className={clsx(
         "relative z-10",
-        "border border-border p-4 rounded-2xl shadow-lg",
+        "border border-border px-4 rounded-2xl shadow-lg",
         "transition-all duration-300 bg-neutral-80/40",
         "hover:border-neutral-60/80 focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
-        hasContent ? "max-w-full" : "max-w-xs",
+        hasContent ? "max-w-full py-4" : "py-3 max-w-[300px]",
         "w-full",
       )}
     >
       <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
         <input
           className="flex-1 bg-transparent text-neutral-10 text-base sm:text-lg focus:outline-none placeholder:text-neutral-40 min-w-0 py-1"
-          placeholder="Em que você está trabalhando?"
+          placeholder="Estou focando em..."
           value={sessionText}
           onChange={(e) => setSessionText(e.target.value)}
         />

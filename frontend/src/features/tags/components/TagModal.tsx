@@ -91,7 +91,7 @@ const TagModal = ({
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+        <div className="flex flex-col min-[350px]:flex-row gap-3 items-center justify-center">
           <Button
             type="submit"
             variant="secondary"
