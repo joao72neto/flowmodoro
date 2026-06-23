@@ -1,41 +1,90 @@
 import clsx from "clsx";
 import { useState } from "react";
 
-import { FaPlayCircle } from "react-icons/fa";
+import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
+import type { ProjectType } from "../../../projects/projects.types";
+import type { TagType } from "../../../tags/tags.types";
 
 const SessionCreation = () => {
   const [sessionText, setSessionText] = useState("");
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+
   const hasContent = sessionText.trim().length > 0;
+  const isExpanded = hasContent && !isTimerRunning;
+
+  const [selectedProject, setSelectedProject] = useState<ProjectType | null>(
+    null,
+  );
+  const [selectedTag, setSelectedTag] = useState<TagType | null>(null);
+
+  const handleStartTimer = () => {
+    if (hasContent) {
+      setIsTimerRunning(true);
+    }
+  };
+
+  const handleStopTimer = () => {
+    setIsTimerRunning(false);
+  };
+
+  const showProjectSelector = !isTimerRunning || selectedProject !== null;
+  const showTagSelector = !isTimerRunning || selectedTag !== null;
+  const showSelectorsContainer =
+    isExpanded ||
+    (isTimerRunning && (selectedProject !== null || selectedTag !== null));
 
   return (
     <div
       className={clsx(
-        "relative z-10",
-        "border border-border px-4 rounded-2xl shadow-lg",
+        "relative z-10 w-full",
+        "border border-border p-4 rounded-2xl shadow-lg",
         "transition-all duration-300 bg-neutral-80/40",
-        "hover:border-neutral-60/80 focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
-        hasContent ? "max-w-full py-4" : "py-3 max-w-[300px]",
-        "w-full",
+        "focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
+        isExpanded
+          ? "max-w-full"
+          : isTimerRunning
+            ? "max-w-[550px]"
+            : "max-w-[300px]",
+        isTimerRunning
+          ? "border-primary/50 animate-border-pulse"
+          : "hover:border-neutral-60/80",
       )}
     >
-      <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+      <div
+        className={clsx(
+          "flex sm:flex-row items-stretch sm:items-center",
+          showSelectorsContainer ? "gap-4 flex-col" : "flex-row",
+        )}
+      >
         <input
           className="flex-1 bg-transparent text-neutral-10 text-base sm:text-lg focus:outline-none placeholder:text-neutral-40 min-w-0 py-1"
           placeholder="Estou focando em..."
+          disabled={isTimerRunning}
           value={sessionText}
           onChange={(e) => setSessionText(e.target.value)}
         />
 
-        {hasContent && (
-          <div className="flex items-center justify-between sm:justify-start gap-8">
-            <div className="flex items-center gap-3">
+        <div
+          className={clsx(
+            "flex items-center justify-between sm:justify-start gap-8",
+          )}
+        >
+          <div
+            className={clsx(
+              "items-center gap-3",
+              showSelectorsContainer ? "flex" : "hidden",
+            )}
+          >
+            {showProjectSelector && (
               <SessionSelector
+                value={selectedProject}
+                onChange={(project) => setSelectedProject(project)}
+                disabled={isTimerRunning}
                 title="Projetos"
                 variant="primary"
-                align="left"
                 items={[
                   { id: 1, name: "Violin" },
                   { id: 2, name: "Coding" },
@@ -49,10 +98,14 @@ const SessionCreation = () => {
               >
                 Projetos
               </SessionSelector>
+            )}
+            {showTagSelector && (
               <SessionSelector
+                value={selectedTag}
+                onChange={(tag) => setSelectedTag(tag)}
+                disabled={isTimerRunning}
                 title="Tags"
                 variant="secondary"
-                align="left"
                 items={[
                   { id: 1, name: "Scales" },
                   { id: 2, name: "Integration" },
@@ -66,19 +119,34 @@ const SessionCreation = () => {
               >
                 Tags
               </SessionSelector>
-            </div>
+            )}
+          </div>
 
+          {!isTimerRunning ? (
             <button
+              onClick={handleStartTimer}
+              type="button"
+              className={clsx(
+                "text-primary text-3xl hover:scale-110 active:scale-95",
+                "transition duration-150 hover:cursor-pointer hover:text-primary/90",
+                !isExpanded && "hidden",
+              )}
+            >
+              <FaPlayCircle />
+            </button>
+          ) : (
+            <button
+              onClick={handleStopTimer}
               type="button"
               className={clsx(
                 "text-primary text-3xl hover:scale-110 active:scale-95",
                 "transition duration-150 hover:cursor-pointer hover:text-primary/90",
               )}
             >
-              <FaPlayCircle />
+              <FaStopCircle />
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

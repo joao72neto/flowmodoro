@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import DropdownContainer from "../../../../shared/components/Dropdown/DropdownContainer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
@@ -18,6 +18,9 @@ const SessionSelector = ({
   variant = "primary",
   placeholder = "Pesquise aqui...",
   align = "left",
+  value,
+  onChange,
+  disabled = false,
 }: {
   children: React.ReactNode;
   title?: string;
@@ -26,6 +29,9 @@ const SessionSelector = ({
   variant?: "primary" | "secondary";
   placeholder?: string;
   align?: "left" | "right";
+  value: ProjectType | TagType | null;
+  onChange: (item: any) => void;
+  disabled?: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,11 +40,12 @@ const SessionSelector = ({
     middleware: [offset(8), flip(), shift()],
   });
 
-  const [activeItemId, setActiveItemId] = useState(0);
-  const [selectedItem, setSelectedItem] = useState<
-    ProjectType | TagType | null
-  >(null);
+  const [activeItemId, setActiveItemId] = useState(value?.id || 0);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setActiveItemId(value?.id || 0);
+  }, [value]);
 
   useClickOutside(refs.floating, () => {
     setIsOpen(false);
@@ -48,13 +55,14 @@ const SessionSelector = ({
   const isActive = (id: number) => id === activeItemId;
 
   const handleConfirmItem = () => {
-    setSelectedItem(items.find((item) => item.id === activeItemId) || null);
+    const item = items.find((item) => item.id === activeItemId) || null;
+    onChange(item);
     setIsOpen(false);
     setSearchQuery("");
   };
 
   const handleClearItem = () => {
-    setSelectedItem(null);
+    onChange(null);
     setActiveItemId(0);
     setSearchQuery("");
   };
@@ -66,10 +74,11 @@ const SessionSelector = ({
   return (
     <div className="relative" ref={refs.setReference}>
       <div
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => !disabled && setIsOpen((prev) => !prev)}
         className={clsx(
-          "flex items-center gap-2 border p-2 rounded-lg hover:cursor-pointer transition-all duration-200",
-          selectedItem
+          "flex items-center gap-2 border p-2 rounded-lg transition-all duration-200",
+          disabled ? "opacity-80 pointer-events-none" : "hover:cursor-pointer",
+          value
             ? variant === "primary"
               ? "bg-primary/10 border-primary/40 text-primary"
               : "bg-secondary/20 border-secondary/40 text-neutral-20"
@@ -78,7 +87,7 @@ const SessionSelector = ({
       >
         {icon && <span className="text-lg">{icon}</span>}
         <span className="truncate max-w-16 sm:max-w-24 text-sm font-medium">
-          {selectedItem ? selectedItem.name : children}
+          {value ? value.name : children}
         </span>
       </div>
       <DropdownContainer
