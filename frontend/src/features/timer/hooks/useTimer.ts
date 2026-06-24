@@ -152,7 +152,6 @@ const useTimer = () => {
       message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds)}?`,
       action: () => {
         handleSaveSession({
-          name: "Session",
           focusSeconds: finalFocusSeconds,
         });
 

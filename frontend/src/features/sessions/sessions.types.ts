@@ -20,16 +20,11 @@ export interface SessionResponse {
   ratio: number;
 }
 
-export interface CreateSessionRequest {
-  focus: number;
+export interface SessionPayload {
+  focus?: number;
   name?: string;
   ratio?: number;
   rest?: number;
-}
-
-export interface UpdateSessionRequest {
-  name: string;
-  focus?: number;
-  ratio?: number;
-  rest?: number;
+  projectId?: number;
+  tagId?: number;
 }

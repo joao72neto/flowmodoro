@@ -1,10 +1,9 @@
 import api from "../../configs/api.config";
 import type { PaginationResponse } from "../../shared/globals.types";
 import type {
-  CreateSessionRequest,
+  SessionPayload,
   SessionGroupResponse,
   SessionResponse,
-  UpdateSessionRequest,
 } from "./sessions.types";
 
 class SessionService {
@@ -22,7 +21,7 @@ class SessionService {
     return res.data;
   }
 
-  async createSession(data: CreateSessionRequest): Promise<SessionResponse> {
+  async createSession(data: SessionPayload): Promise<SessionResponse> {
     const res = await api.post<SessionResponse>("/sessions", data);
     return res.data;
   }
@@ -32,7 +31,7 @@ class SessionService {
     data,
   }: {
     id: number;
-    data: UpdateSessionRequest;
+    data: SessionPayload;
   }): Promise<SessionResponse> {
     const res = await api.put<SessionResponse>(`/sessions/${id}`, data);
     return res.data;

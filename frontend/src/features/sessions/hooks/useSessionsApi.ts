@@ -1,9 +1,5 @@
 import sessionsService from "../sessions.service";
-import type {
-  CreateSessionRequest,
-  SessionResponse,
-  UpdateSessionRequest,
-} from "../sessions.types";
+import type { SessionPayload, SessionResponse } from "../sessions.types";
 import { useModal } from "../../../shared/modal.context";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -39,7 +35,7 @@ export const useFetchSessions = ({
 export const useCreateSession = () => {
   const { showError, hideModal } = useModal();
   return useMutation({
-    mutationFn: (data: CreateSessionRequest): Promise<SessionResponse> =>
+    mutationFn: (data: SessionPayload): Promise<SessionResponse> =>
       sessionsService.createSession(data),
 
     onError: (error: any) => {
@@ -61,7 +57,7 @@ export const useUpdateSession = () => {
       data,
     }: {
       id: number;
-      data: UpdateSessionRequest;
+      data: SessionPayload;
     }): Promise<SessionResponse> => sessionsService.updateSession({ id, data }),
 
     onError: (error: any) => {
