@@ -12,7 +12,11 @@ import ExpandableButton from "../../../../shared/components/buttons/ExpandableBu
 import clsx from "clsx";
 import type { ProjectResponse } from "../../projects.types";
 import Tags from "../../../tags/components/Tags/Tags";
-import { useCreateProject, useFetchProjects } from "../../hooks/useProjectsApi";
+import {
+  useCreateProject,
+  useDeleteProject,
+  useFetchProjects,
+} from "../../hooks/useProjectsApi";
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] =
@@ -29,13 +33,9 @@ const Projects = () => {
 
   const { data: projects } = useFetchProjects();
   const { mutate: handleCreateProject } = useCreateProject();
+  const { mutate: handleDeleteProject } = useDeleteProject();
 
-  const {
-    searchQuery,
-    setSearchQuery,
-    handleDeleteProject,
-    handleEditProject,
-  } = useProjects();
+  const { searchQuery, setSearchQuery, handleEditProject } = useProjects();
 
   if (!projects) return null;
 

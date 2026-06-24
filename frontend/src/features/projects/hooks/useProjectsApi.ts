@@ -47,3 +47,24 @@ export const useCreateProject = () => {
     },
   });
 };
+
+export const useDeleteProject = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => projectsService.deleteProject(id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+
+    onError: (error: any) => {
+      showError({
+        title: "Erro ao deletar projeto",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+  });
+};

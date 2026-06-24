@@ -11,6 +11,10 @@ class ProjectService {
     const res = await api.post<ProjectResponse>("/projects", data);
     return res.data;
   }
+
+  async deleteProject(id: number) {
+    return await api.delete(`/projects/${id}`);
+  }
 }
 
 export default new ProjectService();
