@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import DropdownContainer from "../../../../shared/components/Dropdown/DropdownContainer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
@@ -8,7 +8,6 @@ import type { ProjectResponse } from "../../../projects/projects.types";
 import type { TagResponse } from "../../../tags/tags.types";
 import Button from "../../../../shared/components/buttons/Button";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
-import { useFloating, offset, flip, shift } from "@floating-ui/react";
 
 const SessionSelector = ({
   children,
@@ -17,7 +16,6 @@ const SessionSelector = ({
   items = [],
   variant = "primary",
   placeholder = "Pesquise aqui...",
-  align = "left",
   value,
   onChange,
   disabled = false,
@@ -28,26 +26,22 @@ const SessionSelector = ({
   items?: ProjectResponse[] | TagResponse[];
   variant?: "primary" | "secondary";
   placeholder?: string;
-  align?: "left" | "right";
   value: ProjectResponse | TagResponse | null;
   onChange: (item: any) => void;
   disabled?: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { refs, floatingStyles } = useFloating({
-    placement: align === "left" ? "bottom-start" : "bottom-end",
-    middleware: [offset(8), flip(), shift()],
-  });
-
   const [activeItemId, setActiveItemId] = useState(value?.id || 0);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setActiveItemId(value?.id || 0);
   }, [value]);
 
-  useClickOutside(refs.floating, () => {
+  useClickOutside(dropdownRef, () => {
     setIsOpen(false);
     setSearchQuery("");
   });
@@ -72,7 +66,7 @@ const SessionSelector = ({
   );
 
   return (
-    <div className="relative" ref={refs.setReference}>
+    <div className="relative" ref={dropdownRef}>
       <div
         onClick={() => !disabled && setIsOpen((prev) => !prev)}
         className={clsx(
@@ -90,12 +84,7 @@ const SessionSelector = ({
           {value ? value.name : children}
         </span>
       </div>
-      <DropdownContainer
-        ref={refs.setFloating}
-        style={floatingStyles}
-        className={clsx("p-4 w-56 sm:w-60")}
-        isOpen={isOpen}
-      >
+      <DropdownContainer className={clsx("p-4 w-56 sm:w-60")} isOpen={isOpen}>
         <div className="flex flex-col">
           <span className="text-base font-semibold text-neutral-20">
             {title}
