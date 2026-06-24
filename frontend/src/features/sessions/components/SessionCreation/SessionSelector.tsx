@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
-import type { ProjectType } from "../../../projects/projects.types";
+import type { ProjectResponse } from "../../../projects/projects.types";
 import type { TagType } from "../../../tags/tags.types";
 import Button from "../../../../shared/components/buttons/Button";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
@@ -25,11 +25,11 @@ const SessionSelector = ({
   children: React.ReactNode;
   title?: string;
   icon?: React.ReactNode;
-  items?: ProjectType[] | TagType[];
+  items?: ProjectResponse[] | TagType[];
   variant?: "primary" | "secondary";
   placeholder?: string;
   align?: "left" | "right";
-  value: ProjectType | TagType | null;
+  value: ProjectResponse | TagType | null;
   onChange: (item: any) => void;
   disabled?: boolean;
 }) => {

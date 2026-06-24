@@ -2,20 +2,20 @@ import api from "../../configs/api.config";
 import type { PaginationResponse } from "../../shared/globals.types";
 import type {
   CreateSessionRequest,
-  ISessionGroupResponse,
+  SessionGroupResponse,
   SessionResponse,
   UpdateSessionRequest,
 } from "./sessions.types";
 
 class SessionService {
-  async getSessions({
+  async fetchSessions({
     page = 1,
     size = 10,
   }: {
     page: number;
     size: number;
-  }): Promise<PaginationResponse<ISessionGroupResponse>> {
-    const res = await api.get<PaginationResponse<ISessionGroupResponse>>(
+  }): Promise<PaginationResponse<SessionGroupResponse>> {
+    const res = await api.get<PaginationResponse<SessionGroupResponse>>(
       "/sessions",
       { params: { page, size } },
     );

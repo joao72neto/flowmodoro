@@ -10,14 +10,14 @@ import EmptyTags from "./EmptyTags";
 import { useTags } from "../../hooks/useTags";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
-import type { ProjectType } from "../../../projects/projects.types";
+import type { ProjectResponse } from "../../../projects/projects.types";
 import type { TagType } from "../../tags.types";
 
 const Tags = ({
   project,
   onBack,
 }: {
-  project: ProjectType;
+  project: ProjectResponse;
   onBack: () => void;
 }) => {
   const [editingTag, setEditingTag] = useState<TagType | null>(null);

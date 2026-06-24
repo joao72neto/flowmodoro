@@ -10,14 +10,14 @@ import EmptyProjects from "./EmptyProjects";
 import { useProjects } from "../../hooks/useProjects";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
-import type { ProjectType } from "../../projects.types";
+import type { ProjectResponse } from "../../projects.types";
 import Tags from "../../../tags/components/Tags/Tags";
+import { useFetchProjects } from "../../hooks/useProjectsApi";
 
 const Projects = () => {
-  const [selectedProject, setSelectedProject] = useState<ProjectType | null>(
-    null,
-  );
-  const [editingProject, setEditingProject] = useState<ProjectType | null>(
+  const [selectedProject, setSelectedProject] =
+    useState<ProjectResponse | null>(null);
+  const [editingProject, setEditingProject] = useState<ProjectResponse | null>(
     null,
   );
 
@@ -27,14 +27,17 @@ const Projects = () => {
   const { Modal: EditProject, openModal: openEditModal } =
     useModalFactory(ProjectModal);
 
+  const { data: projects } = useFetchProjects();
+
   const {
-    projects,
     searchQuery,
     setSearchQuery,
     handleCreateProject,
     handleDeleteProject,
     handleEditProject,
   } = useProjects();
+
+  if (!projects) return null;
 
   const isEmpty = projects.length === 0;
 

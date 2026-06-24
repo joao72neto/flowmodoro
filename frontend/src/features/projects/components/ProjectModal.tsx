@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { CreateProjectType, ProjectType } from "../projects.types";
+import type { CreateProjectType, ProjectResponse } from "../projects.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -28,14 +28,14 @@ const ProjectModal = ({
   close,
 }: {
   isOpen: boolean;
-  defaultValues?: ProjectType;
+  defaultValues?: ProjectResponse;
 
   title: string;
   titleIcon?: React.ReactNode;
 
   inputLabel?: string;
 
-  confirm: (project: CreateProjectType | ProjectType) => void;
+  confirm: (project: CreateProjectType | ProjectResponse) => void;
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
 

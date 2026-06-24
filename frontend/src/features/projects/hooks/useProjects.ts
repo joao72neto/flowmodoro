@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
-import type { CreateProjectType, ProjectType } from "../projects.types";
+import type { CreateProjectType, ProjectResponse } from "../projects.types";
 
 export const useProjects = () => {
-  const [projects, setProjects] = useState<ProjectType[]>([
+  const [projects, setProjects] = useState<ProjectResponse[]>([
     { id: 1, name: "Violin" },
     { id: 2, name: "Flowmodoro" },
     { id: 3, name: "Piano" },
@@ -21,7 +21,7 @@ export const useProjects = () => {
     setProjects(projects.filter((item) => item.id !== id));
   };
 
-  const handleEditProject = (project: ProjectType) => {
+  const handleEditProject = (project: ProjectResponse) => {
     setProjects(
       projects.map((item) =>
         item.id === project.id ? { ...item, name: project.name } : item,

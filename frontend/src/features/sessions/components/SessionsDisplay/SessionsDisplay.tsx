@@ -5,12 +5,12 @@ import { formatToHour } from "../../../../shared/utils/number.utils";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
-import { useFetchSessions } from "../../hooks/useSessions";
+import { useFetchSessions } from "../../hooks/useSessionsApi";
 import { useState } from "react";
 import { useSessionContext } from "../../sessions.context";
 import SessionsSkeleton from "./SessionsSkeleton";
-import SessionGroup from "./SessionGroup";
 import SessionsWrapper from "./SessionsWrapper";
+import SessionGroup from "./SessionGroup";
 
 const SessionsDisplay = () => {
   const SIZE = 5;

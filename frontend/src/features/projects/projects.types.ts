@@ -2,7 +2,7 @@ export type CreateProjectType = {
   name: string;
 };
 
-export type ProjectType = {
+export type ProjectResponse = {
   id: number;
   name: string;
 };

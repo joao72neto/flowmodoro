@@ -5,7 +5,7 @@ export interface ISessionGroup {
   sessions: SessionResponse[];
 }
 
-export interface ISessionGroupResponse {
+export interface SessionGroupResponse {
   date: string;
   totalFocus: number;
   totalRest: number;

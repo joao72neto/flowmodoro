@@ -1,5 +1,5 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
-import type { ProjectType } from "../../projects.types";
+import type { ProjectResponse } from "../../projects.types";
 import { MdModeEditOutline } from "react-icons/md";
 import { RxTrash } from "react-icons/rx";
 import clsx from "clsx";
@@ -15,10 +15,10 @@ const Project = ({
   onEdit,
   onSelectTags,
 }: {
-  projectData: ProjectType;
+  projectData: ProjectResponse;
   onDelete?: () => void;
   onEdit?: () => void;
-  onSelectTags?: (project: ProjectType) => void;
+  onSelectTags?: (project: ProjectResponse) => void;
 }) => {
   const { showWarning, hideModal } = useModal();
 

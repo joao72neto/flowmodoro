@@ -7,7 +7,7 @@ import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
-import type { ProjectType } from "../../../projects/projects.types";
+import type { ProjectResponse } from "../../../projects/projects.types";
 import type { TagType } from "../../../tags/tags.types";
 import { useTimerContext } from "../../../timer/timer.context";
 
@@ -21,7 +21,7 @@ const SessionCreation = () => {
   const hasContent = sessionText.trim().length > 0;
   const isExpanded = hasContent && !isTimerRunning;
 
-  const [selectedProject, setSelectedProject] = useState<ProjectType | null>(
+  const [selectedProject, setSelectedProject] = useState<ProjectResponse | null>(
     null,
   );
   const [selectedTag, setSelectedTag] = useState<TagType | null>(null);

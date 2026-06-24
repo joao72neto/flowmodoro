@@ -20,7 +20,7 @@ export const useFetchSessions = ({
     queryKey: ["sessions", page, size],
     queryFn: async () => {
       try {
-        return await sessionsService.getSessions({ page, size });
+        return await sessionsService.fetchSessions({ page, size });
       } catch (error) {
         if (error instanceof Error) {
           showError({
