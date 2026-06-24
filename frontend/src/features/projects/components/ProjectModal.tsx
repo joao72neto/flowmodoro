@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { CreateProjectRequest, ProjectResponse } from "../projects.types";
+import type { ProjectPayload, ProjectResponse } from "../projects.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -19,7 +19,9 @@ const ProjectModal = ({
 
   inputLabel = "Nome",
 
-  confirm,
+  edit,
+  save,
+
   confirmButtonText = "Criar",
   confirmButtonIcon = <MdOutlineAdd />,
 
@@ -35,7 +37,9 @@ const ProjectModal = ({
 
   inputLabel?: string;
 
-  confirm: (project: CreateProjectRequest | ProjectResponse) => void;
+  edit: ({ id, data }: { id: number; data: ProjectPayload }) => void;
+  save: (data: ProjectPayload) => void;
+
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
 
@@ -59,7 +63,7 @@ const ProjectModal = ({
   if (!isOpen) return null;
 
   const onSubmit = (data: { name: string }) => {
-    confirm(defaultValues ? { id: defaultValues.id, ...data } : data);
+    defaultValues ? edit({ id: defaultValues.id, data }) : save(data);
     reset();
     close();
   };

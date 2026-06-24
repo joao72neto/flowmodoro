@@ -1,5 +1,5 @@
 import api from "../../configs/api.config";
-import type { CreateProjectRequest, ProjectResponse } from "./projects.types";
+import type { ProjectPayload, ProjectResponse } from "./projects.types";
 
 class ProjectService {
   async fetchProjects(): Promise<ProjectResponse[]> {
@@ -7,8 +7,19 @@ class ProjectService {
     return res.data;
   }
 
-  async createProject(data: CreateProjectRequest): Promise<ProjectResponse> {
+  async createProject(data: ProjectPayload): Promise<ProjectResponse> {
     const res = await api.post<ProjectResponse>("/projects", data);
+    return res.data;
+  }
+
+  async updateProject({
+    id,
+    data,
+  }: {
+    id: number;
+    data: ProjectPayload;
+  }): Promise<ProjectResponse> {
+    const res = await api.put<ProjectResponse>(`/projects/${id}`, data);
     return res.data;
   }
 

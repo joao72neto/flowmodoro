@@ -16,6 +16,7 @@ import {
   useCreateProject,
   useDeleteProject,
   useFetchProjects,
+  useUpdateProject,
 } from "../../hooks/useProjectsApi";
 
 const Projects = () => {
@@ -34,8 +35,9 @@ const Projects = () => {
   const { data: projects } = useFetchProjects();
   const { mutate: handleCreateProject } = useCreateProject();
   const { mutate: handleDeleteProject } = useDeleteProject();
+  const { mutate: handleEditProject } = useUpdateProject();
 
-  const { searchQuery, setSearchQuery, handleEditProject } = useProjects();
+  const { searchQuery, setSearchQuery } = useProjects();
 
   if (!projects) return null;
 
@@ -108,10 +110,10 @@ const Projects = () => {
           </div>
         </div>
       </div>
-      <CreateProject confirm={handleCreateProject} />
+      <CreateProject save={handleCreateProject} />
       <EditProject
         title="Atualizar Projeto"
-        confirm={handleEditProject}
+        edit={handleEditProject}
         defaultValues={editingProject || undefined}
         inputLabel="Novo nome"
         confirmButtonIcon={<RxUpdate />}
@@ -121,3 +123,4 @@ const Projects = () => {
   );
 };
 export default Projects;
+ 
