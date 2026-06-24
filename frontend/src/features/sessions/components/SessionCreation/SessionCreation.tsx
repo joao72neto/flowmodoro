@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { useState } from "react";
 
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";

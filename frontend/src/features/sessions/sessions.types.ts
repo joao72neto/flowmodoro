@@ -16,8 +16,16 @@ export interface SessionResponse {
   id: number;
   name: string;
   focus: number;
-  rest: number;
   ratio: number;
+  rest: number;
+  project: {
+    id: number;
+    name: string;
+  };
+  tag: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface SessionPayload {
