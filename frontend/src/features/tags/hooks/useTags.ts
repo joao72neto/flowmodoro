@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
-import type { CreateTagType, TagType } from "../tags.types";
+import type { TagPayload, TagResponse } from "../tags.types";
 
-let mockTags: TagType[] = [
+let mockTags: TagResponse[] = [
   { id: 1, name: "Estudo", projectId: 1 },
   { id: 2, name: "Prática", projectId: 1 },
   { id: 3, name: "Feature A", projectId: 2 },
@@ -12,19 +12,19 @@ let mockTags: TagType[] = [
 ];
 
 export const useTags = (projectId: number) => {
-  const [tags, setTagsState] = useState<TagType[]>(mockTags);
+  const [tags, setTagsState] = useState<TagResponse[]>(mockTags);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setSearchQuery("");
   }, [projectId]);
 
-  const setTags = (newTags: TagType[]) => {
+  const setTags = (newTags: TagResponse[]) => {
     mockTags = newTags;
     setTagsState(newTags);
   };
 
-  const handleCreateTag = (tag: CreateTagType | TagType) => {
+  const handleCreateTag = (tag: TagPayload | TagResponse) => {
     const nextId =
       mockTags.length > 0 ? Math.max(...mockTags.map((t) => t.id)) + 1 : 1;
     setTags([{ id: nextId, name: tag.name, projectId }, ...mockTags]);
@@ -34,7 +34,7 @@ export const useTags = (projectId: number) => {
     setTags(mockTags.filter((item) => item.id !== id));
   };
 
-  const handleEditTag = (tag: TagType) => {
+  const handleEditTag = (tag: TagResponse) => {
     setTags(
       mockTags.map((item) =>
         item.id === tag.id ? { ...item, name: tag.name } : item,

@@ -1,9 +1,9 @@
-export type CreateTagType = {
+export type TagPayload = {
   name: string;
   projectId: number;
 };
 
-export type TagType = {
+export type TagResponse = {
   id: number;
   name: string;
   projectId: number;

@@ -8,7 +8,7 @@ import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
 import type { ProjectResponse } from "../../../projects/projects.types";
-import type { TagType } from "../../../tags/tags.types";
+import type { TagResponse } from "../../../tags/tags.types";
 import { useTimerContext } from "../../../timer/timer.context";
 
 const SessionCreation = () => {
@@ -21,10 +21,9 @@ const SessionCreation = () => {
   const hasContent = sessionText.trim().length > 0;
   const isExpanded = hasContent && !isTimerRunning;
 
-  const [selectedProject, setSelectedProject] = useState<ProjectResponse | null>(
-    null,
-  );
-  const [selectedTag, setSelectedTag] = useState<TagType | null>(null);
+  const [selectedProject, setSelectedProject] =
+    useState<ProjectResponse | null>(null);
+  const [selectedTag, setSelectedTag] = useState<TagResponse | null>(null);
 
   const showProjectSelector = !isTimerRunning || selectedProject !== null;
   const showTagSelector = !isTimerRunning || selectedTag !== null;

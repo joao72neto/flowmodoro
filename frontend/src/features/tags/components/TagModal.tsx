@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { CreateTagType, TagType } from "../tags.types";
+import type { TagPayload, TagResponse } from "../tags.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -19,7 +19,10 @@ const TagModal = ({
 
   inputLabel = "Nome",
 
-  confirm,
+  edit,
+  save,
+
+  projectId,
   confirmButtonText = "Criar",
   confirmButtonIcon = <MdOutlineAdd />,
 
@@ -28,14 +31,17 @@ const TagModal = ({
   close,
 }: {
   isOpen: boolean;
-  defaultValues?: TagType;
+  defaultValues?: TagResponse;
 
   title: string;
   titleIcon?: React.ReactNode;
 
   inputLabel?: string;
 
-  confirm: (tag: CreateTagType | TagType) => void;
+  projectId: number;
+  edit: ({ id, data }: { id: number; data: TagPayload }) => void;
+  save: (tag: TagPayload) => void;
+
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
 
@@ -59,11 +65,15 @@ const TagModal = ({
   if (!isOpen) return null;
 
   const onSubmit = (data: { name: string }) => {
-    confirm(
-      defaultValues
-        ? { ...defaultValues, name: data.name }
-        : { name: data.name, projectId: 0 },
-    );
+    defaultValues
+      ? edit({
+          id: defaultValues.id,
+          data: {
+            name: data.name,
+            projectId: projectId,
+          },
+        })
+      : save({ name: data.name, projectId });
     reset();
     close();
   };

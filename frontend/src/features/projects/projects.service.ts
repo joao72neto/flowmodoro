@@ -23,7 +23,7 @@ class ProjectService {
     return res.data;
   }
 
-  async deleteProject(id: number) {
+  async deleteProject(id: number): Promise<void> {
     return await api.delete(`/projects/${id}`);
   }
 }

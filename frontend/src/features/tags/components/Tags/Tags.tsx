@@ -11,7 +11,13 @@ import { useTags } from "../../hooks/useTags";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
 import type { ProjectResponse } from "../../../projects/projects.types";
-import type { TagType } from "../../tags.types";
+import type { TagResponse } from "../../tags.types";
+import {
+  useCreateTag,
+  useDeleteTag,
+  useFetchTagsByProject,
+  useUpdateTag,
+} from "../../hooks/useTagsApi";
 
 const Tags = ({
   project,
@@ -20,7 +26,7 @@ const Tags = ({
   project: ProjectResponse;
   onBack: () => void;
 }) => {
-  const [editingTag, setEditingTag] = useState<TagType | null>(null);
+  const [editingTag, setEditingTag] = useState<TagResponse | null>(null);
 
   const { Modal: CreateTag, openModal: openTagModal } =
     useModalFactory(TagModal);
@@ -28,14 +34,14 @@ const Tags = ({
   const { Modal: EditTag, openModal: openEditModal } =
     useModalFactory(TagModal);
 
-  const {
-    tags,
-    searchQuery,
-    setSearchQuery,
-    handleCreateTag,
-    handleDeleteTag,
-    handleEditTag,
-  } = useTags(project.id);
+  const { data: tags } = useFetchTagsByProject(project.id);
+  const { mutate: handleCreateTag } = useCreateTag();
+  const { mutate: handleDeleteTag } = useDeleteTag();
+  const { mutate: handleEditTag } = useUpdateTag();
+
+  const { searchQuery, setSearchQuery } = useTags(project.id);
+
+  if (!tags) return null;
 
   const isEmpty = tags.length === 0;
 
@@ -102,10 +108,11 @@ const Tags = ({
           Nova Tag
         </ExpandableButton>
       </div>
-      <CreateTag confirm={handleCreateTag} />
+      <CreateTag projectId={project.id} save={handleCreateTag} />
       <EditTag
         title="Atualizar Tag"
-        confirm={handleEditTag}
+        projectId={project.id}
+        edit={handleEditTag}
         defaultValues={editingTag || undefined}
         inputLabel="Novo nome"
         confirmButtonIcon={<RxUpdate />}
