@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { CreateProjectType, ProjectResponse } from "../projects.types";
+import type { CreateProjectRequest, ProjectResponse } from "../projects.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -35,7 +35,7 @@ const ProjectModal = ({
 
   inputLabel?: string;
 
-  confirm: (project: CreateProjectType | ProjectResponse) => void;
+  confirm: (project: CreateProjectRequest | ProjectResponse) => void;
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
 

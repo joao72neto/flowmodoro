@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import type { CreateProjectType, ProjectResponse } from "../projects.types";
+import type { CreateProjectRequest, ProjectResponse } from "../projects.types";
 
 export const useProjects = () => {
   const [projects, setProjects] = useState<ProjectResponse[]>([
@@ -11,7 +11,7 @@ export const useProjects = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleCreateProject = (project: CreateProjectType) => {
+  const handleCreateProject = (project: CreateProjectRequest) => {
     const nextId =
       projects.length > 0 ? Math.max(...projects.map((p) => p.id)) + 1 : 1;
     setProjects([{ id: nextId, name: project.name }, ...projects]);

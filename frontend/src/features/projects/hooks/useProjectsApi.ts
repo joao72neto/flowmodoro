@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../../shared/modal.context";
 import projectsService from "../projects.service";
+import type { CreateProjectRequest, ProjectResponse } from "../projects.types";
 
 export const useFetchProjects = () => {
   const { showError, hideModal } = useModal();
@@ -21,6 +22,28 @@ export const useFetchProjects = () => {
         console.error(error);
         throw error;
       }
+    },
+  });
+};
+
+export const useCreateProject = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateProjectRequest): Promise<ProjectResponse> =>
+      projectsService.createProject(data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+
+    onError: (error: any) => {
+      showError({
+        title: "Erro ao criar projeto",
+        message: error.message,
+        action: hideModal,
+      });
     },
   });
 };
