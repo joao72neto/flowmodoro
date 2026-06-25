@@ -30,6 +30,17 @@ public class ProjectService {
 	@Transactional
 	public ProjectModel save(ProjectModel project, String userId) {
 		project.setUserId(userId);
+		var projects = projectRepository.findByUserIdOrderByIdDesc(userId);
+
+		boolean exists = projects.stream()
+				.anyMatch(oldProject -> oldProject.getName().equals(project.getName()));
+
+		if (exists) {
+			throw new InvalidProjectException(
+					ProjectErrorCode.PROJECT_EXISTS,
+					"Projeto com nome '" + project.getName() + "' já existe");
+		}
+
 		return projectRepository.save(project);
 	}
 
