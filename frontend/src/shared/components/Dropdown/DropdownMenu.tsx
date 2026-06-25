@@ -13,9 +13,11 @@ import { useClickOutside } from "../../hooks/useClickOutside";
 const DropdownMenu = ({
   children,
   items,
+  align = "left",
 }: {
   children: React.ReactNode;
   items: Item[];
+  align?: "left" | "right";
 }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -35,7 +37,7 @@ const DropdownMenu = ({
         {children}
       </button>
 
-      <DropdownContainer isOpen={isOpen}>
+      <DropdownContainer align={align} isOpen={isOpen}>
         <div>
           {items.map((item) => (
             <button

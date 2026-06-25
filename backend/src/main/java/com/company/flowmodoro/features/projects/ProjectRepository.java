@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectModel, Long> {
 
-	List<ProjectModel> findByUserId(String userId);
+	List<ProjectModel> findByUserIdOrderByIdDesc(String userId);
 
 }

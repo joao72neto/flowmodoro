@@ -42,7 +42,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       </SideBarContainer>
 
       {!isSidebarOpen && (
-        <div className="fixed top-0 right-0 p-4 z-10">
+        <div className="fixed bottom-0 right-0 p-4 z-10">
           <ExpandableButton
             icon={
               <PiCaretLeftBold

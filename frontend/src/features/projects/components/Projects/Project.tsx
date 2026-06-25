@@ -69,6 +69,7 @@ const Project = ({
 
       <div className="flex items-center gap-2 shrink-0">
         <DropdownMenu
+          align="right"
           items={[
             {
               label: "Editar",

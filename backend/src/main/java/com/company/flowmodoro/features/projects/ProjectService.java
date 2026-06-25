@@ -9,16 +9,21 @@ import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
 import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
 import com.company.flowmodoro.features.projects.mappers.ProjectUpdateMapper;
+import com.company.flowmodoro.features.sessions.SessionRespository;
 
 @Service
 public class ProjectService {
 
 	private final ProjectRepository projectRepository;
 
+	private final SessionRespository sessionRepository;
+
 	private final ProjectUpdateMapper projectUpdateMapper;
 
-	public ProjectService(ProjectRepository projectRepository, ProjectUpdateMapper projectUpdateMapper) {
+	public ProjectService(ProjectRepository projectRepository, ProjectUpdateMapper projectUpdateMapper,
+			SessionRespository sessionRepository) {
 		this.projectRepository = projectRepository;
+		this.sessionRepository = sessionRepository;
 		this.projectUpdateMapper = projectUpdateMapper;
 	}
 
@@ -29,12 +34,12 @@ public class ProjectService {
 	}
 
 	public List<ProjectModel> findAll(String userId) {
-		return projectRepository.findByUserId(userId);
+		return projectRepository.findByUserIdOrderByIdDesc(userId);
 	}
 
 	public ProjectModel findById(Long id, String userId) {
 		ProjectModel project = projectRepository.findById(id)
-			.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
+				.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
 
 		if (!project.getUserId().equals(userId)) {
 			throw new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found for this user");
@@ -53,6 +58,14 @@ public class ProjectService {
 	@Transactional
 	public void delete(Long id, String userId) {
 		ProjectModel project = findById(id, userId);
+
+		var sessions = sessionRepository.findByProjectAndUserId(project, userId);
+
+		sessions.forEach(session -> {
+			session.setProject(null);
+			session.setTag(null);
+		});
+
 		projectRepository.delete(project);
 	}
 

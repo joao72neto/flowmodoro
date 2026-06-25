@@ -50,11 +50,11 @@ public class SessionModel {
 	private LocalDate date;
 
 	@ManyToOne
-	@JoinColumn(name = "ses_pro_id")
+	@JoinColumn(name = "ses_pro_id", nullable = true)
 	private ProjectModel project;
 
 	@ManyToOne
-	@JoinColumn(name = "ses_tag_id")
+	@JoinColumn(name = "ses_tag_id", nullable = true)
 	private TagModel tag;
 
 }

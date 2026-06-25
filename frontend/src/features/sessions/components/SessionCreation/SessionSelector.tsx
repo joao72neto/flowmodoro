@@ -84,7 +84,10 @@ const SessionSelector = ({
           {value ? value.name : children}
         </span>
       </div>
-      <DropdownContainer className={clsx("p-4 w-56 sm:w-60")} isOpen={isOpen}>
+      <DropdownContainer
+        className={clsx("p-4 w-56 sm:w-60 left-0! sm:left-auto! sm:right-0!")}
+        isOpen={isOpen}
+      >
         <div className="flex flex-col">
           <span className="text-base font-semibold text-neutral-20">
             {title}
