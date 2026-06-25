@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../../shared/modal.context";
 import projectsService from "../projects.service";
 import type { ProjectPayload, ProjectResponse } from "../projects.types";
+import type { ApiError } from "../../../configs/api-error.config";
 
 const PROJECTS_QUERY_KEY = ["projects"];
 
@@ -40,7 +41,8 @@ export const useCreateProject = () => {
       queryClient.invalidateQueries({ queryKey: PROJECTS_QUERY_KEY });
     },
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
+      console.error(error);
       showError({
         title: "Erro ao criar projeto",
         message: error.message,
