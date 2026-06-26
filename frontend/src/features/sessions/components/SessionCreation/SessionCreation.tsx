@@ -103,7 +103,7 @@ const SessionCreation = () => {
             {showTagSelector && (
               <SessionSelector
                 value={selectedTag}
-                onChange={(tag) => setSelectedTagId(tag.id)}
+                onChange={(tag) => setSelectedTagId(tag?.id ?? null)}
                 disabled={isTimerRunning}
                 title="Tags"
                 variant="secondary"
