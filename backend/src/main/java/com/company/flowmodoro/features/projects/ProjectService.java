@@ -29,11 +29,7 @@ public class ProjectService {
 
 	@Transactional
 	public ProjectModel save(ProjectModel project, String userId) {
-		project.setUserId(userId);
-		var projects = projectRepository.findByUserIdOrderByIdDesc(userId);
-
-		boolean exists = projects.stream()
-				.anyMatch(oldProject -> oldProject.getName().equals(project.getName()));
+		boolean exists = projectRepository.existsByNameAndUserId(project.getName(), userId);
 
 		if (exists) {
 			throw new InvalidProjectException(
@@ -41,6 +37,7 @@ public class ProjectService {
 					"Projeto com nome '" + project.getName() + "' já existe");
 		}
 
+		project.setUserId(userId);
 		return projectRepository.save(project);
 	}
 
@@ -61,20 +58,16 @@ public class ProjectService {
 
 	@Transactional
 	public ProjectModel update(Long id, ProjectUpdateDTO dto, String userId) {
-		var projects = projectRepository.findByUserIdOrderByIdDesc(userId);
+		ProjectModel project = findById(id, userId);
+		boolean exists = projectRepository.existsByNameAndUserId(dto.getName(), userId);
 
-		boolean exists = projects.stream()
-				.anyMatch(oldProject -> oldProject.getName().equals(dto.getName()));
-
-		if (exists) {
+		if (exists && !project.getName().equals(dto.getName())) {
 			throw new InvalidProjectException(
 					ProjectErrorCode.PROJECT_EXISTS,
 					"Projeto com nome '" + dto.getName() + "' já existe");
 		}
 
-		ProjectModel project = findById(id, userId);
 		projectUpdateMapper.apply(project, dto);
-
 		return projectRepository.save(project);
 	}
 

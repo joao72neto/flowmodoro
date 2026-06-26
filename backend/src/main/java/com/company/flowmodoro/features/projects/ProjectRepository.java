@@ -10,4 +10,6 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, Long> {
 
 	List<ProjectModel> findByUserIdOrderByIdDesc(String userId);
 
+	boolean existsByNameAndUserId(String name, String userId);
+
 }
