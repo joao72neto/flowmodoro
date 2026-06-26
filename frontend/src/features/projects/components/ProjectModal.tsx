@@ -86,7 +86,9 @@ const ProjectModal = ({
           <Input
             placeholder="Nome do projeto"
             error={errors.name?.message}
-            {...register("name")}
+            {...register("name", {
+              setValueAs: (value) => value.trim(),
+            })}
           />
         </div>
 

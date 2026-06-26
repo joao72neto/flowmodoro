@@ -1,46 +1,108 @@
-import { useState, useMemo } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useModal } from "../../../shared/modal.context";
+import projectsService from "../projects.service";
 import type { ProjectPayload, ProjectResponse } from "../projects.types";
+import { ApiError } from "../../../configs/api-error.config";
+import { projectErrors, type ProjectError } from "../consts/project-errors";
 
-export const useProjects = () => {
-  const [projects, setProjects] = useState<ProjectResponse[]>([
-    { id: 1, name: "Violin" },
-    { id: 2, name: "Flowmodoro" },
-    { id: 3, name: "Piano" },
-    { id: 4, name: "Coding" },
-  ]);
+const PROJECTS_QUERY_KEY = "projects";
 
-  const [searchQuery, setSearchQuery] = useState("");
+export const useFetchProjects = () => {
+  const { showError, hideModal } = useModal();
 
-  const handleCreateProject = (project: ProjectPayload) => {
-    const nextId =
-      projects.length > 0 ? Math.max(...projects.map((p) => p.id)) + 1 : 1;
-    setProjects([{ id: nextId, name: project.name }, ...projects]);
-  };
+  return useQuery({
+    queryKey: [PROJECTS_QUERY_KEY],
+    queryFn: async () => {
+      try {
+        return await projectsService.fetchProjects();
+      } catch (error) {
+        if (error instanceof ApiError) {
+          showError({
+            title:
+              projectErrors[error.code as ProjectError] ??
+              "Erro ao carregar projetos",
+            message: error.message,
+            action: hideModal,
+          });
+        }
+        console.error(error);
+        throw error;
+      }
+    },
+  });
+};
 
-  const handleDeleteProject = (id: number) => {
-    setProjects(projects.filter((item) => item.id !== id));
-  };
+export const useCreateProject = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
 
-  const handleEditProject = (project: ProjectResponse) => {
-    setProjects(
-      projects.map((item) =>
-        item.id === project.id ? { ...item, name: project.name } : item,
-      ),
-    );
-  };
+  return useMutation({
+    mutationFn: (data: ProjectPayload): Promise<ProjectResponse> =>
+      projectsService.createProject(data),
 
-  const filteredProjects = useMemo(() => {
-    return projects.filter((project) =>
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-  }, [projects, searchQuery]);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
+    },
 
-  return {
-    projects: filteredProjects,
-    searchQuery,
-    setSearchQuery,
-    handleCreateProject,
-    handleDeleteProject,
-    handleEditProject,
-  };
+    onError: (error: ApiError) => {
+      showError({
+        title:
+          projectErrors[error.code as ProjectError] ?? "Erro ao criar projeto",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+  });
+};
+
+export const useUpdateProject = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: ProjectPayload;
+    }): Promise<ProjectResponse> => projectsService.updateProject({ id, data }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
+    },
+
+    onError: (error: ApiError) => {
+      showError({
+        title:
+          projectErrors[error.code as ProjectError] ??
+          "Erro ao atualizar projeto",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+  });
+};
+
+export const useDeleteProject = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => projectsService.deleteProject(id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
+    },
+
+    onError: (error: ApiError) => {
+      showError({
+        title:
+          projectErrors[error.code as ProjectError] ??
+          "Erro ao deletar projeto",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+  });
 };

@@ -8,7 +8,7 @@ import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/timer.context";
-import { useFetchProjects } from "../../../projects/hooks/useProjectsApi";
+import { useFetchProjects } from "../../../projects/hooks/useProjects";
 import { useFetchTagsByProject } from "../../../tags/hooks/useTagsApi";
 import { useSessionContext } from "../../sessions.context";
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
 import { RxUpdate } from "react-icons/rx";
 
@@ -7,7 +7,6 @@ import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
 import ProjectModal from "../ProjectModal";
 import Project from "./Project";
 import EmptyProjects from "./EmptyProjects";
-import { useProjects } from "../../hooks/useProjects";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
 import type { ProjectResponse } from "../../projects.types";
@@ -17,7 +16,7 @@ import {
   useDeleteProject,
   useFetchProjects,
   useUpdateProject,
-} from "../../hooks/useProjectsApi";
+} from "../../hooks/useProjects";
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] =
@@ -25,6 +24,7 @@ const Projects = () => {
   const [editingProject, setEditingProject] = useState<ProjectResponse | null>(
     null,
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { Modal: CreateProject, openModal: openProjectModal } =
     useModalFactory(ProjectModal);
@@ -37,11 +37,16 @@ const Projects = () => {
   const { mutate: handleDeleteProject } = useDeleteProject();
   const { mutate: handleEditProject } = useUpdateProject();
 
-  const { searchQuery, setSearchQuery } = useProjects();
+  const filteredProjects = useMemo(() => {
+    return projects?.filter((project) =>
+      project.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [projects, searchQuery]);
 
-  if (!projects) return null;
+  if (!projects || !filteredProjects)
+    return <div>Não foi possivel carregar os projetos</div>;
 
-  const isEmpty = projects.length === 0;
+  const isEmpty = filteredProjects.length === 0;
 
   return (
     <>
@@ -79,7 +84,7 @@ const Projects = () => {
                   }
                 />
               ) : (
-                projects.map((item) => (
+                filteredProjects.map((item) => (
                   <Project
                     key={item.id}
                     projectData={item}
