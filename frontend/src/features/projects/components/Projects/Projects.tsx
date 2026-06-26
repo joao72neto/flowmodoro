@@ -14,11 +14,13 @@ import Tags from "../../../tags/components/Tags/Tags";
 import {
   useCreateProject,
   useDeleteProject,
-  useFetchProjects,
   useUpdateProject,
 } from "../../hooks/useProjects";
+import { useSessionContext } from "../../../sessions/sessions.context";
 
 const Projects = () => {
+  const { projects } = useSessionContext();
+
   const [selectedProject, setSelectedProject] =
     useState<ProjectResponse | null>(null);
   const [editingProject, setEditingProject] = useState<ProjectResponse | null>(
@@ -32,7 +34,6 @@ const Projects = () => {
   const { Modal: EditProject, openModal: openEditModal } =
     useModalFactory(ProjectModal);
 
-  const { data: projects } = useFetchProjects();
   const { mutate: handleCreateProject } = useCreateProject();
   const { mutate: handleDeleteProject } = useDeleteProject();
   const { mutate: handleEditProject } = useUpdateProject();

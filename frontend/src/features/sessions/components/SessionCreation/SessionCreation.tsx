@@ -8,8 +8,6 @@ import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/timer.context";
-import { useFetchProjects } from "../../../projects/hooks/useProjects";
-import { useFetchTagsByProject } from "../../../tags/hooks/useTags";
 import { useSessionContext } from "../../sessions.context";
 
 const SessionCreation = () => {
@@ -18,11 +16,14 @@ const SessionCreation = () => {
 
   const {
     selectedProject,
-    setSelectedProject,
+    setSelectedProjectId,
     selectedTag,
-    setSelectedTag,
+    setSelectedTagId,
     setSessionName,
     sessionName,
+
+    projects,
+    tags,
   } = useSessionContext();
 
   const isTimerRunning = mode === "focus" || mode === "break";
@@ -40,9 +41,6 @@ const SessionCreation = () => {
     "text-primary text-3xl hover:scale-110 active:scale-95",
     "transition duration-150 hover:cursor-pointer hover:text-primary/90",
   );
-
-  const { data: projects } = useFetchProjects();
-  const { data: tags } = useFetchTagsByProject(selectedProject?.id ?? 0);
 
   return (
     <div
@@ -89,7 +87,9 @@ const SessionCreation = () => {
             {showProjectSelector && (
               <SessionSelector
                 value={selectedProject}
-                onChange={(project) => setSelectedProject(project)}
+                onChange={(project) =>
+                  setSelectedProjectId(project?.id ?? null)
+                }
                 disabled={isTimerRunning}
                 title="Projetos"
                 variant="primary"
@@ -103,7 +103,7 @@ const SessionCreation = () => {
             {showTagSelector && (
               <SessionSelector
                 value={selectedTag}
-                onChange={(tag) => setSelectedTag(tag)}
+                onChange={(tag) => setSelectedTagId(tag.id)}
                 disabled={isTimerRunning}
                 title="Tags"
                 variant="secondary"

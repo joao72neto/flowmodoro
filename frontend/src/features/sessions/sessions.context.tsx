@@ -1,9 +1,11 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useCreateSession } from "./hooks/useSessionsApi";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 
 import type { TagResponse } from "../tags/tags.types";
 import type { ProjectResponse } from "../projects/projects.types";
+import { useFetchProjects } from "../projects/hooks/useProjects";
+import { useFetchTagsByProject } from "../tags/hooks/useTags";
 
 export interface ISaveSessionData {
   focusSeconds: number;
@@ -14,10 +16,16 @@ interface ISessionContext {
   setRestRatio: (ratio: number) => void;
   handleSaveSession: (data: ISaveSessionData) => void;
 
+  projects: ProjectResponse[] | undefined;
+  tags: TagResponse[] | undefined;
+
+  selectedProjectId: number | null;
+  selectedTagId: number | null;
+  setSelectedProjectId: (id: number | null) => void;
+  setSelectedTagId: (id: number | null) => void;
+
   selectedTag: TagResponse | null;
   selectedProject: ProjectResponse | null;
-  setSelectedTag: (tag: TagResponse | null) => void;
-  setSelectedProject: (project: ProjectResponse | null) => void;
 
   sessionName: string;
   setSessionName: (name: string) => void;
@@ -37,12 +45,26 @@ export const SessionProvider = ({
     return saved ? Number(saved) : 20;
   });
 
-  const [selectedTag, setSelectedTag] = useState<TagResponse | null>(null);
-  const [selectedProject, setSelectedProject] =
-    useState<ProjectResponse | null>(null);
-  const [sessionName, setSessionName] = useState("");
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null,
+  );
+  const { data: projects = [] } = useFetchProjects();
+
+  const selectedProject = useMemo(
+    () => projects.find((p) => p.id === selectedProjectId) ?? null,
+    [projects, selectedProjectId],
+  );
+
+  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
+  const { data: tags = [] } = useFetchTagsByProject(selectedProjectId || 0);
+
+  const selectedTag = useMemo(
+    () => tags.find((t) => t.id === selectedTagId) ?? null,
+    [tags, selectedTagId],
+  );
 
   const { mutate: createSession, isPending: isSaving } = useCreateSession();
+  const [sessionName, setSessionName] = useState("");
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
@@ -66,10 +88,16 @@ export const SessionProvider = ({
         setRestRatio,
         isSaving,
 
+        projects,
+        tags,
+
+        selectedProjectId,
+        selectedTagId,
+        setSelectedProjectId,
+        setSelectedTagId,
+
         selectedTag,
         selectedProject,
-        setSelectedTag,
-        setSelectedProject,
 
         sessionName,
         setSessionName,
