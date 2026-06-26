@@ -1,7 +1,7 @@
 import sessionsService from "../sessions.service";
 import type { SessionPayload, SessionResponse } from "../sessions.types";
 import { useModal } from "../../../shared/modal.context";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../../../configs/api-error.config";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
 
@@ -40,6 +40,8 @@ export const useFetchSessions = ({
 
 export const useCreateSession = () => {
   const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: SessionPayload): Promise<SessionResponse> =>
       sessionsService.createSession(data),
@@ -52,11 +54,16 @@ export const useCreateSession = () => {
         action: hideModal,
       });
     },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
+    },
   });
 };
 
 export const useUpdateSession = () => {
   const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({
@@ -76,11 +83,16 @@ export const useUpdateSession = () => {
         action: hideModal,
       });
     },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
+    },
   });
 };
 
 export const useDeleteSession = () => {
   const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: number) => sessionsService.deleteSession(id),
@@ -92,6 +104,10 @@ export const useDeleteSession = () => {
         message: error.message,
         action: hideModal,
       });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
     },
   });
 };

@@ -1,8 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useCreateSession } from "./hooks/useSessionsApi";
 import { localStorageKeys } from "../../shared/utils/local-storage.utils";
-import { useQueryClient } from "@tanstack/react-query";
-import type { SessionPayload } from "./sessions.types";
+
 import type { TagResponse } from "../tags/tags.types";
 import type { ProjectResponse } from "../projects/projects.types";
 
@@ -43,7 +42,6 @@ export const SessionProvider = ({
     useState<ProjectResponse | null>(null);
   const [sessionName, setSessionName] = useState("");
 
-  const queryClient = useQueryClient();
   const { mutate: createSession, isPending: isSaving } = useCreateSession();
 
   useEffect(() => {
@@ -51,20 +49,12 @@ export const SessionProvider = ({
   }, [restRatio]);
 
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
-    const data: SessionPayload = {
+    createSession({
       name: sessionName,
       focus: focusSeconds,
       ratio: restRatio / 100,
       projectId: selectedProject?.id,
       tagId: selectedTag?.id,
-    };
-
-    createSession(data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["sessions"],
-        });
-      },
     });
   };
 

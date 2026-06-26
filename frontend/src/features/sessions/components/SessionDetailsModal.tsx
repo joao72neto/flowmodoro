@@ -16,7 +16,6 @@ import { useModal } from "../../../shared/modal.context";
 import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
 import IconButton from "../../../shared/components/buttons/IconButton";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessionsApi";
-import { useQueryClient } from "@tanstack/react-query";
 import type { SessionResponse } from "../sessions.types";
 
 const SessionDetailsModal = ({
@@ -32,7 +31,6 @@ const SessionDetailsModal = ({
 
   const { showWarning, hideModal, setModalLoading } = useModal();
 
-  const queryClient = useQueryClient();
   const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
   const { mutate: deleteSession } = useDeleteSession();
 
@@ -71,9 +69,6 @@ const SessionDetailsModal = ({
       {
         onSuccess: () => {
           sessionStorage.removeItem(draftKey);
-          queryClient.invalidateQueries({
-            queryKey: ["sessions"],
-          });
           setIsOpen(false);
         },
       },
@@ -94,10 +89,6 @@ const SessionDetailsModal = ({
     deleteSession(session.id, {
       onSuccess: () => {
         sessionStorage.removeItem(draftKey);
-        queryClient.invalidateQueries({
-          queryKey: ["sessions"],
-        });
-
         setModalLoading(false);
         setIsOpen(false);
         hideModal();
