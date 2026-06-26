@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../../shared/modal.context";
 import tagService from "../tags.service";
 import type { TagPayload, TagResponse } from "../tags.types";
+import { ApiError } from "../../../configs/api-error.config";
+import { tagErrors, type TagError } from "../consts/tag-errors";
 
 const TAGS_QUERY_KEY = "tags";
 
@@ -15,9 +17,9 @@ export const useFetchTagsByProject = (projectId: number) => {
         if (projectId <= 0) return [];
         return await tagService.fetchTagsByProject(projectId);
       } catch (error) {
-        if (error instanceof Error) {
+        if (error instanceof ApiError) {
           showError({
-            title: "Erro ao carregar tags",
+            title: tagErrors[error.code as TagError] ?? "Erro ao carregar tags",
             message: error.message,
             action: hideModal,
           });
@@ -41,9 +43,9 @@ export const useCreateTag = () => {
       queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
     },
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
-        title: "Erro ao criar tag",
+        title: tagErrors[error.code as TagError] ?? "Erro ao criar tag",
         message: error.message,
         action: hideModal,
       });
@@ -68,9 +70,9 @@ export const useUpdateTag = () => {
       queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
     },
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
-        title: "Erro ao atualizar tag",
+        title: tagErrors[error.code as TagError] ?? "Erro ao atualizar tag",
         message: error.message,
         action: hideModal,
       });
@@ -89,9 +91,9 @@ export const useDeleteTag = () => {
       queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
     },
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
-        title: "Erro ao deletar tag",
+        title: tagErrors[error.code as TagError] ?? "Erro ao deletar tag",
         message: error.message,
         action: hideModal,
       });

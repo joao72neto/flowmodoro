@@ -1,8 +1,14 @@
+import type { ProjectError } from "../features/projects/consts/project-errors";
+import type { SessionError } from "../features/sessions/consts/session-errors";
+import type { TagError } from "../features/tags/consts/tag-errors";
+
+export type CodeError = ProjectError | TagError | SessionError;
+
 export class ApiError extends Error {
-  code?: string;
+  code?: CodeError;
   statusCode: number;
 
-  constructor(message: string, statusCode: number, code?: string) {
+  constructor(message: string, statusCode: number, code?: CodeError) {
     super(message);
     this.statusCode = statusCode;
     this.code = code;

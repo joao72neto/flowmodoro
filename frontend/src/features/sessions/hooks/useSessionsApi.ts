@@ -2,6 +2,10 @@ import sessionsService from "../sessions.service";
 import type { SessionPayload, SessionResponse } from "../sessions.types";
 import { useModal } from "../../../shared/modal.context";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { ApiError } from "../../../configs/api-error.config";
+import { sessionErrors, type SessionError } from "../consts/session-errors";
+
+const SESSIONS_QUERY_KEY = "sessions";
 
 export const useFetchSessions = ({
   page,
@@ -13,14 +17,16 @@ export const useFetchSessions = ({
   const { showError, hideModal } = useModal();
 
   return useQuery({
-    queryKey: ["sessions", page, size],
+    queryKey: [SESSIONS_QUERY_KEY, page, size],
     queryFn: async () => {
       try {
         return await sessionsService.fetchSessions({ page, size });
       } catch (error) {
-        if (error instanceof Error) {
+        if (error instanceof ApiError) {
           showError({
-            title: "Erro ao carregar sessões",
+            title:
+              sessionErrors[error.code as SessionError] ??
+              "Erro ao carregar sessões",
             message: error.message,
             action: hideModal,
           });
@@ -38,9 +44,10 @@ export const useCreateSession = () => {
     mutationFn: (data: SessionPayload): Promise<SessionResponse> =>
       sessionsService.createSession(data),
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
-        title: "Erro ao criar sessão",
+        title:
+          sessionErrors[error.code as SessionError] ?? "Erro ao criar sessão",
         message: error.message,
         action: hideModal,
       });
@@ -60,9 +67,11 @@ export const useUpdateSession = () => {
       data: SessionPayload;
     }): Promise<SessionResponse> => sessionsService.updateSession({ id, data }),
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
-        title: "Erro ao atualizar sessão",
+        title:
+          sessionErrors[error.code as SessionError] ??
+          "Erro ao atualizar sessão",
         message: error.message,
         action: hideModal,
       });
@@ -78,7 +87,8 @@ export const useDeleteSession = () => {
 
     onError: (error: any) => {
       showError({
-        title: "Erro ao deletar sessão",
+        title:
+          sessionErrors[error.code as SessionError] ?? "Erro ao deletar sessão",
         message: error.message,
         action: hideModal,
       });

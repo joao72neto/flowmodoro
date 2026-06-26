@@ -2,22 +2,25 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../../shared/modal.context";
 import projectsService from "../projects.service";
 import type { ProjectPayload, ProjectResponse } from "../projects.types";
-import type { ApiError } from "../../../configs/api-error.config";
+import { ApiError } from "../../../configs/api-error.config";
+import { projectErrors, type ProjectError } from "../consts/project-errors";
 
-const PROJECTS_QUERY_KEY = ["projects"];
+const PROJECTS_QUERY_KEY = "projects";
 
 export const useFetchProjects = () => {
   const { showError, hideModal } = useModal();
 
   return useQuery({
-    queryKey: PROJECTS_QUERY_KEY,
+    queryKey: [PROJECTS_QUERY_KEY],
     queryFn: async () => {
       try {
         return await projectsService.fetchProjects();
       } catch (error) {
-        if (error instanceof Error) {
+        if (error instanceof ApiError) {
           showError({
-            title: "Erro ao carregar projetos",
+            title:
+              projectErrors[error.code as ProjectError] ??
+              "Erro ao carregar projetos",
             message: error.message,
             action: hideModal,
           });
@@ -38,13 +41,13 @@ export const useCreateProject = () => {
       projectsService.createProject(data),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PROJECTS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
     },
 
     onError: (error: ApiError) => {
-      console.error(error);
       showError({
-        title: "Erro ao criar projeto",
+        title:
+          projectErrors[error.code as ProjectError] ?? "Erro ao criar projeto",
         message: error.message,
         action: hideModal,
       });
@@ -66,12 +69,14 @@ export const useUpdateProject = () => {
     }): Promise<ProjectResponse> => projectsService.updateProject({ id, data }),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PROJECTS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
     },
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
-        title: "Erro ao atualizar projeto",
+        title:
+          projectErrors[error.code as ProjectError] ??
+          "Erro ao atualizar projeto",
         message: error.message,
         action: hideModal,
       });
@@ -87,12 +92,14 @@ export const useDeleteProject = () => {
     mutationFn: (id: number) => projectsService.deleteProject(id),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PROJECTS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
     },
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
-        title: "Erro ao deletar projeto",
+        title:
+          projectErrors[error.code as ProjectError] ??
+          "Erro ao deletar projeto",
         message: error.message,
         action: hideModal,
       });
