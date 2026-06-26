@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TagRepository extends JpaRepository<TagModel, Long> {
 
-	List<TagModel> findByProjectId(Long projectId);
+	List<TagModel> findByProjectIdOrderByIdDesc(Long projectId);
+
+	boolean existsByNameAndProjectId(String name, Long projectId);
 
 }

@@ -9,7 +9,7 @@ import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/timer.context";
 import { useFetchProjects } from "../../../projects/hooks/useProjects";
-import { useFetchTagsByProject } from "../../../tags/hooks/useTagsApi";
+import { useFetchTagsByProject } from "../../../tags/hooks/useTags";
 import { useSessionContext } from "../../sessions.context";
 
 const SessionCreation = () => {

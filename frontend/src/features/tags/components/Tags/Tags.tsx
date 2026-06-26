@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
 import { PiCaretLeftBold } from "react-icons/pi";
 import { RxUpdate } from "react-icons/rx";
@@ -7,7 +7,6 @@ import { useModalFactory } from "../../../../shared/hooks/useModalFactory";
 import TagModal from "../TagModal";
 import Tag from "./Tag";
 import EmptyTags from "./EmptyTags";
-import { useTags } from "../../hooks/useTags";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
 import type { ProjectResponse } from "../../../projects/projects.types";
@@ -17,7 +16,7 @@ import {
   useDeleteTag,
   useFetchTagsByProject,
   useUpdateTag,
-} from "../../hooks/useTagsApi";
+} from "../../hooks/useTags";
 
 const Tags = ({
   project,
@@ -27,6 +26,7 @@ const Tags = ({
   onBack: () => void;
 }) => {
   const [editingTag, setEditingTag] = useState<TagResponse | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { Modal: CreateTag, openModal: openTagModal } =
     useModalFactory(TagModal);
@@ -39,11 +39,19 @@ const Tags = ({
   const { mutate: handleDeleteTag } = useDeleteTag();
   const { mutate: handleEditTag } = useUpdateTag();
 
-  const { searchQuery, setSearchQuery } = useTags(project.id);
+  const filteredTags = useMemo(() => {
+    if (!tags) return [];
 
-  if (!tags) return null;
+    return tags
+      .filter((tag) => tag.projectId === project.id)
+      .filter((tag) =>
+        tag.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+  }, [tags, project.id, searchQuery]);
 
-  const isEmpty = tags.length === 0;
+  if (!tags) return <div>Não foi possível carregar as tags</div>;
+
+  const isEmpty = filteredTags.length === 0;
 
   return (
     <>
@@ -86,7 +94,7 @@ const Tags = ({
               }
             />
           ) : (
-            tags.map((item) => (
+            filteredTags.map((item) => (
               <Tag
                 key={item.id}
                 tagData={item}

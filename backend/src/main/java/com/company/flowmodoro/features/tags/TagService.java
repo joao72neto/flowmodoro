@@ -29,6 +29,14 @@ public class TagService {
 
 	@Transactional
 	public TagModel save(TagModel tag, Long projectId, String userId) {
+		boolean exists = tagRepository.existsByNameAndProjectId(tag.getName(), projectId);
+
+		if (exists) {
+			throw new InvalidTagException(
+					TagErrorCode.TAG_EXISTS,
+					"Tag com nome '" + tag.getName() + "' já existe");
+		}
+
 		ProjectModel project = projectService.findById(projectId, userId);
 		tag.setProject(project);
 		return tagRepository.save(tag);
@@ -36,16 +44,23 @@ public class TagService {
 
 	public List<TagModel> findAllByProject(Long projectId, String userId) {
 		projectService.findById(projectId, userId);
-		return tagRepository.findByProjectId(projectId);
+		return tagRepository.findByProjectIdOrderByIdDesc(projectId);
 	}
 
 	@Transactional
 	public TagModel update(Long id, TagUpdateDTO dto, String userId) {
 		TagModel tag = tagRepository.findById(id)
-			.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+
+		boolean exists = tagRepository.existsByNameAndProjectId(dto.getName(), tag.getProject().getId());
+
+		if (exists && !tag.getName().equals(dto.getName())) {
+			throw new InvalidTagException(
+					TagErrorCode.TAG_EXISTS,
+					"Tag com nome '" + dto.getName() + "' já existe");
+		}
 
 		projectService.findById(tag.getProject().getId(), userId);
-
 		tagUpdateMapper.apply(tag, dto);
 		return tagRepository.save(tag);
 	}
@@ -53,7 +68,7 @@ public class TagService {
 	@Transactional
 	public void delete(Long id, String userId) {
 		TagModel tag = tagRepository.findById(id)
-			.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
 
 		projectService.findById(tag.getProject().getId(), userId);
 

@@ -97,7 +97,9 @@ const TagModal = ({
             variant="secondary"
             placeholder="Nome da tag"
             error={errors.name?.message}
-            {...register("name")}
+            {...register("name", {
+              setValueAs: (value) => value.trim(),
+            })}
           />
         </div>
 
