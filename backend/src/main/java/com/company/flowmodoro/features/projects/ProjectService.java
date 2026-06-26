@@ -62,6 +62,17 @@ public class ProjectService {
 	@Transactional
 	public ProjectModel update(Long id, ProjectUpdateDTO dto, String userId) {
 		ProjectModel project = findById(id, userId);
+		var projects = projectRepository.findByUserIdOrderByIdDesc(userId);
+
+		boolean exists = projects.stream()
+				.anyMatch(oldProject -> oldProject.getName().equals(project.getName()));
+
+		if (exists) {
+			throw new InvalidProjectException(
+					ProjectErrorCode.PROJECT_EXISTS,
+					"Projeto com nome '" + project.getName() + "' já existe");
+		}
+
 		projectUpdateMapper.apply(project, dto);
 		return projectRepository.save(project);
 	}
