@@ -173,19 +173,6 @@ const SessionDetailsModal = ({
           </span>
         </Stack>
 
-        {session.rest > 0 && (
-          <>
-            <Stack direction="row" justify="between" className="w-full">
-              <span className="text-neutral-20 font-medium text-sm sm:text-base">
-                Descanso calculado
-              </span>
-              <span className="font-mono text-lg sm:text-xl text-success">
-                {formatToHour(session.rest)}
-              </span>
-            </Stack>
-          </>
-        )}
-
         {session.project && (
           <Stack direction="row" justify="between" className="w-full">
             <span className="text-neutral-20 font-medium text-sm sm:text-base">

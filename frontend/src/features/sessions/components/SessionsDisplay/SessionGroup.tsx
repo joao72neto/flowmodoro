@@ -41,7 +41,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
   const tag = sessionGroup.sessions[0].tag;
   const project = sessionGroup.sessions[0].project;
   const hasTagOrProject = tag || project;
-  const showTagAndProject = hasTagOrProject && !isTogglable;
+  const showTagAndProject = hasTagOrProject;
 
   return (
     <>

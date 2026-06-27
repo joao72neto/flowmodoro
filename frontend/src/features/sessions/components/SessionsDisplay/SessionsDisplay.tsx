@@ -55,7 +55,7 @@ const SessionsDisplay = () => {
               >
                 {sessionGroup.sessionGroups.map((group) => (
                   <SessionGroup
-                    key={`${sessionGroup.date}-${group.name}`}
+                    key={`${sessionGroup.date}-${group.name}-${group.id}`}
                     sessionGroup={group}
                   />
                 ))}

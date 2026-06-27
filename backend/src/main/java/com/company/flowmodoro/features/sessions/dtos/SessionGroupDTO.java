@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class SessionGroupDTO {
 
+	private String id;
+
 	private String name;
 
 	private long totalFocus;

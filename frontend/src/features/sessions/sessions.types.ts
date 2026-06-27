@@ -1,4 +1,5 @@
 export interface ISessionGroup {
+  id: string;
   name: string;
   totalFocus: number;
   totalRest: number;
