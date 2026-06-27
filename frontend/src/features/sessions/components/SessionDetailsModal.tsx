@@ -17,6 +17,7 @@ import IconButton from "../../../shared/components/buttons/IconButton";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessionsApi";
 import type { SessionResponse } from "../sessions.types";
 import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
+import Label from "../../../shared/components/Label";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -162,7 +163,7 @@ const SessionDetailsModal = ({
         />
       </Stack>
 
-      <div className="flex flex-col gap-8 bg-neutral-80/50 p-5 rounded-2xl border border-border">
+      <div className="flex flex-col gap-6 bg-neutral-80/50 p-5 rounded-2xl border border-border">
         <Stack direction="row" justify="between" className="w-full">
           <span className="text-neutral-20 font-medium text-sm sm:text-base">
             Tempo de Foco
@@ -183,6 +184,24 @@ const SessionDetailsModal = ({
               </span>
             </Stack>
           </>
+        )}
+
+        {session.project && (
+          <Stack direction="row" justify="between" className="w-full">
+            <span className="text-neutral-20 font-medium text-sm sm:text-base">
+              Projeto
+            </span>
+            <Label>{session.project.name}</Label>
+          </Stack>
+        )}
+
+        {session.tag && (
+          <Stack direction="row" justify="between" className="w-full">
+            <span className="text-neutral-20 font-medium text-sm sm:text-base">
+              Tag
+            </span>
+            <Label variant="secondary">{session.tag.name}</Label>
+          </Stack>
         )}
 
         {preset && (

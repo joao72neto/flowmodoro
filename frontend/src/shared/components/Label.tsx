@@ -27,7 +27,7 @@ const Label = ({
         className,
       )}
     >
-      <span className="text-xs sm:text-sm shrink-0">{icon}</span>
+      {icon && <span className="text-xs sm:text-sm shrink-0">{icon}</span>}
       <span className="truncate text-[10px] sm:text-xs font-medium max-w-28">
         {children}
       </span>
