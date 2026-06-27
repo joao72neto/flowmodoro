@@ -75,13 +75,27 @@ const SessionCreation = () => {
           showSelectorsContainer ? "gap-4 flex-col" : "flex-row",
         )}
       >
-        <input
-          className="flex-1 bg-transparent text-neutral-10 text-base sm:text-lg focus:outline-none placeholder:text-neutral-40 min-w-0 py-1"
-          placeholder="Estou focando em..."
-          disabled={isTimerRunning}
-          value={sessionName}
-          onChange={(e) => setSessionName(e.target.value)}
-        />
+        {isTimerRunning ? (
+          <div
+            className={clsx(
+              "flex-1 min-w-0 py-1",
+              "truncate text-neutral-10 text-base sm:text-lg",
+            )}
+          >
+            {sessionName}
+          </div>
+        ) : (
+          <input
+            className={clsx(
+              "flex-1 min-w-0 py-1",
+              "bg-transparent text-neutral-10 text-base sm:text-lg",
+              "focus:outline-none placeholder:text-neutral-40",
+            )}
+            placeholder="Estou focando em..."
+            value={sessionName}
+            onChange={(e) => setSessionName(e.target.value)}
+          />
+        )}
 
         <div
           className={clsx(

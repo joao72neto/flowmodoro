@@ -11,7 +11,7 @@ import { FaTrash } from "react-icons/fa6";
 import { MdSave, MdModeEdit } from "react-icons/md";
 
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import IconButton from "../../../shared/components/buttons/IconButton";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessionsApi";
@@ -41,7 +41,6 @@ const SessionDetailsModal = ({
     sessionStorage.getItem(draftKey) || session.name,
   );
   const [isEditing, setIsEditing] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const draft = sessionStorage.getItem(draftKey);
@@ -49,14 +48,6 @@ const SessionDetailsModal = ({
   }, [session.id, session.name, draftKey]);
 
   const isReadyToSave = title.trim() !== session.name.trim();
-
-  const handleEditTitle = () => {
-    setIsEditing(true);
-
-    requestAnimationFrame(() => {
-      inputRef.current?.focus();
-    });
-  };
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -119,26 +110,31 @@ const SessionDetailsModal = ({
         <div className="flex-1 flex items-center gap-4 min-w-0">
           <div className="relative flex-1 min-w-0 group">
             <div className="inline-grid items-center font-bold w-full">
-              <span className="invisible col-start-1 row-start-1 whitespace-pre pb-1 text-lg sm:text-2xl line-clamp-1">
-                {title || "Sessão sem nome"}
-              </span>
-              <input
-                type="text"
-                value={capitalize(title)}
-                onChange={handleChangeTitle}
-                size={1}
-                className={clsx(
-                  "col-start-1 row-start-1 w-full focus:outline-none bg-transparent",
-                  "text-lg sm:text-2xl font-bold transition-all duration-300 pb-1",
-                  isEditing
-                    ? "border-b-2 border-primary text-neutral-10"
-                    : "border-b-2 border-transparent text-neutral-10 cursor-default",
-                )}
-                ref={inputRef}
-                onBlur={() => setIsEditing(false)}
-                disabled={!isEditing}
-                placeholder="Nome da sessão"
-              />
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={capitalize(title)}
+                  onChange={handleChangeTitle}
+                  placeholder="Nome da sessão"
+                  className={clsx(
+                    "col-start-1 row-start-1 w-full",
+                    "focus:outline-none bg-transparent",
+                    "text-lg sm:text-2xl font-bold pb-1",
+                    "border-b-2 border-primary text-neutral-10",
+                  )}
+                />
+              ) : (
+                <div
+                  className={clsx(
+                    "col-start-1 row-start-1 w-full min-w-0",
+                    "text-lg sm:text-2xl font-bold pb-1 text-left",
+                    "border-b-2 border-transparent text-neutral-10",
+                    "truncate cursor-default",
+                  )}
+                >
+                  {capitalize(title) || "Nome da sessão"}
+                </div>
+              )}
             </div>
           </div>
           <IconButton
@@ -152,7 +148,7 @@ const SessionDetailsModal = ({
                 />
               )
             }
-            onClick={isEditing ? () => setIsEditing(false) : handleEditTitle}
+            onClick={() => setIsEditing((prev) => !prev)}
           />
         </div>
         <IconButton
