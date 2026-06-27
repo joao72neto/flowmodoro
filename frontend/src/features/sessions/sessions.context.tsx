@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useCreateSession } from "./hooks/useSessionsApi";
-import { localStorageKeys } from "../../shared/utils/local-storage.utils";
 
 import type { TagResponse } from "../tags/tags.types";
 import type { ProjectResponse } from "../projects/projects.types";
 import { useFetchProjects } from "../projects/hooks/useProjects";
 import { useFetchTagsByProject } from "../tags/hooks/useTags";
+import { localStorageKeys } from "../../shared/utils/storage.utils";
 
 export interface ISaveSessionData {
   focusSeconds: number;
@@ -46,7 +46,13 @@ export const SessionProvider = ({
   });
 
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null,
+    () => {
+      const saved = localStorage.getItem(localStorageKeys.session);
+      const { selectedProjectId } = saved
+        ? JSON.parse(saved)
+        : { selectedProjectId: null };
+      return selectedProjectId;
+    },
   );
   const { data: projects = [] } = useFetchProjects();
 
@@ -55,7 +61,13 @@ export const SessionProvider = ({
     [projects, selectedProjectId],
   );
 
-  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
+  const [selectedTagId, setSelectedTagId] = useState<number | null>(() => {
+    const saved = localStorage.getItem(localStorageKeys.session);
+    const { selectedTagId } = saved
+      ? JSON.parse(saved)
+      : { selectedTagId: null };
+    return selectedTagId;
+  });
   const { data: tags = [] } = useFetchTagsByProject(selectedProjectId || 0);
 
   const selectedTag = useMemo(
@@ -64,7 +76,18 @@ export const SessionProvider = ({
   );
 
   const { mutate: createSession, isPending: isSaving } = useCreateSession();
-  const [sessionName, setSessionName] = useState("");
+  const [sessionName, setSessionName] = useState(() => {
+    const saved = localStorage.getItem(localStorageKeys.session);
+    const { sessionName } = saved ? JSON.parse(saved) : { sessionName: "" };
+    return sessionName;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      localStorageKeys.session,
+      JSON.stringify({ sessionName, selectedProjectId, selectedTagId }),
+    );
+  }, [selectedProjectId, selectedTagId, sessionName]);
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAnonymousUserId } from "../shared/utils/local-storage.utils";
+import { getAnonymousUserId } from "../shared/utils/storage.utils";
 import { handleApiError } from "./api-error.config";
 
 const api = axios.create({

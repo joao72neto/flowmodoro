@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { localStorageKeys } from "../utils/local-storage.utils";
+import { localStorageKeys } from "../utils/storage.utils";
 
 type Theme = "light" | "dark";
 

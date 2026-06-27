@@ -13,10 +13,10 @@ import { MdSave, MdModeEdit } from "react-icons/md";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
-import { localStorageKeys } from "../../../shared/utils/local-storage.utils";
 import IconButton from "../../../shared/components/buttons/IconButton";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessionsApi";
 import type { SessionResponse } from "../sessions.types";
+import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -35,7 +35,7 @@ const SessionDetailsModal = ({
   const { mutate: deleteSession } = useDeleteSession();
 
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
-  const draftKey = `${localStorageKeys.sessionTitle}-${session.id}`;
+  const draftKey = `${sessionStorageKeys.sessionTitle}-${session.id}`;
 
   const [title, setTitle] = useState<string>(
     sessionStorage.getItem(draftKey) || session.name,

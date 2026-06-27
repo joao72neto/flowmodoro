@@ -21,7 +21,6 @@ const SessionCreation = () => {
     setSelectedTagId,
     setSessionName,
     sessionName,
-
     projects,
     tags,
   } = useSessionContext();

@@ -1,9 +1,14 @@
 export const localStorageKeys = {
   timer: "flowmodoro_timer_state",
   restRatio: "flowmodoro_rest_ratio",
+  session: "flowmodoro_session",
+
   userId: "flowmodoro_anonymous_user_id",
-  sessionTitle: "flowmodoro_session_title",
   theme: "flowmodoro_theme",
+};
+
+export const sessionStorageKeys = {
+  sessionTitle: "flowmodoro_session_title",
 };
 
 export const getAnonymousUserId = (): string => {
