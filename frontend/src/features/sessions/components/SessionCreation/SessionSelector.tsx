@@ -16,6 +16,7 @@ const SessionSelector = ({
   items = [],
   variant = "primary",
   placeholder = "Pesquise aqui...",
+  emptyMsg = "Nenhum item encontrado",
   value,
   onChange,
   disabled = false,
@@ -26,6 +27,7 @@ const SessionSelector = ({
   items?: ProjectResponse[] | TagResponse[];
   variant?: "primary" | "secondary";
   placeholder?: string;
+  emptyMsg?: string;
   value: ProjectResponse | TagResponse | null;
   onChange: (item: any) => void;
   disabled?: boolean;
@@ -109,7 +111,7 @@ const SessionSelector = ({
           >
             {filteredItems.length === 0 ? (
               <div className="text-center py-4 text-xs text-neutral-40">
-                Nenhum resultado encontrado
+                {emptyMsg}
               </div>
             ) : (
               filteredItems.map((item) => (

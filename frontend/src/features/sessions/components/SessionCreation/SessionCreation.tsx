@@ -95,6 +95,7 @@ const SessionCreation = () => {
                 variant="primary"
                 items={projects}
                 placeholder="Pesquisar projeto..."
+                emptyMsg="Nenhum projeto encontrado"
                 icon={<GoProject />}
               >
                 Projetos
@@ -109,6 +110,11 @@ const SessionCreation = () => {
                 variant="secondary"
                 items={tags}
                 placeholder="Pesquisar tag..."
+                emptyMsg={
+                  selectedProject
+                    ? "Nenhuma tag encontrada"
+                    : "Selecione um projeto primeiro"
+                }
                 icon={<IoMdPricetag />}
               >
                 Tags

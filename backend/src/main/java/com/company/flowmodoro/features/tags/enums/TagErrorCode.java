@@ -4,7 +4,6 @@ import com.company.flowmodoro.exception.ErrorCode;
 
 public enum TagErrorCode implements ErrorCode {
 
-	TAG_NOT_FOUND,
-	TAG_EXISTS
+	TAG_NOT_FOUND, TAG_EXISTS
 
 }

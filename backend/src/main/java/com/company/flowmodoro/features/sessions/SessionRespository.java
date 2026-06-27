@@ -14,7 +14,8 @@ import com.company.flowmodoro.features.projects.ProjectModel;
 @Repository
 public interface SessionRespository extends JpaRepository<SessionModel, Long> {
 
-	@Query(value = "SELECT DISTINCT s.date FROM SessionModel s WHERE s.userId = :userId", countQuery = "SELECT COUNT(DISTINCT s.date) FROM SessionModel s WHERE s.userId = :userId")
+	@Query(value = "SELECT DISTINCT s.date FROM SessionModel s WHERE s.userId = :userId",
+			countQuery = "SELECT COUNT(DISTINCT s.date) FROM SessionModel s WHERE s.userId = :userId")
 	Page<LocalDate> findDistinctDates(String userId, Pageable pageable);
 
 	List<SessionModel> findByUserIdAndDateInOrderByIdDesc(String userId, List<LocalDate> dates);

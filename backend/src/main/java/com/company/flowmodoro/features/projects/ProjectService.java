@@ -32,8 +32,7 @@ public class ProjectService {
 		boolean exists = projectRepository.existsByNameAndUserId(project.getName(), userId);
 
 		if (exists) {
-			throw new InvalidProjectException(
-					ProjectErrorCode.PROJECT_EXISTS,
+			throw new InvalidProjectException(ProjectErrorCode.PROJECT_EXISTS,
 					"Projeto com nome '" + project.getName() + "' já existe");
 		}
 
@@ -47,7 +46,7 @@ public class ProjectService {
 
 	public ProjectModel findById(Long id, String userId) {
 		ProjectModel project = projectRepository.findById(id)
-				.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
+			.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
 
 		if (!project.getUserId().equals(userId)) {
 			throw new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found for this user");
@@ -62,8 +61,7 @@ public class ProjectService {
 		boolean exists = projectRepository.existsByNameAndUserId(dto.getName(), userId);
 
 		if (exists && !project.getName().equals(dto.getName())) {
-			throw new InvalidProjectException(
-					ProjectErrorCode.PROJECT_EXISTS,
+			throw new InvalidProjectException(ProjectErrorCode.PROJECT_EXISTS,
 					"Projeto com nome '" + dto.getName() + "' já existe");
 		}
 
