@@ -27,6 +27,10 @@ const SessionCreation = () => {
 
   const isTimerRunning = mode === "focus" || mode === "break";
 
+  const isFocusRunning = mode === "focus";
+  const isBreakRunning = mode === "break";
+  const isTimerStopped = mode === "stopped";
+
   const hasContent = sessionName.trim().length > 0;
   const isExpanded = hasContent && !isTimerRunning;
 
@@ -37,8 +41,11 @@ const SessionCreation = () => {
     (isTimerRunning && (selectedProject !== null || selectedTag !== null));
 
   const buttonClasses = clsx(
-    "text-primary text-3xl hover:scale-110 active:scale-95",
-    "transition duration-150 hover:cursor-pointer hover:text-primary/90",
+    isBreakRunning || isTimerStopped
+      ? "text-success hover:text-success/90"
+      : "text-primary hover:text-primary/90",
+    "text-3xl hover:scale-110 active:scale-95",
+    "transition duration-150 hover:cursor-pointer",
   );
 
   return (
@@ -47,15 +54,19 @@ const SessionCreation = () => {
         "relative z-10 w-full",
         "border border-border p-4 rounded-2xl shadow-lg",
         "transition-all duration-300 bg-neutral-80/40",
-        "focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
+        isBreakRunning || isTimerStopped
+          ? "focus-within:border-success/50 focus-within:shadow-[0_0_20px_rgba(34,197,94,0.08)]"
+          : "focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
         isExpanded
           ? "max-w-full"
           : isTimerRunning
             ? "max-w-[550px]"
             : "max-w-[300px]",
-        isTimerRunning
-          ? "border-primary/50 animate-border-pulse"
-          : "hover:border-neutral-60/80",
+        isFocusRunning
+          ? "border-primary/50 animate-border-pulse-focus"
+          : isBreakRunning
+            ? "border-success/50 animate-border-pulse-break"
+            : "hover:border-neutral-60/80",
       )}
     >
       <div
