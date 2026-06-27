@@ -9,21 +9,25 @@ import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/timer.context";
 import { useSessionContext } from "../../sessions.context";
+import { useEffect, useState } from "react";
+import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
     useTimerContext();
 
   const {
+    setSessionName: setContextSessionName,
+    sessionName: contextSessionName,
     selectedProject,
     setSelectedProjectId,
     selectedTag,
     setSelectedTagId,
-    setSessionName,
-    sessionName,
     projects,
     tags,
   } = useSessionContext();
+
+  const [sessionName, setSessionName] = useState(contextSessionName);
 
   const isTimerRunning = mode === "focus" || mode === "break";
 
@@ -47,6 +51,38 @@ const SessionCreation = () => {
     "text-3xl hover:scale-110 active:scale-95",
     "transition duration-150 hover:cursor-pointer",
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      localStorage.setItem(
+        localStorageKeys.session,
+        JSON.stringify({
+          sessionName: sessionName,
+          selectedProjectId: selectedProject?.id,
+          selectedTagId: selectedTag?.id,
+        }),
+      );
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [sessionName, selectedProject, selectedTag]);
+
+  const commitSessionName = () => {
+    setContextSessionName(sessionName);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      commitSessionName();
+
+      if (mode === null) {
+        startFocus();
+        return;
+      }
+
+      startBreak();
+    }
+  };
 
   return (
     <div
@@ -75,8 +111,13 @@ const SessionCreation = () => {
           showSelectorsContainer ? "gap-4 flex-col" : "flex-row",
         )}
       >
-        {isTimerRunning ? (
+        {isTimerRunning || isTimerStopped ? (
           <div
+            title={
+              isTimerRunning
+                ? "Foco em andamento"
+                : "Pronto para iniciar a pausa"
+            }
             className={clsx(
               "flex-1 min-w-0 py-1",
               "truncate text-neutral-10 text-base sm:text-lg",
@@ -93,6 +134,8 @@ const SessionCreation = () => {
             )}
             placeholder="Estou focando em..."
             value={sessionName}
+            onKeyDown={handleKeyDown}
+            onBlur={commitSessionName}
             onChange={(e) => setSessionName(e.target.value)}
           />
         )}
@@ -148,21 +191,34 @@ const SessionCreation = () => {
 
           {mode === null ? (
             <button
-              onClick={() => startFocus()}
+              title="Iniciar foco"
+              onClick={startFocus}
               className={clsx(buttonClasses, !isExpanded && "hidden")}
             >
               <FaPlayCircle />
             </button>
           ) : mode === "focus" ? (
-            <button onClick={() => stopFocus()} className={buttonClasses}>
+            <button
+              title="Parar foco"
+              onClick={stopFocus}
+              className={buttonClasses}
+            >
               <FaStopCircle />
             </button>
           ) : mode === "stopped" ? (
-            <button onClick={() => startBreak()} className={buttonClasses}>
+            <button
+              title="Iniciar pausa"
+              onClick={startBreak}
+              className={buttonClasses}
+            >
               <FaPlayCircle />
             </button>
           ) : (
-            <button onClick={() => skipBreak()} className={buttonClasses}>
+            <button
+              title="Pular pausa"
+              onClick={skipBreak}
+              className={buttonClasses}
+            >
               <IoPlaySkipForwardCircleSharp />
             </button>
           )}

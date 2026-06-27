@@ -27,8 +27,8 @@ interface ISessionContext {
   selectedTag: TagResponse | null;
   selectedProject: ProjectResponse | null;
 
-  sessionName: string;
   setSessionName: (name: string) => void;
+  sessionName: string;
 
   isSaving: boolean;
 }
@@ -40,9 +40,10 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [restRatio, setRestRatio] = useState<number>(() => {
-    const saved = localStorage.getItem(localStorageKeys.restRatio);
-    return saved ? Number(saved) : 20;
+  const [sessionName, setSessionName] = useState<string>(() => {
+    const saved = localStorage.getItem(localStorageKeys.session);
+    const { sessionName } = saved ? JSON.parse(saved) : { sessionName: "" };
+    return sessionName;
   });
 
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
@@ -75,23 +76,16 @@ export const SessionProvider = ({
     [tags, selectedTagId],
   );
 
-  const { mutate: createSession, isPending: isSaving } = useCreateSession();
-  const [sessionName, setSessionName] = useState(() => {
-    const saved = localStorage.getItem(localStorageKeys.session);
-    const { sessionName } = saved ? JSON.parse(saved) : { sessionName: "" };
-    return sessionName;
+  const [restRatio, setRestRatio] = useState<number>(() => {
+    const saved = localStorage.getItem(localStorageKeys.restRatio);
+    return saved ? Number(saved) : 20;
   });
-
-  useEffect(() => {
-    localStorage.setItem(
-      localStorageKeys.session,
-      JSON.stringify({ sessionName, selectedProjectId, selectedTagId }),
-    );
-  }, [selectedProjectId, selectedTagId, sessionName]);
 
   useEffect(() => {
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
   }, [restRatio]);
+
+  const { mutate: createSession, isPending: isSaving } = useCreateSession();
 
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
     createSession({
@@ -122,8 +116,8 @@ export const SessionProvider = ({
         selectedTag,
         selectedProject,
 
-        sessionName,
         setSessionName,
+        sessionName,
       }}
     >
       {children}
