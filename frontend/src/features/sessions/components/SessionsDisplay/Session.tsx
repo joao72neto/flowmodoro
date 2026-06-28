@@ -17,6 +17,8 @@ const Session = ({
 }) => {
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
+  const showTagAndProject = session.tag || session.project;
+
   return (
     <div onClick={onClick} className="w-full">
       <div
@@ -26,21 +28,10 @@ const Session = ({
           "hover:bg-neutral-80/20 transition duration-200 bg-neutral-80/60",
         )}
       >
-        <span className={"flex-1 text-sm text-left sm:text-base"}>
-          {session.name}
-        </span>
-
-        <div className="flex justify-between w-full sm:w-auto sm:gap-6">
-          <div className="flex items-center gap-2">
-            {session.project?.name && (
-              <Label icon={<GoProject />}>{session.project.name}</Label>
-            )}
-            {session.tag?.name && (
-              <Label variant="secondary" icon={<IoMdPricetag />}>
-                {session.tag.name}
-              </Label>
-            )}
-          </div>
+        <div className="flex justify-between w-full items-center">
+          <span className={"flex-1 text-sm text-left sm:text-base"}>
+            {session.name}
+          </span>
           <span
             className={clsx(
               "text-sm bg-neutral-80/50 border border-border",
@@ -51,6 +42,30 @@ const Session = ({
             {formatToHour(session.focus)}
           </span>
         </div>
+
+        {showTagAndProject && (
+          <div className="flex justify-between w-full sm:w-auto sm:gap-6">
+            <div className="flex items-center gap-2">
+              {session.project?.name && (
+                <Label icon={<GoProject />}>{session.project.name}</Label>
+              )}
+              {session.tag?.name && (
+                <Label variant="secondary" icon={<IoMdPricetag />}>
+                  {session.tag.name}
+                </Label>
+              )}
+            </div>
+            <span
+              className={clsx(
+                "text-sm bg-neutral-80/50 border border-border",
+                "px-2 py-0.5 rounded-md shadow",
+                preset?.textClass,
+              )}
+            >
+              {formatToHour(session.focus)}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

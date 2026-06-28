@@ -15,9 +15,9 @@ public class SessionUpdateMapper {
 		session.setFocus(dto.getFocus() != null ? dto.getFocus() : session.getFocus());
 		session.setRatio(dto.getRatio() != null ? dto.getRatio() : session.getRatio());
 		session.setRest(dto.getRest() != null ? dto.getRest() : session.getRest());
-		session.setProject(dto.getProjectId() != null ? ProjectModel.builder().id(dto.getProjectId()).build()
+		session.setProject(dto.getProjectId() != null ? (dto.getProjectId() > 0 ? ProjectModel.builder().id(dto.getProjectId()).build() : null)
 				: session.getProject());
-		session.setTag(dto.getTagId() != null ? TagModel.builder().id(dto.getTagId()).build() : session.getTag());
+		session.setTag(dto.getTagId() != null ? (dto.getTagId() > 0 ? TagModel.builder().id(dto.getTagId()).build() : null) : session.getTag());
 	}
 
 	public SessionUpdateDTO toDTO(SessionModel session) {

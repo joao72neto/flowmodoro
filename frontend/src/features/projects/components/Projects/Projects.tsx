@@ -15,11 +15,11 @@ import {
   useCreateProject,
   useDeleteProject,
   useUpdateProject,
+  useFetchProjects,
 } from "../../hooks/useProjects";
-import { useSessionContext } from "../../../sessions/sessions.context";
 
 const Projects = () => {
-  const { projects } = useSessionContext();
+  const { data: projects } = useFetchProjects();
 
   const [selectedProject, setSelectedProject] =
     useState<ProjectResponse | null>(null);

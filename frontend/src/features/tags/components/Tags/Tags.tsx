@@ -11,8 +11,7 @@ import ExpandableButton from "../../../../shared/components/buttons/ExpandableBu
 import clsx from "clsx";
 import type { ProjectResponse } from "../../../projects/projects.types";
 import type { TagResponse } from "../../tags.types";
-import { useCreateTag, useDeleteTag, useUpdateTag } from "../../hooks/useTags";
-import { useSessionContext } from "../../../sessions/sessions.context";
+import { useCreateTag, useDeleteTag, useUpdateTag, useFetchTagsByProject } from "../../hooks/useTags";
 
 const Tags = ({
   project,
@@ -21,7 +20,7 @@ const Tags = ({
   project: ProjectResponse;
   onBack: () => void;
 }) => {
-  const { tags } = useSessionContext();
+  const { data: tags } = useFetchTagsByProject(project.id);
 
   const [editingTag, setEditingTag] = useState<TagResponse | null>(null);
   const [searchQuery, setSearchQuery] = useState("");

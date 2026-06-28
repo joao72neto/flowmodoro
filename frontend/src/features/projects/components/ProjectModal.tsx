@@ -92,7 +92,7 @@ const ProjectModal = ({
           />
         </div>
 
-        <div className="flex flex-col min-[350px]:flex-row gap-3 items-center justify-center">
+        <div className="flex flex-col-reverse min-[350px]:flex-row gap-3 items-center justify-center">
           <Button
             type="button"
             icon={<span className="text-xl">{cancelButtonIcon}</span>}

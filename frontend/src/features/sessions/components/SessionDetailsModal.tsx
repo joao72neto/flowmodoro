@@ -128,8 +128,8 @@ const SessionDetailsModal = ({
           focus: focus,
           ratio: ratio,
           rest: updatedRest,
-          projectId: selectedProjectId || undefined,
-          tagId: selectedTagId || undefined,
+          projectId: selectedProjectId !== null ? selectedProjectId : 0,
+          tagId: selectedTagId !== null ? selectedTagId : 0,
         },
       },
       {
