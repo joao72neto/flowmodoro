@@ -8,7 +8,7 @@ import { PRESETS } from "../../timer/ratio.const";
 import Button from "../../../shared/components/buttons/Button";
 
 import { FaTrash } from "react-icons/fa6";
-import { MdSave } from "react-icons/md";
+import { MdSave, MdModeEdit, MdCancel } from "react-icons/md";
 
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -30,6 +30,8 @@ const SessionDetailsModal = ({
   session: SessionResponse;
 }) => {
   if (!isOpen) return null;
+
+  const [mode, setMode] = useState<"view" | "edit">("view");
 
   const { showWarning, hideModal, setModalLoading } = useModal();
 
@@ -103,7 +105,7 @@ const SessionDetailsModal = ({
   return (
     <ModalContainer close={handleClose} className="!gap-10">
       <Stack direction="row" justify="between" gap={5} className="w-full">
-        {false ? (
+        {mode === "edit" ? (
           <input
             type="text"
             value={capitalize(title)}
@@ -140,63 +142,89 @@ const SessionDetailsModal = ({
       </Stack>
 
       <div className="flex flex-col gap-6 bg-neutral-80/50 p-5 rounded-2xl border border-border">
-        {session.focus && (
-          <LabeledValue
-            name="Tempo Total"
-            value={formatToHour(session.focus)}
-          />
-        )}
-
-        {session.project && (
-          <LabeledValue
-            name="Projeto"
-            value={<Label>{session.project.name}</Label>}
-          />
-        )}
-
-        {session.tag && (
-          <LabeledValue
-            name="Tag"
-            value={<Label variant="secondary">{session.tag.name}</Label>}
-          />
-        )}
-
-        {preset && (
-          <LabeledValue
-            name="Perfil de Descanso"
-            value={
-              <span
-                className={clsx(
-                  "font-bold text-sm sm:text-base px-3 py-1 rounded-lg bg-neutral-80/50 border border-border",
-                  preset.textClass,
-                )}
-              >
-                {preset.label}
-              </span>
-            }
-          />
+        {mode === "view" ? (
+          <>
+            {session.focus && (
+              <LabeledValue
+                name="Tempo Total"
+                value={formatToHour(session.focus)}
+              />
+            )}
+            {session.project && (
+              <LabeledValue
+                name="Projeto"
+                value={<Label>{session.project.name}</Label>}
+              />
+            )}
+            {session.tag && (
+              <LabeledValue
+                name="Tag"
+                value={<Label variant="secondary">{session.tag.name}</Label>}
+              />
+            )}
+            {preset && (
+              <LabeledValue
+                name="Perfil de Descanso"
+                value={
+                  <span
+                    className={clsx(
+                      "font-bold text-sm sm:text-base px-3 py-1 rounded-lg bg-neutral-80/50 border border-border",
+                      preset.textClass,
+                    )}
+                  >
+                    {preset.label}
+                  </span>
+                }
+              />
+            )}
+          </>
+        ) : (
+          <div>Editing</div>
         )}
       </div>
 
       <div className="flex gap-4 flex-col-reverse sm:flex-row w-full">
-        <Button
-          onClick={handleDelete}
-          icon={<FaTrash size={16} />}
-          variant="danger"
-          className="flex-1 bg-neutral-20/30 !border-border hover:!bg-danger hover:!text-white transition-all"
-        >
-          Excluir
-        </Button>
-        <Button
-          icon={<MdSave size={20} />}
-          variant="primary"
-          disabled={!isReadyToSave || isUpdating}
-          loading={isUpdating}
-          onClick={handleSave}
-          className="flex-[2] shadow-lg shadow-primary/20"
-        >
-          Salvar Alterações
-        </Button>
+        {mode === "view" ? (
+          <>
+            <Button
+              onClick={handleDelete}
+              icon={<FaTrash size={16} />}
+              variant="danger"
+              className="flex-1 bg-neutral-20/30 !border-border hover:!bg-danger hover:!text-white transition-all"
+            >
+              Excluir
+            </Button>
+            <Button
+              icon={<MdModeEdit size={20} />}
+              variant="primary"
+              onClick={() => setMode("edit")}
+              className="flex-[2] shadow-lg shadow-primary/20"
+            >
+              Editar
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => setMode("view")}
+              icon={<MdCancel size={16} />}
+              variant="danger"
+              className="flex-1 bg-neutral-20/30 !border-border hover:!bg-danger hover:!text-white transition-all"
+            >
+              Cancelar
+            </Button>
+            <Button
+              icon={<MdSave size={20} />}
+              variant="primary"
+              disabled={!isReadyToSave || isUpdating}
+              loading={isUpdating}
+              onClick={handleSave}
+              className="flex-[2] shadow-lg shadow-primary/20"
+            >
+              Salvar Alterações
+            </Button>
+          </>
+        )}
       </div>
     </ModalContainer>
   );
