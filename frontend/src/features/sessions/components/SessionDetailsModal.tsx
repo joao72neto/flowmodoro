@@ -19,6 +19,11 @@ import type { SessionResponse } from "../sessions.types";
 import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
 import Label from "../../../shared/components/labels/Label";
 import LabeledValue from "../../../shared/components/labels/LabeledValue";
+import { GoProject } from "react-icons/go";
+import { IoMdPricetag } from "react-icons/io";
+import { useSessionContext } from "../sessions.context";
+import { useFetchTagsByProject } from "../../tags/hooks/useTags";
+import SessionSelector from "./SessionCreation/SessionSelector";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -38,26 +43,67 @@ const SessionDetailsModal = ({
   const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
   const { mutate: deleteSession } = useDeleteSession();
 
+  const { projects = [] } = useSessionContext();
+
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
   const draftKey = `${sessionStorageKeys.sessionTitle}-${session.id}`;
 
   const [title, setTitle] = useState<string>(
     sessionStorage.getItem(draftKey) || session.name,
   );
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    session.project?.id || null,
+  );
+  const [selectedTagId, setSelectedTagId] = useState<number | null>(
+    session.tag?.id || null,
+  );
+  const [ratio, setRatio] = useState<number>(session.ratio);
+  const [focus, setFocus] = useState<number>(session.focus);
+
+  const { data: tags = [] } = useFetchTagsByProject(selectedProjectId || 0);
 
   useEffect(() => {
-    const draft = sessionStorage.getItem(draftKey);
-    setTitle(draft || session.name);
-  }, [session.id, session.name, draftKey]);
+    if (mode === "view" || !isOpen) {
+      setTitle(sessionStorage.getItem(draftKey) || session.name);
+      setSelectedProjectId(session.project?.id || null);
+      setSelectedTagId(session.tag?.id || null);
+      setRatio(session.ratio);
+      setFocus(session.focus);
+    }
+  }, [mode, session, draftKey, isOpen]);
 
-  const isReadyToSave = title.trim() !== session.name.trim();
+  useEffect(() => {
+    if (mode === "edit" && title !== session.name) {
+      sessionStorage.setItem(draftKey, title);
+    }
+  }, [title, mode, session.name, draftKey]);
+
+  const isReadyToSave =
+    title.trim() !== "" &&
+    (title.trim() !== session.name.trim() ||
+      selectedProjectId !== (session.project?.id || null) ||
+      selectedTagId !== (session.tag?.id || null) ||
+      ratio !== session.ratio ||
+      focus !== session.focus);
 
   const handleSave = () => {
+    const updatedRest = Math.round(focus * ratio);
     updateSession(
-      { id: session.id, data: { name: title } },
+      {
+        id: session.id,
+        data: {
+          name: title,
+          focus: focus,
+          ratio: ratio,
+          rest: updatedRest,
+          projectId: selectedProjectId || undefined,
+          tagId: selectedTagId || undefined,
+        },
+      },
       {
         onSuccess: () => {
           sessionStorage.removeItem(draftKey);
+          setMode("view");
           setIsOpen(false);
         },
       },
@@ -108,7 +154,8 @@ const SessionDetailsModal = ({
         {mode === "edit" ? (
           <input
             type="text"
-            value={capitalize(title)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="Nome da sessão"
             className={clsx(
               "col-start-1 row-start-1 w-full",
@@ -179,7 +226,94 @@ const SessionDetailsModal = ({
             )}
           </>
         ) : (
-          <div>Editing</div>
+          <>
+            <LabeledValue
+              name="Tempo Total (minutos)"
+              value={
+                <input
+                  type="number"
+                  min={1}
+                  value={Math.floor(focus / 60)}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setFocus(val * 60);
+                  }}
+                  className="w-24 text-right bg-neutral-90/50 border border-border rounded px-2 py-1 focus:outline-none focus:border-primary text-sm font-mono text-neutral-10"
+                />
+              }
+            />
+            <LabeledValue
+              name="Projeto"
+              value={
+                <SessionSelector
+                  value={
+                    projects.find((p) => p.id === selectedProjectId) || null
+                  }
+                  onChange={(project) => {
+                    setSelectedProjectId(project?.id ?? null);
+                    setSelectedTagId(null);
+                  }}
+                  title="Projetos"
+                  variant="primary"
+                  items={projects}
+                  placeholder="Pesquisar projeto..."
+                  emptyMsg="Nenhum projeto encontrado"
+                  icon={<GoProject />}
+                >
+                  Projetos
+                </SessionSelector>
+              }
+            />
+            <LabeledValue
+              name="Tag"
+              value={
+                <SessionSelector
+                  value={tags.find((t) => t.id === selectedTagId) || null}
+                  onChange={(tag) => setSelectedTagId(tag?.id ?? null)}
+                  title="Tags"
+                  variant="secondary"
+                  items={tags}
+                  placeholder="Pesquisar tag..."
+                  emptyMsg={
+                    selectedProjectId
+                      ? "Nenhuma tag encontrada"
+                      : "Selecione um projeto primeiro"
+                  }
+                  icon={<IoMdPricetag />}
+                >
+                  Tags
+                </SessionSelector>
+              }
+            />
+            <LabeledValue
+              name="Perfil de Descanso"
+              value={
+                <div className="flex gap-2">
+                  {PRESETS.map((p) => {
+                    const isSelected = p.value === ratio * 100;
+                    return (
+                      <button
+                        key={p.value}
+                        type="button"
+                        onClick={() => setRatio(p.value / 100)}
+                        className={clsx(
+                          "font-bold text-xs sm:text-sm px-3 py-1 rounded-lg border transition-all duration-200 cursor-pointer",
+                          isSelected
+                            ? clsx(
+                                "bg-neutral-80/80 border-primary",
+                                p.textClass,
+                              )
+                            : "bg-neutral-90/30 border-border text-neutral-40 hover:text-neutral-20 hover:border-neutral-60",
+                        )}
+                      >
+                        {p.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              }
+            />
+          </>
         )}
       </div>
 
@@ -206,7 +340,10 @@ const SessionDetailsModal = ({
         ) : (
           <>
             <Button
-              onClick={() => setMode("view")}
+              onClick={() => {
+                sessionStorage.removeItem(draftKey);
+                setMode("view");
+              }}
               icon={<MdCancel size={16} />}
               variant="danger"
               className="flex-1 bg-neutral-20/30 !border-border hover:!bg-danger hover:!text-white transition-all"
