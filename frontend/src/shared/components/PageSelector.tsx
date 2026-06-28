@@ -69,7 +69,7 @@ const PageSelector = ({
               "px-4 py-1 rounded-md text-sm font-medium transition-colors text-neutral-10",
               "border-border cursor-pointer",
               currentPage === page
-                ? "bg-primary/10 border border-primary text-neutral-10"
+                ? "bg-primary/20 border border-primary/50 text-neutral-10"
                 : "border hover:bg-neutral-60/50",
             )}
           >

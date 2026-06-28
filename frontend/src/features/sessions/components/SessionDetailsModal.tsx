@@ -19,6 +19,8 @@ import type { SessionResponse } from "../sessions.types";
 import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
 import Label from "../../../shared/components/Label";
 
+import { FaCheck } from "react-icons/fa6";
+
 const SessionDetailsModal = ({
   isOpen,
   setIsOpen,
@@ -141,7 +143,7 @@ const SessionDetailsModal = ({
           <IconButton
             icon={
               isEditing ? (
-                <MdSave className="text-success animate-fade-in" size={24} />
+                <FaCheck className="text-success animate-fade-in" size={24} />
               ) : (
                 <MdModeEdit
                   className="text-neutral-20 hover:text-primary transition-colors"

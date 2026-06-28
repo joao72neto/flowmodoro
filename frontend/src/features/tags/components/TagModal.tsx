@@ -105,14 +105,6 @@ const TagModal = ({
 
         <div className="flex flex-col min-[350px]:flex-row gap-3 items-center justify-center">
           <Button
-            type="submit"
-            variant="secondary"
-            icon={<span className="text-xl">{confirmButtonIcon}</span>}
-            className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2!"
-          >
-            {confirmButtonText}
-          </Button>
-          <Button
             type="button"
             icon={<span className="text-xl">{cancelButtonIcon}</span>}
             className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2! sm:text-base!"
@@ -123,6 +115,14 @@ const TagModal = ({
             }}
           >
             {cancelButtonText}
+          </Button>
+          <Button
+            type="submit"
+            variant="secondary"
+            icon={<span className="text-xl">{confirmButtonIcon}</span>}
+            className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2!"
+          >
+            {confirmButtonText}
           </Button>
         </div>
       </form>

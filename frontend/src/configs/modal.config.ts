@@ -47,6 +47,6 @@ export const modalConfig: IModalConfig = {
     closeButtonText: "Cancelar",
     closeButtonVariant: "danger",
     confirmButtonText: "Confirmar",
-    confirmButtonVariant: "success",
+    confirmButtonVariant: "primary",
   },
 };

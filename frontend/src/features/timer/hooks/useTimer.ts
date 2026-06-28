@@ -45,7 +45,11 @@ const useTimer = () => {
       seconds < 60 ? seconds.toString() : Math.floor(seconds / 60).toString();
 
     if (mode === "focus") {
-      updateFaviconWithTime({ time: faviconTime, color: "#ef4444" });
+      updateFaviconWithTime({
+        time: faviconTime,
+        color: "#f59e0b",
+        textColor: "#222",
+      });
     } else if (mode === "break") {
       updateFaviconWithTime({
         time: faviconTime,

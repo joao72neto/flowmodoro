@@ -25,7 +25,7 @@ public class SessionAggregator {
 
 	public List<DailySessionsDTO> groupSessionsByDate(List<SessionModel> sessions, List<LocalDate> orderedDates) {
 		Map<LocalDate, List<SessionModel>> sessionsByDay = sessions.stream()
-				.collect(Collectors.groupingBy(SessionModel::getDate));
+			.collect(Collectors.groupingBy(SessionModel::getDate));
 
 		List<DailySessionsDTO> result = new ArrayList<>();
 
@@ -48,13 +48,9 @@ public class SessionAggregator {
 
 			String name = sessionModel.getName() != null ? sessionModel.getName() : "";
 
-			Long projectId = sessionModel.getProject() != null
-					? sessionModel.getProject().getId()
-					: null;
+			Long projectId = sessionModel.getProject() != null ? sessionModel.getProject().getId() : null;
 
-			Long tagId = sessionModel.getTag() != null
-					? sessionModel.getTag().getId()
-					: null;
+			Long tagId = sessionModel.getTag() != null ? sessionModel.getTag().getId() : null;
 
 			String groupKey = name + "|" + projectId + "|" + tagId;
 
@@ -65,28 +61,29 @@ public class SessionAggregator {
 				existingGroup.setTotalFocus(existingGroup.getTotalFocus() + sessionModel.getFocus());
 				existingGroup.setTotalRest(existingGroup.getTotalRest() + sessionModel.getRest());
 				existingGroup.getSessions().add(currentSessionDTO);
-			} else {
+			}
+			else {
 				List<SessionDTO> initialSessionsList = new ArrayList<>();
 				initialSessionsList.add(currentSessionDTO);
 
 				SessionGroupDTO newGroup = SessionGroupDTO.builder()
-						.id(UUID.randomUUID().toString())
-						.name(name)
-						.totalFocus(sessionModel.getFocus())
-						.totalRest(sessionModel.getRest())
-						.sessions(initialSessionsList)
-						.build();
+					.id(UUID.randomUUID().toString())
+					.name(name)
+					.totalFocus(sessionModel.getFocus())
+					.totalRest(sessionModel.getRest())
+					.sessions(initialSessionsList)
+					.build();
 
 				groupsMap.put(groupKey, newGroup);
 			}
 		}
 
 		return DailySessionsDTO.builder()
-				.date(date)
-				.totalFocus(dailyTotalFocus)
-				.totalRest(dailyTotalRest)
-				.sessionGroups(new ArrayList<>(groupsMap.values()))
-				.build();
+			.date(date)
+			.totalFocus(dailyTotalFocus)
+			.totalRest(dailyTotalRest)
+			.sessionGroups(new ArrayList<>(groupsMap.values()))
+			.build();
 	}
 
 }
