@@ -20,6 +20,7 @@ const SessionSelector = ({
   value,
   onChange,
   disabled = false,
+  align = "auto",
 }: {
   children: React.ReactNode;
   title?: string;
@@ -31,6 +32,7 @@ const SessionSelector = ({
   value: ProjectResponse | TagResponse | null;
   onChange: (item: any) => void;
   disabled?: boolean;
+  align?: "left" | "right" | "auto";
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -87,8 +89,9 @@ const SessionSelector = ({
         </span>
       </div>
       <DropdownContainer
-        className={clsx("p-4 w-56 sm:w-60 left-0! sm:left-auto! sm:right-0!")}
+        className={clsx("p-4 w-56 sm:w-60")}
         isOpen={isOpen}
+        align={align}
       >
         <div className="flex flex-col">
           <span className="text-base font-semibold text-neutral-20">

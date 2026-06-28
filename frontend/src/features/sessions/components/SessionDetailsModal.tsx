@@ -24,6 +24,15 @@ import { IoMdPricetag } from "react-icons/io";
 import { useSessionContext } from "../sessions.context";
 import { useFetchTagsByProject } from "../../tags/hooks/useTags";
 import SessionSelector from "./SessionCreation/SessionSelector";
+import Input from "../../../shared/components/inputs/Input";
+
+interface SessionDraft {
+  title: string;
+  selectedProjectId: number | null;
+  selectedTagId: number | null;
+  ratio: number;
+  focus: number;
+}
 
 const SessionDetailsModal = ({
   isOpen,
@@ -36,8 +45,6 @@ const SessionDetailsModal = ({
 }) => {
   if (!isOpen) return null;
 
-  const [mode, setMode] = useState<"view" | "edit">("view");
-
   const { showWarning, hideModal, setModalLoading } = useModal();
 
   const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
@@ -48,35 +55,60 @@ const SessionDetailsModal = ({
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
   const draftKey = `${sessionStorageKeys.sessionTitle}-${session.id}`;
 
+  const getDraft = (): SessionDraft | null => {
+    const saved = sessionStorage.getItem(draftKey);
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const draft = getDraft();
+
+  const [mode, setMode] = useState<"view" | "edit">(draft ? "edit" : "view");
+
   const [title, setTitle] = useState<string>(
-    sessionStorage.getItem(draftKey) || session.name,
+    draft ? draft.title : session.name,
   );
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    session.project?.id || null,
+    draft ? draft.selectedProjectId : session.project?.id || null,
   );
   const [selectedTagId, setSelectedTagId] = useState<number | null>(
-    session.tag?.id || null,
+    draft ? draft.selectedTagId : session.tag?.id || null,
   );
-  const [ratio, setRatio] = useState<number>(session.ratio);
-  const [focus, setFocus] = useState<number>(session.focus);
+  const [ratio, setRatio] = useState<number>(
+    draft ? draft.ratio : session.ratio,
+  );
+  const [focus, setFocus] = useState<number>(
+    draft ? draft.focus : session.focus,
+  );
 
   const { data: tags = [] } = useFetchTagsByProject(selectedProjectId || 0);
 
   useEffect(() => {
-    if (mode === "view" || !isOpen) {
-      setTitle(sessionStorage.getItem(draftKey) || session.name);
+    if (mode === "view") {
+      sessionStorage.removeItem(draftKey);
+      setTitle(session.name);
       setSelectedProjectId(session.project?.id || null);
       setSelectedTagId(session.tag?.id || null);
       setRatio(session.ratio);
       setFocus(session.focus);
     }
-  }, [mode, session, draftKey, isOpen]);
+  }, [mode, session, draftKey]);
 
   useEffect(() => {
-    if (mode === "edit" && title !== session.name) {
-      sessionStorage.setItem(draftKey, title);
+    if (mode === "edit") {
+      const currentDraft: SessionDraft = {
+        title,
+        selectedProjectId,
+        selectedTagId,
+        ratio,
+        focus,
+      };
+      sessionStorage.setItem(draftKey, JSON.stringify(currentDraft));
     }
-  }, [title, mode, session.name, draftKey]);
+  }, [mode, title, selectedProjectId, selectedTagId, ratio, focus, draftKey]);
 
   const isReadyToSave =
     title.trim() !== "" &&
@@ -133,23 +165,24 @@ const SessionDetailsModal = ({
 
   const handleClose = () => {
     if (isReadyToSave) {
-      setIsOpen(false);
       showWarning({
         title: "Deseja mesmo fechar sem salvar?",
         message: "Seus dados não serão salvos.",
-        cancel: () => setIsOpen(true),
+        cancel: () => {},
         action: () => {
           sessionStorage.removeItem(draftKey);
+          setIsOpen(false);
           hideModal();
         },
       });
       return;
     }
+    sessionStorage.removeItem(draftKey);
     setIsOpen(false);
   };
 
   return (
-    <ModalContainer close={handleClose} className="!gap-10">
+    <ModalContainer close={handleClose} className="!gap-10 !overflow-visible">
       <Stack direction="row" justify="between" gap={5} className="w-full">
         {mode === "edit" ? (
           <input
@@ -230,7 +263,7 @@ const SessionDetailsModal = ({
             <LabeledValue
               name="Tempo Total (minutos)"
               value={
-                <input
+                <Input
                   type="number"
                   min={1}
                   value={Math.floor(focus / 60)}
@@ -238,7 +271,7 @@ const SessionDetailsModal = ({
                     const val = Number(e.target.value);
                     setFocus(val * 60);
                   }}
-                  className="w-24 text-right bg-neutral-90/50 border border-border rounded px-2 py-1 focus:outline-none focus:border-primary text-sm font-mono text-neutral-10"
+                  className="w-17! text-sm! sm:text-base!"
                 />
               }
             />
@@ -259,6 +292,7 @@ const SessionDetailsModal = ({
                   placeholder="Pesquisar projeto..."
                   emptyMsg="Nenhum projeto encontrado"
                   icon={<GoProject />}
+                  align="right"
                 >
                   Projetos
                 </SessionSelector>
@@ -280,13 +314,15 @@ const SessionDetailsModal = ({
                       : "Selecione um projeto primeiro"
                   }
                   icon={<IoMdPricetag />}
+                  align="right"
                 >
                   Tags
                 </SessionSelector>
               }
             />
             <LabeledValue
-              name="Perfil de Descanso"
+              className="flex-col! items-start!"
+              name="Perfil de Descanso:"
               value={
                 <div className="flex gap-2">
                   {PRESETS.map((p) => {
@@ -299,10 +335,7 @@ const SessionDetailsModal = ({
                         className={clsx(
                           "font-bold text-xs sm:text-sm px-3 py-1 rounded-lg border transition-all duration-200 cursor-pointer",
                           isSelected
-                            ? clsx(
-                                "bg-neutral-80/80 border-primary",
-                                p.textClass,
-                              )
+                            ? clsx("bg-neutral-80/80", p.textClass)
                             : "bg-neutral-90/30 border-border text-neutral-40 hover:text-neutral-20 hover:border-neutral-60",
                         )}
                       >
