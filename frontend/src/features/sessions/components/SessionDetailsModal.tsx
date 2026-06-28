@@ -8,7 +8,7 @@ import { PRESETS } from "../../timer/ratio.const";
 import Button from "../../../shared/components/buttons/Button";
 
 import { FaTrash } from "react-icons/fa6";
-import { MdSave, MdModeEdit } from "react-icons/md";
+import { MdSave } from "react-icons/md";
 
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -17,9 +17,8 @@ import IconButton from "../../../shared/components/buttons/IconButton";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessionsApi";
 import type { SessionResponse } from "../sessions.types";
 import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
-import Label from "../../../shared/components/Label";
-
-import { FaCheck } from "react-icons/fa6";
+import Label from "../../../shared/components/labels/Label";
+import LabeledValue from "../../../shared/components/labels/LabeledValue";
 
 const SessionDetailsModal = ({
   isOpen,
@@ -43,7 +42,6 @@ const SessionDetailsModal = ({
   const [title, setTitle] = useState<string>(
     sessionStorage.getItem(draftKey) || session.name,
   );
-  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const draft = sessionStorage.getItem(draftKey);
@@ -51,11 +49,6 @@ const SessionDetailsModal = ({
   }, [session.id, session.name, draftKey]);
 
   const isReadyToSave = title.trim() !== session.name.trim();
-
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    sessionStorage.setItem(draftKey, e.target.value);
-  };
 
   const handleSave = () => {
     updateSession(
@@ -110,50 +103,31 @@ const SessionDetailsModal = ({
   return (
     <ModalContainer close={handleClose} className="!gap-10">
       <Stack direction="row" justify="between" gap={5} className="w-full">
-        <div className="flex-1 flex items-center gap-4 min-w-0">
-          <div className="relative flex-1 min-w-0 group">
-            <div className="inline-grid items-center font-bold w-full">
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={capitalize(title)}
-                  onChange={handleChangeTitle}
-                  placeholder="Nome da sessão"
-                  className={clsx(
-                    "col-start-1 row-start-1 w-full",
-                    "focus:outline-none bg-transparent",
-                    "text-lg sm:text-2xl font-bold pb-1",
-                    "border-b-2 border-primary text-neutral-10",
-                  )}
-                />
-              ) : (
-                <div
-                  className={clsx(
-                    "col-start-1 row-start-1 w-full min-w-0",
-                    "text-lg sm:text-2xl font-bold pb-1 text-left",
-                    "border-b-2 border-transparent text-neutral-10",
-                    "truncate cursor-default",
-                  )}
-                >
-                  {capitalize(title) || "Nome da sessão"}
-                </div>
-              )}
-            </div>
-          </div>
-          <IconButton
-            icon={
-              isEditing ? (
-                <FaCheck className="text-success animate-fade-in" size={24} />
-              ) : (
-                <MdModeEdit
-                  className="text-neutral-20 hover:text-primary transition-colors"
-                  size={24}
-                />
-              )
-            }
-            onClick={() => setIsEditing((prev) => !prev)}
+        {false ? (
+          <input
+            type="text"
+            value={capitalize(title)}
+            placeholder="Nome da sessão"
+            className={clsx(
+              "col-start-1 row-start-1 w-full",
+              "focus:outline-none bg-transparent",
+              "text-lg sm:text-2xl font-bold pb-1",
+              "border-b-2 border-primary text-neutral-10",
+            )}
           />
-        </div>
+        ) : (
+          <div
+            className={clsx(
+              "col-start-1 row-start-1 w-full min-w-0",
+              "text-lg sm:text-2xl font-bold pb-1 text-left",
+              "border-b-2 border-transparent text-neutral-10",
+              "truncate cursor-default",
+            )}
+          >
+            {capitalize(title) || "Nome da sessão"}
+          </div>
+        )}
+
         <IconButton
           icon={
             <IoClose
@@ -166,47 +140,41 @@ const SessionDetailsModal = ({
       </Stack>
 
       <div className="flex flex-col gap-6 bg-neutral-80/50 p-5 rounded-2xl border border-border">
-        <Stack direction="row" justify="between" className="w-full">
-          <span className="text-neutral-20 font-medium text-sm sm:text-base">
-            Tempo de Foco
-          </span>
-          <span className="font-mono text-lg sm:text-xl text-neutral-20">
-            {formatToHour(session.focus)}
-          </span>
-        </Stack>
+        {session.focus && (
+          <LabeledValue
+            name="Tempo Total"
+            value={formatToHour(session.focus)}
+          />
+        )}
 
         {session.project && (
-          <Stack direction="row" justify="between" className="w-full">
-            <span className="text-neutral-20 font-medium text-sm sm:text-base">
-              Projeto
-            </span>
-            <Label>{session.project.name}</Label>
-          </Stack>
+          <LabeledValue
+            name="Projeto"
+            value={<Label>{session.project.name}</Label>}
+          />
         )}
 
         {session.tag && (
-          <Stack direction="row" justify="between" className="w-full">
-            <span className="text-neutral-20 font-medium text-sm sm:text-base">
-              Tag
-            </span>
-            <Label variant="secondary">{session.tag.name}</Label>
-          </Stack>
+          <LabeledValue
+            name="Tag"
+            value={<Label variant="secondary">{session.tag.name}</Label>}
+          />
         )}
 
         {preset && (
-          <Stack direction="row" justify="between" className="w-full">
-            <span className="text-neutral-20 font-medium text-sm sm:text-base">
-              Perfil de Descanso
-            </span>
-            <span
-              className={clsx(
-                "font-bold text-sm sm:text-base px-3 py-1 rounded-lg bg-neutral-80/50 border border-border",
-                preset.textClass,
-              )}
-            >
-              {preset.label}
-            </span>
-          </Stack>
+          <LabeledValue
+            name="Perfil de Descanso"
+            value={
+              <span
+                className={clsx(
+                  "font-bold text-sm sm:text-base px-3 py-1 rounded-lg bg-neutral-80/50 border border-border",
+                  preset.textClass,
+                )}
+              >
+                {preset.label}
+              </span>
+            }
+          />
         )}
       </div>
 

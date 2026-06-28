@@ -9,7 +9,7 @@ import { PRESETS } from "../../../timer/ratio.const";
 import type { ISessionGroup, SessionResponse } from "../../sessions.types";
 import SessionDetailsModal from "../SessionDetailsModal";
 import Session from "./Session";
-import Label from "../../../../shared/components/Label";
+import Label from "../../../../shared/components/labels/Label";
 
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
