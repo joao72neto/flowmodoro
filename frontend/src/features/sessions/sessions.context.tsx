@@ -32,8 +32,6 @@ interface ISessionContext {
 
   setSessionName: (name: string) => void;
   sessionName: string;
-
-  isSaving: boolean;
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
@@ -90,7 +88,7 @@ export const SessionProvider = ({
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
   }, [restRatio]);
 
-  const { mutate: createSession, isPending: isSaving } = useCreateSession();
+  const { mutate: createSession } = useCreateSession();
 
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
     setCurrentPage(1);
@@ -112,7 +110,6 @@ export const SessionProvider = ({
         handleSaveSession,
         restRatio,
         setRestRatio,
-        isSaving,
 
         projects,
         tags,

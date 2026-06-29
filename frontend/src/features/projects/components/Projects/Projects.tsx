@@ -17,9 +17,10 @@ import {
   useUpdateProject,
   useFetchProjects,
 } from "../../hooks/useProjects";
+import ProjectsSkeleton from "./ProjectsSkeleton";
 
 const Projects = () => {
-  const { data: projects } = useFetchProjects();
+  const { data: projects, isLoading } = useFetchProjects();
 
   const [selectedProject, setSelectedProject] =
     useState<ProjectResponse | null>(null);
@@ -39,13 +40,12 @@ const Projects = () => {
   const { mutate: handleEditProject } = useUpdateProject();
 
   const filteredProjects = useMemo(() => {
-    return projects?.filter((project) =>
+    if (!projects) return [];
+
+    return projects.filter((project) =>
       project.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [projects, searchQuery]);
-
-  if (!projects || !filteredProjects)
-    return <div>Não foi possivel carregar os projetos</div>;
 
   const isEmpty = filteredProjects.length === 0;
 
@@ -69,36 +69,42 @@ const Projects = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div
-              className={clsx(
-                "flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden",
-                isEmpty && "justify-center",
-              )}
-            >
-              {isEmpty ? (
-                <EmptyProjects
-                  title={searchQuery ? "Nenhum resultado" : "Sem projetos"}
-                  message={
-                    searchQuery
-                      ? `Não encontramos nada para "${searchQuery}".`
-                      : "Crie seu primeiro projeto para começar a organizar seu tempo."
-                  }
-                />
-              ) : (
-                filteredProjects.map((item) => (
-                  <Project
-                    key={item.id}
-                    projectData={item}
-                    onDelete={() => handleDeleteProject(item.id)}
-                    onEdit={() => {
-                      setEditingProject(item);
-                      openEditModal();
-                    }}
-                    onSelectTags={setSelectedProject}
+
+            {isLoading ? (
+              <ProjectsSkeleton />
+            ) : (
+              <div
+                className={clsx(
+                  "flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden",
+                  isEmpty && "justify-center",
+                )}
+              >
+                {isEmpty ? (
+                  <EmptyProjects
+                    title={searchQuery ? "Nenhum resultado" : "Sem projetos"}
+                    message={
+                      searchQuery
+                        ? `Não encontramos nada para "${searchQuery}".`
+                        : "Crie seu primeiro projeto para começar a organizar seu tempo."
+                    }
                   />
-                ))
-              )}
-            </div>
+                ) : (
+                  filteredProjects.map((item) => (
+                    <Project
+                      key={item.id}
+                      projectData={item}
+                      onDelete={() => handleDeleteProject(item.id)}
+                      onEdit={() => {
+                        setEditingProject(item);
+                        openEditModal();
+                      }}
+                      onSelectTags={setSelectedProject}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+
             <ExpandableButton
               icon={<GoPlus size={25} />}
               className="absolute bottom-4 right-4 z-10 rounded-full!"

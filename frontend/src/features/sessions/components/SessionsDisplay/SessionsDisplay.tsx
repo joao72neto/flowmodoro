@@ -14,9 +14,9 @@ import SessionGroup from "./SessionGroup";
 const SessionsDisplay = () => {
   const SIZE = 7;
 
-  const { isSaving, currentPage, setCurrentPage } = useSessionContext();
+  const { currentPage, setCurrentPage } = useSessionContext();
 
-  const { data: sessions, isLoading: loading } = useFetchSessions({
+  const { data: sessions, isLoading } = useFetchSessions({
     page: currentPage,
     size: SIZE,
   });
@@ -28,7 +28,7 @@ const SessionsDisplay = () => {
     setCurrentPage,
   });
 
-  if (loading || !sessions || isSaving) {
+  if (isLoading || !sessions) {
     return (
       <div className="flex flex-col gap-6 w-full items-center">
         <SessionsSkeleton />
