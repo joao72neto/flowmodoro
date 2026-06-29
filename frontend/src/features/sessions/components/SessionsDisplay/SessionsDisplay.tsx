@@ -12,7 +12,7 @@ import SessionsWrapper from "./SessionsWrapper";
 import SessionGroup from "./SessionGroup";
 
 const SessionsDisplay = () => {
-  const SIZE = 5;
+  const SIZE = 7;
 
   const { isSaving, currentPage, setCurrentPage } = useSessionContext();
 
@@ -21,13 +21,12 @@ const SessionsDisplay = () => {
     size: SIZE,
   });
 
-  const { prevPage, nextPage, totalPages, goToPage, hasNextPage, hasPrevPage } =
-    usePagination({
-      itemsPerPage: SIZE,
-      totalItems: sessions?.totalElements ?? 0,
-      currentPage,
-      setCurrentPage,
-    });
+  const { totalPages, goToPage } = usePagination({
+    itemsPerPage: SIZE,
+    totalItems: sessions?.totalElements ?? 0,
+    currentPage,
+    setCurrentPage,
+  });
 
   if (loading || !sessions || isSaving) {
     return (
@@ -63,11 +62,7 @@ const SessionsDisplay = () => {
           {sessions.totalElements > SIZE && (
             <PageSelector
               goToPage={goToPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
               currentPage={currentPage}
-              prevPage={prevPage}
-              nextPage={nextPage}
               totalPages={totalPages}
             />
           )}

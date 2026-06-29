@@ -23,22 +23,9 @@ export function usePagination({
     [totalPages],
   );
 
-  const nextPage = useCallback(
-    () => goToPage(currentPage + 1),
-    [currentPage, goToPage],
-  );
-  const prevPage = useCallback(
-    () => goToPage(currentPage - 1),
-    [currentPage, goToPage],
-  );
-
   return {
     currentPage,
     totalPages,
-    nextPage,
-    prevPage,
     goToPage,
-    hasNextPage: currentPage < totalPages,
-    hasPrevPage: currentPage > 1,
   };
 }

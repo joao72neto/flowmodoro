@@ -1,55 +1,46 @@
 import clsx from "clsx";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
 
 interface PageSelectorProps {
   currentPage: number;
   totalPages: number;
-  prevPage: () => void;
-  nextPage: () => void;
   goToPage: (page: number) => void;
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
 }
 
 const PageSelector = ({
   currentPage,
   totalPages,
-  prevPage,
-  nextPage,
   goToPage,
-  hasPrevPage,
-  hasNextPage,
 }: PageSelectorProps) => {
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxVisible = 5;
+  if (totalPages <= 1) return null;
 
-    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    let end = Math.min(totalPages, start + maxVisible - 1);
+  const maxVisiblePages = 4;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = startPage + maxVisiblePages - 1;
 
-    if (end - start + 1 < maxVisible) {
-      start = Math.max(1, end - maxVisible + 1);
-    }
+  if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
 
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    return pages;
-  };
+  const pages = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i,
+  );
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <button
         type="button"
-        onClick={prevPage}
-        disabled={!hasPrevPage}
+        onClick={() => goToPage(1)}
+        disabled={currentPage === 1}
         className={clsx(
           "group px-3 py-1 cursor-pointer",
           "disabled:cursor-not-allowed disabled:opacity-50",
         )}
         title="Primeira página"
       >
-        <IoChevronBack
+        <FiChevronsLeft
           size={30}
           className={clsx(
             "block origin-center transition-all duration-300 ease-out",
@@ -60,7 +51,7 @@ const PageSelector = ({
       </button>
 
       <div className="flex gap-2 sm:flex">
-        {getPageNumbers().map((page) => (
+        {pages.map((page) => (
           <button
             type="button"
             key={page}
@@ -79,15 +70,15 @@ const PageSelector = ({
       </div>
 
       <button
-        onClick={nextPage}
-        disabled={!hasNextPage}
+        onClick={() => goToPage(totalPages)}
+        disabled={currentPage === totalPages}
         className={clsx(
           "group px-3 py-1 cursor-pointer",
           "disabled:cursor-not-allowed disabled:opacity-50",
         )}
         title="Última página"
       >
-        <IoChevronForward
+        <FiChevronsRight
           size={30}
           className={clsx(
             "block origin-center transition-all duration-300 ease-out",

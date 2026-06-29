@@ -32,15 +32,18 @@ const Session = ({
           <span className={"flex-1 text-sm text-left sm:text-base"}>
             {session.name}
           </span>
-          <span
-            className={clsx(
-              "text-sm bg-neutral-80/50 border border-border",
-              "px-2 py-0.5 rounded-md shadow",
-              preset?.textClass,
-            )}
-          >
-            {formatToHour(session.focus)}
-          </span>
+
+          {!showTagAndProject && (
+            <span
+              className={clsx(
+                "text-sm bg-neutral-80/50 border border-border",
+                "px-2 py-0.5 rounded-md shadow",
+                preset?.textClass,
+              )}
+            >
+              {formatToHour(session.focus)}
+            </span>
+          )}
         </div>
 
         {showTagAndProject && (
