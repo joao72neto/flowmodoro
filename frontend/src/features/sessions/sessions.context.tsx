@@ -12,6 +12,9 @@ export interface ISaveSessionData {
 }
 
 interface ISessionContext {
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+
   restRatio: number;
   setRestRatio: (ratio: number) => void;
   handleSaveSession: (data: ISaveSessionData) => void;
@@ -40,6 +43,8 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [sessionName, setSessionName] = useState<string>(() => {
     const saved = localStorage.getItem(localStorageKeys.session);
     const { sessionName } = saved ? JSON.parse(saved) : { sessionName: "" };
@@ -88,6 +93,7 @@ export const SessionProvider = ({
   const { mutate: createSession, isPending: isSaving } = useCreateSession();
 
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
+    setCurrentPage(1);
     createSession({
       name: sessionName,
       focus: focusSeconds,
@@ -100,6 +106,9 @@ export const SessionProvider = ({
   return (
     <SessionContext.Provider
       value={{
+        currentPage,
+        setCurrentPage,
+
         handleSaveSession,
         restRatio,
         setRestRatio,

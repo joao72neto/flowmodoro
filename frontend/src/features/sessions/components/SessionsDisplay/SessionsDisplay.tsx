@@ -6,7 +6,6 @@ import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
 import { useFetchSessions } from "../../hooks/useSessionsApi";
-import { useState } from "react";
 import { useSessionContext } from "../../sessions.context";
 import SessionsSkeleton from "./SessionsSkeleton";
 import SessionsWrapper from "./SessionsWrapper";
@@ -15,9 +14,7 @@ import SessionGroup from "./SessionGroup";
 const SessionsDisplay = () => {
   const SIZE = 5;
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { isSaving } = useSessionContext();
+  const { isSaving, currentPage, setCurrentPage } = useSessionContext();
 
   const { data: sessions, isLoading: loading } = useFetchSessions({
     page: currentPage,
