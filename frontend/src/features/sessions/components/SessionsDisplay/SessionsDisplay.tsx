@@ -50,10 +50,7 @@ const SessionsDisplay = () => {
                 totalFocus={formatToHour(sessionGroup.totalFocus)}
               >
                 {sessionGroup.sessionGroups.map((group) => (
-                  <SessionGroup
-                    key={`${sessionGroup.date}-${group.name}-${group.id}`}
-                    sessionGroup={group}
-                  />
+                  <SessionGroup key={group.id} sessionGroup={group} />
                 ))}
               </DailySessions>
             ))}

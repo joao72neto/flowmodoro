@@ -1,5 +1,6 @@
 package com.company.flowmodoro.features.sessions;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,7 +26,7 @@ public class SessionAggregator {
 
 	public List<DailySessionsDTO> groupSessionsByDate(List<SessionModel> sessions, List<LocalDate> orderedDates) {
 		Map<LocalDate, List<SessionModel>> sessionsByDay = sessions.stream()
-			.collect(Collectors.groupingBy(SessionModel::getDate));
+				.collect(Collectors.groupingBy(SessionModel::getDate));
 
 		List<DailySessionsDTO> result = new ArrayList<>();
 
@@ -67,7 +68,7 @@ public class SessionAggregator {
 				initialSessionsList.add(currentSessionDTO);
 
 				SessionGroupDTO newGroup = SessionGroupDTO.builder()
-					.id(UUID.randomUUID().toString())
+					.id(UUID.nameUUIDFromBytes(groupKey.getBytes(StandardCharsets.UTF_8)).toString())
 					.name(name)
 					.totalFocus(sessionModel.getFocus())
 					.totalRest(sessionModel.getRest())

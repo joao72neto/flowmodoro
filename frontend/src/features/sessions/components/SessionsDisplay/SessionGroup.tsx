@@ -13,9 +13,9 @@ import Label from "../../../../shared/components/labels/Label";
 
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
+import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
 
 const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [showSessionDetailsModal, setShowSessionDetailsModal] = useState(false);
   const [selectedSession, setSelectedSession] = useState<SessionResponse>(
     sessionGroup.sessions[0],
@@ -25,12 +25,26 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
     setSelectedSession(sessionGroup.sessions[0]);
   }, [sessionGroup.sessions]);
 
-  const handleToggle = () => setIsOpen(!isOpen);
+  const storageKey = sessionStorageKeys.isSessionGroupOpen(sessionGroup.id);
+
+  const [isOpen, setIsOpen] = useState(() => {
+    return sessionStorage.getItem(storageKey) === "true";
+  });
+
+  const handleToggle = () => {
+    setIsOpen((prev) => {
+      const next = !prev;
+      sessionStorage.setItem(storageKey, String(next));
+      return next;
+    });
+  };
+
   const isTogglable = sessionGroup.sessions.length > 1;
 
   useEffect(() => {
     if (!isTogglable) {
       setIsOpen(false);
+      sessionStorage.removeItem(storageKey);
     }
   }, [isTogglable]);
 

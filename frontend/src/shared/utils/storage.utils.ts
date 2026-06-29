@@ -9,6 +9,7 @@ export const localStorageKeys = {
 
 export const sessionStorageKeys = {
   sessionTitle: "flowmodoro_session_title",
+  isSessionGroupOpen: (id: string) => `flowmodoro_is_session_group_open_${id}`,
 };
 
 export const getAnonymousUserId = (): string => {
