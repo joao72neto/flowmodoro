@@ -6,7 +6,7 @@ import { ApiError } from "../../../configs/api-error.config";
 import { projectErrors, type ProjectError } from "../consts/project-errors";
 import { SESSIONS_QUERY_KEY } from "../../sessions/hooks/useSessions";
 
-const PROJECTS_QUERY_KEY = "projects";
+export const PROJECTS_QUERY_KEY = "projects";
 
 export const useFetchProjects = () => {
   const { showError, hideModal } = useModal();

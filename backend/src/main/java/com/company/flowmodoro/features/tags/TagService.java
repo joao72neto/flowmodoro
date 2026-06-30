@@ -72,6 +72,8 @@ public class TagService {
 		TagModel tag = tagRepository.findById(id)
 				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
 
+		projectService.findById(tag.getProject().getId(), userId);
+
 		var sessions = sessionRepository.findByTagAndUserId(tag, userId);
 		sessions.forEach(session -> session.setTag(null));
 

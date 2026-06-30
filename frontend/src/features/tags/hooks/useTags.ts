@@ -6,7 +6,7 @@ import { ApiError } from "../../../configs/api-error.config";
 import { tagErrors, type TagError } from "../consts/tag-errors";
 import { SESSIONS_QUERY_KEY } from "../../sessions/hooks/useSessions";
 
-const TAGS_QUERY_KEY = "tags";
+export const TAGS_QUERY_KEY = "tags";
 
 export const useFetchTagsByProject = (projectId: number) => {
   const { showError, hideModal } = useModal();

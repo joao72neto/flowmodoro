@@ -5,4 +5,5 @@ export type ProjectPayload = {
 export type ProjectResponse = {
   id: number;
   name: string;
+  totalFocus?: number;
 };

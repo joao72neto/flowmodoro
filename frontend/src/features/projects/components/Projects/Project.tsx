@@ -8,6 +8,7 @@ import { IoMdPricetag } from "react-icons/io";
 import { GoProject } from "react-icons/go";
 import { IoTimeOutline } from "react-icons/io5";
 import DropdownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
+import { formatToHour } from "../../../../shared/utils/number.utils";
 
 const Project = ({
   projectData,
@@ -50,7 +51,11 @@ const Project = ({
         <div className="flex items-center gap-3 text-xs text-neutral-40">
           <span className="flex items-center gap-1">
             <IoTimeOutline className="shrink-0" size={13} />
-            <span>100h</span>
+            <span>
+              {projectData?.totalFocus && projectData.totalFocus > 0
+                ? formatToHour(projectData.totalFocus)
+                : "--:--:--"}
+            </span>
           </span>
           <span className="text-neutral-40/40">•</span>
           <button

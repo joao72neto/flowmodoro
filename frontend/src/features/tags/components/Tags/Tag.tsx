@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { useModal } from "../../../../shared/modal.context";
 import { IoMdPricetag } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
+import { formatToHour } from "../../../../shared/utils/number.utils";
 
 const Tag = ({
   tagData,
@@ -47,7 +48,11 @@ const Tag = ({
         <div className="flex items-center gap-3 text-xs text-neutral-40">
           <span className="flex items-center gap-1">
             <IoTimeOutline className="shrink-0" size={13} />
-            <span>100h</span>
+            <span>
+              {tagData?.totalFocus && tagData.totalFocus > 0
+                ? formatToHour(tagData.totalFocus)
+                : "--:--:--"}
+            </span>
           </span>
         </div>
       </div>
