@@ -26,7 +26,7 @@ public class SessionService {
 
 	private static final SessionErrorCode SESSION_NOT_FOUND = SessionErrorCode.SESSION_NOT_FOUND;
 
-	private final SessionRespository sessionRepository;
+	private final SessionRepository sessionRepository;
 
 	private final SessionUpdateMapper sessionUpdateMapper;
 
@@ -38,7 +38,7 @@ public class SessionService {
 
 	private final ProjectTagValidator projectTagValidator;
 
-	public SessionService(SessionRespository sessionRepository, SessionUpdateMapper sessionUpdateMapper,
+	public SessionService(SessionRepository sessionRepository, SessionUpdateMapper sessionUpdateMapper,
 
 			SessionAggregator aggregator, SessionCalculator calculator, SessionValidator validator,
 			ProjectTagValidator projectTagValidator) {

@@ -14,7 +14,7 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useModal } from "../../../shared/modal.context";
 import IconButton from "../../../shared/components/buttons/IconButton";
-import { useDeleteSession, useUpdateSession } from "../hooks/useSessionsApi";
+import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
 import type { SessionResponse } from "../sessions.types";
 import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
 import Label from "../../../shared/components/labels/Label";

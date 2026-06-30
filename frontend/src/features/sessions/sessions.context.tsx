@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useCreateSession } from "./hooks/useSessionsApi";
+import { useCreateSession } from "./hooks/useSessions";
 
 import type { TagResponse } from "../tags/tags.types";
 import type { ProjectResponse } from "../projects/projects.types";

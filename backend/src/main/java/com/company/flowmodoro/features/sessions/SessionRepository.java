@@ -10,16 +10,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.company.flowmodoro.features.projects.ProjectModel;
+import com.company.flowmodoro.features.tags.TagModel;
 
 @Repository
-public interface SessionRespository extends JpaRepository<SessionModel, Long> {
+public interface SessionRepository extends JpaRepository<SessionModel, Long> {
 
-	@Query(value = "SELECT DISTINCT s.date FROM SessionModel s WHERE s.userId = :userId",
-			countQuery = "SELECT COUNT(DISTINCT s.date) FROM SessionModel s WHERE s.userId = :userId")
+	@Query(value = "SELECT DISTINCT s.date FROM SessionModel s WHERE s.userId = :userId", countQuery = "SELECT COUNT(DISTINCT s.date) FROM SessionModel s WHERE s.userId = :userId")
 	Page<LocalDate> findDistinctDates(String userId, Pageable pageable);
 
 	List<SessionModel> findByUserIdAndDateInOrderByIdDesc(String userId, List<LocalDate> dates);
 
 	List<SessionModel> findByProjectAndUserId(ProjectModel project, String userId);
+
+	List<SessionModel> findByTagAndUserId(TagModel tag, String userId);
 
 }

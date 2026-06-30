@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../../../configs/api-error.config";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
 
-const SESSIONS_QUERY_KEY = "sessions";
+export const SESSIONS_QUERY_KEY = "sessions";
 
 export const useFetchSessions = ({
   page,

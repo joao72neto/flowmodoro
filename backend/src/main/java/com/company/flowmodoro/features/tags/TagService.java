@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.company.flowmodoro.features.projects.ProjectModel;
 import com.company.flowmodoro.features.projects.ProjectService;
+import com.company.flowmodoro.features.sessions.SessionRepository;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.enums.TagErrorCode;
 import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
@@ -21,10 +22,14 @@ public class TagService {
 
 	private final TagUpdateMapper tagUpdateMapper;
 
-	public TagService(TagRepository tagRepository, ProjectService projectService, TagUpdateMapper tagUpdateMapper) {
+	private final SessionRepository sessionRepository;
+
+	public TagService(TagRepository tagRepository, ProjectService projectService, TagUpdateMapper tagUpdateMapper,
+			SessionRepository sessionRepository) {
 		this.tagRepository = tagRepository;
 		this.projectService = projectService;
 		this.tagUpdateMapper = tagUpdateMapper;
+		this.sessionRepository = sessionRepository;
 	}
 
 	@Transactional
@@ -48,7 +53,7 @@ public class TagService {
 	@Transactional
 	public TagModel update(Long id, TagUpdateDTO dto, String userId) {
 		TagModel tag = tagRepository.findById(id)
-			.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
 
 		boolean exists = tagRepository.existsByNameAndProjectId(dto.getName(), tag.getProject().getId());
 
@@ -64,9 +69,10 @@ public class TagService {
 	@Transactional
 	public void delete(Long id, String userId) {
 		TagModel tag = tagRepository.findById(id)
-			.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
+				.orElseThrow(() -> new InvalidTagException(TagErrorCode.TAG_NOT_FOUND, "Tag not found"));
 
-		projectService.findById(tag.getProject().getId(), userId);
+		var sessions = sessionRepository.findByTagAndUserId(tag, userId);
+		sessions.forEach(session -> session.setTag(null));
 
 		tagRepository.delete(tag);
 	}

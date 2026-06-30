@@ -9,19 +9,19 @@ import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
 import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
 import com.company.flowmodoro.features.projects.mappers.ProjectUpdateMapper;
-import com.company.flowmodoro.features.sessions.SessionRespository;
+import com.company.flowmodoro.features.sessions.SessionRepository;
 
 @Service
 public class ProjectService {
 
 	private final ProjectRepository projectRepository;
 
-	private final SessionRespository sessionRepository;
+	private final SessionRepository sessionRepository;
 
 	private final ProjectUpdateMapper projectUpdateMapper;
 
 	public ProjectService(ProjectRepository projectRepository, ProjectUpdateMapper projectUpdateMapper,
-			SessionRespository sessionRepository) {
+			SessionRepository sessionRepository) {
 		this.projectRepository = projectRepository;
 		this.sessionRepository = sessionRepository;
 		this.projectUpdateMapper = projectUpdateMapper;

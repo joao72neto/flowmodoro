@@ -4,6 +4,7 @@ import projectsService from "../projects.service";
 import type { ProjectPayload, ProjectResponse } from "../projects.types";
 import { ApiError } from "../../../configs/api-error.config";
 import { projectErrors, type ProjectError } from "../consts/project-errors";
+import { SESSIONS_QUERY_KEY } from "../../sessions/hooks/useSessions";
 
 const PROJECTS_QUERY_KEY = "projects";
 
@@ -93,6 +94,7 @@ export const useDeleteProject = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
       setModalLoading(false);
       hideModal();
     },

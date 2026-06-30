@@ -5,7 +5,7 @@ import { formatToHour } from "../../../../shared/utils/number.utils";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
-import { useFetchSessions } from "../../hooks/useSessionsApi";
+import { useFetchSessions } from "../../hooks/useSessions";
 import { useSessionContext } from "../../sessions.context";
 import SessionsSkeleton from "./SessionsSkeleton";
 import SessionsWrapper from "./SessionsWrapper";
