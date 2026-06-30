@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { TagPayload, TagResponse } from "../tags.types";
+import type { TagResponse } from "../tags.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
