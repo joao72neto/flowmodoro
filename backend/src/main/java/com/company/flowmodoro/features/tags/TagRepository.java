@@ -23,6 +23,7 @@ public interface TagRepository extends JpaRepository<TagModel, Long> {
 			        ON s.tag.id = t.id
 			        AND s.userId = :userId
 			    WHERE t.project.id = :projectId
+			      AND t.project.userId = :userId
 			    GROUP BY
 			        t.id,
 			        t.name,

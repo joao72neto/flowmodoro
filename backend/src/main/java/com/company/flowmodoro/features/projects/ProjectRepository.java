@@ -21,6 +21,7 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, Long> {
 			    LEFT JOIN SessionModel s
 			        ON s.project.id = p.id
 			        AND s.userId = :userId
+			    WHERE p.userId = :userId
 			    GROUP BY p.id, p.name
 			""")
 	List<ProjectDTO> findAllWithTotalFocus(String userId);
