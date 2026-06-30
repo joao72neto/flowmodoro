@@ -18,8 +18,11 @@ import {
   useFetchProjects,
 } from "../../hooks/useProjects";
 import ProjectsSkeleton from "./ProjectsSkeleton";
+import { useModal } from "../../../../shared/modal.context";
 
 const Projects = () => {
+  const { setModalLoading } = useModal();
+
   const { data: projects, isLoading } = useFetchProjects();
 
   const [selectedProject, setSelectedProject] =
@@ -35,9 +38,11 @@ const Projects = () => {
   const { Modal: EditProject, openModal: openEditModal } =
     useModalFactory(ProjectModal);
 
-  const { mutate: handleCreateProject } = useCreateProject();
+  const { mutate: handleCreateProject, isPending: isSaving } =
+    useCreateProject();
+  const { mutate: handleEditProject, isPending: isUpdating } =
+    useUpdateProject();
   const { mutate: handleDeleteProject } = useDeleteProject();
-  const { mutate: handleEditProject } = useUpdateProject();
 
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
@@ -93,7 +98,10 @@ const Projects = () => {
                     <Project
                       key={item.id}
                       projectData={item}
-                      onDelete={() => handleDeleteProject(item.id)}
+                      onDelete={() => {
+                        setModalLoading(true);
+                        handleDeleteProject(item.id);
+                      }}
                       onEdit={() => {
                         setEditingProject(item);
                         openEditModal();
@@ -122,10 +130,11 @@ const Projects = () => {
           </div>
         </div>
       </div>
-      <CreateProject save={handleCreateProject} />
+      <CreateProject save={handleCreateProject} loading={isSaving} />
       <EditProject
         title="Atualizar Projeto"
         edit={handleEditProject}
+        loading={isUpdating}
         defaultValues={editingProject || undefined}
         inputLabel="Novo nome"
         confirmButtonIcon={<RxUpdate />}

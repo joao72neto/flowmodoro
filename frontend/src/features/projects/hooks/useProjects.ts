@@ -85,7 +85,7 @@ export const useUpdateProject = () => {
 };
 
 export const useDeleteProject = () => {
-  const { showError, hideModal } = useModal();
+  const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -93,6 +93,8 @@ export const useDeleteProject = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
+      setModalLoading(false);
+      hideModal();
     },
 
     onError: (error: ApiError) => {

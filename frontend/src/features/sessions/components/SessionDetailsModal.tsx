@@ -377,6 +377,7 @@ const SessionDetailsModal = ({
                 sessionStorage.removeItem(draftKey);
                 setMode("view");
               }}
+              disabled={isUpdating}
               icon={<MdCancel size={16} />}
               variant="danger"
               className="flex-1 bg-neutral-20/30 !border-border hover:!bg-danger hover:!text-white transition-all"

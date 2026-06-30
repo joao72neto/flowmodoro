@@ -29,7 +29,6 @@ const Project = ({
       cancel: hideModal,
       action: () => {
         onDelete?.();
-        hideModal();
       },
     });
   };

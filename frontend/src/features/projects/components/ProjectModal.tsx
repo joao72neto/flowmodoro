@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { ProjectPayload, ProjectResponse } from "../projects.types";
+import type { ProjectResponse } from "../projects.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -9,6 +9,8 @@ import { GoProject } from "react-icons/go";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateProjectSchema } from "../projects.schemas";
+
+import type { useCreateProject, useUpdateProject } from "../hooks/useProjects";
 
 const ProjectModal = ({
   isOpen,
@@ -28,6 +30,8 @@ const ProjectModal = ({
   cancelButtonText = "Cancelar",
   cancelButtonIcon = <MdOutlineCancel />,
   close,
+
+  loading,
 }: {
   isOpen: boolean;
   defaultValues?: ProjectResponse;
@@ -37,8 +41,8 @@ const ProjectModal = ({
 
   inputLabel?: string;
 
-  edit: ({ id, data }: { id: number; data: ProjectPayload }) => void;
-  save: (data: ProjectPayload) => void;
+  edit: ReturnType<typeof useUpdateProject>["mutate"];
+  save: ReturnType<typeof useCreateProject>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
@@ -46,6 +50,8 @@ const ProjectModal = ({
   cancelButtonText?: string;
   cancelButtonIcon?: React.ReactNode;
   close: () => void;
+
+  loading?: boolean;
 }) => {
   const {
     register,
@@ -62,10 +68,17 @@ const ProjectModal = ({
 
   if (!isOpen) return null;
 
-  const onSubmit = (data: { name: string }) => {
-    defaultValues ? edit({ id: defaultValues.id, data }) : save(data);
+  const closeAndReset = () => {
     reset();
     close();
+  };
+
+  const onSubmit = (data: { name: string }) => {
+    defaultValues
+      ? edit({ id: defaultValues.id, data }, { onSuccess: closeAndReset })
+      : save(data, {
+          onSuccess: closeAndReset,
+        });
   };
 
   return (
@@ -92,23 +105,25 @@ const ProjectModal = ({
           />
         </div>
 
-        <div className="flex flex-col-reverse min-[350px]:flex-row gap-3 items-center justify-center">
+        <div className="flex flex-col-reverse sm:flex-row gap-3 items-center justify-center">
           <Button
             type="button"
             icon={<span className="text-xl">{cancelButtonIcon}</span>}
-            className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2! sm:text-base!"
+            className="w-full text-md! sm:w-[150px] sm:p-2! sm:text-base!"
             variant="danger"
             onClick={() => {
               reset();
               close();
             }}
+            disabled={loading}
           >
             {cancelButtonText}
           </Button>
           <Button
+            loading={loading}
             type="submit"
             icon={<span className="text-xl">{confirmButtonIcon}</span>}
-            className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2!"
+            className="w-full text-md! sm:w-[150px] sm:p-2!"
           >
             {confirmButtonText}
           </Button>
