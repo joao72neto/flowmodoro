@@ -21,4 +21,6 @@ public class TagDTO {
 	@NotNull(message = "Project ID is required")
 	private Long projectId;
 
+	private Long totalFocus;
+
 }

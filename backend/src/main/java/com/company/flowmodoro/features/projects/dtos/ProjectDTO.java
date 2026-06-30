@@ -17,4 +17,6 @@ public class ProjectDTO {
 	@NotBlank(message = "Project name is required")
 	private String name;
 
+	private Long totalFocus;
+
 }

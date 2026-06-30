@@ -42,8 +42,8 @@ public class TagController {
 	@GetMapping
 	public ResponseEntity<List<TagDTO>> findByProject(@RequestParam Long projectId,
 			@RequestHeader("X-User-Id") String userId) {
-		List<TagModel> tags = tagService.findAllByProject(projectId, userId);
-		return ResponseEntity.ok(tagMapper.toDTO(tags));
+		List<TagDTO> tags = tagService.findAllByProject(projectId, userId);
+		return ResponseEntity.ok(tags);
 	}
 
 	@PutMapping("/{id}")

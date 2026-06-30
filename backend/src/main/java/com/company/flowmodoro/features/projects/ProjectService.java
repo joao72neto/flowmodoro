@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
 import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
 import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
@@ -40,13 +41,13 @@ public class ProjectService {
 		return projectRepository.save(project);
 	}
 
-	public List<ProjectModel> findAll(String userId) {
-		return projectRepository.findByUserIdOrderByIdDesc(userId);
+	public List<ProjectDTO> findAll(String userId) {
+		return projectRepository.findAllWithTotalFocus(userId);
 	}
 
 	public ProjectModel findById(Long id, String userId) {
 		ProjectModel project = projectRepository.findById(id)
-			.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
+				.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
 
 		if (!project.getUserId().equals(userId)) {
 			throw new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found for this user");

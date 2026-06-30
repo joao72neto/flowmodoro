@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.company.flowmodoro.features.projects.ProjectModel;
 import com.company.flowmodoro.features.projects.ProjectService;
 import com.company.flowmodoro.features.sessions.SessionRepository;
+import com.company.flowmodoro.features.tags.dtos.TagDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.enums.TagErrorCode;
 import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
@@ -45,9 +46,9 @@ public class TagService {
 		return tagRepository.save(tag);
 	}
 
-	public List<TagModel> findAllByProject(Long projectId, String userId) {
+	public List<TagDTO> findAllByProject(Long projectId, String userId) {
 		projectService.findById(projectId, userId);
-		return tagRepository.findByProjectIdOrderByIdDesc(projectId);
+		return tagRepository.findAllWithTotalFocus(projectId, userId);
 	}
 
 	@Transactional

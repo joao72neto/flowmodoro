@@ -41,8 +41,8 @@ public class ProjectController {
 
 	@GetMapping
 	public ResponseEntity<List<ProjectDTO>> findAll(@RequestHeader("X-User-Id") String userId) {
-		List<ProjectModel> projects = projectService.findAll(userId);
-		return ResponseEntity.ok(projectMapper.toDTO(projects));
+		List<ProjectDTO> projects = projectService.findAll(userId);
+		return ResponseEntity.ok(projects);
 	}
 
 	@GetMapping("/{id}")
