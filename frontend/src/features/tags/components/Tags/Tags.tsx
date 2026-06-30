@@ -18,6 +18,7 @@ import {
   useFetchTagsByProject,
 } from "../../hooks/useTags";
 import TagsSkeleton from "./TagsSkeleton";
+import { useModal } from "../../../../shared/modal.context";
 
 const Tags = ({
   project,
@@ -26,6 +27,8 @@ const Tags = ({
   project: ProjectResponse;
   onBack: () => void;
 }) => {
+  const { setModalLoading } = useModal();
+
   const { data: tags, isLoading } = useFetchTagsByProject(project.id);
 
   const [editingTag, setEditingTag] = useState<TagResponse | null>(null);
@@ -37,9 +40,9 @@ const Tags = ({
   const { Modal: EditTag, openModal: openEditModal } =
     useModalFactory(TagModal);
 
-  const { mutate: handleCreateTag } = useCreateTag();
+  const { mutate: handleCreateTag, isPending: isSaving } = useCreateTag();
+  const { mutate: handleEditTag, isPending: isUpdating } = useUpdateTag();
   const { mutate: handleDeleteTag } = useDeleteTag();
-  const { mutate: handleEditTag } = useUpdateTag();
 
   const filteredTags = useMemo(() => {
     if (!tags) return [];
@@ -101,7 +104,10 @@ const Tags = ({
                 <Tag
                   key={item.id}
                   tagData={item}
-                  onDelete={() => handleDeleteTag(item.id)}
+                  onDelete={() => {
+                    setModalLoading(true);
+                    handleDeleteTag(item.id);
+                  }}
                   onEdit={() => {
                     setEditingTag(item);
                     openEditModal();
@@ -121,11 +127,16 @@ const Tags = ({
           Nova Tag
         </ExpandableButton>
       </div>
-      <CreateTag projectId={project.id} save={handleCreateTag} />
+      <CreateTag
+        projectId={project.id}
+        save={handleCreateTag}
+        loading={isSaving}
+      />
       <EditTag
         title="Atualizar Tag"
         projectId={project.id}
         edit={handleEditTag}
+        loading={isUpdating}
         defaultValues={editingTag || undefined}
         inputLabel="Novo nome"
         confirmButtonIcon={<RxUpdate />}

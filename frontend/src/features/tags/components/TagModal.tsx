@@ -9,6 +9,7 @@ import { IoMdPricetag } from "react-icons/io";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateTagSchema } from "../tags.schemas";
+import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
 
 const TagModal = ({
   isOpen,
@@ -29,6 +30,8 @@ const TagModal = ({
   cancelButtonText = "Cancelar",
   cancelButtonIcon = <MdOutlineCancel />,
   close,
+
+  loading,
 }: {
   isOpen: boolean;
   defaultValues?: TagResponse;
@@ -39,8 +42,8 @@ const TagModal = ({
   inputLabel?: string;
 
   projectId: number;
-  edit: ({ id, data }: { id: number; data: TagPayload }) => void;
-  save: (tag: TagPayload) => void;
+  edit: ReturnType<typeof useUpdateTag>["mutate"];
+  save: ReturnType<typeof useCreateTag>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
@@ -48,6 +51,8 @@ const TagModal = ({
   cancelButtonText?: string;
   cancelButtonIcon?: React.ReactNode;
   close: () => void;
+
+  loading?: boolean;
 }) => {
   const {
     register,
@@ -64,18 +69,24 @@ const TagModal = ({
 
   if (!isOpen) return null;
 
-  const onSubmit = (data: { name: string }) => {
-    defaultValues
-      ? edit({
-          id: defaultValues.id,
-          data: {
-            name: data.name,
-            projectId: projectId,
-          },
-        })
-      : save({ name: data.name, projectId });
+  const closeAndReset = () => {
     reset();
     close();
+  };
+
+  const onSubmit = (data: { name: string }) => {
+    defaultValues
+      ? edit(
+          {
+            id: defaultValues.id,
+            data: {
+              name: data.name,
+              projectId: projectId,
+            },
+          },
+          { onSuccess: closeAndReset },
+        )
+      : save({ name: data.name, projectId }, { onSuccess: closeAndReset });
   };
 
   return (
@@ -103,12 +114,13 @@ const TagModal = ({
           />
         </div>
 
-        <div className="flex flex-col-reverse min-[350px]:flex-row gap-3 items-center justify-center">
+        <div className="flex flex-col-reverse sm:flex-row gap-3 items-center justify-center">
           <Button
             type="button"
             icon={<span className="text-xl">{cancelButtonIcon}</span>}
-            className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2! sm:text-base!"
+            className="w-full text-md! sm:w-[150px] sm:p-2! sm:text-base!"
             variant="danger"
+            disabled={loading}
             onClick={() => {
               reset();
               close();
@@ -120,7 +132,8 @@ const TagModal = ({
             type="submit"
             variant="secondary"
             icon={<span className="text-xl">{confirmButtonIcon}</span>}
-            className="w-full text-md! p-1.5! sm:w-[150px] sm:p-2!"
+            className="w-full text-md! sm:w-[150px] sm:p-2!"
+            loading={loading}
           >
             {confirmButtonText}
           </Button>

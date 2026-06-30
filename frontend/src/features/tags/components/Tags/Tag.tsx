@@ -26,7 +26,6 @@ const Tag = ({
       cancel: hideModal,
       action: () => {
         onDelete?.();
-        hideModal();
       },
     });
   };

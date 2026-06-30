@@ -81,7 +81,7 @@ export const useUpdateTag = () => {
 };
 
 export const useDeleteTag = () => {
-  const { showError, hideModal } = useModal();
+  const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -89,6 +89,8 @@ export const useDeleteTag = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
+      setModalLoading(false);
+      hideModal();
     },
 
     onError: (error: ApiError) => {
