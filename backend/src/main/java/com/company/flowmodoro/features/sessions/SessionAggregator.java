@@ -26,7 +26,7 @@ public class SessionAggregator {
 
 	public List<DailySessionsDTO> groupSessionsByDate(List<SessionModel> sessions, List<LocalDate> orderedDates) {
 		Map<LocalDate, List<SessionModel>> sessionsByDay = sessions.stream()
-				.collect(Collectors.groupingBy(SessionModel::getDate));
+			.collect(Collectors.groupingBy(SessionModel::getDate));
 
 		List<DailySessionsDTO> result = new ArrayList<>();
 

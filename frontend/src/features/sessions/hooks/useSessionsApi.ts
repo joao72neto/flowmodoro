@@ -39,7 +39,7 @@ export const useFetchSessions = ({
 };
 
 export const useCreateSession = () => {
-  const { showError, hideModal } = useModal();
+  const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -57,6 +57,8 @@ export const useCreateSession = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
+      setModalLoading(false);
+      hideModal();
     },
   });
 };

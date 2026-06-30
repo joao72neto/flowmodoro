@@ -13,7 +13,7 @@ import { localStorageKeys } from "../../../shared/utils/storage.utils";
 
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
-  const { showWarning, hideModal } = useModal();
+  const { showWarning, hideModal, setModalLoading } = useModal();
 
   const BREAK_RATIO = restRatio / 100;
 
@@ -155,11 +155,10 @@ const useTimer = () => {
       title: "Sessão Finalizada! 🎉",
       message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds)}?`,
       action: () => {
+        setModalLoading(true);
         handleSaveSession({
           focusSeconds: finalFocusSeconds,
         });
-
-        hideModal();
       },
       cancel: () => {
         setMode(null);

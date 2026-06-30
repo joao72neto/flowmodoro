@@ -27,7 +27,7 @@ const LoadingApplication = () => {
           <div className="absolute inset-0 bg-danger/20 blur-3xl rounded-full animate-pulse" />
           <GiSandsOfTime
             size={80}
-            className="text-danger animate-spin-slow relative z-10"
+            className="text-primary animate-spin-slow relative z-10"
           />
         </div>
 
@@ -38,7 +38,7 @@ const LoadingApplication = () => {
         <p className="text-neutral-40 mb-6 leading-relaxed">
           A API está hospedada em um servidor gratuito que entra em repouso após
           inatividade. Isso pode levar cerca de{" "}
-          <span className="text-danger font-semibold text-nowrap">
+          <span className="text-primary font-semibold text-nowrap">
             1 a 2 minutos
           </span>
           .
@@ -51,7 +51,7 @@ const LoadingApplication = () => {
         </div>
 
         <div className="w-full bg-neutral-80/50 h-1.5 rounded-full overflow-hidden">
-          <div className="bg-danger h-full animate-loading-bar" />
+          <div className="bg-primary h-full animate-loading-bar" />
         </div>
 
         <div className="flex items-center justify-between w-full mt-4">
