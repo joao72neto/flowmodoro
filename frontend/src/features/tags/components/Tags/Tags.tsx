@@ -18,7 +18,7 @@ import {
   useFetchTagsByProject,
 } from "../../hooks/useTags";
 import TagsSkeleton from "./TagsSkeleton";
-import { useModal } from "../../../../shared/modal.context";
+import { useModal } from "../../../../shared/contexts/modal.context";
 
 const Tags = ({
   project,

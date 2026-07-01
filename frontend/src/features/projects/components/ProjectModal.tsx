@@ -110,7 +110,7 @@ const ProjectModal = ({
             type="button"
             icon={<span className="text-xl">{cancelButtonIcon}</span>}
             className="w-full text-md! sm:w-[150px] sm:p-2! sm:text-base!"
-            variant="danger"
+            variant="secondary40"
             onClick={() => {
               reset();
               close();

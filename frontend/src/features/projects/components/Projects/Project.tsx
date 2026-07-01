@@ -3,12 +3,12 @@ import type { ProjectResponse } from "../../projects.types";
 import { MdModeEditOutline } from "react-icons/md";
 import { RxTrash } from "react-icons/rx";
 import clsx from "clsx";
-import { useModal } from "../../../../shared/modal.context";
 import { IoMdPricetag } from "react-icons/io";
 import { GoProject } from "react-icons/go";
 import { IoTimeOutline } from "react-icons/io5";
 import DropdownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 import { formatToHour } from "../../../../shared/utils/number.utils";
+import { useModal } from "../../../../shared/contexts/modal.context";
 
 const Project = ({
   projectData,
@@ -21,10 +21,10 @@ const Project = ({
   onEdit?: () => void;
   onSelectTags?: (project: ProjectResponse) => void;
 }) => {
-  const { showWarning, hideModal } = useModal();
+  const { showDefault, hideModal } = useModal();
 
   const handleDelete = () => {
-    showWarning({
+    showDefault({
       title: "Deseja mesmo excluir este projeto?",
       message: "Esta operação não pode ser desfeita.",
       cancel: hideModal,

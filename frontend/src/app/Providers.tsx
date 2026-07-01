@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { ModalProvider } from "../shared/modal.context";
 import { TimerProvider } from "../features/timer/timer.context";
 import LoadingApplication from "./LoadingApplication";
 
 import { ThemeProvider } from "../shared/contexts/theme.context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "../features/sessions/sessions.context";
+import { ModalProvider } from "../shared/contexts/modal.context";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false);

@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useModal } from "../../../shared/modal.context";
 import tagService from "../tags.service";
 import type { TagPayload, TagResponse } from "../tags.types";
 import { ApiError } from "../../../configs/api-error.config";
 import { tagErrors, type TagError } from "../consts/tag-errors";
 import { SESSIONS_QUERY_KEY } from "../../sessions/hooks/useSessions";
+import { useModal } from "../../../shared/contexts/modal.context";
 
 export const TAGS_QUERY_KEY = "tags";
 

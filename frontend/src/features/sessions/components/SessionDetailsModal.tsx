@@ -12,7 +12,6 @@ import { MdSave, MdModeEdit, MdCancel } from "react-icons/md";
 
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { useModal } from "../../../shared/modal.context";
 import IconButton from "../../../shared/components/buttons/IconButton";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
 import type { SessionResponse } from "../sessions.types";
@@ -25,6 +24,7 @@ import { useSessionContext } from "../sessions.context";
 import { useFetchTagsByProject } from "../../tags/hooks/useTags";
 import SessionSelector from "./SessionCreation/SessionSelector";
 import Input from "../../../shared/components/inputs/Input";
+import { useModal } from "../../../shared/contexts/modal.context";
 
 interface SessionDraft {
   title: string;

@@ -18,7 +18,7 @@ import {
   useFetchProjects,
 } from "../../hooks/useProjects";
 import ProjectsSkeleton from "./ProjectsSkeleton";
-import { useModal } from "../../../../shared/modal.context";
+import { useModal } from "../../../../shared/contexts/modal.context";
 
 const Projects = () => {
   const { setModalLoading } = useModal();

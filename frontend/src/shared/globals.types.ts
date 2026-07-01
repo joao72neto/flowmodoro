@@ -2,6 +2,7 @@ export type ModalType = "warning" | "error" | "success" | "default";
 export type VariantType =
   | "secondary"
   | "danger"
+  | "secondary40"
   | "danger2"
   | "primary"
   | "success"

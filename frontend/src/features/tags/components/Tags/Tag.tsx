@@ -4,10 +4,10 @@ import type { TagResponse } from "../../tags.types";
 import { MdModeEditOutline } from "react-icons/md";
 import { RxTrash } from "react-icons/rx";
 import clsx from "clsx";
-import { useModal } from "../../../../shared/modal.context";
 import { IoMdPricetag } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { formatToHour } from "../../../../shared/utils/number.utils";
+import { useModal } from "../../../../shared/contexts/modal.context";
 
 const Tag = ({
   tagData,

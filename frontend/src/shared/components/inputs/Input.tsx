@@ -4,6 +4,7 @@ import { forwardRef, type InputHTMLAttributes } from "react";
 
 const focusVariants = {
   primary: "focus-within:border-primary!",
+  secondary40: "focus-within:border-secondary/40!",
   secondary: "focus-within:border-secondary!",
   danger: "focus-within:border-danger!",
   danger2: "focus-within:border-danger-2!",
@@ -13,6 +14,7 @@ const focusVariants = {
 
 const iconFocusVariants = {
   primary: "group-focus-within:text-primary",
+  secondary40: "group-focus-within:text-secondary/40",
   secondary: "group-focus-within:text-secondary",
   danger: "group-focus-within:text-danger",
   danger2: "group-focus-within:text-danger-2",

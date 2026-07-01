@@ -25,6 +25,7 @@ export const baseStyle = clsx(
 export const variants = {
   primary: clsx(baseStyle, "bg-primary"),
   secondary: clsx(baseStyle, "bg-secondary"),
+  secondary40: clsx(baseStyle, "bg-secondary/40"),
   danger: clsx(baseStyle, "bg-danger"),
   danger2: clsx(baseStyle, "bg-danger-2"),
   success: clsx(baseStyle, "bg-success"),

@@ -1,11 +1,11 @@
 import sessionsService from "../sessions.service";
 import type { SessionPayload, SessionResponse } from "../sessions.types";
-import { useModal } from "../../../shared/modal.context";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../../../configs/api-error.config";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
 import { PROJECTS_QUERY_KEY } from "../../projects/hooks/useProjects";
 import { TAGS_QUERY_KEY } from "../../tags/hooks/useTags";
+import { useModal } from "../../../shared/contexts/modal.context";
 
 export const SESSIONS_QUERY_KEY = "sessions";
 
