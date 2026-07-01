@@ -28,6 +28,7 @@ public interface TagRepository extends JpaRepository<TagModel, Long> {
 			        t.id,
 			        t.name,
 			        t.project.id
+					ORDER BY t.id DESC
 			""")
 	List<TagDTO> findAllWithTotalFocus(Long projectId, String userId);
 

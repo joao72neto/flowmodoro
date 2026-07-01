@@ -23,6 +23,7 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, Long> {
 			        AND s.userId = :userId
 			    WHERE p.userId = :userId
 			    GROUP BY p.id, p.name
+					ORDER BY p.id DESC
 			""")
 	List<ProjectDTO> findAllWithTotalFocus(String userId);
 
