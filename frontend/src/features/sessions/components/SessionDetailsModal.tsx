@@ -45,7 +45,7 @@ const SessionDetailsModal = ({
 }) => {
   if (!isOpen) return null;
 
-  const { showWarning, hideModal, setModalLoading } = useModal();
+  const { showDefault, hideModal, setModalLoading } = useModal();
 
   const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
   const { mutate: deleteSession } = useDeleteSession();
@@ -143,7 +143,7 @@ const SessionDetailsModal = ({
   };
 
   const handleDelete = () => {
-    showWarning({
+    showDefault({
       title: "Deseja mesmo excluir essa sessão?",
       message: "Esta operação não pode ser desfeita.",
       cancel: () => {},
@@ -165,9 +165,10 @@ const SessionDetailsModal = ({
 
   const handleClose = () => {
     if (isReadyToSave) {
-      showWarning({
+      showDefault({
         title: "Deseja mesmo fechar sem salvar?",
         message: "Seus dados não serão salvos.",
+        cancelLabel: "Voltar",
         cancel: () => {},
         action: () => {
           sessionStorage.removeItem(draftKey);

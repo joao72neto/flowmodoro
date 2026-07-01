@@ -1,4 +1,4 @@
-export type ModalType = "warning" | "error" | "success" | "default";
+export type ModalType = "warning" | "error" | "success" | "default" | "info";
 export type VariantType =
   | "secondary"
   | "danger"

@@ -13,7 +13,7 @@ import { useModal } from "../../../shared/contexts/modal.context";
 
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
-  const { showWarning, hideModal, setModalLoading } = useModal();
+  const { showDefault, hideModal, setModalLoading } = useModal();
 
   const BREAK_RATIO = restRatio / 100;
 
@@ -151,7 +151,7 @@ const useTimer = () => {
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
 
-    showWarning({
+    showDefault({
       title: "Sessão Finalizada! 🎉",
       message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds)}?`,
       action: () => {

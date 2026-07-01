@@ -1,6 +1,7 @@
 import type { VariantType } from "../shared/globals.types";
 
 interface IModalConfig {
+  info: IModal;
   default: IModal;
   success: IModal;
   error: IModal;
@@ -17,9 +18,17 @@ interface IModal {
 }
 
 export const modalConfig: IModalConfig = {
-  default: {
+  info: {
     title: "Aviso",
     children: "Este é um aviso padrão",
+    closeButtonText: "Fechar",
+    closeButtonVariant: "secondary40",
+    confirmButtonText: "Confirmar",
+    confirmButtonVariant: "primary",
+  },
+  default: {
+    title: "Padrão'",
+    children: "Este é o modal padrão",
     closeButtonText: "Fechar",
     closeButtonVariant: "secondary40",
     confirmButtonText: "Confirmar",

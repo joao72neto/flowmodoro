@@ -48,6 +48,21 @@ interface IModalContext {
     confirmLabel?: string;
     cancelLabel?: string;
   }) => void;
+  showInfo: ({
+    title,
+    message,
+    action,
+    cancel,
+    confirmLabel,
+    cancelLabel,
+  }: {
+    title: string;
+    message: string;
+    action: () => void;
+    cancel?: () => void;
+    confirmLabel?: string;
+    cancelLabel?: string;
+  }) => void;
   showDefault: ({
     title,
     message,
@@ -113,6 +128,35 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       setIsModalLoading(false);
     },
     [],
+  );
+
+  const showInfo = useCallback(
+    ({
+      title,
+      message,
+      action,
+      cancel,
+      confirmLabel,
+      cancelLabel,
+    }: {
+      title: string;
+      message: string;
+      action: () => void;
+      cancel?: () => void;
+      confirmLabel?: string;
+      cancelLabel?: string;
+    }) => {
+      showModal({
+        type: "info",
+        title,
+        message,
+        onConfirm: action,
+        onCancel: cancel,
+        confirmLabel,
+        cancelLabel,
+      });
+    },
+    [showModal],
   );
 
   const showDefault = useCallback(
@@ -258,6 +302,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         showWarning,
         showSuccess,
         showDefault,
+        showInfo,
         hideModal,
         setModalLoading: setIsModalLoading,
       }}
@@ -271,7 +316,9 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
           confirmButtonText={confirmLabel}
           onClose={handleCancel}
           onConfirm={
-            modalType === "warning" || confirmLabel ? handleConfirm : undefined
+            modalType === "warning" || modalType === "default" || confirmLabel
+              ? handleConfirm
+              : undefined
           }
           isLoading={isModalLoading}
         >
