@@ -80,7 +80,7 @@ const Projects = () => {
             ) : (
               <div
                 className={clsx(
-                  "flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden",
+                  "flex-1 flex flex-col gap-2 p-1 overflow-auto contain-content scrollbar-hidden",
                   isEmpty && "justify-center",
                 )}
               >

@@ -13,12 +13,12 @@
 
 .light {
   --neutral-100: #fafaf9;
-  --text-primary: #1c1917;
+  --text-primary: #252221;
   --neutral-80: #ffffff;
-  --neutral-60: #f5f5f4;
+  --neutral-60: #e2e2e2;
   --neutral-40: #737373;
   --neutral-20: #404040;
-  --neutral-10: #171717;
+  --neutral-10: #2b2828;
   --border-color: rgba(0, 0, 0, 0.1);
 }
 

@@ -37,7 +37,7 @@ const Project = ({
   return (
     <div
       className={clsx(
-        "p-4 rounded-xl bg-neutral-80/40 border border-border flex items-center justify-between",
+        "p-4 rounded-xl bg-neutral-80/40 border border-border flex items-center justify-between shadow-md",
         "hover:border-neutral-60 hover:bg-neutral-80/85 hover:shadow-lg transition-all duration-200 group relative",
       )}
     >
