@@ -33,15 +33,15 @@ Quando o usuário inicia o descanso calculado pelo app, ele pode:
 - esperar até o término (uma notificação será enviada ao finalizar);
 - ou pular a pausa e iniciar uma nova sessão.
 
-### Gestão de Tarefas
+### Gestão de Projetos e Tags
 
-A aplicação conta com uma barra lateral (*sidebar*) à direita para o gerenciamento de tarefas.
+A aplicação conta com uma barra lateral (*sidebar*) à direita para gerenciar projetos e tags, que podem ser atribuídos às sessões de forma opcional.
 
 Nela é possível:
 
-- Criar novas tarefas;
-- Editar e excluir tarefas existentes;
-- Iniciar o *tracking* de uma tarefa ao clicar no botão de *play*.
+- Criar novos projetos e suas respectivas tags (as tags são exclusivas de cada projeto);
+- Editar e excluir projetos e tags;
+- Visualizar o tempo total acumulado por projeto e por tag ao longo do tempo, conforme são utilizados nas sessões.
 
 ### Histórico de Sessões
 
