@@ -11,18 +11,25 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
-import java.time.Duration;
 
+import com.company.flowmodoro.exception.CommonErrorCode;
+import com.company.flowmodoro.exception.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class RateLimitInterceptor implements HandlerInterceptor {
 
+	private final ObjectMapper objectMapper = new ObjectMapper();
+
 	private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
 	private Bucket createNewBucket() {
-		Bandwidth limit = Bandwidth.classic(20, Refill.greedy(20, Duration.ofMinutes(1)));
+		Bandwidth limit = Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1)));
 		return Bucket.builder().addLimit(limit).build();
 	}
 
@@ -41,13 +48,18 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 		if (bucket.tryConsume(1)) {
 			return true;
 		}
-		else {
-			response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-			response.setContentType("application/json");
-			response.getWriter().write("{\"error\": \"Too many requests!\"}");
 
-			return false;
-		}
+		ErrorResponse error = ErrorResponse.builder()
+				.code(CommonErrorCode.RATE_LIMIT_EXCEEDED)
+				.errors(List.of("Muitas requisições. Por favor, tente novamente mais tarde."))
+				.build();
+
+		response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json");
+		response.getWriter().write(objectMapper.writeValueAsString(error));
+
+		return false;
 	}
 
 }
