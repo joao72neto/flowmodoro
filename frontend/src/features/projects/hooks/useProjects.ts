@@ -1,18 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import projectsService from "../projects.service";
 import type { ProjectPayload, ProjectResponse } from "../projects.types";
-import { ApiError } from "../../../configs/api-error.config";
+import { ApiError } from "../../../configs/api-error.configs";
 import { projectErrors, type ProjectError } from "../consts/project-errors";
-import { SESSIONS_QUERY_KEY } from "../../sessions/hooks/useSessions";
 import { useModal } from "../../../shared/contexts/modal.context";
-
-export const PROJECTS_QUERY_KEY = "projects";
+import { APP_DATA_QUERY_KEY } from "../../../app-query-key";
 
 export const useFetchProjects = () => {
   const { showError, hideModal } = useModal();
 
   return useQuery({
-    queryKey: [PROJECTS_QUERY_KEY],
+    queryKey: [APP_DATA_QUERY_KEY],
     queryFn: async () => {
       try {
         return await projectsService.fetchProjects();
@@ -42,7 +40,7 @@ export const useCreateProject = () => {
       projectsService.createProject(data),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
 
     onError: (error: ApiError) => {
@@ -70,7 +68,7 @@ export const useUpdateProject = () => {
     }): Promise<ProjectResponse> => projectsService.updateProject({ id, data }),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
 
     onError: (error: ApiError) => {
@@ -93,8 +91,7 @@ export const useDeleteProject = () => {
     mutationFn: (id: number) => projectsService.deleteProject(id),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
       setModalLoading(false);
       hideModal();
     },

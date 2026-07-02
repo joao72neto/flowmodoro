@@ -29,7 +29,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 	private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
 	private Bucket createNewBucket() {
-		Bandwidth limit = Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1)));
+		Bandwidth limit = Bandwidth.classic(50, Refill.greedy(50, Duration.ofMinutes(1)));
 		return Bucket.builder().addLimit(limit).build();
 	}
 

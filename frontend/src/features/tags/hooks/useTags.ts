@@ -1,18 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import tagService from "../tags.service";
 import type { TagPayload, TagResponse } from "../tags.types";
-import { ApiError } from "../../../configs/api-error.config";
+import { ApiError } from "../../../configs/api-error.configs";
 import { tagErrors, type TagError } from "../consts/tag-errors";
-import { SESSIONS_QUERY_KEY } from "../../sessions/hooks/useSessions";
 import { useModal } from "../../../shared/contexts/modal.context";
-
-export const TAGS_QUERY_KEY = "tags";
+import { APP_DATA_QUERY_KEY } from "../../../app-query-key";
 
 export const useFetchTagsByProject = (projectId: number) => {
   const { showError, hideModal } = useModal();
 
   return useQuery({
-    queryKey: [TAGS_QUERY_KEY, projectId],
+    queryKey: [APP_DATA_QUERY_KEY, projectId],
     queryFn: async () => {
       try {
         if (projectId <= 0) return [];
@@ -41,7 +39,7 @@ export const useCreateTag = () => {
       tagService.createTag(data),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
 
     onError: (error: ApiError) => {
@@ -68,7 +66,7 @@ export const useUpdateTag = () => {
     }): Promise<TagResponse> => tagService.updateTag({ id, data }),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
 
     onError: (error: ApiError) => {
@@ -89,8 +87,7 @@ export const useDeleteTag = () => {
     mutationFn: (id: number) => tagService.deleteTag(id),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
       setModalLoading(false);
       hideModal();
     },

@@ -1,4 +1,4 @@
-import api from "../../configs/api.config";
+import api from "../../configs/api.configs";
 import type { ProjectPayload, ProjectResponse } from "./projects.types";
 
 class ProjectService {

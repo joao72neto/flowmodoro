@@ -39,7 +39,7 @@ function Timer() {
       <div
         className={clsx(
           "relative flex items-center justify-center",
-          "aspect-square min-w-60 p-7 rounded-full",
+          "aspect-square min-w-60 p-7 rounded-full shadow-2xl",
           "bg-neutral-80/80 border font-mono font-semibold",
           "transition-all duration-500 transform-gpu",
           config.ring,

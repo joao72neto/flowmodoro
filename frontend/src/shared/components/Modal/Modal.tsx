@@ -1,5 +1,5 @@
 import BaseModal from "./BaseModal";
-import { modalConfig } from "../../../configs/modal.config";
+import { modalConfig } from "../../../configs/modal.configs";
 import type { ModalType, VariantType } from "../../globals.types";
 
 const Modal = ({

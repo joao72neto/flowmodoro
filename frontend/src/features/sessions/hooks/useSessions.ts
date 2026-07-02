@@ -1,13 +1,11 @@
 import sessionsService from "../sessions.service";
 import type { SessionPayload, SessionResponse } from "../sessions.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ApiError } from "../../../configs/api-error.config";
+import { ApiError } from "../../../configs/api-error.configs";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
-import { PROJECTS_QUERY_KEY } from "../../projects/hooks/useProjects";
-import { TAGS_QUERY_KEY } from "../../tags/hooks/useTags";
-import { useModal } from "../../../shared/contexts/modal.context";
 
-export const SESSIONS_QUERY_KEY = "sessions";
+import { useModal } from "../../../shared/contexts/modal.context";
+import { APP_DATA_QUERY_KEY } from "../../../app-query-key";
 
 export const useFetchSessions = ({
   page,
@@ -19,7 +17,7 @@ export const useFetchSessions = ({
   const { showError, hideModal } = useModal();
 
   return useQuery({
-    queryKey: [SESSIONS_QUERY_KEY, page, size],
+    queryKey: [APP_DATA_QUERY_KEY, page, size],
     queryFn: async () => {
       try {
         return await sessionsService.fetchSessions({ page, size });
@@ -58,9 +56,7 @@ export const useCreateSession = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
       setModalLoading(false);
       hideModal();
     },
@@ -91,9 +87,7 @@ export const useUpdateSession = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };
@@ -115,9 +109,7 @@ export const useDeleteSession = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [SESSIONS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };

@@ -1,4 +1,4 @@
-import api from "../../configs/api.config";
+import api from "../../configs/api.configs";
 import type { PaginationResponse } from "../../shared/globals.types";
 import type {
   SessionPayload,

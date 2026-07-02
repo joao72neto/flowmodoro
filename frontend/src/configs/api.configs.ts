@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAnonymousUserId } from "../shared/utils/storage.utils";
-import { handleApiError } from "./api-error.config";
+import { handleApiError } from "./api-error.configs";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",

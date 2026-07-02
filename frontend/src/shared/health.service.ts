@@ -1,4 +1,4 @@
-import api from "../configs/api.config";
+import api from "../configs/api.configs";
 
 class HealthService {
   async getHealth() {
