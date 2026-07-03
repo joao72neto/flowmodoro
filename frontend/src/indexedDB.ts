@@ -1,10 +1,10 @@
 import Dexie, { type Table } from "dexie";
-import type { SessionResponse } from "./features/sessions/api/sessions.types";
 import type { ProjectResponse } from "./features/projects/api/projects.types";
 import type { TagResponse } from "./features/tags/api/tags.types";
+import type { SessionModel } from "./features/sessions/db/session.model";
 
 class AppDB extends Dexie {
-  sessions!: Table<SessionResponse, string>;
+  sessions!: Table<SessionModel, string>;
   projects!: Table<ProjectResponse, string>;
   tags!: Table<TagResponse, string>;
 
