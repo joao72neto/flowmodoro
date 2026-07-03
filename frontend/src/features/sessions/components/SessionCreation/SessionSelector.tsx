@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
-import type { ProjectResponse } from "../../../projects/projects.types";
-import type { TagResponse } from "../../../tags/tags.types";
+import type { ProjectResponse } from "../../../projects/api/projects.types";
+import type { TagResponse } from "../../../tags/api/tags.types";
 import Button from "../../../../shared/components/buttons/Button";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 

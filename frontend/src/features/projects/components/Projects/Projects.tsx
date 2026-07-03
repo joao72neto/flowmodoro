@@ -9,14 +9,14 @@ import Project from "./Project";
 import EmptyProjects from "./EmptyProjects";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
-import type { ProjectResponse } from "../../projects.types";
+import type { ProjectResponse } from "../../api/projects.types";
 import Tags from "../../../tags/components/Tags/Tags";
 import {
   useCreateProject,
   useDeleteProject,
   useUpdateProject,
   useFetchProjects,
-} from "../../hooks/useProjects";
+} from "../../api/hooks/useProjects";
 import ProjectsSkeleton from "./ProjectsSkeleton";
 import { useModal } from "../../../../shared/contexts/modal.context";
 

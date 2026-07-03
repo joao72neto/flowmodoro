@@ -1,5 +1,5 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
-import type { ProjectResponse } from "../../projects.types";
+import type { ProjectResponse } from "../../api/projects.types";
 import { MdModeEditOutline } from "react-icons/md";
 import { RxTrash } from "react-icons/rx";
 import clsx from "clsx";

@@ -1,6 +1,6 @@
-import type { ProjectError } from "../features/projects/consts/project-errors";
-import type { SessionError } from "../features/sessions/consts/session-errors";
-import type { TagError } from "../features/tags/consts/tag-errors";
+import type { ProjectError } from "../features/projects/api/consts/project-errors";
+import type { SessionError } from "../features/sessions/api/consts/session-errors";
+import type { TagError } from "../features/tags/api/consts/tag-errors";
 
 export type CodeError = ProjectError | TagError | SessionError;
 

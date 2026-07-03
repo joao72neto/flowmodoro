@@ -1,11 +1,16 @@
-import sessionsService from "../sessions.service";
 import type { SessionPayload, SessionResponse } from "../sessions.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ApiError } from "../../../configs/api-error.configs";
+import { ApiError } from "../../../../configs/api-error.configs";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
 
-import { useModal } from "../../../shared/contexts/modal.context";
-import { APP_DATA_QUERY_KEY } from "../../../app-query-key";
+import { useModal } from "../../../../shared/contexts/modal.context";
+import { APP_DATA_QUERY_KEY } from "../../../../app-query-key";
+import {
+  createSession,
+  deleteSession,
+  fetchSessions,
+  updateSession,
+} from "../sessions.api";
 
 export const useFetchSessions = ({
   page,
@@ -20,7 +25,7 @@ export const useFetchSessions = ({
     queryKey: [APP_DATA_QUERY_KEY, page, size],
     queryFn: async () => {
       try {
-        return await sessionsService.fetchSessions({ page, size });
+        return await fetchSessions({ page, size });
       } catch (error) {
         if (error instanceof ApiError) {
           showError({
@@ -44,7 +49,7 @@ export const useCreateSession = () => {
 
   return useMutation({
     mutationFn: (data: SessionPayload): Promise<SessionResponse> =>
-      sessionsService.createSession(data),
+      createSession(data),
 
     onError: (error: ApiError) => {
       showError({
@@ -74,7 +79,7 @@ export const useUpdateSession = () => {
     }: {
       id: number;
       data: SessionPayload;
-    }): Promise<SessionResponse> => sessionsService.updateSession({ id, data }),
+    }): Promise<SessionResponse> => updateSession({ id, data }),
 
     onError: (error: ApiError) => {
       showError({
@@ -97,7 +102,7 @@ export const useDeleteSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => sessionsService.deleteSession(id),
+    mutationFn: (id: number) => deleteSession(id),
 
     onError: (error: any) => {
       showError({

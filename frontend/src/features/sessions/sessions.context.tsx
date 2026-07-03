@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useCreateSession } from "./hooks/useSessions";
+import { useCreateSession } from "./api/hooks/useSessions";
 
-import type { TagResponse } from "../tags/tags.types";
-import type { ProjectResponse } from "../projects/projects.types";
-import { useFetchProjects } from "../projects/hooks/useProjects";
-import { useFetchTagsByProject } from "../tags/hooks/useTags";
+import type { TagResponse } from "../tags/api/tags.types";
+import type { ProjectResponse } from "../projects/api/projects.types";
+import { useFetchProjects } from "../projects/api/hooks/useProjects";
+import { useFetchTagsByProject } from "../tags/api/hooks/useTags";
 import { localStorageKeys } from "../../shared/utils/storage.utils";
 
 export interface ISaveSessionData {

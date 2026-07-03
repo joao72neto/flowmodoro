@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { ProjectResponse } from "../projects.types";
+import type { ProjectResponse } from "../api/projects.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateProjectSchema } from "../project.schema";
 
-import type { useCreateProject, useUpdateProject } from "../hooks/useProjects";
+import type { useCreateProject, useUpdateProject } from "../api/hooks/useProjects";
 
 const ProjectModal = ({
   isOpen,

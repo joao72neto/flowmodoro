@@ -1,7 +1,7 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { TagResponse } from "../tags.types";
+import type { TagResponse } from "../api/tags.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -9,7 +9,7 @@ import { IoMdPricetag } from "react-icons/io";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateTagSchema } from "../tag.schema";
-import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
+import type { useCreateTag, useUpdateTag } from "../api/hooks/useTags";
 
 const TagModal = ({
   isOpen,

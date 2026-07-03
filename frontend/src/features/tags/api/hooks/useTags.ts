@@ -1,25 +1,29 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import projectsService from "../projects.service";
-import type { ProjectPayload, ProjectResponse } from "../projects.types";
-import { ApiError } from "../../../configs/api-error.configs";
-import { projectErrors, type ProjectError } from "../consts/project-errors";
-import { useModal } from "../../../shared/contexts/modal.context";
-import { APP_DATA_QUERY_KEY } from "../../../app-query-key";
+import type { TagPayload, TagResponse } from "../tags.types";
+import { ApiError } from "../../../../configs/api-error.configs";
+import { tagErrors, type TagError } from "../consts/tag-errors";
+import { useModal } from "../../../../shared/contexts/modal.context";
+import { APP_DATA_QUERY_KEY } from "../../../../app-query-key";
+import {
+  createTag,
+  deleteTag,
+  fetchTagsByProject,
+  updateTag,
+} from "../tags.api";
 
-export const useFetchProjects = () => {
+export const useFetchTagsByProject = (projectId: number) => {
   const { showError, hideModal } = useModal();
 
   return useQuery({
-    queryKey: [APP_DATA_QUERY_KEY],
+    queryKey: [APP_DATA_QUERY_KEY, projectId],
     queryFn: async () => {
       try {
-        return await projectsService.fetchProjects();
+        if (projectId <= 0) return [];
+        return await fetchTagsByProject(projectId);
       } catch (error) {
         if (error instanceof ApiError) {
           showError({
-            title:
-              projectErrors[error.code as ProjectError] ??
-              "Erro ao carregar projetos",
+            title: tagErrors[error.code as TagError] ?? "Erro ao carregar tags",
             message: error.message,
             action: hideModal,
           });
@@ -31,13 +35,12 @@ export const useFetchProjects = () => {
   });
 };
 
-export const useCreateProject = () => {
+export const useCreateTag = () => {
   const { showError, hideModal } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: ProjectPayload): Promise<ProjectResponse> =>
-      projectsService.createProject(data),
+    mutationFn: (data: TagPayload): Promise<TagResponse> => createTag(data),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
@@ -45,8 +48,7 @@ export const useCreateProject = () => {
 
     onError: (error: ApiError) => {
       showError({
-        title:
-          projectErrors[error.code as ProjectError] ?? "Erro ao criar projeto",
+        title: tagErrors[error.code as TagError] ?? "Erro ao criar tag",
         message: error.message,
         action: hideModal,
       });
@@ -54,7 +56,7 @@ export const useCreateProject = () => {
   });
 };
 
-export const useUpdateProject = () => {
+export const useUpdateTag = () => {
   const { showError, hideModal } = useModal();
   const queryClient = useQueryClient();
 
@@ -64,8 +66,8 @@ export const useUpdateProject = () => {
       data,
     }: {
       id: number;
-      data: ProjectPayload;
-    }): Promise<ProjectResponse> => projectsService.updateProject({ id, data }),
+      data: TagPayload;
+    }): Promise<TagResponse> => updateTag({ id, data }),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
@@ -73,9 +75,7 @@ export const useUpdateProject = () => {
 
     onError: (error: ApiError) => {
       showError({
-        title:
-          projectErrors[error.code as ProjectError] ??
-          "Erro ao atualizar projeto",
+        title: tagErrors[error.code as TagError] ?? "Erro ao atualizar tag",
         message: error.message,
         action: hideModal,
       });
@@ -83,12 +83,12 @@ export const useUpdateProject = () => {
   });
 };
 
-export const useDeleteProject = () => {
+export const useDeleteTag = () => {
   const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => projectsService.deleteProject(id),
+    mutationFn: (id: number) => deleteTag(id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
@@ -98,9 +98,7 @@ export const useDeleteProject = () => {
 
     onError: (error: ApiError) => {
       showError({
-        title:
-          projectErrors[error.code as ProjectError] ??
-          "Erro ao deletar projeto",
+        title: tagErrors[error.code as TagError] ?? "Erro ao deletar tag",
         message: error.message,
         action: hideModal,
       });

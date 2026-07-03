@@ -9,14 +9,14 @@ import Tag from "./Tag";
 import EmptyTags from "./EmptyTags";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
-import type { ProjectResponse } from "../../../projects/projects.types";
-import type { TagResponse } from "../../tags.types";
+import type { ProjectResponse } from "../../../projects/api/projects.types";
+import type { TagResponse } from "../../api/tags.types";
 import {
   useCreateTag,
   useDeleteTag,
   useUpdateTag,
   useFetchTagsByProject,
-} from "../../hooks/useTags";
+} from "../../api/hooks/useTags";
 import TagsSkeleton from "./TagsSkeleton";
 import { useModal } from "../../../../shared/contexts/modal.context";
 

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 import { formatToHour } from "../../../../shared/utils/number.utils";
-import type { SessionResponse } from "../../sessions.types";
+import type { SessionResponse } from "../../api/sessions.types";
 import { PRESETS } from "../../../timer/consts/ratio-presets";
 
 import { GoProject } from "react-icons/go";
