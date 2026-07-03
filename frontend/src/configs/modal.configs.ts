@@ -1,4 +1,4 @@
-import type { VariantType } from "../shared/globals.types";
+import type { VariantType } from "../shared/global.types";
 
 interface IModalConfig {
   info: IModal;

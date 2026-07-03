@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { PiCaretDownLight, PiCaretUpLight } from "react-icons/pi";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import RatioSlider from "./RatioSlider";
-import { PRESETS } from "../../ratio.const";
+import { PRESETS } from "../../consts/ratio-presets";
 import { useTimerContext } from "../../timer.context";
 import { useSessionContext } from "../../../sessions/sessions.context";
 

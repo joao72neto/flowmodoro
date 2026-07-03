@@ -4,7 +4,7 @@ import Stack from "../../../shared/components/Stack";
 import { formatToHour } from "../../../shared/utils/number.utils";
 import { capitalize } from "../../../shared/utils/string.utils";
 
-import { PRESETS } from "../../timer/ratio.const";
+import { PRESETS } from "../../timer/consts/ratio-presets";
 import Button from "../../../shared/components/buttons/Button";
 
 import { FaTrash } from "react-icons/fa6";

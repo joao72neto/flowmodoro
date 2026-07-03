@@ -5,7 +5,7 @@ import { capitalize } from "../../../../shared/utils/string.utils";
 
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { useEffect, useState } from "react";
-import { PRESETS } from "../../../timer/ratio.const";
+import { PRESETS } from "../../../timer/consts/ratio-presets";
 import type { ISessionGroup, SessionResponse } from "../../sessions.types";
 import SessionDetailsModal from "../SessionDetailsModal";
 import Session from "./Session";

@@ -8,7 +8,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { IoMdPricetag } from "react-icons/io";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { CreateTagSchema } from "../tags.schemas";
+import { CreateTagSchema } from "../tag.schema";
 import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
 
 const TagModal = ({

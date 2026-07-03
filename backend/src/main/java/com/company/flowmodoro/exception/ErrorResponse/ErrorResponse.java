@@ -1,4 +1,4 @@
-package com.company.flowmodoro.exception;
+package com.company.flowmodoro.exception.ErrorResponse;
 
 import java.util.List;
 

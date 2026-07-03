@@ -2,6 +2,8 @@ package com.company.flowmodoro.exception;
 
 import java.util.List;
 
+import com.company.flowmodoro.exception.ErrorResponse.ErrorCode;
+
 public class BaseException extends RuntimeException {
 
 	private final List<String> errors;

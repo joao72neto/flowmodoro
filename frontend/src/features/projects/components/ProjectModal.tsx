@@ -8,7 +8,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { GoProject } from "react-icons/go";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { CreateProjectSchema } from "../projects.schemas";
+import { CreateProjectSchema } from "../project.schema";
 
 import type { useCreateProject, useUpdateProject } from "../hooks/useProjects";
 

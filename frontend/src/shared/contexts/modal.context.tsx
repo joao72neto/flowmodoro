@@ -1,6 +1,6 @@
 import Modal from "../components/Modal/Modal";
 import { createContext, useContext, useState, useCallback } from "react";
-import type { ModalType } from "../globals.types";
+import type { ModalType } from "../global.types";
 
 interface IModalContext {
   showError: ({

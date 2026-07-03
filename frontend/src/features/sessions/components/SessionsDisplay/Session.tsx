@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import type { SessionResponse } from "../../sessions.types";
-import { PRESETS } from "../../../timer/ratio.const";
+import { PRESETS } from "../../../timer/consts/ratio-presets";
 
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";

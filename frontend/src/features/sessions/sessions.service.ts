@@ -1,5 +1,5 @@
 import api from "../../configs/api.configs";
-import type { PaginationResponse } from "../../shared/globals.types";
+import type { PaginationResponse } from "../../shared/global.types";
 import type {
   SessionPayload,
   SessionGroupResponse,

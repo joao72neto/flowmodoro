@@ -12,8 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.company.flowmodoro.exception.CommonErrorCode;
-import com.company.flowmodoro.exception.ErrorResponse;
+import com.company.flowmodoro.exception.ErrorResponse.ErrorResponse;
+import com.company.flowmodoro.exception.enums.CommonErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
