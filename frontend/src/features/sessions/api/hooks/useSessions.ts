@@ -4,7 +4,7 @@ import { ApiError } from "../../../../configs/api-error.configs";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
 
 import { useModal } from "../../../../shared/contexts/modal.context";
-import { APP_DATA_QUERY_KEY } from "../../../../app-query-key";
+import { APP_DATA_QUERY_KEY } from "../../../../query-key";
 import {
   createSession,
   deleteSession,

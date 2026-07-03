@@ -1,16 +1,16 @@
+export interface SessionGroupResponse {
+  date: string;
+  totalFocus: number;
+  totalRest: number;
+  sessionGroups: ISessionGroup[];
+}
+
 export interface ISessionGroup {
   id: string;
   name: string;
   totalFocus: number;
   totalRest: number;
   sessions: SessionResponse[];
-}
-
-export interface SessionGroupResponse {
-  date: string;
-  totalFocus: number;
-  totalRest: number;
-  sessionGroups: ISessionGroup[];
 }
 
 export interface SessionResponse {
