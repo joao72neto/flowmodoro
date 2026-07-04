@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { SessionPayload } from "../../api/sessions.types";
 import type { SessionModel } from "../session.model";
 import { createLocalSession, fetchLocalSessions } from "../sessions.repository";
@@ -37,6 +37,7 @@ export const useFetchLocalSessions = ({
 
 export const useCreateLocalSession = () => {
   const { showError, hideModal, setModalLoading } = useModal();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: SessionPayload): Promise<SessionModel> =>
@@ -51,6 +52,7 @@ export const useCreateLocalSession = () => {
     },
 
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
       setModalLoading(false);
       hideModal();
     },

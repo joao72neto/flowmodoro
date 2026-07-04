@@ -105,7 +105,10 @@ export const createLocalSession = async (
     name: payload.name || DEFAULT_SESSION.name,
     focus: payload.focus || DEFAULT_SESSION.focus,
     ratio: payload.ratio || DEFAULT_SESSION.ratio,
-    rest: payload.rest || DEFAULT_SESSION.rest,
+    rest: calculateRest(
+      payload.focus || DEFAULT_SESSION.focus,
+      payload.ratio || DEFAULT_SESSION.ratio,
+    ),
     projectId: payload.projectId || DEFAULT_SESSION.projectId,
     tagId: payload.tagId || DEFAULT_SESSION.tagId,
     date: new Date().toISOString(),
@@ -114,4 +117,8 @@ export const createLocalSession = async (
   await db.sessions.add(session);
 
   return session;
+};
+
+const calculateRest = (focus: number, ratio: number) => {
+  return focus * ratio;
 };
