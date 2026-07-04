@@ -14,7 +14,7 @@ export interface ISessionGroup {
 }
 
 export interface SessionResponse {
-  id: number;
+  id: number | string;
   name: string;
   focus: number;
   ratio: number;

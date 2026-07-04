@@ -7,46 +7,6 @@ import type {
 import { DEFAULT_SESSION } from "./consts/default-session";
 import type { SessionModel } from "./session.model";
 
-const test = {
-  content: [
-    {
-      date: "2026-07-03",
-      totalFocus: 2280,
-      totalRest: 456,
-      sessionGroups: [
-        {
-          id: "fb3e42ae-40ad-3bfc-a47f-2af2f50fd88b",
-          name: "Codando a lot",
-          totalFocus: 2280,
-          totalRest: 456,
-          sessions: [
-            {
-              id: 164,
-              name: "Codando a lot",
-              focus: 18,
-              ratio: 0.2,
-              rest: 4,
-              project: {
-                id: 42,
-                name: "Nossa",
-                totalFocus: null,
-              },
-              tag: {
-                id: 39,
-                name: "Tag",
-              },
-            },
-          ],
-        },
-      ],
-    },
-  ],
-  page: 1,
-  size: 5,
-  totalElements: 17,
-  totalPages: 4,
-};
-
 export const fetchLocalSessions = async ({
   page = 1,
   size = 10,
@@ -54,12 +14,87 @@ export const fetchLocalSessions = async ({
   page: number;
   size: number;
 }): Promise<PaginationResponse<SessionGroupResponse>> => {
-  db.sessions
-    .offset((page - 1) * size)
-    .limit(size)
-    .toArray();
+  const sessions = await db.sessions.toArray();
+  const projects = await db.projects.toArray();
+  const tags = await db.tags.toArray();
 
-  return test;
+  const projectsMap = new Map(projects.map((project) => [project.id, project]));
+  const tagsMap = new Map(tags.map((tag) => [tag.id, tag]));
+
+  const sessionResponse = sessions.map((session) => {
+    const project = projectsMap.get(session.projectId || 0);
+    const tag = tagsMap.get(session.tagId || 0);
+
+    return {
+      id: session.id,
+      name: session.name,
+      focus: session.focus,
+      ratio: session.ratio,
+      rest: session.rest,
+      dateString: session.date.split("T")[0],
+      project: {
+        id: session.projectId || 0,
+        name: project?.name ?? "",
+      },
+      tag: {
+        id: session.tagId || 0,
+        name: tag?.name ?? "",
+      },
+    };
+  });
+
+  const groupedData = sessionResponse.reduce((acc: any, session) => {
+    const dateKey = session.dateString;
+    const groupName = session.name;
+
+    if (!acc[dateKey]) {
+      acc[dateKey] = {
+        date: dateKey,
+        totalFocus: 0,
+        totalRest: 0,
+        sessionGroupsMap: {},
+      };
+    }
+
+    if (!acc[dateKey].sessionGroupsMap[groupName]) {
+      acc[dateKey].sessionGroupsMap[groupName] = {
+        id: crypto.randomUUID(),
+        name: groupName,
+        totalFocus: 0,
+        totalRest: 0,
+        sessions: [],
+      };
+    }
+
+    acc[dateKey].sessionGroupsMap[groupName].sessions.push(session);
+
+    acc[dateKey].sessionGroupsMap[groupName].totalFocus += session.focus;
+    acc[dateKey].sessionGroupsMap[groupName].totalRest += session.rest;
+
+    acc[dateKey].totalFocus += session.focus;
+    acc[dateKey].totalRest += session.rest;
+
+    return acc;
+  }, {});
+
+  const content: SessionGroupResponse[] = Object.values(groupedData).map(
+    (dateGroup: any) => {
+      return {
+        date: dateGroup.date,
+        totalFocus: dateGroup.totalFocus,
+        totalRest: dateGroup.totalRest,
+        sessionGroups: Object.values(dateGroup.sessionGroupsMap),
+      };
+    },
+  );
+
+  return {
+    content,
+    page,
+    size,
+    totalElements: sessions.length,
+    totalPages: Math.ceil(sessions.length / size),
+  };
 };
 
 export const createLocalSession = async (
@@ -73,6 +108,7 @@ export const createLocalSession = async (
     rest: payload.rest || DEFAULT_SESSION.rest,
     projectId: payload.projectId || DEFAULT_SESSION.projectId,
     tagId: payload.tagId || DEFAULT_SESSION.tagId,
+    date: new Date().toISOString(),
   };
 
   await db.sessions.add(session);

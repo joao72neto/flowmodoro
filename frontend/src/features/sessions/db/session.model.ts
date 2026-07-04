@@ -6,4 +6,5 @@ export interface SessionModel {
   rest: number;
   projectId: number | null;
   tagId: number | null;
+  date: string;
 }
