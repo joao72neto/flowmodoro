@@ -8,4 +8,5 @@ export const DEFAULT_SESSION: SessionModel = {
   rest: 0,
   projectId: null,
   tagId: null,
+  date: new Date().toISOString(),
 };
