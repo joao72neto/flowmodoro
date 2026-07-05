@@ -39,7 +39,7 @@ export const useCreateLocalProject = () => {
 
     onError: (error: ApiError) => {
       showError({
-        title: "Erro ao criar projeto local'cls",
+        title: "Erro ao criar projeto local",
         message: error.message,
         action: hideModal,
       });
