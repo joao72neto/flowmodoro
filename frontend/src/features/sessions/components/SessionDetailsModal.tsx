@@ -48,8 +48,11 @@ const SessionDetailsModal = ({
   const { showDefault, hideModal, setModalLoading } = useModal();
 
   const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
-
   const { mutate: deleteSession } = useDeleteSession();
+
+  // const { mutate: updateLocalSession, isPending: isUpdating } =
+  //   useUpdateLocalSession();
+  // const { mutate: deleteLocalSession } = useDeleteLocalSession();
 
   const { projects = [] } = useSessionContext();
 

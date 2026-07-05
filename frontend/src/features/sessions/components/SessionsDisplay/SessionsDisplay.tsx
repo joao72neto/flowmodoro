@@ -21,6 +21,11 @@ const SessionsDisplay = () => {
     size: SIZE,
   });
 
+  // const { data: sessions, isLoading } = useFetchLocalSessions({
+  //   page: currentPage,
+  //   size: SIZE,
+  // });
+
   const { totalPages, goToPage } = usePagination({
     itemsPerPage: SIZE,
     totalItems: sessions?.totalElements ?? 0,

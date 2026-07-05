@@ -89,6 +89,7 @@ export const SessionProvider = ({
   }, [restRatio]);
 
   const { mutate: createSession } = useCreateSession();
+  // const { mutate: createLocalSession } = useCreateLocalSession();
 
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
     setCurrentPage(1);

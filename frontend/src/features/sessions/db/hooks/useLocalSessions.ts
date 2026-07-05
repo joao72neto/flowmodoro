@@ -3,6 +3,7 @@ import type { SessionPayload } from "../../api/sessions.types";
 import type { SessionModel } from "../session.model";
 import {
   createLocalSession,
+  deleteLocalSession,
   fetchLocalSessions,
   updateLocalSession,
 } from "../sessions.repository";
@@ -86,6 +87,29 @@ export const useUpdateLocalSession = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+    },
+  });
+};
+
+export const useDeleteLocalSession = () => {
+  const { showError, hideModal, setModalLoading } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteLocalSession(id),
+
+    onError: (error: ApiError) => {
+      showError({
+        title: "Erro ao deletar sessão local",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      hideModal();
+      setModalLoading(false);
     },
   });
 };

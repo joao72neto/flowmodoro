@@ -151,3 +151,7 @@ export const updateLocalSession = async ({
 
   return updatedSession;
 };
+
+export const deleteLocalSession = async (id: string) => {
+  await db.sessions.delete(id);
+};
