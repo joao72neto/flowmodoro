@@ -24,6 +24,7 @@ const Projects = () => {
   const { setModalLoading } = useModal();
 
   const { data: projects, isLoading } = useFetchProjects();
+  // const { data: projects, isLoading } = useFetchLocalProjects();
 
   const [selectedProject, setSelectedProject] =
     useState<ProjectResponse | null>(null);
@@ -40,6 +41,9 @@ const Projects = () => {
 
   const { mutate: handleCreateProject, isPending: isSaving } =
     useCreateProject();
+  // const { mutate: handleCreateProject, isPending: isSaving } =
+  //   useCreateLocalProject();
+
   const { mutate: handleEditProject, isPending: isUpdating } =
     useUpdateProject();
   const { mutate: handleDeleteProject } = useDeleteProject();
