@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { SessionPayload } from "../../api/sessions.types";
 import type { SessionModel } from "../session.model";
-import { createLocalSession, fetchLocalSessions } from "../sessions.repository";
+import {
+  createLocalSession,
+  fetchLocalSessions,
+  updateLocalSession,
+} from "../sessions.repository";
 import { useModal } from "../../../../shared/contexts/modal.context";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
@@ -23,7 +27,7 @@ export const useFetchLocalSessions = ({
       } catch (error) {
         if (error instanceof ApiError) {
           showError({
-            title: "Erro ao carregar sessões",
+            title: "Erro ao carregar sessões locais",
             message: error.message,
             action: hideModal,
           });
@@ -55,6 +59,33 @@ export const useCreateLocalSession = () => {
       queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
       setModalLoading(false);
       hideModal();
+    },
+  });
+};
+
+export const useUpdateLocalSession = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: SessionPayload;
+    }): Promise<SessionModel> => updateLocalSession({ id, data }),
+
+    onError: (error: ApiError) => {
+      showError({
+        title: "Erro ao atualizar sessão local",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
     },
   });
 };

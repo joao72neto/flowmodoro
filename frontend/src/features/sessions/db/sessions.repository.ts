@@ -122,3 +122,32 @@ export const createLocalSession = async (
 const calculateRest = (focus: number, ratio: number) => {
   return focus * ratio;
 };
+
+export const updateLocalSession = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: SessionPayload;
+}): Promise<SessionModel> => {
+  const oldSession = await db.sessions.get(id);
+
+  const updatedSession: SessionModel = {
+    id,
+    date: new Date().toISOString(),
+    name: data.name || oldSession?.name || DEFAULT_SESSION.name,
+    focus: data.focus || oldSession?.focus || DEFAULT_SESSION.focus,
+    ratio: data.ratio || oldSession?.ratio || DEFAULT_SESSION.ratio,
+    rest: calculateRest(
+      data.focus || oldSession?.focus || DEFAULT_SESSION.focus,
+      data.ratio || oldSession?.ratio || DEFAULT_SESSION.ratio,
+    ),
+    projectId:
+      data.projectId || oldSession?.projectId || DEFAULT_SESSION.projectId,
+    tagId: data.tagId || oldSession?.tagId || DEFAULT_SESSION.tagId,
+  };
+
+  await db.sessions.update(id, data);
+
+  return updatedSession;
+};
