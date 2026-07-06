@@ -22,8 +22,14 @@ export const fetchLocalSessions = async ({
   size: number;
 }): Promise<PaginationResponse<DailySessionsDTO>> => {
   const sessions = await db.sessions.toArray();
+  const projects = await db.projects.toArray();
+  const tags = await db.tags.toArray();
 
-  const normalizedSessions = await normalizeSessions(sessions);
+  const normalizedSessions = normalizeSessions({
+    sessions,
+    projects,
+    tags,
+  });
   const groupedSessions = groupSessions(normalizedSessions);
   const groupedSessionsByDate = groupSessionsByDate(groupedSessions);
 

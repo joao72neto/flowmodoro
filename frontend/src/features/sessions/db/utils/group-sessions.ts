@@ -1,4 +1,5 @@
-import { db } from "../../../../indexedDB";
+import type { ProjectModel } from "../../../projects/db/project.model";
+import type { TagModel } from "../../../tags/db/tag.model";
 import type {
   DailySessionsDTO,
   SessionDTO,
@@ -7,12 +8,15 @@ import type {
 import type { SessionModel } from "../session.model";
 import { modelToDTO } from "../sessions.mappers";
 
-export const normalizeSessions = async (
-  sessions: SessionModel[],
-): Promise<SessionDTO[]> => {
-  const projects = await db.projects.toArray();
-  const tags = await db.tags.toArray();
-
+export const normalizeSessions = ({
+  sessions,
+  projects,
+  tags,
+}: {
+  sessions: SessionModel[];
+  projects: ProjectModel[];
+  tags: TagModel[];
+}): SessionDTO[] => {
   const projectsMap = new Map(projects.map((project) => [project.id, project]));
   const tagsMap = new Map(tags.map((tag) => [tag.id, tag]));
 
