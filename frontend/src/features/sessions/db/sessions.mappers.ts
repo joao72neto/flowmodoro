@@ -19,6 +19,7 @@ export const modelToDTO = ({
     name: session.name,
     focus: session.focus,
     rest: session.rest,
+    date: session.date,
     ratio: session.ratio,
     project: {
       id: project?.id || "",
