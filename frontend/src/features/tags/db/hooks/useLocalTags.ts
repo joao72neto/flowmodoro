@@ -1,0 +1,106 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useModal } from "../../../../shared/contexts/modal.context";
+import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
+import { ApiError } from "../../../../configs/api-error.configs";
+import {
+  createLocalTag,
+  deleteLocalTag,
+  fetchLocalTagsByProject,
+  updateLocalTag,
+} from "../tags.respository";
+import type { TagModel } from "../tag.model";
+import type { TagPayload } from "../../api/tags.types";
+
+export const useFetchLocalTagsByProject = (projectId: number) => {
+  const { showError, hideModal } = useModal();
+
+  return useQuery({
+    queryKey: [APP_LOCAL_DATA_QUERY_KEY],
+    queryFn: async () => {
+      try {
+        return await fetchLocalTagsByProject(projectId);
+      } catch (error) {
+        if (error instanceof ApiError) {
+          showError({
+            title: "Erro ao carregar tags locais",
+            message: error.message,
+            action: hideModal,
+          });
+        }
+        console.error(error);
+        throw error;
+      }
+    },
+  });
+};
+
+export const useCreateLocalTag = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: TagPayload): Promise<TagModel> => createLocalTag(data),
+
+    onError: (error: ApiError) => {
+      showError({
+        title: "Erro ao criar tag local",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+    },
+  });
+};
+
+export const useUpdateLocalTag = () => {
+  const { showError, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: TagPayload;
+    }): Promise<TagModel> => updateLocalTag({ id, data }),
+
+    onError: (error: ApiError) => {
+      showError({
+        title: "Erro ao atualizar tag local",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+    },
+  });
+};
+
+export const useDeleteLocalTag = () => {
+  const { showError, hideModal, setModalLoading } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteLocalTag(id),
+
+    onError: (error: ApiError) => {
+      showError({
+        title: "Erro ao deletar tag local",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      hideModal();
+      setModalLoading(false);
+    },
+  });
+};

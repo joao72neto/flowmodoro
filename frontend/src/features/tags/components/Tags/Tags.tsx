@@ -30,6 +30,7 @@ const Tags = ({
   const { setModalLoading } = useModal();
 
   const { data: tags, isLoading } = useFetchTagsByProject(project.id);
+  // const { data: tags, isLoading } = useFetchLocalTagsByProject(project.id);
 
   const [editingTag, setEditingTag] = useState<TagResponse | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,8 +42,13 @@ const Tags = ({
     useModalFactory(TagModal);
 
   const { mutate: handleCreateTag, isPending: isSaving } = useCreateTag();
+  // const { mutate: handleCreateTag, isPending: isSaving } = useCreateLocalTag();
+
   const { mutate: handleEditTag, isPending: isUpdating } = useUpdateTag();
+  // const { mutate: handleEditTag, isPending: isUpdating } = useUpdateLocalTag();
+
   const { mutate: handleDeleteTag } = useDeleteTag();
+  // const { mutate: handleDeleteTag } = useDeleteLocalTag();
 
   const filteredTags = useMemo(() => {
     if (!tags) return [];

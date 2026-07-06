@@ -1,5 +1,5 @@
 export type TagModel = {
-  id: number;
+  id: string | number;
   name: string;
   projectId: number;
 };
