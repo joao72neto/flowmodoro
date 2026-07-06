@@ -19,3 +19,22 @@ export const createLocalProject = async (
 
   return project;
 };
+
+export const updateLocalProject = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: ProjectPayload;
+}): Promise<ProjectModel> => {
+  const oldProject = await db.projects.get(id);
+
+  const updatedProject: ProjectModel = {
+    id,
+    name: data.name || oldProject?.name || DEFAULT_PROJECT.name,
+  };
+
+  await db.projects.update(id, data);
+
+  return updatedProject;
+};

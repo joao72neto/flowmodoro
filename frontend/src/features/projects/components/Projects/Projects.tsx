@@ -46,6 +46,9 @@ const Projects = () => {
 
   const { mutate: handleEditProject, isPending: isUpdating } =
     useUpdateProject();
+  // const { mutate: handleEditProject, isPending: isUpdating } =
+  //   useUpdateLocalProject();
+
   const { mutate: handleDeleteProject } = useDeleteProject();
 
   const filteredProjects = useMemo(() => {
