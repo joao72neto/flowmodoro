@@ -38,3 +38,7 @@ export const updateLocalProject = async ({
 
   return updatedProject;
 };
+
+export const deleteLocalProject = async (id: string) => {
+  await db.projects.delete(id);
+};

@@ -3,6 +3,7 @@ import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
 import { useModal } from "../../../../shared/contexts/modal.context";
 import {
   createLocalProject,
+  deleteLocalProject,
   fetchLocalProjects,
   updateLocalProject,
 } from "../projects.repository";
@@ -78,6 +79,29 @@ export const useUpdateLocalProject = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+    },
+  });
+};
+
+export const useDeleteLocalProject = () => {
+  const { showError, hideModal, setModalLoading } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteLocalProject(id),
+
+    onError: (error: ApiError) => {
+      showError({
+        title: "Erro ao deletar projeto local",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      hideModal();
+      setModalLoading(false);
     },
   });
 };

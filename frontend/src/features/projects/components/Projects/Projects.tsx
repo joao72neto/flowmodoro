@@ -50,6 +50,7 @@ const Projects = () => {
   //   useUpdateLocalProject();
 
   const { mutate: handleDeleteProject } = useDeleteProject();
+  // const { mutate: handleDeleteProject } = useDeleteLocalProject();
 
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
