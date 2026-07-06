@@ -1,4 +1,4 @@
 export interface ProjectModel {
-  id: string | number;
+  id: string;
   name: string;
 }

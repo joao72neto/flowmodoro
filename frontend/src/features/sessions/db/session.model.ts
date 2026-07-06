@@ -4,7 +4,7 @@ export interface SessionModel {
   focus: number;
   ratio: number;
   rest: number;
-  projectId: number | null;
-  tagId: number | null;
+  projectId?: string;
+  tagId?: string;
   date: string;
 }

@@ -1,6 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { SessionPayload } from "../../api/sessions.types";
-import type { SessionModel } from "../session.model";
 import {
   createLocalSession,
   deleteLocalSession,
@@ -10,6 +8,7 @@ import {
 import { useModal } from "../../../../shared/contexts/modal.context";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
+import type { SessionDTO, SessionPayloadDTO } from "../session.dtos";
 
 export const useFetchLocalSessions = ({
   page,
@@ -45,7 +44,7 @@ export const useCreateLocalSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: SessionPayload): Promise<SessionModel> =>
+    mutationFn: (data: SessionPayloadDTO): Promise<SessionDTO> =>
       createLocalSession(data),
 
     onError: (error: ApiError) => {
@@ -74,8 +73,8 @@ export const useUpdateLocalSession = () => {
       data,
     }: {
       id: string;
-      data: SessionPayload;
-    }): Promise<SessionModel> => updateLocalSession({ id, data }),
+      data: SessionPayloadDTO;
+    }): Promise<SessionDTO> => updateLocalSession({ id, data }),
 
     onError: (error: ApiError) => {
       showError({

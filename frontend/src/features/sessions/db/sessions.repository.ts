@@ -1,11 +1,10 @@
 import { db } from "../../../indexedDB";
 import type { PaginationResponse } from "../../../shared/global.types";
-import type {
-  SessionGroupResponse,
-  SessionPayload,
-} from "../api/sessions.types";
-import { DEFAULT_SESSION } from "./consts/default-session";
+import type { SessionGroupResponse } from "../api/sessions.types";
 import type { SessionModel } from "./session.model";
+import type { SessionPayloadDTO, SessionDTO } from "./session.dtos";
+import { payloadToModel, modelToDTO } from "./sessions.mappers";
+import { applyUpdates } from "./utils/apply-updates";
 
 export const fetchLocalSessions = async ({
   page = 1,
@@ -22,8 +21,8 @@ export const fetchLocalSessions = async ({
   const tagsMap = new Map(tags.map((tag) => [tag.id, tag]));
 
   const sessionResponse = sessions.map((session) => {
-    const project = projectsMap.get(session.projectId || 0);
-    const tag = tagsMap.get(session.tagId || 0);
+    const project = projectsMap.get(session.projectId || "");
+    const tag = tagsMap.get(session.tagId || "");
 
     return {
       id: session.id,
@@ -98,29 +97,16 @@ export const fetchLocalSessions = async ({
 };
 
 export const createLocalSession = async (
-  payload: SessionPayload,
-): Promise<SessionModel> => {
-  const session = {
-    id: crypto.randomUUID(),
-    name: payload.name || DEFAULT_SESSION.name,
-    focus: payload.focus || DEFAULT_SESSION.focus,
-    ratio: payload.ratio || DEFAULT_SESSION.ratio,
-    rest: calculateRest(
-      payload.focus || DEFAULT_SESSION.focus,
-      payload.ratio || DEFAULT_SESSION.ratio,
-    ),
-    projectId: payload.projectId || DEFAULT_SESSION.projectId,
-    tagId: payload.tagId || DEFAULT_SESSION.tagId,
-    date: new Date().toISOString(),
-  };
+  payload: SessionPayloadDTO,
+): Promise<SessionDTO> => {
+  const session: SessionModel = payloadToModel(payload);
 
   await db.sessions.add(session);
 
-  return session;
-};
+  const project = await db.projects.get(session.projectId || "");
+  const tag = await db.tags.get(session.tagId || "");
 
-const calculateRest = (focus: number, ratio: number) => {
-  return focus * ratio;
+  return modelToDTO({ session, project, tag });
 };
 
 export const updateLocalSession = async ({
@@ -128,28 +114,22 @@ export const updateLocalSession = async ({
   data,
 }: {
   id: string;
-  data: SessionPayload;
-}): Promise<SessionModel> => {
-  const oldSession = await db.sessions.get(id);
+  data: SessionPayloadDTO;
+}): Promise<SessionDTO> => {
+  const old = await db.sessions.get(id);
 
-  const updatedSession: SessionModel = {
+  const updatedSession: SessionModel = applyUpdates({
     id,
-    date: new Date().toISOString(),
-    name: data.name || oldSession?.name || DEFAULT_SESSION.name,
-    focus: data.focus || oldSession?.focus || DEFAULT_SESSION.focus,
-    ratio: data.ratio || oldSession?.ratio || DEFAULT_SESSION.ratio,
-    rest: calculateRest(
-      data.focus || oldSession?.focus || DEFAULT_SESSION.focus,
-      data.ratio || oldSession?.ratio || DEFAULT_SESSION.ratio,
-    ),
-    projectId:
-      data.projectId || oldSession?.projectId || DEFAULT_SESSION.projectId,
-    tagId: data.tagId || oldSession?.tagId || DEFAULT_SESSION.tagId,
-  };
+    old,
+    updated: data,
+  });
 
   await db.sessions.update(id, data);
 
-  return updatedSession;
+  const project = await db.projects.get(updatedSession.projectId || "");
+  const tag = await db.tags.get(updatedSession.tagId || "");
+
+  return modelToDTO({ session: updatedSession, project, tag });
 };
 
 export const deleteLocalSession = async (id: string) => {
