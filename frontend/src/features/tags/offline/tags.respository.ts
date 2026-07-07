@@ -1,26 +1,25 @@
 import { db } from "../../../indexedDB";
-import type { TagPayload } from "../api/tags.types";
-import { DEFAULT_TAG } from "./consts/default-tag";
+
+import type { TagDTO, TagPayloadDTO } from "./tag.dtos";
 import type { TagModel } from "./tag.model";
+import { modelToDTO, modelToDTOArray, payloadToModel } from "./tags.mappers";
+import { applyUpdates } from "./utils/apply-updates";
 
 export const fetchLocalTagsByProject = async (
   projectId: number,
-): Promise<TagModel[]> => {
-  return db.tags.filter((tag) => tag.projectId === projectId).toArray();
+): Promise<TagDTO[]> => {
+  const tags = await db.tags.where("projectId").equals(projectId).toArray();
+  return modelToDTOArray(tags);
 };
 
 export const createLocalTag = async (
-  payload: TagPayload,
-): Promise<TagModel> => {
-  const tag: TagModel = {
-    id: crypto.randomUUID(),
-    name: payload.name || DEFAULT_TAG.name,
-    projectId: payload.projectId || DEFAULT_TAG.projectId,
-  };
+  payload: TagPayloadDTO,
+): Promise<TagDTO> => {
+  const tag: TagModel = payloadToModel(payload);
 
   await db.tags.add(tag);
 
-  return tag;
+  return modelToDTO(tag);
 };
 
 export const updateLocalTag = async ({
@@ -28,19 +27,15 @@ export const updateLocalTag = async ({
   data,
 }: {
   id: string;
-  data: TagPayload;
+  data: TagPayloadDTO;
 }) => {
-  const oldTag = await db.tags.get(id);
+  const old = await db.tags.get(id);
 
-  const updatedTag: TagModel = {
-    id,
-    name: data.name || oldTag?.name || DEFAULT_TAG.name,
-    projectId: data.projectId || oldTag?.projectId || DEFAULT_TAG.projectId,
-  };
+  const updatedTag: TagModel = applyUpdates({ id, old, updated: data });
 
   await db.tags.update(id, data);
 
-  return updatedTag;
+  return modelToDTO(updatedTag);
 };
 
 export const deleteLocalTag = async (id: string) => {

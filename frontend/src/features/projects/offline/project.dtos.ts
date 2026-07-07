@@ -1,7 +1,7 @@
 export interface ProjectDTO {
   id: string;
   name: string;
-  totalFocus?: number;
+  totalFocus: number;
 }
 
 export interface ProjectPayloadDTO {

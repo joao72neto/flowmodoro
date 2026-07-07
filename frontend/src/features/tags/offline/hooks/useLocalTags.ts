@@ -8,8 +8,8 @@ import {
   fetchLocalTagsByProject,
   updateLocalTag,
 } from "../tags.respository";
-import type { TagModel } from "../tag.model";
-import type { TagPayload } from "../../api/tags.types";
+
+import type { TagDTO, TagPayloadDTO } from "../tag.dtos";
 
 export const useFetchLocalTagsByProject = (projectId: number) => {
   const { showError, hideModal } = useModal();
@@ -39,7 +39,7 @@ export const useCreateLocalTag = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: TagPayload): Promise<TagModel> => createLocalTag(data),
+    mutationFn: (data: TagPayloadDTO): Promise<TagDTO> => createLocalTag(data),
 
     onError: (error: ApiError) => {
       showError({
@@ -65,8 +65,8 @@ export const useUpdateLocalTag = () => {
       data,
     }: {
       id: string;
-      data: TagPayload;
-    }): Promise<TagModel> => updateLocalTag({ id, data }),
+      data: TagPayloadDTO;
+    }): Promise<TagDTO> => updateLocalTag({ id, data }),
 
     onError: (error: ApiError) => {
       showError({
