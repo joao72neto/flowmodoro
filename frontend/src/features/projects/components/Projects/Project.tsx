@@ -1,5 +1,4 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
-import type { ProjectResponse } from "../../api/projects.types";
 import { MdModeEditOutline } from "react-icons/md";
 import { RxTrash } from "react-icons/rx";
 import clsx from "clsx";
@@ -9,6 +8,7 @@ import { IoTimeOutline } from "react-icons/io5";
 import DropdownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useModal } from "../../../../shared/contexts/modal.context";
+import type { ProjectDTO } from "../../offline/project.dtos";
 
 const Project = ({
   projectData,
@@ -16,10 +16,10 @@ const Project = ({
   onEdit,
   onSelectTags,
 }: {
-  projectData: ProjectResponse;
+  projectData: ProjectDTO;
   onDelete?: () => void;
   onEdit?: () => void;
-  onSelectTags?: (project: ProjectResponse) => void;
+  onSelectTags?: (project: ProjectDTO) => void;
 }) => {
   const { showDefault, hideModal } = useModal();
 

@@ -9,30 +9,32 @@ import Tag from "./Tag";
 import EmptyTags from "./EmptyTags";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
-import type { ProjectResponse } from "../../../projects/api/projects.types";
-import type { TagResponse } from "../../api/tags.types";
-import {
-  useCreateTag,
-  useDeleteTag,
-  useUpdateTag,
-  useFetchTagsByProject,
-} from "../../api/hooks/useTags";
+
 import TagsSkeleton from "./TagsSkeleton";
 import { useModal } from "../../../../shared/contexts/modal.context";
+import {
+  useCreateLocalTag,
+  useDeleteLocalTag,
+  useFetchLocalTagsByProject,
+  useUpdateLocalTag,
+} from "../../offline/hooks/useLocalTags";
+import type { ProjectDTO } from "../../../projects/offline/project.dtos";
+import type { TagDTO } from "../../offline/tag.dtos";
 
 const Tags = ({
   project,
   onBack,
 }: {
-  project: ProjectResponse;
+  project: ProjectDTO;
   onBack: () => void;
 }) => {
   const { setModalLoading } = useModal();
 
-  const { data: tags, isLoading } = useFetchTagsByProject(project.id);
-  // const { data: tags, isLoading } = useFetchLocalTagsByProject(project.id);
+  const { data: tags, isLoading } = useFetchLocalTagsByProject(
+    project.id || "",
+  );
 
-  const [editingTag, setEditingTag] = useState<TagResponse | null>(null);
+  const [editingTag, setEditingTag] = useState<TagDTO | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { Modal: CreateTag, openModal: openTagModal } =
@@ -41,14 +43,11 @@ const Tags = ({
   const { Modal: EditTag, openModal: openEditModal } =
     useModalFactory(TagModal);
 
-  const { mutate: handleCreateTag, isPending: isSaving } = useCreateTag();
-  // const { mutate: handleCreateTag, isPending: isSaving } = useCreateLocalTag();
+  const { mutate: handleCreateTag, isPending: isSaving } = useCreateLocalTag();
 
-  const { mutate: handleEditTag, isPending: isUpdating } = useUpdateTag();
-  // const { mutate: handleEditTag, isPending: isUpdating } = useUpdateLocalTag();
+  const { mutate: handleEditTag, isPending: isUpdating } = useUpdateLocalTag();
 
-  const { mutate: handleDeleteTag } = useDeleteTag();
-  // const { mutate: handleDeleteTag } = useDeleteLocalTag();
+  const { mutate: handleDeleteTag } = useDeleteLocalTag();
 
   const filteredTags = useMemo(() => {
     if (!tags) return [];

@@ -1,7 +1,6 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { TagResponse } from "../api/tags.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -9,7 +8,11 @@ import { IoMdPricetag } from "react-icons/io";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateTagSchema } from "../tag.schema";
-import type { useCreateTag, useUpdateTag } from "../api/hooks/useTags";
+import type { TagDTO } from "../offline/tag.dtos";
+import type {
+  useCreateLocalTag,
+  useUpdateLocalTag,
+} from "../offline/hooks/useLocalTags";
 
 const TagModal = ({
   isOpen,
@@ -34,16 +37,16 @@ const TagModal = ({
   loading,
 }: {
   isOpen: boolean;
-  defaultValues?: TagResponse;
+  defaultValues?: TagDTO;
 
   title: string;
   titleIcon?: React.ReactNode;
 
   inputLabel?: string;
 
-  projectId: number;
-  edit: ReturnType<typeof useUpdateTag>["mutate"];
-  save: ReturnType<typeof useCreateTag>["mutate"];
+  projectId: string;
+  edit: ReturnType<typeof useUpdateLocalTag>["mutate"];
+  save: ReturnType<typeof useCreateLocalTag>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;

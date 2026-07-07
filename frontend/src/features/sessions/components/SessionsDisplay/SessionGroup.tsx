@@ -6,7 +6,6 @@ import { capitalize } from "../../../../shared/utils/string.utils";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { useEffect, useState } from "react";
 import { PRESETS } from "../../../timer/consts/ratio-presets";
-import type { ISessionGroup, SessionResponse } from "../../api/sessions.types";
 import SessionDetailsModal from "../SessionDetailsModal";
 import Session from "./Session";
 import Label from "../../../../shared/components/labels/Label";
@@ -14,10 +13,11 @@ import Label from "../../../../shared/components/labels/Label";
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
+import type { SessionDTO, SessionGroupDTO } from "../../offline/session.dtos";
 
-const SessionGroup = ({ sessionGroup }: { sessionGroup: ISessionGroup }) => {
+const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
   const [showSessionDetailsModal, setShowSessionDetailsModal] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<SessionResponse>(
+  const [selectedSession, setSelectedSession] = useState<SessionDTO>(
     sessionGroup.sessions[0],
   );
 

@@ -13,23 +13,26 @@ import { MdSave, MdModeEdit, MdCancel } from "react-icons/md";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import IconButton from "../../../shared/components/buttons/IconButton";
-import { useDeleteSession, useUpdateSession } from "../api/hooks/useSessions";
-import type { SessionResponse } from "../api/sessions.types";
 import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
 import Label from "../../../shared/components/labels/Label";
 import LabeledValue from "../../../shared/components/labels/LabeledValue";
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import { useSessionContext } from "../sessions.context";
-import { useFetchTagsByProject } from "../../tags/api/hooks/useTags";
 import SessionSelector from "./SessionCreation/SessionSelector";
 import Input from "../../../shared/components/inputs/Input";
 import { useModal } from "../../../shared/contexts/modal.context";
+import type { SessionDTO } from "../offline/session.dtos";
+import {
+  useDeleteLocalSession,
+  useUpdateLocalSession,
+} from "../offline/hooks/useLocalSessions";
+import { useFetchLocalTagsByProject } from "../../tags/offline/hooks/useLocalTags";
 
 interface SessionDraft {
   title: string;
-  selectedProjectId: number | null;
-  selectedTagId: number | null;
+  selectedProjectId: string | null;
+  selectedTagId: string | null;
   ratio: number;
   focus: number;
 }
@@ -41,18 +44,15 @@ const SessionDetailsModal = ({
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  session: SessionResponse;
+  session: SessionDTO;
 }) => {
   if (!isOpen) return null;
 
   const { showDefault, hideModal, setModalLoading } = useModal();
 
-  const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
-  const { mutate: deleteSession } = useDeleteSession();
-
-  // const { mutate: updateLocalSession, isPending: isUpdating } =
-  //   useUpdateLocalSession();
-  // const { mutate: deleteLocalSession } = useDeleteLocalSession();
+  const { mutate: updateLocalSession, isPending: isUpdating } =
+    useUpdateLocalSession();
+  const { mutate: deleteLocalSession } = useDeleteLocalSession();
 
   const { projects = [] } = useSessionContext();
 
@@ -75,10 +75,10 @@ const SessionDetailsModal = ({
   const [title, setTitle] = useState<string>(
     draft ? draft.title : session.name,
   );
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
     draft ? draft.selectedProjectId : session.project?.id || null,
   );
-  const [selectedTagId, setSelectedTagId] = useState<number | null>(
+  const [selectedTagId, setSelectedTagId] = useState<string | null>(
     draft ? draft.selectedTagId : session.tag?.id || null,
   );
   const [ratio, setRatio] = useState<number>(
@@ -88,7 +88,9 @@ const SessionDetailsModal = ({
     draft ? draft.focus : session.focus,
   );
 
-  const { data: tags = [] } = useFetchTagsByProject(selectedProjectId || 0);
+  const { data: tags = [] } = useFetchLocalTagsByProject(
+    selectedProjectId || "",
+  );
 
   useEffect(() => {
     if (mode === "view") {
@@ -124,7 +126,7 @@ const SessionDetailsModal = ({
 
   const handleSave = () => {
     const updatedRest = Math.round(focus * ratio);
-    updateSession(
+    updateLocalSession(
       {
         id: session.id,
         data: {
@@ -132,8 +134,8 @@ const SessionDetailsModal = ({
           focus: focus,
           ratio: ratio,
           rest: updatedRest,
-          projectId: selectedProjectId !== null ? selectedProjectId : 0,
-          tagId: selectedTagId !== null ? selectedTagId : 0,
+          projectId: selectedProjectId !== null ? selectedProjectId : "",
+          tagId: selectedTagId !== null ? selectedTagId : "",
         },
       },
       {
@@ -157,7 +159,7 @@ const SessionDetailsModal = ({
 
   const handleConfirmDelete = () => {
     setModalLoading(true);
-    deleteSession(session.id, {
+    deleteLocalSession(session.id, {
       onSuccess: () => {
         sessionStorage.removeItem(draftKey);
         setModalLoading(false);

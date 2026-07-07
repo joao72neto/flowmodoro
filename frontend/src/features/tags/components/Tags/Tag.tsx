@@ -1,6 +1,5 @@
 import DropDownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import type { TagResponse } from "../../api/tags.types";
 import { MdModeEditOutline } from "react-icons/md";
 import { RxTrash } from "react-icons/rx";
 import clsx from "clsx";
@@ -8,13 +7,14 @@ import { IoMdPricetag } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useModal } from "../../../../shared/contexts/modal.context";
+import type { TagDTO } from "../../offline/tag.dtos";
 
 const Tag = ({
   tagData,
   onDelete,
   onEdit,
 }: {
-  tagData: TagResponse;
+  tagData: TagDTO;
   onDelete?: () => void;
   onEdit?: () => void;
 }) => {

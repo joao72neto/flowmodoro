@@ -1,7 +1,6 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
 import Button from "../../../shared/components/buttons/Button";
-import type { ProjectResponse } from "../api/projects.types";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -10,7 +9,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateProjectSchema } from "../project.schema";
 
-import type { useCreateProject, useUpdateProject } from "../api/hooks/useProjects";
+import type { ProjectDTO } from "../offline/project.dtos";
+import type { useCreateLocalProject, useUpdateLocalProject } from "../offline/hooks/useLocalProjects";
 
 const ProjectModal = ({
   isOpen,
@@ -34,15 +34,15 @@ const ProjectModal = ({
   loading,
 }: {
   isOpen: boolean;
-  defaultValues?: ProjectResponse;
+  defaultValues?: ProjectDTO;
 
   title: string;
   titleIcon?: React.ReactNode;
 
   inputLabel?: string;
 
-  edit: ReturnType<typeof useUpdateProject>["mutate"];
-  save: ReturnType<typeof useCreateProject>["mutate"];
+  edit: ReturnType<typeof useUpdateLocalProject>["mutate"];
+  save: ReturnType<typeof useCreateLocalProject>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;

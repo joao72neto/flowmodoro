@@ -5,26 +5,21 @@ import { formatToHour } from "../../../../shared/utils/number.utils";
 import PageSelector from "../../../../shared/components/PageSelector";
 import { usePagination } from "../../../../shared/hooks/usePagination";
 import EmptySessions from "./EmptySessions";
-import { useFetchSessions } from "../../api/hooks/useSessions";
 import { useSessionContext } from "../../sessions.context";
 import SessionsSkeleton from "./SessionsSkeleton";
 import SessionsWrapper from "./SessionsWrapper";
 import SessionGroup from "./SessionGroup";
+import { useFetchLocalSessions } from "../../offline/hooks/useLocalSessions";
 
 const SessionsDisplay = () => {
   const SIZE = 7;
 
   const { currentPage, setCurrentPage } = useSessionContext();
 
-  const { data: sessions, isLoading } = useFetchSessions({
+  const { data: sessions, isLoading } = useFetchLocalSessions({
     page: currentPage,
     size: SIZE,
   });
-
-  // const { data: sessions, isLoading } = useFetchLocalSessions({
-  //   page: currentPage,
-  //   size: SIZE,
-  // });
 
   const { totalPages, goToPage } = usePagination({
     itemsPerPage: SIZE,

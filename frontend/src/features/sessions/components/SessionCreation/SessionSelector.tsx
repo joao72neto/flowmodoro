@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
-import type { ProjectResponse } from "../../../projects/api/projects.types";
-import type { TagResponse } from "../../../tags/api/tags.types";
+
 import Button from "../../../../shared/components/buttons/Button";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
+import type { ProjectDTO } from "../../../projects/offline/project.dtos";
+import type { TagDTO } from "../../../tags/offline/tag.dtos";
 
 const SessionSelector = ({
   children,
@@ -25,24 +26,24 @@ const SessionSelector = ({
   children: React.ReactNode;
   title?: string;
   icon?: React.ReactNode;
-  items?: ProjectResponse[] | TagResponse[];
+  items?: ProjectDTO[] | TagDTO[];
   variant?: "primary" | "secondary";
   placeholder?: string;
   emptyMsg?: string;
-  value: ProjectResponse | TagResponse | null;
+  value: ProjectDTO | TagDTO | null;
   onChange: (item: any) => void;
   disabled?: boolean;
   align?: "left" | "right" | "auto";
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [activeItemId, setActiveItemId] = useState(value?.id || 0);
+  const [activeItemId, setActiveItemId] = useState(value?.id || "");
   const [searchQuery, setSearchQuery] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setActiveItemId(value?.id || 0);
+    setActiveItemId(value?.id || "");
   }, [value]);
 
   useClickOutside(dropdownRef, () => {
@@ -50,7 +51,7 @@ const SessionSelector = ({
     setSearchQuery("");
   });
 
-  const isActive = (id: number) => id === activeItemId;
+  const isActive = (id: string) => id === activeItemId;
 
   const handleConfirmItem = () => {
     const item = items.find((item) => item.id === activeItemId) || null;
@@ -61,7 +62,7 @@ const SessionSelector = ({
 
   const handleClearItem = () => {
     onChange(null);
-    setActiveItemId(0);
+    setActiveItemId("");
     setSearchQuery("");
   };
 

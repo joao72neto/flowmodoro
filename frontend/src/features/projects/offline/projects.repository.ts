@@ -1,8 +1,11 @@
 import { db } from "../../../indexedDB";
-import type { ProjectPayload } from "../api/projects.types";
-import type { ProjectDTO } from "./project.dtos";
+import type { ProjectDTO, ProjectPayloadDTO } from "./project.dtos";
 import type { ProjectModel } from "./project.model";
-import { modelToDTO, modelToDTOArray, payloadToModel } from "./projects.mappers";
+import {
+  modelToDTO,
+  modelToDTOArray,
+  payloadToModel,
+} from "./projects.mappers";
 import { applyUpdates } from "./utils/apply-updates";
 
 export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
@@ -11,7 +14,7 @@ export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
 };
 
 export const createLocalProject = async (
-  payload: ProjectPayload,
+  payload: ProjectPayloadDTO,
 ): Promise<ProjectDTO> => {
   const project: ProjectModel = payloadToModel(payload);
 
@@ -25,7 +28,7 @@ export const updateLocalProject = async ({
   data,
 }: {
   id: string;
-  data: ProjectPayload;
+  data: ProjectPayloadDTO;
 }): Promise<ProjectDTO> => {
   const old = await db.projects.get(id);
 

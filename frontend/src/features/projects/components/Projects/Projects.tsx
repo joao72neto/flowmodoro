@@ -9,28 +9,27 @@ import Project from "./Project";
 import EmptyProjects from "./EmptyProjects";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
-import type { ProjectResponse } from "../../api/projects.types";
 import Tags from "../../../tags/components/Tags/Tags";
-import {
-  useCreateProject,
-  useDeleteProject,
-  useUpdateProject,
-  useFetchProjects,
-} from "../../api/hooks/useProjects";
+
 import ProjectsSkeleton from "./ProjectsSkeleton";
 import { useModal } from "../../../../shared/contexts/modal.context";
+import {
+  useCreateLocalProject,
+  useDeleteLocalProject,
+  useFetchLocalProjects,
+  useUpdateLocalProject,
+} from "../../offline/hooks/useLocalProjects";
+import type { ProjectDTO } from "../../offline/project.dtos";
 
 const Projects = () => {
   const { setModalLoading } = useModal();
 
-  const { data: projects, isLoading } = useFetchProjects();
-  // const { data: projects, isLoading } = useFetchLocalProjects();
+  const { data: projects, isLoading } = useFetchLocalProjects();
 
-  const [selectedProject, setSelectedProject] =
-    useState<ProjectResponse | null>(null);
-  const [editingProject, setEditingProject] = useState<ProjectResponse | null>(
+  const [selectedProject, setSelectedProject] = useState<ProjectDTO | null>(
     null,
   );
+  const [editingProject, setEditingProject] = useState<ProjectDTO | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { Modal: CreateProject, openModal: openProjectModal } =
@@ -40,17 +39,12 @@ const Projects = () => {
     useModalFactory(ProjectModal);
 
   const { mutate: handleCreateProject, isPending: isSaving } =
-    useCreateProject();
-  // const { mutate: handleCreateProject, isPending: isSaving } =
-  //   useCreateLocalProject();
+    useCreateLocalProject();
 
   const { mutate: handleEditProject, isPending: isUpdating } =
-    useUpdateProject();
-  // const { mutate: handleEditProject, isPending: isUpdating } =
-  //   useUpdateLocalProject();
+    useUpdateLocalProject();
 
-  const { mutate: handleDeleteProject } = useDeleteProject();
-  // const { mutate: handleDeleteProject } = useDeleteLocalProject();
+  const { mutate: handleDeleteProject } = useDeleteLocalProject();
 
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
@@ -132,7 +126,7 @@ const Projects = () => {
 
           <div className="w-1/2 h-full shrink-0 relative">
             <Tags
-              project={selectedProject || { id: 0, name: "" }}
+              project={selectedProject || { id: "", name: "", totalFocus: 0 }}
               onBack={() => setSelectedProject(null)}
             />
           </div>
