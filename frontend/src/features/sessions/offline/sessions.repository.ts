@@ -8,11 +8,7 @@ import type {
 } from "./session.dtos";
 import { payloadToModel, modelToDTO } from "./sessions.mappers";
 import { applyUpdates } from "./utils/apply-updates";
-import {
-  groupSessions,
-  groupSessionsByDate,
-  normalizeSessions,
-} from "./utils/group-sessions";
+import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
 
 export const fetchLocalSessions = async ({
   page = 1,
@@ -30,15 +26,14 @@ export const fetchLocalSessions = async ({
     projects,
     tags,
   });
-  const groupedSessions = groupSessions(normalizedSessions);
-  const groupedSessionsByDate = groupSessionsByDate(groupedSessions);
+  const content = buildDailySessions(normalizedSessions);
 
   return {
-    content: groupedSessionsByDate,
+    content,
     page,
     size,
-    totalElements: sessions.length,
-    totalPages: Math.ceil(sessions.length / size),
+    totalElements: normalizedSessions.length,
+    totalPages: Math.ceil(normalizedSessions.length / size),
   };
 };
 

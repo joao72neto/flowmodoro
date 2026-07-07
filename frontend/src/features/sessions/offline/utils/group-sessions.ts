@@ -17,68 +17,80 @@ export const normalizeSessions = ({
   projects: ProjectModel[];
   tags: TagModel[];
 }): SessionDTO[] => {
-  const projectsMap = new Map(projects.map((project) => [project.id, project]));
-  const tagsMap = new Map(tags.map((tag) => [tag.id, tag]));
+  const projectsMap = new Map(projects.map((p) => [p.id, p]));
+  const tagsMap = new Map(tags.map((t) => [t.id, t]));
 
-  const sessionResponse: SessionDTO[] = sessions.map((session) => {
-    const project = projectsMap.get(session.projectId || "");
-    const tag = tagsMap.get(session.tagId || "");
-
-    return modelToDTO({ session, project, tag });
-  });
-
-  return sessionResponse;
+  return sessions.map((session) => ({
+    ...modelToDTO({
+      session,
+      project: projectsMap.get(session.projectId || ""),
+      tag: tagsMap.get(session.tagId || ""),
+    }),
+  }));
 };
 
-export const groupSessions = (sessions: SessionDTO[]): SessionGroupDTO[] => {
-  const groupedData = sessions.reduce((acc: any, session) => {
-    const dateKey = session.date.split("T")[0];
-    const groupName = session.name;
+export const buildDailySessions = (
+  sessions: SessionDTO[],
+): DailySessionsDTO[] => {
+  const daysMap: Record<string, any> = {};
 
-    if (!acc[dateKey]) {
-      acc[dateKey] = {
+  sessions.forEach((session) => {
+    const dateKey = session.date.split("T")[0];
+    const projectId = session.project?.id || "null";
+    const tagId = session.tag?.id || "null";
+    const groupKey = `${session.name}_${projectId}_${tagId}`;
+
+    if (!daysMap[dateKey]) {
+      daysMap[dateKey] = {
         date: dateKey,
         totalFocus: 0,
         totalRest: 0,
-        sessionGroupsMap: {},
+        groupsMap: {},
       };
     }
 
-    if (!acc[dateKey].sessionGroupsMap[groupName]) {
-      acc[dateKey].sessionGroupsMap[groupName] = {
-        id: crypto.randomUUID(),
-        name: groupName,
+    const day = daysMap[dateKey];
+    day.totalFocus += session.focus;
+    day.totalRest += session.rest;
+
+    if (!day.groupsMap[groupKey]) {
+      day.groupsMap[groupKey] = {
+        id: groupKey,
+        name: session.name,
         totalFocus: 0,
         totalRest: 0,
         sessions: [],
       };
     }
 
-    acc[dateKey].sessionGroupsMap[groupName].sessions.push(session);
+    const group = day.groupsMap[groupKey];
+    group.totalFocus += session.focus;
+    group.totalRest += session.rest;
+    group.sessions.push(session);
+  });
 
-    acc[dateKey].sessionGroupsMap[groupName].totalFocus += session.focus;
-    acc[dateKey].sessionGroupsMap[groupName].totalRest += session.rest;
+  const content: DailySessionsDTO[] = Object.values(daysMap).map((day: any) => {
+    const sessionGroups: SessionGroupDTO[] = Object.values(day.groupsMap);
 
-    acc[dateKey].totalFocus += session.focus;
-    acc[dateKey].totalRest += session.rest;
+    sessionGroups.forEach((group) => {
+      group.sessions.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      );
+    });
 
-    return acc;
-  }, {});
+    sessionGroups.sort(
+      (a, b) => new Date(b.sessions[0].date).getTime() - new Date(a.sessions[0].date).getTime(),
+    );
 
-  return Object.values(groupedData);
-};
-
-export const groupSessionsByDate = (
-  sessions: SessionGroupDTO[],
-): DailySessionsDTO[] => {
-  const content: DailySessionsDTO[] = sessions.map((dateGroup: any) => {
     return {
-      date: dateGroup.date,
-      totalFocus: dateGroup.totalFocus,
-      totalRest: dateGroup.totalRest,
-      sessionGroups: Object.values(dateGroup.sessionGroupsMap),
+      date: day.date,
+      totalFocus: day.totalFocus,
+      totalRest: day.totalRest,
+      sessionGroups,
     };
   });
 
-  return content;
+  return content.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
 };
