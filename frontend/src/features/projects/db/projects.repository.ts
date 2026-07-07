@@ -1,23 +1,23 @@
 import { db } from "../../../indexedDB";
 import type { ProjectPayload } from "../api/projects.types";
-import { DEFAULT_PROJECT } from "./consts/default-project";
+import type { ProjectDTO } from "./project.dtos";
 import type { ProjectModel } from "./project.model";
+import { modelToDTO, modelToDTOArray, payloadToModel } from "./projects.mappers";
+import { applyUpdates } from "./utils/apply-updates";
 
-export const fetchLocalProjects = async (): Promise<ProjectModel[]> => {
-  return db.projects.toArray();
+export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
+  const projects = await db.projects.toArray();
+  return modelToDTOArray(projects);
 };
 
 export const createLocalProject = async (
   payload: ProjectPayload,
-): Promise<ProjectModel> => {
-  const project = {
-    id: crypto.randomUUID(),
-    name: payload.name || DEFAULT_PROJECT.name,
-  };
+): Promise<ProjectDTO> => {
+  const project: ProjectModel = payloadToModel(payload);
 
   await db.projects.add(project);
 
-  return project;
+  return modelToDTO(project);
 };
 
 export const updateLocalProject = async ({
@@ -26,17 +26,18 @@ export const updateLocalProject = async ({
 }: {
   id: string;
   data: ProjectPayload;
-}): Promise<ProjectModel> => {
-  const oldProject = await db.projects.get(id);
+}): Promise<ProjectDTO> => {
+  const old = await db.projects.get(id);
 
-  const updatedProject: ProjectModel = {
+  const updatedProject: ProjectModel = applyUpdates({
     id,
-    name: data.name || oldProject?.name || DEFAULT_PROJECT.name,
-  };
+    old,
+    updated: data,
+  });
 
   await db.projects.update(id, data);
 
-  return updatedProject;
+  return modelToDTO(updatedProject);
 };
 
 export const deleteLocalProject = async (id: string) => {
