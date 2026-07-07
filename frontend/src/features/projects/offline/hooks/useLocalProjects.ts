@@ -8,8 +8,8 @@ import {
   updateLocalProject,
 } from "../projects.repository";
 import { ApiError } from "../../../../configs/api-error.configs";
-import type { ProjectPayload } from "../../api/projects.types";
-import type { ProjectModel } from "../project.model";
+
+import type { ProjectDTO, ProjectPayloadDTO } from "../project.dtos";
 
 export const useFetchLocalProjects = () => {
   const { showError, hideModal } = useModal();
@@ -39,7 +39,7 @@ export const useCreateLocalProject = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: ProjectPayload): Promise<ProjectModel> =>
+    mutationFn: (data: ProjectPayloadDTO): Promise<ProjectDTO> =>
       createLocalProject(data),
 
     onError: (error: ApiError) => {
@@ -66,8 +66,8 @@ export const useUpdateLocalProject = () => {
       data,
     }: {
       id: string;
-      data: ProjectPayload;
-    }): Promise<ProjectModel> => updateLocalProject({ id, data }),
+      data: ProjectPayloadDTO;
+    }): Promise<ProjectDTO> => updateLocalProject({ id, data }),
 
     onError: (error: ApiError) => {
       showError({

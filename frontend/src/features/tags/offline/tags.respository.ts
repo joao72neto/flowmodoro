@@ -6,7 +6,7 @@ import { modelToDTO, modelToDTOArray, payloadToModel } from "./tags.mappers";
 import { applyUpdates } from "./utils/apply-updates";
 
 export const fetchLocalTagsByProject = async (
-  projectId: number,
+  projectId: string,
 ): Promise<TagDTO[]> => {
   const tags = await db.tags.where("projectId").equals(projectId).toArray();
   return modelToDTOArray(tags);

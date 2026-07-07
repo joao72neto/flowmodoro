@@ -11,7 +11,7 @@ import {
 
 import type { TagDTO, TagPayloadDTO } from "../tag.dtos";
 
-export const useFetchLocalTagsByProject = (projectId: number) => {
+export const useFetchLocalTagsByProject = (projectId: string) => {
   const { showError, hideModal } = useModal();
 
   return useQuery({
