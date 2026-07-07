@@ -14,8 +14,10 @@ import type { TagDTO, TagPayloadDTO } from "../tag.dtos";
 export const useFetchLocalTagsByProject = (projectId: string) => {
   const { showError, hideModal } = useModal();
 
+  const TAGS_QUERY_KEY = "tags";
+
   return useQuery({
-    queryKey: [APP_LOCAL_DATA_QUERY_KEY],
+    queryKey: [APP_LOCAL_DATA_QUERY_KEY, TAGS_QUERY_KEY, projectId],
     queryFn: async () => {
       try {
         return await fetchLocalTagsByProject(projectId);

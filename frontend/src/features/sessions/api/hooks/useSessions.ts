@@ -21,8 +21,10 @@ export const useFetchSessions = ({
 }) => {
   const { showError, hideModal } = useModal();
 
+  const SESSIONS_QUERY_KEY = "sessions";
+
   return useQuery({
-    queryKey: [APP_DATA_QUERY_KEY, page, size],
+    queryKey: [APP_DATA_QUERY_KEY, SESSIONS_QUERY_KEY, page, size],
     queryFn: async () => {
       try {
         return await fetchSessions({ page, size });

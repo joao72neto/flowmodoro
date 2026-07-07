@@ -10,6 +10,8 @@ import { ApiError } from "../../../../configs/api-error.configs";
 import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
 import type { SessionDTO, SessionPayloadDTO } from "../session.dtos";
 
+const SESSIONS_QUERY_KEY = "sessions";
+
 export const useFetchLocalSessions = ({
   page,
   size,
@@ -20,7 +22,7 @@ export const useFetchLocalSessions = ({
   const { showError, hideModal } = useModal();
 
   return useQuery({
-    queryKey: [APP_LOCAL_DATA_QUERY_KEY, page, size],
+    queryKey: [APP_LOCAL_DATA_QUERY_KEY, SESSIONS_QUERY_KEY, page, size],
     queryFn: async () => {
       try {
         return await fetchLocalSessions({ page, size });

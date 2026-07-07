@@ -14,8 +14,10 @@ import {
 export const useFetchProjects = () => {
   const { showError, hideModal } = useModal();
 
+  const PROJECTS_QUERY_KEY = "projects";
+
   return useQuery({
-    queryKey: [APP_DATA_QUERY_KEY],
+    queryKey: [APP_DATA_QUERY_KEY, PROJECTS_QUERY_KEY],
     queryFn: async () => {
       try {
         return await fetchProjects();

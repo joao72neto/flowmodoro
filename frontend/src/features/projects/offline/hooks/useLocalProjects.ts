@@ -14,8 +14,10 @@ import type { ProjectDTO, ProjectPayloadDTO } from "../project.dtos";
 export const useFetchLocalProjects = () => {
   const { showError, hideModal } = useModal();
 
+  const PROJECTS_QUERY_KEY = "projects";
+
   return useQuery({
-    queryKey: [APP_LOCAL_DATA_QUERY_KEY],
+    queryKey: [APP_LOCAL_DATA_QUERY_KEY, PROJECTS_QUERY_KEY],
     queryFn: async () => {
       try {
         return await fetchLocalProjects();

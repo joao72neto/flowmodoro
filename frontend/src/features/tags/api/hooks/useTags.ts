@@ -14,8 +14,10 @@ import {
 export const useFetchTagsByProject = (projectId: number) => {
   const { showError, hideModal } = useModal();
 
+  const TAGS_QUERY_KEY = "tags";
+
   return useQuery({
-    queryKey: [APP_DATA_QUERY_KEY, projectId],
+    queryKey: [APP_DATA_QUERY_KEY, TAGS_QUERY_KEY, projectId],
     queryFn: async () => {
       try {
         if (projectId <= 0) return [];
