@@ -1,9 +1,9 @@
-import type { ProjectModel } from "../../projects/db/project.model";
-import type { TagModel } from "../../tags/db/tag.model";
 import type { SessionModel } from "./session.model";
 import type { SessionPayloadDTO, SessionDTO } from "./session.dtos";
 import { DEFAULT_SESSION } from "./consts/default-session";
 import { calculateRest } from "./utils/calculate-rest";
+import type { ProjectModel } from "../../projects/offline/project.model";
+import type { TagModel } from "../../tags/offline/tag.model";
 
 export const modelToDTO = ({
   session,

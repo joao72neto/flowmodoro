@@ -47,7 +47,7 @@ public class ProjectService {
 
 	public ProjectModel findById(Long id, String userId) {
 		ProjectModel project = projectRepository.findById(id)
-				.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
+			.orElseThrow(() -> new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found"));
 
 		if (!project.getUserId().equals(userId)) {
 			throw new InvalidProjectException(ProjectErrorCode.PROJECT_NOT_FOUND, "Project not found for this user");

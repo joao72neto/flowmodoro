@@ -50,9 +50,9 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 		}
 
 		ErrorResponse error = ErrorResponse.builder()
-				.code(CommonErrorCode.RATE_LIMIT_EXCEEDED)
-				.errors(List.of("Muitas requisições. Por favor, tente novamente mais tarde."))
-				.build();
+			.code(CommonErrorCode.RATE_LIMIT_EXCEEDED)
+			.errors(List.of("Muitas requisições. Por favor, tente novamente mais tarde."))
+			.build();
 
 		response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
 		response.setCharacterEncoding("UTF-8");
