@@ -11,24 +11,32 @@ const Label = ({
   variant?: "primary" | "secondary";
   className?: string;
 }) => {
-  const bgColor = variant === "primary" ? "bg-primary/10" : "bg-secondary/10";
+  const bgColor =
+    variant === "primary"
+      ? "bg-primary/10 hover:bg-primary/15"
+      : "bg-secondary/10 hover:bg-secondary/15";
   const textColor = variant === "primary" ? "text-primary" : "text-secondary";
   const borderColor =
-    variant === "primary" ? "border-primary/20" : "border-secondary/20";
+    variant === "primary"
+      ? "border-primary/25 hover:border-primary/45"
+      : "border-secondary/25 hover:border-secondary/45";
 
   return (
     <div
       className={clsx(
-        "flex items-center gap-1.5 max-w-[110px]",
-        "px-2.5 py-1 rounded-full border",
+        "flex items-center gap-1.5 sm:max-w-[110px] shrink-0",
+        "px-2.5 py-0.5 sm:py-1 rounded-lg border",
+        "transition-[scale] duration-200 ease-out hover:scale-[1.02] cursor-default select-none",
         bgColor,
         textColor,
         borderColor,
         className,
       )}
     >
-      {icon && <span className="text-xs sm:text-sm shrink-0">{icon}</span>}
-      <span className="truncate text-[10px] sm:text-xs font-medium max-w-28">
+      {icon && (
+        <span className="text-xs sm:text-sm shrink-0 opacity-80">{icon}</span>
+      )}
+      <span className="truncate text-[10px] sm:text-xs font-semibold tracking-wide flex-1 text-left">
         {children}
       </span>
     </div>
