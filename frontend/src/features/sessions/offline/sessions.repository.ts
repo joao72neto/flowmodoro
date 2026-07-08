@@ -27,13 +27,18 @@ export const fetchLocalSessions = async ({
     tags,
   });
   const content = buildDailySessions(normalizedSessions);
+  
+  const totalElements = content.length;
+  const totalPages = Math.ceil(totalElements / size);
+  const startIndex = (page - 1) * size;
+  const paginatedContent = content.slice(startIndex, startIndex + size);
 
   return {
-    content,
+    content: paginatedContent,
     page,
     size,
-    totalElements: normalizedSessions.length,
-    totalPages: Math.ceil(normalizedSessions.length / size),
+    totalElements,
+    totalPages,
   };
 };
 
