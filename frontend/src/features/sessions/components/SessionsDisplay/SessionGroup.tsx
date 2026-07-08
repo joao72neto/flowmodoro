@@ -5,7 +5,6 @@ import { capitalize } from "../../../../shared/utils/string.utils";
 
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { useEffect, useState } from "react";
-import { PRESETS } from "../../../timer/consts/ratio-presets";
 import SessionDetailsModal from "../SessionDetailsModal";
 import Session from "./Session";
 import Label from "../../../../shared/components/labels/Label";
@@ -48,10 +47,6 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
     }
   }, [isTogglable]);
 
-  const preset = PRESETS.find(
-    (preset) => preset.value === sessionGroup.sessions[0].ratio * 100,
-  );
-
   const tag = sessionGroup.sessions[0].tag;
   const project = sessionGroup.sessions[0].project;
   const hasTagOrProject = tag.id !== "" || project.id !== "";
@@ -61,6 +56,20 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
     "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
     "border border-border px-3 py-1 rounded-lg shadow font-semibold",
   );
+
+  const firstRatio = Math.round((sessionGroup.sessions[0]?.ratio || 0) * 100);
+
+  const isUniform = sessionGroup.sessions.every(
+    (session) => Math.round(session.ratio * 100) === firstRatio,
+  );
+
+  const borderColors: Record<number, string> = {
+    10: "border-l-danger",
+    20: "border-l-primary",
+    30: "border-l-success",
+  };
+
+  const borderColorClass = isUniform ? borderColors[firstRatio] : undefined;
 
   return (
     <>
@@ -73,9 +82,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
               ? "bg-neutral-80/40 border-neutral-70/50"
               : "bg-neutral-80/90",
             "border-l-4",
-            preset?.value === 10 && !isTogglable && "border-l-danger",
-            preset?.value === 20 && !isTogglable && "border-l-primary",
-            preset?.value === 30 && !isTogglable && "border-l-success",
+            borderColorClass,
           )}
           gap={3}
           onClick={
@@ -149,7 +156,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
         </Stack>
         <AnimatedCollapse show={isOpen}>
           <div>
-            <Stack gap={2} className="w-full mt-2">
+            <Stack gap={2} className="mt-2 ml-5 border-l border-border pl-4">
               {sessionGroup.sessions.map((session) => (
                 <Session
                   key={session.id}

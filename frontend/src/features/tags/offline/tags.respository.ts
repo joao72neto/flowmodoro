@@ -2,14 +2,32 @@ import { db } from "../../../indexedDB";
 
 import type { TagDTO, TagPayloadDTO } from "./tag.dtos";
 import type { TagModel } from "./tag.model";
-import { modelToDTO, modelToDTOArray, payloadToModel } from "./tags.mappers";
+import { modelToDTO, payloadToModel } from "./tags.mappers";
 import { applyUpdates } from "./utils/apply-updates";
 
 export const fetchLocalTagsByProject = async (
   projectId: string,
 ): Promise<TagDTO[]> => {
-  const tags = await db.tags.where("projectId").equals(projectId).toArray();
-  return modelToDTOArray(tags);
+  const [tags, sessions] = await Promise.all([
+    db.tags.where("projectId").equals(projectId).toArray(),
+    db.sessions.toArray(),
+  ]);
+
+  const focusPerTag = sessions.reduce(
+    (acumulador, session) => {
+      const tId = session.tagId;
+      if (!tId) return acumulador;
+
+      acumulador[tId] = (acumulador[tId] || 0) + (session.focus || 0);
+      return acumulador;
+    },
+    {} as Record<string, number>,
+  );
+
+  return tags.map((tag) => ({
+    ...tag,
+    totalFocus: focusPerTag[tag.id] || 0,
+  }));
 };
 
 export const createLocalTag = async (

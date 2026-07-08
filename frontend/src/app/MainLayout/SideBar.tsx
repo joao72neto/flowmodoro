@@ -7,14 +7,14 @@ import Projects from "../../features/projects/components/Projects/Projects";
 
 const SideBar = ({ onClick }: { onClick?: () => void }) => {
   return (
-    <div className="border-l bg-neutral-100 border-l-border h-full shadow-2xl flex flex-col">
+    <div className="border-l bg-neutral-100 border-l-border h-full flex flex-col">
       <div className="flex justify-between items-center px-4 py-4 border-b border-border">
         <div className="flex items-center gap-3">
           <IconButton
             icon={
               <IoClose
                 size={24}
-                className="text-neutral-40 hover:text-danger hover:rotate-90 hover:scale-110 transition-all duration-300"
+                className="text-neutral-40 hover:text-danger hover:rotate-90 hover:scale-110 transition-[transform] duration-300"
               />
             }
             onClick={onClick}
