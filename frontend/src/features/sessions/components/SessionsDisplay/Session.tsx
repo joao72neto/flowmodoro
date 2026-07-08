@@ -1,6 +1,7 @@
 import clsx from "clsx";
 
 import { formatToHour } from "../../../../shared/utils/number.utils";
+import { capitalize } from "../../../../shared/utils/string.utils";
 import { PRESETS } from "../../../timer/consts/ratio-presets";
 
 import { GoProject } from "react-icons/go";
@@ -28,18 +29,19 @@ const Session = ({
     <div onClick={onClick} className="w-full">
       <div
         className={clsx(
-          "flex flex-col sm:flex-row sm:items-center gap-2",
+          "flex flex-col sm:flex-row sm:items-center gap-2 relative overflow-hidden",
           "border shadow-lg border-border py-3 px-4 sm:py-4 sm:px-5 cursor-pointer rounded-xl w-full",
-          "hover:bg-neutral-80/20 transition duration-200 bg-neutral-80/60",
+          "hover:bg-neutral-80/40 hover:translate-x-0.5 transition duration-200 bg-neutral-80/60",
+          "border-l-4",
+          preset?.value === 10 && "border-l-danger",
+          preset?.value === 20 && "border-l-primary",
+          preset?.value === 30 && "border-l-success",
         )}
       >
         <div className="flex justify-between w-full items-center sm:w-auto sm:flex-1 min-w-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div
-              className={clsx("w-1 h-1 rounded-full shrink-0", preset?.bgClass)}
-            />
             <span className="flex-1 text-sm text-left sm:text-base line-clamp-1 break-all">
-              {session.name}
+              {capitalize(session.name)}
             </span>
           </div>
 
