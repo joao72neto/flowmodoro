@@ -57,6 +57,11 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
   const hasTagOrProject = tag.id !== "" || project.id !== "";
   const showTagAndProject = hasTagOrProject;
 
+  const totalFocusClasses = clsx(
+    "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
+    "border border-border px-3 py-1 rounded-lg shadow font-semibold",
+  );
+
   return (
     <>
       <div className="flex flex-col w-full">
@@ -70,13 +75,20 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
             isTogglable ? handleToggle : () => setShowSessionDetailsModal(true)
           }
         >
-          <div className="flex flex-col gap-2 sm:flex-row sm:justify-between w-full">
-            <div className="flex gap-3 items-center justify-between w-full">
-              <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full">
+            <div className="flex gap-3 items-center justify-between sm:justify-start w-full sm:w-auto sm:flex-1 min-w-0">
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={clsx(
+                    "w-1 h-1 rounded-full shrink-0",
+                    preset?.bgClass,
+                  )}
+                />
+
                 {isTogglable && (
                   <span
                     className={clsx(
-                      "cursor-pointer text-md sm:text-lg font-medium line-clamp-1",
+                      "cursor-pointer text-md sm:text-lg font-medium line-clamp-1 shrink-0",
                       "break-all border border-border rounded-lg px-3 py-1",
                       "hover:bg-neutral-60/50 transition-colors bg-neutral-60/50",
                     )}
@@ -85,26 +97,21 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
                     {sessionGroup.sessions.length}
                   </span>
                 )}
+
                 <span className="text-lg sm:text-xl font-medium line-clamp-1 break-all">
                   {capitalize(sessionGroup.name)}
                 </span>
               </div>
               {!showTagAndProject && (
-                <span
-                  className={clsx(
-                    "text-sm sm:text-base bg-neutral-80/50 border border-border ",
-                    "px-3 py-1 rounded-lg shadow font-semibold",
-                    !isTogglable && preset?.textClass,
-                  )}
-                >
+                <span className={clsx(totalFocusClasses, "sm:ml-auto")}>
                   {formatToHour(sessionGroup.totalFocus)}
                 </span>
               )}
             </div>
 
             {showTagAndProject && (
-              <div className="flex justify-between gap-6 w-full sm:w-auto">
-                <div className="flex items-center gap-2">
+              <div className="flex justify-between w-full sm:w-auto sm:flex-1 sm:justify-end sm:items-center sm:gap-6 min-w-0">
+                <div className="flex items-center gap-2 min-w-0 sm:flex-1 justify-start">
                   {project?.name && (
                     <Label icon={<GoProject />}>{project.name}</Label>
                   )}
@@ -115,13 +122,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
                   )}
                 </div>
 
-                <span
-                  className={clsx(
-                    "text-sm sm:text-base bg-neutral-80/50 border border-border ",
-                    "px-3 py-1 rounded-lg shadow font-semibold",
-                    !isTogglable && preset?.textClass,
-                  )}
-                >
+                <span className={clsx(totalFocusClasses)}>
                   {formatToHour(sessionGroup.totalFocus)}
                 </span>
               </div>

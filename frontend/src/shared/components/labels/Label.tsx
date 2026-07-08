@@ -19,7 +19,7 @@ const Label = ({
   return (
     <div
       className={clsx(
-        "flex items-center gap-1.5",
+        "flex items-center gap-1.5 max-w-[110px]",
         "px-2.5 py-1 rounded-full border",
         bgColor,
         textColor,

@@ -5,11 +5,11 @@ export const formatToHour = (totalSeconds: number) => {
   const m = Math.floor((totalSeconds % 3600) / 60);
   const s = Math.floor(totalSeconds % 60);
 
-  if (h > 0) return `${h}:${toPaddedString(m)}:${toPaddedString(s)}`;
+  if (h > 0) return `${h}h ${m}m`;
 
-  if (m > 0) return `${toPaddedString(m)}:${toPaddedString(s)}`;
+  if (m > 0) return `${m}m`;
 
-  if (s > 0) return `${toPaddedString(s)}s`;
+  if (s > 0) return `${s}s`;
 };
 
 export const formatTimer = (totalSeconds: number) => {
