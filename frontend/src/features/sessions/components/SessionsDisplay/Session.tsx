@@ -17,7 +17,7 @@ const Session = ({
 }) => {
   const preset = PRESETS.find((preset) => preset.value === session.ratio * 100);
 
-  const showTagAndProject = session.tag || session.project;
+  const showTagAndProject = session.tag.id !== "" || session.project.id !== "";
 
   return (
     <div onClick={onClick} className="w-full">

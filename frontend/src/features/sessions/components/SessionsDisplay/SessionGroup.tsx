@@ -54,7 +54,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
 
   const tag = sessionGroup.sessions[0].tag;
   const project = sessionGroup.sessions[0].project;
-  const hasTagOrProject = tag || project;
+  const hasTagOrProject = tag.id !== "" || project.id !== "";
   const showTagAndProject = hasTagOrProject;
 
   return (

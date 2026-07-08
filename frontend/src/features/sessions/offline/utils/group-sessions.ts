@@ -79,7 +79,9 @@ export const buildDailySessions = (
     });
 
     sessionGroups.sort(
-      (a, b) => new Date(b.sessions[0].date).getTime() - new Date(a.sessions[0].date).getTime(),
+      (a, b) =>
+        new Date(b.sessions[0].date).getTime() -
+        new Date(a.sessions[0].date).getTime(),
     );
 
     return {

@@ -188,6 +188,8 @@ const SessionDetailsModal = ({
     setIsOpen(false);
   };
 
+  console.log("Projec", session.project);
+
   return (
     <ModalContainer close={handleClose} className="!gap-10 !overflow-visible">
       <Stack direction="row" justify="between" gap={5} className="w-full">
@@ -237,13 +239,13 @@ const SessionDetailsModal = ({
                 value={formatToHour(session.focus)}
               />
             )}
-            {session.project && (
+            {session.project.id !== "" && (
               <LabeledValue
                 name="Projeto"
                 value={<Label>{session.project.name}</Label>}
               />
             )}
-            {session.tag && (
+            {session.tag.id !== "" && (
               <LabeledValue
                 name="Tag"
                 value={<Label variant="secondary">{session.tag.name}</Label>}
