@@ -58,5 +58,6 @@ export const updateLocalProject = async ({
 };
 
 export const deleteLocalProject = async (id: string) => {
+  await db.tags.where("projectId").equals(id).delete();
   await db.projects.delete(id);
 };
