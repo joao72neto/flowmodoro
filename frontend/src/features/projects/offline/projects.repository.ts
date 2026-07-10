@@ -33,7 +33,6 @@ export const createLocalProject = async (
   const project: ProjectModel = payloadToModel(payload);
 
   await db.projects.add(project);
-
   return modelToDTO(project);
 };
 

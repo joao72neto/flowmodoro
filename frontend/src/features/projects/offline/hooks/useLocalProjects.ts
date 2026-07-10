@@ -44,9 +44,18 @@ export const useCreateLocalProject = () => {
     mutationFn: (data: ProjectPayloadDTO): Promise<ProjectDTO> =>
       createLocalProject(data),
 
-    onError: (error: ApiError) => {
+    onError: (error) => {
+      if (error.name === "ConstraintError") {
+        showError({
+          title: "Erro ao criar projeto",
+          message: "Já existe um projeto com esse nome.",
+          action: hideModal,
+        });
+        return;
+      }
+
       showError({
-        title: "Erro ao criar projeto local",
+        title: "Erro ao criar projeto",
         message: error.message,
         action: hideModal,
       });

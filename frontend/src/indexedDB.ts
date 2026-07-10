@@ -11,9 +11,9 @@ class AppDB extends Dexie {
   constructor() {
     super("flowmodoro-db");
 
-    this.version(1).stores({
+    this.version(2).stores({
       sessions: "id",
-      projects: "id",
+      projects: "id, &name",
       tags: "id, projectId",
     });
   }
