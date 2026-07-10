@@ -1,40 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { localStorageKeys } from "../../shared/utils/storage.utils";
-import { useCreateLocalSession } from "./offline/hooks/useLocalSessions";
-import { useFetchLocalTagsByProject } from "../tags/offline/hooks/useLocalTags";
-import { useFetchLocalProjects } from "../projects/offline/hooks/useLocalProjects";
-import type { ProjectDTO } from "../projects/offline/project.dtos";
-import type { TagDTO } from "../tags/offline/tag.dtos";
-
-export interface ISaveSessionData {
-  focusSeconds: number;
-}
-
-interface ISessionContext {
-  currentPage: number;
-  setCurrentPage: (page: number) => void;
-
-  restRatio: number;
-  setRestRatio: (ratio: number) => void;
-  handleSaveSession: (data: ISaveSessionData) => void;
-
-  projects: ProjectDTO[] | undefined;
-  tags: TagDTO[] | undefined;
-
-  selectedProjectId: string | null;
-  selectedTagId: string | null;
-  setSelectedProjectId: (id: string | null) => void;
-  setSelectedTagId: (id: string | null) => void;
-
-  selectedTag: TagDTO | null;
-  selectedProject: ProjectDTO | null;
-
-  setSessionName: (name: string) => void;
-  sessionName: string;
-}
-
-export const SessionContext = createContext<ISessionContext | null>(null);
+import { localStorageKeys } from "../../../shared/utils/storage.utils";
+import { useCreateLocalSession } from "../offline/hooks/useLocalSessions";
+import { useFetchLocalTagsByProject } from "../../tags/offline/hooks/useLocalTags";
+import { useFetchLocalProjects } from "../../projects/offline/hooks/useLocalProjects";
+import { SessionContext } from "./sessions.context";
+import type { ISaveSessionData } from "./sessions.context";
 
 export const SessionProvider = ({
   children,
@@ -132,12 +103,4 @@ export const SessionProvider = ({
       {children}
     </SessionContext.Provider>
   );
-};
-
-export const useSessionContext = () => {
-  const context = useContext(SessionContext);
-  if (!context)
-    throw new Error("useSessionContext must be used within a SessionProvider");
-
-  return context;
 };

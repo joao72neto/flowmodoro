@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import { PRESETS } from "../../consts/ratio-presets";
+import type { RatioPreset } from "../../consts/ratio-presets";
+
 
 function RatioSlider({
   presets,
@@ -8,7 +10,7 @@ function RatioSlider({
   onRatioChange,
   onPresetChange,
 }: {
-  presets: typeof PRESETS;
+  presets: RatioPreset[];
   currentPreset: (typeof PRESETS)[number];
   restRatio: number;
   onRatioChange: (ratio: number) => void;

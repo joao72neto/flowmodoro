@@ -4,7 +4,7 @@ import LoadingApplication from "./LoadingApplication";
 
 import { ThemeProvider } from "../shared/contexts/theme.context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SessionProvider } from "../features/sessions/sessions.context";
+import { SessionProvider } from "../features/sessions/context/sessions.provider";
 import { ModalProvider } from "../shared/contexts/modal.context";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {

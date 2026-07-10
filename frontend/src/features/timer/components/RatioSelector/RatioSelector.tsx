@@ -6,7 +6,8 @@ import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse
 import RatioSlider from "./RatioSlider";
 import { PRESETS } from "../../consts/ratio-presets";
 import { useTimerContext } from "../../timer.context";
-import { useSessionContext } from "../../../sessions/sessions.context";
+import type { RatioPreset } from "../../consts/ratio-presets";
+import { useSessionContext } from "../../../sessions/context/sessions.context";
 
 function RatioSelector() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ function RatioSelector() {
 
   useEffect(() => {
     if (isFocusRunning) setIsOpen(false);
-  }, [mode]);
+  }, [mode, isFocusRunning]);
 
   return (
     <div className="flex flex-col items-center">
@@ -72,7 +73,7 @@ function RatioSelector() {
       <AnimatedCollapse show={isOpen && !isFocusRunning}>
         <div className="pt-2">
           <RatioSlider
-            presets={PRESETS as any}
+            presets={PRESETS as RatioPreset[]}
             restRatio={restRatio}
             onRatioChange={setRestRatio}
             currentPreset={currentPreset}

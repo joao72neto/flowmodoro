@@ -18,7 +18,7 @@ import Label from "../../../shared/components/labels/Label";
 import LabeledValue from "../../../shared/components/labels/LabeledValue";
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
-import { useSessionContext } from "../sessions.context";
+import { useSessionContext } from "../context/sessions.context";
 import SessionSelector from "./SessionCreation/SessionSelector";
 import Input from "../../../shared/components/inputs/Input";
 import { useModal } from "../../../shared/contexts/modal.context";
@@ -46,7 +46,6 @@ const SessionDetailsModal = ({
   setIsOpen: (isOpen: boolean) => void;
   session: SessionDTO;
 }) => {
-  if (!isOpen) return null;
 
   const { showDefault, hideModal, setModalLoading } = useModal();
 
@@ -67,6 +66,7 @@ const SessionDetailsModal = ({
       return null;
     }
   };
+
 
   const draft = getDraft();
 
@@ -115,6 +115,8 @@ const SessionDetailsModal = ({
       sessionStorage.setItem(draftKey, JSON.stringify(currentDraft));
     }
   }, [mode, title, selectedProjectId, selectedTagId, ratio, focus, draftKey]);
+
+  if (!isOpen) return null;
 
   const isReadyToSave =
     title.trim() !== "" &&

@@ -8,7 +8,7 @@ import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/timer.context";
-import { useSessionContext } from "../../sessions.context";
+import { useSessionContext } from "../../context/sessions.context";
 import { useEffect, useState } from "react";
 import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 

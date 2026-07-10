@@ -1,4 +1,12 @@
-export const PRESETS = [
+export type RatioPreset = {
+  value: number;
+  label: string;
+  textClass: string;
+  bgClass: string;
+}
+
+
+export const PRESETS: RatioPreset[] = [
   {
     value: 10,
     label: "Intenso",
