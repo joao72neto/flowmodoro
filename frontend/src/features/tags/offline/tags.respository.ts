@@ -24,10 +24,15 @@ export const fetchLocalTagsByProject = async (
     {} as Record<string, number>,
   );
 
-  return tags.map((tag) => ({
-    ...tag,
-    totalFocus: focusPerTag[tag.id] || 0,
-  }));
+  return tags
+    .map((tag) => ({
+      ...tag,
+      totalFocus: focusPerTag[tag.id] || 0,
+    }))
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
 };
 
 export const createLocalTag = async (

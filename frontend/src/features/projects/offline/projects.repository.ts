@@ -6,7 +6,7 @@ import { applyUpdates } from "./utils/apply-updates";
 
 export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
   const [projects, sessions] = await Promise.all([
-    db.projects.orderBy("id").reverse().toArray(),
+    db.projects.orderBy("createdAt").reverse().toArray(),
     db.sessions.toArray(),
   ]);
 

@@ -17,5 +17,6 @@ export const payloadToModel = (project: ProjectPayloadDTO): ProjectModel => {
   return {
     id: crypto.randomUUID(),
     name: project.name,
+    createdAt: new Date().toISOString(),
   };
 };

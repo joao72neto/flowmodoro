@@ -19,5 +19,6 @@ export const payloadToModel = (tag: TagPayloadDTO): TagModel => {
     id: crypto.randomUUID(),
     name: tag.name,
     projectId: tag.projectId,
+    createdAt: new Date().toISOString(),
   };
 };
