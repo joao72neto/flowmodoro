@@ -43,9 +43,18 @@ export const useCreateLocalTag = () => {
   return useMutation({
     mutationFn: (data: TagPayloadDTO): Promise<TagDTO> => createLocalTag(data),
 
-    onError: (error: ApiError) => {
+    onError: (error) => {
+      if (error.name === "ConstraintError") {
+        showError({
+          title: "Tag duplicada",
+          message: "Já existe uma tag com esse nome.",
+          action: hideModal,
+        });
+        return;
+      }
+
       showError({
-        title: "Erro ao criar tag local",
+        title: "Erro ao criar tag",
         message: error.message,
         action: hideModal,
       });

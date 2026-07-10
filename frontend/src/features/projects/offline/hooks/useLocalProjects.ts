@@ -47,7 +47,7 @@ export const useCreateLocalProject = () => {
     onError: (error) => {
       if (error.name === "ConstraintError") {
         showError({
-          title: "Erro ao criar projeto",
+          title: "Projeto duplicado",
           message: "Já existe um projeto com esse nome.",
           action: hideModal,
         });
