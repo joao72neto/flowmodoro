@@ -11,6 +11,12 @@ import {
 
 import type { TagDTO, TagPayloadDTO } from "../tag.dtos";
 
+const duplicatedErrorConfig = {
+  title: "Tag duplicada",
+  message: "Já existe uma tag com esse nome.",
+  action: () => {},
+};
+
 export const useFetchLocalTagsByProject = (projectId: string) => {
   const { showError, hideModal } = useModal();
 
@@ -46,9 +52,9 @@ export const useCreateLocalTag = () => {
     onError: (error) => {
       if (error.name === "ConstraintError") {
         showError({
-          title: "Tag duplicada",
-          message: "Já existe uma tag com esse nome.",
-          action: hideModal,
+          title: duplicatedErrorConfig.title,
+          message: duplicatedErrorConfig.message,
+          action: duplicatedErrorConfig.action,
         });
         return;
       }
@@ -79,9 +85,18 @@ export const useUpdateLocalTag = () => {
       data: TagPayloadDTO;
     }): Promise<TagDTO> => updateLocalTag({ id, data }),
 
-    onError: (error: ApiError) => {
+    onError: (error) => {
+      if (error.message.includes("ConstraintError")) {
+        showError({
+          title: duplicatedErrorConfig.title,
+          message: duplicatedErrorConfig.message,
+          action: duplicatedErrorConfig.action,
+        });
+        return;
+      }
+
       showError({
-        title: "Erro ao atualizar tag local",
+        title: "Erro ao atualizar tag",
         message: error.message,
         action: hideModal,
       });

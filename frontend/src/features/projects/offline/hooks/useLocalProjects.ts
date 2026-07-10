@@ -11,6 +11,12 @@ import { ApiError } from "../../../../configs/api-error.configs";
 
 import type { ProjectDTO, ProjectPayloadDTO } from "../project.dtos";
 
+const duplicatedErrorConfig = {
+  title: "Projeto duplicado",
+  message: "Já existe um projeto com esse nome.",
+  action: () => {},
+};
+
 export const useFetchLocalProjects = () => {
   const { showError, hideModal } = useModal();
 
@@ -47,9 +53,9 @@ export const useCreateLocalProject = () => {
     onError: (error) => {
       if (error.name === "ConstraintError") {
         showError({
-          title: "Projeto duplicado",
-          message: "Já existe um projeto com esse nome.",
-          action: hideModal,
+          title: duplicatedErrorConfig.title,
+          message: duplicatedErrorConfig.message,
+          action: duplicatedErrorConfig.action,
         });
         return;
       }
@@ -80,9 +86,18 @@ export const useUpdateLocalProject = () => {
       data: ProjectPayloadDTO;
     }): Promise<ProjectDTO> => updateLocalProject({ id, data }),
 
-    onError: (error: ApiError) => {
+    onError: (error) => {
+      if (error.message.includes("ConstraintError")) {
+        showError({
+          title: duplicatedErrorConfig.title,
+          message: duplicatedErrorConfig.message,
+          action: duplicatedErrorConfig.action,
+        });
+        return;
+      }
+
       showError({
-        title: "Erro ao atualizar projeto local",
+        title: "Erro ao atualizar projeto",
         message: error.message,
         action: hideModal,
       });
