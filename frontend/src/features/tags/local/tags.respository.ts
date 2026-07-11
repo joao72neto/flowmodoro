@@ -1,4 +1,4 @@
-import { db } from "../../../indexedDB";
+import { db } from "../../../local/indexedDB";
 
 import type { TagDTO, TagPayloadDTO } from "./tag.dtos";
 import type { TagModel } from "./tag.model";

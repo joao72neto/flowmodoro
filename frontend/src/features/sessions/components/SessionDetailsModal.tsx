@@ -22,12 +22,12 @@ import { useSessionContext } from "../context/sessions.context";
 import SessionSelector from "./SessionCreation/SessionSelector";
 import Input from "../../../shared/components/inputs/Input";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
-import type { SessionDTO } from "../offline/session.dtos";
+import type { SessionDTO } from "../local/session.dtos";
 import {
   useDeleteLocalSession,
   useUpdateLocalSession,
-} from "../offline/hooks/useLocalSessions";
-import { useFetchLocalTagsByProject } from "../../tags/offline/hooks/useLocalTags";
+} from "../local/hooks/useLocalSessions";
+import { useFetchLocalTagsByProject } from "../../tags/local/hooks/useLocalTags";
 
 interface SessionDraft {
   title: string;

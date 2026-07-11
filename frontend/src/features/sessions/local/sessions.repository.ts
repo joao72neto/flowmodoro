@@ -1,4 +1,4 @@
-import { db } from "../../../indexedDB";
+import { db } from "../../../local/indexedDB";
 import type { PaginationResponse } from "../../../shared/global.types";
 import type { SessionModel } from "./session.model";
 import type {
@@ -27,7 +27,7 @@ export const fetchLocalSessions = async ({
     tags,
   });
   const content = buildDailySessions(normalizedSessions);
-  
+
   const totalElements = content.length;
   const totalPages = Math.ceil(totalElements / size);
   const startIndex = (page - 1) * size;

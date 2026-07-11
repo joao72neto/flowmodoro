@@ -1,4 +1,4 @@
-import { db } from "../../../indexedDB";
+import { db } from "../../../local/indexedDB";
 import type { ProjectDTO, ProjectPayloadDTO } from "./project.dtos";
 import type { ProjectModel } from "./project.model";
 import { modelToDTO, payloadToModel } from "./projects.mappers";

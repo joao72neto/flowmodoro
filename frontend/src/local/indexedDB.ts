@@ -1,7 +1,7 @@
 import Dexie, { type Table } from "dexie";
-import type { SessionModel } from "./features/sessions/offline/session.model";
-import type { ProjectModel } from "./features/projects/offline/project.model";
-import type { TagModel } from "./features/tags/offline/tag.model";
+import type { SessionModel } from "../features/sessions/local/session.model";
+import type { ProjectModel } from "../features/projects/local/project.model";
+import type { TagModel } from "../features/tags/local/tag.model";
 
 class AppDB extends Dexie {
   sessions!: Table<SessionModel, string>;

@@ -7,7 +7,7 @@ import { IoMdPricetag } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import type { TagDTO } from "../../offline/tag.dtos";
+import type { TagDTO } from "../../local/tag.dtos";
 
 const Tag = ({
   tagData,

@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
-import type { ProjectDTO } from "../../projects/offline/project.dtos";
-import type { TagDTO } from "../../tags/offline/tag.dtos";
+import type { ProjectDTO } from "../../projects/local/project.dtos";
+import type { TagDTO } from "../../tags/local/tag.dtos";
 
 export interface ISaveSessionData {
   focusSeconds: number;

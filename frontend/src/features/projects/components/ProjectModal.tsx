@@ -9,11 +9,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateProjectSchema } from "../project.schema";
 
-import type { ProjectDTO } from "../offline/project.dtos";
+import type { ProjectDTO } from "../local/project.dtos";
 import type {
   useCreateLocalProject,
   useUpdateLocalProject,
-} from "../offline/hooks/useLocalProjects";
+} from "../local/hooks/useLocalProjects";
 
 const ProjectModal = ({
   isOpen,

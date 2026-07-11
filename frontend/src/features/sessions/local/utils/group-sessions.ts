@@ -1,5 +1,5 @@
-import type { ProjectModel } from "../../../projects/offline/project.model";
-import type { TagModel } from "../../../tags/offline/tag.model";
+import type { ProjectModel } from "../../../projects/local/project.model";
+import type { TagModel } from "../../../tags/local/tag.model";
 import type {
   DailySessionsDTO,
   SessionDTO,
