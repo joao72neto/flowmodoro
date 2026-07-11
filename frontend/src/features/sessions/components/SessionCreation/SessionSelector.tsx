@@ -5,7 +5,7 @@ import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
 
-import Button from "../../../../shared/components/buttons/Button";
+import Button from "../../../../shared/components/buttons/Button/Button";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import type { ProjectDTO } from "../../../projects/offline/project.dtos";
 import type { TagDTO } from "../../../tags/offline/tag.dtos";
@@ -31,7 +31,7 @@ const SessionSelector = ({
   placeholder?: string;
   emptyMsg?: string;
   value: ProjectDTO | TagDTO | null;
-  onChange: (item: any) => void;
+  onChange: (item: ProjectDTO | TagDTO | null) => void;
   disabled?: boolean;
   align?: "left" | "right" | "auto";
 }) => {

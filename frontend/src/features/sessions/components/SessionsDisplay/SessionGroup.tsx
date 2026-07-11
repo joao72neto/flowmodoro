@@ -45,7 +45,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
       setIsOpen(false);
       sessionStorage.removeItem(storageKey);
     }
-  }, [isTogglable]);
+  }, [isTogglable, storageKey]);
 
   const tag = sessionGroup.sessions[0].tag;
   const project = sessionGroup.sessions[0].project;

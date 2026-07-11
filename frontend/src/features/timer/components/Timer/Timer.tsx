@@ -1,4 +1,4 @@
-import { useTimerContext } from "../../timer.context";
+import { useTimerContext } from "../../context/timer.context";
 import clsx from "clsx";
 
 import { formatTimer } from "../../../../shared/utils/number.utils";

@@ -8,6 +8,24 @@ import type {
 import type { SessionModel } from "../session.model";
 import { modelToDTO } from "../sessions.mappers";
 
+type DayMap = {
+  [key: string]: {
+    date: string;
+    totalFocus: number;
+    totalRest: number;
+    groupsMap: Record<
+      string,
+      {
+        id: string;
+        name: string;
+        totalFocus: number;
+        totalRest: number;
+        sessions: SessionDTO[];
+      }
+    >;
+  };
+};
+
 export const normalizeSessions = ({
   sessions,
   projects,
@@ -32,7 +50,7 @@ export const normalizeSessions = ({
 export const buildDailySessions = (
   sessions: SessionDTO[],
 ): DailySessionsDTO[] => {
-  const daysMap: Record<string, any> = {};
+  const daysMap: DayMap = {};
 
   sessions.forEach((session) => {
     const dateKey = session.date.split("T")[0];
@@ -69,7 +87,7 @@ export const buildDailySessions = (
     group.sessions.push(session);
   });
 
-  const content: DailySessionsDTO[] = Object.values(daysMap).map((day: any) => {
+  const content: DailySessionsDTO[] = Object.values(daysMap).map((day) => {
     const sessionGroups: SessionGroupDTO[] = Object.values(day.groupsMap);
 
     sessionGroups.forEach((group) => {

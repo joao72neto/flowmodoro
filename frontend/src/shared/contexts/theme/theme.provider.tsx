@@ -1,20 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { localStorageKeys } from "../utils/storage.utils";
-
-type Theme = "light" | "dark";
-
-interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+import React, { useEffect, useMemo, useState } from "react";
+import { localStorageKeys } from "../../utils/storage.utils";
+import type { Theme } from "./theme.context";
+import { ThemeContext } from "./theme.context";
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -48,12 +35,4 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </ThemeContext.Provider>
   );
-};
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
 };

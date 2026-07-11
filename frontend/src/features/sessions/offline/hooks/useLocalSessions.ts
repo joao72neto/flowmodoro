@@ -5,7 +5,7 @@ import {
   fetchLocalSessions,
   updateLocalSession,
 } from "../sessions.repository";
-import { useModal } from "../../../../shared/contexts/modal.context";
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
 import type { SessionDTO, SessionPayloadDTO } from "../session.dtos";

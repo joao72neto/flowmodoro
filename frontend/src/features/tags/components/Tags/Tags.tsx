@@ -11,7 +11,7 @@ import ExpandableButton from "../../../../shared/components/buttons/ExpandableBu
 import clsx from "clsx";
 
 import TagsSkeleton from "./TagsSkeleton";
-import { useModal } from "../../../../shared/contexts/modal.context";
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
   useCreateLocalTag,
   useDeleteLocalTag,

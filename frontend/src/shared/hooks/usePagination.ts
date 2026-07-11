@@ -20,7 +20,7 @@ export function usePagination({
       const validPage = Math.max(1, Math.min(page, totalPages || 1));
       setCurrentPage(validPage);
     },
-    [totalPages],
+    [totalPages, setCurrentPage],
   );
 
   return {

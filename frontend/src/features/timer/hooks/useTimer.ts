@@ -8,7 +8,7 @@ import {
 import { formatToHour } from "../../../shared/utils/number.utils";
 import healthService from "../../../shared/health.service";
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
-import { useModal } from "../../../shared/contexts/modal.context";
+import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 
 const useTimer = () => {

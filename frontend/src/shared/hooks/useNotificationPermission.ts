@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useModal } from "../contexts/modal.context";
+import { useModal } from "../contexts/modal/modal.context";
 
 export const useNotificationPermission = () => {
   const { showInfo, hideModal } = useModal();
@@ -35,5 +35,5 @@ export const useNotificationPermission = () => {
         }
       }
     })();
-  }, []);
+  }, [showInfo, hideModal]);
 };

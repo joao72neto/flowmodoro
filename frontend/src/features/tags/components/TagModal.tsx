@@ -1,6 +1,6 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
-import Button from "../../../shared/components/buttons/Button";
+import Button from "../../../shared/components/buttons/Button/Button";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -39,14 +39,14 @@ const TagModal = ({
   isOpen: boolean;
   defaultValues?: TagDTO;
 
-  title: string;
+  title?: string;
   titleIcon?: React.ReactNode;
 
   inputLabel?: string;
 
   projectId: string;
-  edit: ReturnType<typeof useUpdateLocalTag>["mutate"];
-  save: ReturnType<typeof useCreateLocalTag>["mutate"];
+  edit?: ReturnType<typeof useUpdateLocalTag>["mutate"];
+  save?: ReturnType<typeof useCreateLocalTag>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
@@ -78,18 +78,23 @@ const TagModal = ({
   };
 
   const onSubmit = (data: { name: string }) => {
-    defaultValues
-      ? edit(
-          {
-            id: defaultValues.id,
-            data: {
-              name: data.name,
-              projectId: projectId,
-            },
+    if (defaultValues && edit) {
+      edit(
+        {
+          id: defaultValues.id,
+          data: {
+            name: data.name,
+            projectId: projectId,
           },
-          { onSuccess: closeAndReset },
-        )
-      : save({ name: data.name, projectId }, { onSuccess: closeAndReset });
+        },
+        { onSuccess: closeAndReset },
+      );
+      return;
+    }
+
+    if (save) {
+      save({ name: data.name, projectId }, { onSuccess: closeAndReset });
+    }
   };
 
   return (

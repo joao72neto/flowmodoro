@@ -1,6 +1,6 @@
 import ModalContainer from "../../../shared/components/Modal/ModalContainer";
 import Input from "../../../shared/components/inputs/Input";
-import Button from "../../../shared/components/buttons/Button";
+import Button from "../../../shared/components/buttons/Button/Button";
 
 import { MdOutlineAdd } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
@@ -10,7 +10,10 @@ import { useForm } from "react-hook-form";
 import { CreateProjectSchema } from "../project.schema";
 
 import type { ProjectDTO } from "../offline/project.dtos";
-import type { useCreateLocalProject, useUpdateLocalProject } from "../offline/hooks/useLocalProjects";
+import type {
+  useCreateLocalProject,
+  useUpdateLocalProject,
+} from "../offline/hooks/useLocalProjects";
 
 const ProjectModal = ({
   isOpen,
@@ -36,13 +39,13 @@ const ProjectModal = ({
   isOpen: boolean;
   defaultValues?: ProjectDTO;
 
-  title: string;
+  title?: string;
   titleIcon?: React.ReactNode;
 
   inputLabel?: string;
 
-  edit: ReturnType<typeof useUpdateLocalProject>["mutate"];
-  save: ReturnType<typeof useCreateLocalProject>["mutate"];
+  edit?: ReturnType<typeof useUpdateLocalProject>["mutate"];
+  save?: ReturnType<typeof useCreateLocalProject>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
@@ -74,11 +77,16 @@ const ProjectModal = ({
   };
 
   const onSubmit = (data: { name: string }) => {
-    defaultValues
-      ? edit({ id: defaultValues.id, data }, { onSuccess: closeAndReset })
-      : save(data, {
-          onSuccess: closeAndReset,
-        });
+    if (defaultValues && edit) {
+      edit({ id: defaultValues.id, data }, { onSuccess: closeAndReset });
+      return;
+    }
+
+    if (save) {
+      save(data, {
+        onSuccess: closeAndReset,
+      });
+    }
   };
 
   return (

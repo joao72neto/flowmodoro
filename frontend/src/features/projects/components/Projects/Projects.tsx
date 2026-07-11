@@ -12,7 +12,7 @@ import clsx from "clsx";
 import Tags from "../../../tags/components/Tags/Tags";
 
 import ProjectsSkeleton from "./ProjectsSkeleton";
-import { useModal } from "../../../../shared/contexts/modal.context";
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
   useCreateLocalProject,
   useDeleteLocalProject,

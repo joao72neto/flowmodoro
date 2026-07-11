@@ -7,7 +7,7 @@ import { GoProject } from "react-icons/go";
 import { IoTimeOutline } from "react-icons/io5";
 import DropdownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 import { formatToHour } from "../../../../shared/utils/number.utils";
-import { useModal } from "../../../../shared/contexts/modal.context";
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import type { ProjectDTO } from "../../offline/project.dtos";
 
 const Project = ({

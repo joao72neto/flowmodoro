@@ -1,88 +1,8 @@
-import Modal from "../components/Modal/Modal";
-import { createContext, useContext, useState, useCallback } from "react";
-import type { ModalType } from "../global.types";
+import Modal from "../../components/Modal/Modal";
+import { useState, useCallback } from "react";
+import type { ModalType } from "../../global.types";
 
-interface IModalContext {
-  showError: ({
-    title,
-    message,
-    action,
-    cancel,
-    confirmLabel,
-    cancelLabel,
-  }: {
-    title: string;
-    message: string;
-    action: () => void;
-    cancel?: () => void;
-    confirmLabel?: string;
-    cancelLabel?: string;
-  }) => void;
-  showWarning: ({
-    title,
-    message,
-    action,
-    cancel,
-    confirmLabel,
-    cancelLabel,
-  }: {
-    title: string;
-    message: string;
-    action: () => void;
-    cancel?: () => void;
-    confirmLabel?: string;
-    cancelLabel?: string;
-  }) => void;
-  showSuccess: ({
-    title,
-    message,
-    action,
-    cancel,
-    confirmLabel,
-    cancelLabel,
-  }: {
-    title: string;
-    message: string;
-    action: () => void;
-    cancel?: () => void;
-    confirmLabel?: string;
-    cancelLabel?: string;
-  }) => void;
-  showInfo: ({
-    title,
-    message,
-    action,
-    cancel,
-    confirmLabel,
-    cancelLabel,
-  }: {
-    title: string;
-    message: string;
-    action: () => void;
-    cancel?: () => void;
-    confirmLabel?: string;
-    cancelLabel?: string;
-  }) => void;
-  showDefault: ({
-    title,
-    message,
-    action,
-    cancel,
-    confirmLabel,
-    cancelLabel,
-  }: {
-    title: string;
-    message: string;
-    action: () => void;
-    cancel?: () => void;
-    confirmLabel?: string;
-    cancelLabel?: string;
-  }) => void;
-  hideModal: () => void;
-  setModalLoading: (isLoading: boolean) => void;
-}
-
-export const ModalContext = createContext<IModalContext | null>(null);
+import { ModalContext } from "./modal.context";
 
 export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   const [modalType, setModalType] = useState<ModalType | null>(null);
@@ -327,10 +247,4 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       )}
     </ModalContext.Provider>
   );
-};
-
-export const useModal = () => {
-  const context = useContext(ModalContext);
-  if (!context) throw new Error("useModal must be used within a ModalProvider");
-  return context;
 };

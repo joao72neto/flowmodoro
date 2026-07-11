@@ -1,6 +1,7 @@
 import { PiSunBold, PiMoonBold } from "react-icons/pi";
-import { useTheme } from "../contexts/theme.context";
 import IconButton from "./buttons/IconButton";
+
+import { useTheme } from "../contexts/theme/theme.context";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();

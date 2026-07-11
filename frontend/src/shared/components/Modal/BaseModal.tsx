@@ -1,4 +1,4 @@
-import Button from "../buttons/Button";
+import Button from "../buttons/Button/Button";
 
 import { MdOutlineCancel } from "react-icons/md";
 import { GiConfirmed } from "react-icons/gi";

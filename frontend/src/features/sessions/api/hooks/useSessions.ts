@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
 
-import { useModal } from "../../../../shared/contexts/modal.context";
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { APP_DATA_QUERY_KEY } from "../../../../query-key";
 import {
   createSession,
@@ -106,7 +106,7 @@ export const useDeleteSession = () => {
   return useMutation({
     mutationFn: (id: number) => deleteSession(id),
 
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showError({
         title:
           sessionErrors[error.code as SessionError] ?? "Erro ao deletar sessão",

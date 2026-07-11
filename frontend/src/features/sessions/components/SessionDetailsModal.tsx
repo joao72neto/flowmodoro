@@ -5,7 +5,7 @@ import { formatToHour } from "../../../shared/utils/number.utils";
 import { capitalize } from "../../../shared/utils/string.utils";
 
 import { PRESETS } from "../../timer/consts/ratio-presets";
-import Button from "../../../shared/components/buttons/Button";
+import Button from "../../../shared/components/buttons/Button/Button";
 
 import { FaTrash } from "react-icons/fa6";
 import { MdSave, MdModeEdit, MdCancel } from "react-icons/md";
@@ -21,7 +21,7 @@ import { IoMdPricetag } from "react-icons/io";
 import { useSessionContext } from "../context/sessions.context";
 import SessionSelector from "./SessionCreation/SessionSelector";
 import Input from "../../../shared/components/inputs/Input";
-import { useModal } from "../../../shared/contexts/modal.context";
+import { useModal } from "../../../shared/contexts/modal/modal.context";
 import type { SessionDTO } from "../offline/session.dtos";
 import {
   useDeleteLocalSession,
@@ -46,7 +46,6 @@ const SessionDetailsModal = ({
   setIsOpen: (isOpen: boolean) => void;
   session: SessionDTO;
 }) => {
-
   const { showDefault, hideModal, setModalLoading } = useModal();
 
   const { mutate: updateLocalSession, isPending: isUpdating } =
@@ -66,7 +65,6 @@ const SessionDetailsModal = ({
       return null;
     }
   };
-
 
   const draft = getDraft();
 

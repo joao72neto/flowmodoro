@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { TimerProvider } from "../features/timer/timer.context";
+import { TimerProvider } from "../features/timer/context/timer.provider";
 import LoadingApplication from "./LoadingApplication";
 
-import { ThemeProvider } from "../shared/contexts/theme.context";
+import { ThemeProvider } from "../shared/contexts/theme/theme.provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "../features/sessions/context/sessions.provider";
-import { ModalProvider } from "../shared/contexts/modal.context";
+import { ModalProvider } from "../shared/contexts/modal/modal.provider";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
