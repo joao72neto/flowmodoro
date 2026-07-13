@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.projects.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProjectDTO {
 
-	private Long id;
+    private UUID id;
 
-	@NotBlank(message = "Project name is required")
-	private String name;
+    @NotBlank(message = "Project name is required")
+    private String name;
 
-	private Long totalFocus;
-
+    private Long totalFocus;
 }

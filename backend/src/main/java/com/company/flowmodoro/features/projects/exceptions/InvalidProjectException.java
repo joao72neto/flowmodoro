@@ -5,8 +5,7 @@ import com.company.flowmodoro.exception.ErrorResponse.ErrorCode;
 
 public class InvalidProjectException extends BaseException {
 
-	public InvalidProjectException(ErrorCode errorCode, String message) {
-		super(errorCode, message);
-	}
-
+    public InvalidProjectException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
+    }
 }

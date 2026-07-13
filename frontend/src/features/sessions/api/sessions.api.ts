@@ -1,4 +1,7 @@
 import api from "../../../configs/api.configs";
+import type { SessionPayloadDTO } from "../local/session.dtos";
+import type { SessionDTO } from "../local/session.dtos";
+
 import type { PaginationResponse } from "../../../shared/global.types";
 import type {
   SessionPayload,
@@ -22,9 +25,9 @@ export const fetchSessions = async ({
 };
 
 export const createSession = async (
-  data: SessionPayload,
-): Promise<SessionResponse> => {
-  const res = await api.post<SessionResponse>("/sessions", data);
+  data: SessionPayloadDTO,
+): Promise<SessionDTO> => {
+  const res = await api.post<SessionDTO>("/sessions", data);
   return res.data;
 };
 

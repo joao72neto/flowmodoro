@@ -1,7 +1,6 @@
 package com.company.flowmodoro.exception.ErrorResponse;
 
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ErrorResponse {
 
-	private ErrorCode code;
+    private ErrorCode code;
 
-	private List<String> errors;
-
+    private List<String> errors;
 }

@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.sessions.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,19 +13,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SessionUpdateDTO {
 
-	private Long id;
+    private UUID id;
 
-	private Long focus;
+    private Long focus;
 
-	@NotBlank(message = "Session name is required")
-	private String name;
+    @NotBlank(message = "Session name is required")
+    private String name;
 
-	private Double ratio;
+    private Double ratio;
 
-	private Long rest;
+    private Long rest;
 
-	private Long projectId;
+    private UUID projectId;
 
-	private Long tagId;
-
+    private UUID tagId;
 }

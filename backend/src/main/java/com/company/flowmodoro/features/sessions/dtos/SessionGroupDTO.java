@@ -1,10 +1,11 @@
 package com.company.flowmodoro.features.sessions.dtos;
 
+import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data
 @Builder
@@ -12,14 +13,13 @@ import java.util.List;
 @AllArgsConstructor
 public class SessionGroupDTO {
 
-	private String id;
+    private UUID id;
 
-	private String name;
+    private String name;
 
-	private long totalFocus;
+    private long totalFocus;
 
-	private long totalRest;
+    private long totalRest;
 
-	private List<SessionDTO> sessions;
-
+    private List<SessionDTO> sessions;
 }

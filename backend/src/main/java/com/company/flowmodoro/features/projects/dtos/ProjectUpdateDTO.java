@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProjectUpdateDTO {
 
-	@NotBlank(message = "Project name is required")
-	private String name;
-
+    @NotBlank(message = "Project name is required")
+    private String name;
 }

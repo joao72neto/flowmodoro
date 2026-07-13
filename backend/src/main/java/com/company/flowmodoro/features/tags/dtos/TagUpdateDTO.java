@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TagUpdateDTO {
 
-	@NotBlank(message = "Tag name is required")
-	private String name;
-
+    @NotBlank(message = "Tag name is required")
+    private String name;
 }
