@@ -2,8 +2,8 @@ import api from "../../../configs/api.configs";
 import type {
   CreateSessionDTO,
   SessionPayloadDTO,
-} from "../local/session.dtos";
-import type { SessionDTO } from "../local/session.dtos";
+} from "../dtos/sessions-request.dtos";
+import type { SessionDTO } from "../dtos/sessions-response.dtos";
 
 import type { PaginationResponse } from "../../../shared/global.types";
 import type {

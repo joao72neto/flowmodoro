@@ -2,10 +2,11 @@ import { db } from "../../../local/indexedDB";
 import type { PaginationResponse } from "../../../shared/global.types";
 import type { SessionModel } from "./session.model";
 import type {
-  SessionPayloadDTO,
   SessionDTO,
   DailySessionsDTO,
-} from "./session.dtos";
+} from "../dtos/sessions-response.dtos";
+import type { SessionPayloadDTO } from "../dtos/sessions-request.dtos";
+
 import { payloadToModel, modelToDTO } from "./sessions.mappers";
 import { applyUpdates } from "./utils/apply-updates";
 import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";

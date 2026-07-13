@@ -4,7 +4,7 @@ import type {
   DailySessionsDTO,
   SessionDTO,
   SessionGroupDTO,
-} from "../session.dtos";
+} from "../../dtos/sessions-response.dtos";
 import type { SessionModel } from "../session.model";
 import { modelToDTO } from "../sessions.mappers";
 

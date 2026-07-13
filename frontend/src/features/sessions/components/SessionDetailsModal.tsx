@@ -22,7 +22,7 @@ import { useSessionContext } from "../context/sessions.context";
 import SessionSelector from "./SessionCreation/SessionSelector";
 import Input from "../../../shared/components/inputs/Input";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
-import type { SessionDTO } from "../local/session.dtos";
+import type { SessionDTO } from "../dtos/sessions-response.dtos";
 import {
   useDeleteLocalSession,
   useUpdateLocalSession,

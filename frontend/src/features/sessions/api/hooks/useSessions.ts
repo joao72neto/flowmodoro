@@ -5,9 +5,9 @@ import { sessionErrors, type SessionError } from "../consts/session-errors";
 import { createManySessions } from "../sessions.api";
 import type {
   CreateSessionDTO,
-  SessionDTO,
   SessionPayloadDTO,
-} from "../../local/session.dtos";
+} from "../../dtos/sessions-request.dtos";
+import type { SessionDTO } from "../../dtos/sessions-response.dtos";
 
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { APP_DATA_QUERY_KEY } from "../../../../query-key";

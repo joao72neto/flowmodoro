@@ -8,7 +8,10 @@ import {
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
-import type { SessionDTO, SessionPayloadDTO } from "../session.dtos";
+
+import type { SessionDTO } from "../../dtos/sessions-response.dtos";
+import type { SessionPayloadDTO } from "../../dtos/sessions-request.dtos";
+
 import { triggerSync } from "../../../../local/sync-manager";
 
 const SESSIONS_QUERY_KEY = "sessions";

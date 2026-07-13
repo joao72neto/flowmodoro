@@ -1,5 +1,5 @@
 import { DEFAULT_SESSION } from "../consts/default-session";
-import type { SessionPayloadDTO } from "../session.dtos";
+import type { SessionPayloadDTO } from "../../dtos/sessions-request.dtos";
 import type { SessionModel } from "../session.model";
 import { calculateRest } from "./calculate-rest";
 

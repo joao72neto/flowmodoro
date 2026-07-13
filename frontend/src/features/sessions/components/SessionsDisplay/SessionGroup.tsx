@@ -12,7 +12,7 @@ import Label from "../../../../shared/components/labels/Label";
 import { GoProject, GoChevronDown } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
-import type { SessionDTO, SessionGroupDTO } from "../../local/session.dtos";
+import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response.dtos";
 
 const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
   const [showSessionDetailsModal, setShowSessionDetailsModal] = useState(false);

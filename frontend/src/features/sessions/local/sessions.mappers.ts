@@ -1,5 +1,7 @@
 import type { SessionModel } from "./session.model";
-import type { SessionPayloadDTO, SessionDTO } from "./session.dtos";
+import type { SessionDTO } from "../dtos/sessions-response.dtos";
+import type { SessionPayloadDTO } from "../dtos/sessions-request.dtos";
+
 import { DEFAULT_SESSION } from "./consts/default-session";
 import { calculateRest } from "./utils/calculate-rest";
 import type { ProjectModel } from "../../projects/local/project.model";

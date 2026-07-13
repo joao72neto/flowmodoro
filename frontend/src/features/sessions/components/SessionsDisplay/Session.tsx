@@ -7,7 +7,7 @@ import { PRESETS } from "../../../timer/consts/ratio-presets";
 import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import Label from "../../../../shared/components/labels/Label";
-import type { SessionDTO } from "../../local/session.dtos";
+import type { SessionDTO } from "../../dtos/sessions-response.dtos";
 
 const Session = ({
   session,

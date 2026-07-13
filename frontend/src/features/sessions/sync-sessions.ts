@@ -1,5 +1,5 @@
 import type { SessionModel } from "./local/session.model";
-import type { CreateSessionDTO } from "./local/session.dtos";
+import type { CreateSessionDTO } from "./dtos/sessions-request.dtos";
 
 import { db } from "../../local/indexedDB";
 import { createManySessions } from "./api/sessions.api";
