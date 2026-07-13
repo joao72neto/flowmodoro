@@ -31,6 +31,10 @@ public class SessionCreateMapper {
             .build();
     }
 
+    public List<SessionModel> toEntity(List<SessionCreateDTO> sessionDTOs) {
+        return sessionDTOs.stream().map(this::toEntity).toList();
+    }
+
     public SessionCreateDTO toDTO(SessionModel session) {
         return SessionCreateDTO.builder()
             .id(session.getId())

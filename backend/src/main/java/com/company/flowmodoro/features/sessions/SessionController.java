@@ -8,6 +8,7 @@ import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.sessions.mappers.SessionCreateMapper;
 import com.company.flowmodoro.features.sessions.mappers.SessionMapper;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,6 +40,18 @@ public class SessionController {
         this.sessionService = sessionService;
         this.mapper = mapper;
         this.createMapper = createMapper;
+    }
+
+    @PostMapping("/create-many")
+    public ResponseEntity<List<SessionDTO>> saveMany(
+        @Valid @RequestBody List<SessionCreateDTO> dtos,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        List<SessionModel> sessions = sessionService.saveMany(
+            createMapper.toEntity(dtos),
+            userId
+        );
+        return ResponseEntity.status(201).body(mapper.toDTO(sessions));
     }
 
     @PostMapping

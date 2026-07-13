@@ -56,7 +56,21 @@ public class SessionService {
     }
 
     @Transactional
+    public List<SessionModel> saveMany(
+        List<SessionModel> sessions,
+        UUID userId
+    ) {
+        return sessions
+            .stream()
+            .map(session -> prepareSession(session, userId))
+            .toList();
+    }
+
     public SessionModel save(SessionModel session, UUID userId) {
+        return prepareSession(session, userId);
+    }
+
+    private SessionModel prepareSession(SessionModel session, UUID userId) {
         List<String> errors = new ArrayList<>();
 
         if (session.getDate() == null) {
