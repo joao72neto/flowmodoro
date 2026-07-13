@@ -5,6 +5,10 @@ import Providers from "./app/Providers";
 import { getSerwist } from "virtual:serwist";
 import Home from "./app/Home";
 
+import { initSync } from "./local/sync-manager";
+
+initSync();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Providers>

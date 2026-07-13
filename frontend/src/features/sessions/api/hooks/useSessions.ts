@@ -2,6 +2,8 @@ import type { SessionPayload, SessionResponse } from "../sessions.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
+import { createManySessions } from "../sessions.api";
+import type { SessionDTO, SessionPayloadDTO } from "../../local/session.dtos";
 
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { APP_DATA_QUERY_KEY } from "../../../../query-key";
@@ -45,12 +47,35 @@ export const useFetchSessions = ({
   });
 };
 
+export const useCreateManySessions = () => {
+  const { showError, hideModal, setModalLoading } = useModal();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: SessionPayloadDTO[]): Promise<SessionDTO[]> =>
+      createManySessions(data),
+
+    onError: (error: ApiError) => {
+      showError({
+        title: "Erro ao criar sessões",
+        message: error.message,
+        action: hideModal,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      setModalLoading(false);
+    },
+  });
+};
+
 export const useCreateSession = () => {
   const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: SessionPayload): Promise<SessionResponse> =>
+    mutationFn: (data: SessionPayloadDTO): Promise<SessionDTO> =>
       createSession(data),
 
     onError: (error: ApiError) => {

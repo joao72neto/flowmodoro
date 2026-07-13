@@ -1,6 +1,9 @@
 import type { SessionModel } from "./local/session.model";
+import type { SessionPayloadDTO } from "./local/session.dtos";
+
 import { db } from "../../local/indexedDB";
-import { createSession } from "./api/sessions.api";
+import { createManySessions } from "./api/sessions.api";
+import { modelToPayloadArray } from "./local/sessions.mappers";
 
 class SyncSessions {
   async syncCreateSession() {
@@ -11,9 +14,8 @@ class SyncSessions {
 
     if (sessions.length === 0) return;
 
-    for (const session of sessions) {
-      await createSession(session);
-    }
+    const payload: SessionPayloadDTO[] = modelToPayloadArray(sessions);
+    await createManySessions(payload);
   }
 }
 export default new SyncSessions();

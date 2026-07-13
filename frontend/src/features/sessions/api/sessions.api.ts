@@ -24,6 +24,13 @@ export const fetchSessions = async ({
   return res.data;
 };
 
+export const createManySessions = async (
+  data: SessionPayloadDTO[],
+): Promise<SessionDTO[]> => {
+  const res = await api.post<SessionDTO[]>("/sessions/create-many", data);
+  return res.data;
+};
+
 export const createSession = async (
   data: SessionPayloadDTO,
 ): Promise<SessionDTO> => {
