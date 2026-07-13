@@ -1,9 +1,8 @@
 import type { SessionModel } from "./local/session.model";
-import type { SessionPayloadDTO } from "./local/session.dtos";
+import type { CreateSessionDTO } from "./local/session.dtos";
 
 import { db } from "../../local/indexedDB";
 import { createManySessions } from "./api/sessions.api";
-import { modelToPayloadArray } from "./local/sessions.mappers";
 
 class SyncSessions {
   async syncCreateSession() {
@@ -14,8 +13,24 @@ class SyncSessions {
 
     if (sessions.length === 0) return;
 
-    const payload: SessionPayloadDTO[] = modelToPayloadArray(sessions);
+    const payload: CreateSessionDTO[] = preparePayload(sessions);
     await createManySessions(payload);
+
+    await db.sessions.bulkPut(
+      sessions.map((s) => ({ ...s, pending_action: null })),
+    );
   }
 }
 export default new SyncSessions();
+
+const preparePayload = (sessions: SessionModel[]): CreateSessionDTO[] => {
+  return sessions.map((s) => ({
+    id: s.id,
+    name: s.name,
+    focus: s.focus,
+    ratio: s.ratio,
+    rest: s.rest,
+    projectId: s.projectId,
+    tagId: s.tagId,
+  }));
+};

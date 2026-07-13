@@ -9,3 +9,7 @@ export function initSync() {
     void syncSessions.syncCreateSession();
   }
 }
+
+export function triggerSync() {
+  window.dispatchEvent(new Event("online"));
+}

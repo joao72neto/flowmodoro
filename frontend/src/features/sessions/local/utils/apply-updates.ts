@@ -25,5 +25,9 @@ export const applyUpdates = ({
     projectId:
       updated?.projectId || old?.projectId || DEFAULT_SESSION.projectId,
     tagId: updated?.tagId || old?.tagId || DEFAULT_SESSION.tagId,
+    pending_action:
+      updated?.pending_action ||
+      old?.pending_action ||
+      DEFAULT_SESSION.pending_action,
   };
 };

@@ -3,7 +3,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { sessionErrors, type SessionError } from "../consts/session-errors";
 import { createManySessions } from "../sessions.api";
-import type { SessionDTO, SessionPayloadDTO } from "../../local/session.dtos";
+import type {
+  CreateSessionDTO,
+  SessionDTO,
+  SessionPayloadDTO,
+} from "../../local/session.dtos";
 
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { APP_DATA_QUERY_KEY } from "../../../../query-key";
@@ -52,7 +56,7 @@ export const useCreateManySessions = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: SessionPayloadDTO[]): Promise<SessionDTO[]> =>
+    mutationFn: (data: CreateSessionDTO[]): Promise<SessionDTO[]> =>
       createManySessions(data),
 
     onError: (error: ApiError) => {

@@ -9,4 +9,5 @@ export const DEFAULT_SESSION: SessionModel = {
   projectId: "",
   tagId: "",
   date: new Date().toISOString(),
+  pending_action: null,
 };

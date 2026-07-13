@@ -32,19 +32,6 @@ export const modelToDTO = ({
   };
 };
 
-export const modelToPayloadArray = (
-  sessions: SessionModel[],
-): SessionPayloadDTO[] => {
-  return sessions.map((session) => ({
-    name: session.name,
-    focus: session.focus,
-    ratio: session.ratio,
-    rest: session.rest,
-    projectId: session.projectId,
-    tagId: session.tagId,
-  }));
-};
-
 export const payloadToModel = (session: SessionPayloadDTO): SessionModel => ({
   id: crypto.randomUUID(),
   name: session.name || DEFAULT_SESSION.name,
@@ -57,4 +44,5 @@ export const payloadToModel = (session: SessionPayloadDTO): SessionModel => ({
   projectId: session.projectId || DEFAULT_SESSION.projectId,
   tagId: session.tagId || DEFAULT_SESSION.tagId,
   date: new Date().toISOString(),
+  pending_action: "CREATE",
 });
