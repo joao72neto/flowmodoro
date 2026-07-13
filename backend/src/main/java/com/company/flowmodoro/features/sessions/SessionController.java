@@ -44,7 +44,7 @@ public class SessionController {
 
     @PostMapping("/create-many")
     public ResponseEntity<List<SessionDTO>> saveMany(
-        @Valid @RequestBody List<SessionCreateDTO> dtos,
+        @RequestBody List<@Valid SessionCreateDTO> dtos,
         @RequestHeader("X-User-Id") UUID userId
     ) {
         List<SessionModel> sessions = sessionService.saveMany(
