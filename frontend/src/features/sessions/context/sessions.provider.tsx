@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
-import { useCreateLocalSession } from "../hooks/useLocalSessions";
+import { useCreateSession } from "../hooks/useSessions";
 import { useFetchLocalTagsByProject } from "../../tags/local/hooks/useLocalTags";
 import { useFetchLocalProjects } from "../../projects/local/hooks/useLocalProjects";
 import { SessionContext } from "./sessions.context";
 import type { ISaveSessionData } from "./sessions.context";
+import { getStorageObject } from "../../../shared/utils/storage.utils";
 
 export const SessionProvider = ({
   children,
@@ -14,20 +15,18 @@ export const SessionProvider = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [sessionName, setSessionName] = useState<string>(() => {
-    const saved = localStorage.getItem(localStorageKeys.session);
-    const { sessionName } = saved ? JSON.parse(saved) : { sessionName: "" };
-    return sessionName;
+  const initialSessionDraft = getStorageObject(localStorageKeys.session, {
+    sessionName: "",
+    selectedProjectId: null as string | null,
+    selectedTagId: null as string | null,
   });
 
+  const [sessionName, setSessionName] = useState<string>(
+    initialSessionDraft.sessionName,
+  );
+
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
-    () => {
-      const saved = localStorage.getItem(localStorageKeys.session);
-      const { selectedProjectId } = saved
-        ? JSON.parse(saved)
-        : { selectedProjectId: null };
-      return selectedProjectId;
-    },
+    initialSessionDraft.selectedProjectId,
   );
   const { data: projects = [] } = useFetchLocalProjects();
 
@@ -36,13 +35,9 @@ export const SessionProvider = ({
     [projects, selectedProjectId],
   );
 
-  const [selectedTagId, setSelectedTagId] = useState<string | null>(() => {
-    const saved = localStorage.getItem(localStorageKeys.session);
-    const { selectedTagId } = saved
-      ? JSON.parse(saved)
-      : { selectedTagId: null };
-    return selectedTagId;
-  });
+  const [selectedTagId, setSelectedTagId] = useState<string | null>(
+    initialSessionDraft.selectedTagId,
+  );
 
   const { data: tags = [] } = useFetchLocalTagsByProject(
     selectedProjectId || "",
@@ -62,11 +57,11 @@ export const SessionProvider = ({
     localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
   }, [restRatio]);
 
-  const { mutate: createLocalSession } = useCreateLocalSession();
+  const { mutate: createSession } = useCreateSession();
 
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
     setCurrentPage(1);
-    createLocalSession({
+    createSession({
       name: sessionName,
       focus: focusSeconds,
       ratio: restRatio / 100,

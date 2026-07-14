@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../global-query-keys";
+import { APP_DATA_QUERY_KEY } from "../../../../global-query-key";
 import { ApiError } from "../../../../configs/api-error.configs";
 import {
   createLocalTag,
@@ -23,7 +23,7 @@ export const useFetchLocalTagsByProject = (projectId: string) => {
   const TAGS_QUERY_KEY = "tags";
 
   return useQuery({
-    queryKey: [APP_LOCAL_DATA_QUERY_KEY, TAGS_QUERY_KEY, projectId],
+    queryKey: [APP_DATA_QUERY_KEY, TAGS_QUERY_KEY, projectId],
     queryFn: async () => {
       try {
         return await fetchLocalTagsByProject(projectId);
@@ -67,7 +67,7 @@ export const useCreateLocalTag = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };
@@ -103,7 +103,7 @@ export const useUpdateLocalTag = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };
@@ -124,7 +124,7 @@ export const useDeleteLocalTag = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
       hideModal();
       setModalLoading(false);
     },

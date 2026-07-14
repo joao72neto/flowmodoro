@@ -20,3 +20,13 @@ export const getAnonymousUserId = (): string => {
   }
   return id;
 };
+
+export const getStorageObject = <T>(key: string, fallback: T): T => {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? { ...fallback, ...JSON.parse(item) } : fallback;
+  } catch (error) {
+    console.error(`Error parsing ${key} from localStorage`, error);
+    return fallback;
+  }
+};

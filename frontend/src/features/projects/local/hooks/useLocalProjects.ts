@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../global-query-keys";
+import { APP_DATA_QUERY_KEY } from "../../../../global-query-key";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
   createLocalProject,
@@ -23,7 +23,7 @@ export const useFetchLocalProjects = () => {
   const PROJECTS_QUERY_KEY = "projects";
 
   return useQuery({
-    queryKey: [APP_LOCAL_DATA_QUERY_KEY, PROJECTS_QUERY_KEY],
+    queryKey: [APP_DATA_QUERY_KEY, PROJECTS_QUERY_KEY],
     queryFn: async () => {
       try {
         return await fetchLocalProjects();
@@ -68,7 +68,7 @@ export const useCreateLocalProject = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };
@@ -104,7 +104,7 @@ export const useUpdateLocalProject = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };
@@ -125,7 +125,7 @@ export const useDeleteLocalProject = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
       hideModal();
       setModalLoading(false);
     },

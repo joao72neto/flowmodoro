@@ -23,10 +23,7 @@ import SessionSelector from "./SessionCreation/SessionSelector";
 import Input from "../../../shared/components/inputs/Input";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import type { SessionDTO } from "../dtos/sessions-response";
-import {
-  useDeleteLocalSession,
-  useUpdateLocalSession,
-} from "../hooks/useLocalSessions";
+import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
 import { useFetchLocalTagsByProject } from "../../tags/local/hooks/useLocalTags";
 
 interface SessionDraft {
@@ -48,9 +45,8 @@ const SessionDetailsModal = ({
 }) => {
   const { showDefault, hideModal, setModalLoading } = useModal();
 
-  const { mutate: updateLocalSession, isPending: isUpdating } =
-    useUpdateLocalSession();
-  const { mutate: deleteLocalSession } = useDeleteLocalSession();
+  const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
+  const { mutate: deleteSession } = useDeleteSession();
 
   const { projects = [] } = useSessionContext();
 
@@ -126,7 +122,7 @@ const SessionDetailsModal = ({
 
   const handleSave = () => {
     const updatedRest = Math.round(focus * ratio);
-    updateLocalSession(
+    updateSession(
       {
         id: session.id,
         data: {
@@ -159,7 +155,7 @@ const SessionDetailsModal = ({
 
   const handleConfirmDelete = () => {
     setModalLoading(true);
-    deleteLocalSession(session.id, {
+    deleteSession(session.id, {
       onSuccess: () => {
         sessionStorage.removeItem(draftKey);
         setModalLoading(false);

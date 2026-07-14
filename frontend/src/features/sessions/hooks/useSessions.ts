@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  createLocalSession,
-  deleteLocalSession,
-  fetchLocalSessions,
-  updateLocalSession,
+  createSession,
+  deleteSession,
+  fetchSessions,
+  updateSession,
 } from "../local/sessions.repository";
 
-import { APP_LOCAL_DATA_QUERY_KEY } from "../../../global-query-keys";
+import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
 
 import type { SessionDTO } from "../dtos/sessions-response";
 import type { UpdateSessionDTO } from "../dtos/sessions-request";
@@ -15,7 +15,7 @@ import { triggerSync } from "../../../local/sync-manager";
 
 const SESSIONS_QUERY_KEY = "sessions";
 
-export const useFetchLocalSessions = ({
+export const useFetchSessions = ({
   page,
   size,
 }: {
@@ -23,35 +23,35 @@ export const useFetchLocalSessions = ({
   size: number;
 }) => {
   return useQuery({
-    queryKey: [APP_LOCAL_DATA_QUERY_KEY, SESSIONS_QUERY_KEY, page, size],
-    queryFn: async () => await fetchLocalSessions({ page, size }),
+    queryKey: [APP_DATA_QUERY_KEY, SESSIONS_QUERY_KEY, page, size],
+    queryFn: async () => await fetchSessions({ page, size }),
 
     meta: {
-      errorTitle: "Erro ao carregar sessões locais",
+      errorTitle: "Erro ao carregar sessões",
     },
   });
 };
 
-export const useCreateLocalSession = () => {
+export const useCreateSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: UpdateSessionDTO): Promise<SessionDTO> =>
-      createLocalSession(data),
+      createSession(data),
 
     meta: {
-      errorTitle: "Erro ao criar sessão local",
+      errorTitle: "Erro ao criar sessão",
       closeModalOnSuccess: true,
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
       triggerSync();
     },
   });
 };
 
-export const useUpdateLocalSession = () => {
+export const useUpdateSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -61,32 +61,32 @@ export const useUpdateLocalSession = () => {
     }: {
       id: string;
       data: UpdateSessionDTO;
-    }): Promise<SessionDTO> => updateLocalSession({ id, data }),
+    }): Promise<SessionDTO> => updateSession({ id, data }),
 
     meta: {
-      errorTitle: "Erro ao atualizar sessão local",
+      errorTitle: "Erro ao atualizar sessão",
       closeModalOnSuccess: true,
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };
 
-export const useDeleteLocalSession = () => {
+export const useDeleteSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => deleteLocalSession(id),
+    mutationFn: (id: string) => deleteSession(id),
 
     meta: {
-      errorTitle: "Erro ao deletar sessão local",
+      errorTitle: "Erro ao deletar sessão",
       closeModalOnSuccess: true,
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
     },
   });
 };

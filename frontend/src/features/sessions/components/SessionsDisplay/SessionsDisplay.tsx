@@ -9,14 +9,14 @@ import { useSessionContext } from "../../context/sessions.context";
 import SessionsSkeleton from "./SessionsSkeleton";
 import SessionsWrapper from "./SessionsWrapper";
 import SessionGroup from "./SessionGroup";
-import { useFetchLocalSessions } from "../../hooks/useLocalSessions";
+import { useFetchSessions } from "../../hooks/useSessions";
 
 const SessionsDisplay = () => {
   const SIZE = 7;
 
   const { currentPage, setCurrentPage } = useSessionContext();
 
-  const { data: sessions, isLoading } = useFetchLocalSessions({
+  const { data: sessions, isLoading } = useFetchSessions({
     page: currentPage,
     size: SIZE,
   });

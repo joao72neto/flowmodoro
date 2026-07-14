@@ -9,7 +9,7 @@ import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
 
 import mapper from "../sessions.mappers";
 
-export const fetchLocalSessions = async ({
+export const fetchSessions = async ({
   page = 1,
   size = 10,
 }: {
@@ -41,7 +41,7 @@ export const fetchLocalSessions = async ({
   };
 };
 
-export const createLocalSession = async (
+export const createSession = async (
   payload: UpdateSessionDTO,
 ): Promise<SessionDTO> => {
   const session: SessionModel = mapper.toEntity(payload);
@@ -54,7 +54,7 @@ export const createLocalSession = async (
   return mapper.toDTO({ session, project, tag });
 };
 
-export const updateLocalSession = async ({
+export const updateSession = async ({
   id,
   data,
 }: {
@@ -69,7 +69,7 @@ export const updateLocalSession = async ({
     updated: data,
   });
 
-  await db.sessions.update(id, data);
+  await db.sessions.update(id, updatedSession);
 
   const project = await db.projects.get(updatedSession.projectId || "");
   const tag = await db.tags.get(updatedSession.tagId || "");
@@ -77,6 +77,6 @@ export const updateLocalSession = async ({
   return mapper.toDTO({ session: updatedSession, project, tag });
 };
 
-export const deleteLocalSession = async (id: string) => {
+export const deleteSession = async (id: string) => {
   await db.sessions.delete(id);
 };
