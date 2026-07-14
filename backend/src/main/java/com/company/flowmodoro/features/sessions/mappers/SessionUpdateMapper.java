@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionUpdateMapper {
 
-    public void apply(SessionModel session, SessionUpdateDTO dto) {
+    public void apply(SessionUpdateDTO dto, SessionModel session) {
         session.setName(
             dto.getName() != null ? dto.getName() : session.getName()
         );
@@ -32,6 +32,24 @@ public class SessionUpdateMapper {
                 ? TagModel.builder().id(dto.getTagId()).build()
                 : null
         );
+    }
+
+    public SessionModel toEntity(SessionUpdateDTO dto) {
+        return SessionModel.builder()
+            .focus(dto.getFocus())
+            .ratio(dto.getRatio())
+            .rest(dto.getRest())
+            .project(
+                dto.getProjectId() != null
+                    ? ProjectModel.builder().id(dto.getProjectId()).build()
+                    : null
+            )
+            .tag(
+                dto.getTagId() != null
+                    ? TagModel.builder().id(dto.getTagId()).build()
+                    : null
+            )
+            .build();
     }
 
     public SessionUpdateDTO toDTO(SessionModel session) {

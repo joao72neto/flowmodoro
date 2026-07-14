@@ -5,14 +5,15 @@ import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
 import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
-import com.company.flowmodoro.features.sessions.helpers.ProjectTagValidator;
-import com.company.flowmodoro.features.sessions.helpers.SessionCalculator;
 import com.company.flowmodoro.features.sessions.helpers.SessionValidator;
 import com.company.flowmodoro.features.sessions.mappers.SessionUpdateMapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,65 +29,23 @@ public class SessionService {
 
     private final SessionRepository sessionRepository;
 
-    private final SessionUpdateMapper sessionUpdateMapper;
-
     private final SessionAggregator aggregator;
-
-    private final SessionCalculator calculator;
 
     private final SessionValidator validator;
 
-    private final ProjectTagValidator projectTagValidator;
+    private final SessionUpdateMapper sessionUpdateMapper;
 
     public SessionService(
         SessionRepository sessionRepository,
         SessionUpdateMapper sessionUpdateMapper,
         SessionAggregator aggregator,
-        SessionCalculator calculator,
-        SessionValidator validator,
-        ProjectTagValidator projectTagValidator
+        SessionValidator validator
     ) {
         this.sessionRepository = sessionRepository;
         this.sessionUpdateMapper = sessionUpdateMapper;
 
         this.aggregator = aggregator;
-        this.calculator = calculator;
         this.validator = validator;
-        this.projectTagValidator = projectTagValidator;
-    }
-
-    @Transactional
-    public List<SessionModel> saveMany(
-        List<SessionModel> sessions,
-        UUID userId
-    ) {
-        return sessions
-            .stream()
-            .map(session -> prepareSession(session, userId))
-            .toList();
-    }
-
-    public SessionModel save(SessionModel session, UUID userId) {
-        return prepareSession(session, userId);
-    }
-
-    private SessionModel prepareSession(SessionModel session, UUID userId) {
-        List<String> errors = new ArrayList<>();
-
-        if (session.getDate() == null) {
-            session.setDate(LocalDate.now());
-        }
-
-        if (session.getRatio() == null) {
-            session.setRatio(0.2);
-        }
-
-        projectTagValidator.validateProjectAndTag(session, userId);
-        calculator.calculateRest(session, session.getRatio());
-        validator.validateSessions(session, errors);
-
-        session.setUserId(userId);
-        return sessionRepository.save(session);
     }
 
     public PageResponse<DailySessionsDTO> consult(
@@ -130,6 +89,57 @@ public class SessionService {
     }
 
     @Transactional
+    public List<SessionModel> saveAll(
+        List<SessionModel> sessions,
+        UUID userId
+    ) {
+        List<SessionModel> entities = sessions
+            .stream()
+            .map(session -> validator.prepareSession(session, userId))
+            .toList();
+
+        return sessionRepository.saveAll(entities);
+    }
+
+    @Transactional
+    public SessionModel save(SessionModel session, UUID userId) {
+        SessionModel entity = validator.prepareSession(session, userId);
+        return sessionRepository.save(entity);
+    }
+
+    @Transactional
+    public List<SessionModel> updateAll(
+        List<SessionUpdateDTO> sessions,
+        UUID userId
+    ) {
+        Map<UUID, SessionUpdateDTO> updates = sessions
+            .stream()
+            .collect(
+                Collectors.toMap(SessionUpdateDTO::getId, Function.identity())
+            );
+
+        List<SessionModel> entities = sessionRepository.findAllById(
+            updates.keySet()
+        );
+
+        if (entities.size() != sessions.size()) {
+            throw new InvalidSessionException(
+                SESSION_NOT_FOUND,
+                "Session not found for one or more ids"
+            );
+        }
+
+        List<String> errors = new ArrayList<>();
+        entities.forEach(entity -> {
+            SessionUpdateDTO dto = updates.get(entity.getId());
+            sessionUpdateMapper.apply(dto, entity);
+            validator.validateSessions(entity, errors);
+        });
+
+        return sessionRepository.saveAll(entities);
+    }
+
+    @Transactional
     public SessionModel update(UUID id, SessionUpdateDTO dto, UUID userId) {
         SessionModel session = sessionRepository
             .findById(id)
@@ -147,9 +157,8 @@ public class SessionService {
             );
         }
 
-        sessionUpdateMapper.apply(session, dto);
-
-        projectTagValidator.validateProjectAndTag(session, userId);
+        sessionUpdateMapper.apply(dto, session);
+        validator.validateProjectAndTag(session, userId);
 
         List<String> errors = new ArrayList<>();
         validator.validateSessions(session, errors);

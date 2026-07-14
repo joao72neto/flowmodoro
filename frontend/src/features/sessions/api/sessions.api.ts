@@ -24,7 +24,7 @@ export const fetchSessions = async ({
 export const createManySessions = async (
   data: CreateSessionDTO[],
 ): Promise<SessionDTO[]> => {
-  const res = await api.post<SessionDTO[]>("/sessions/create-many", data);
+  const res = await api.post<SessionDTO[]>("/sessions/bulk", data);
   return res.data;
 };
 

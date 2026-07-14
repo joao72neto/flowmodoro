@@ -42,12 +42,12 @@ public class SessionController {
         this.createMapper = createMapper;
     }
 
-    @PostMapping("/create-many")
-    public ResponseEntity<List<SessionDTO>> saveMany(
+    @PostMapping("/bulk")
+    public ResponseEntity<List<SessionDTO>> saveAll(
         @RequestBody List<@Valid SessionCreateDTO> dtos,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        List<SessionModel> sessions = sessionService.saveMany(
+        List<SessionModel> sessions = sessionService.saveAll(
             createMapper.toEntity(dtos),
             userId
         );
