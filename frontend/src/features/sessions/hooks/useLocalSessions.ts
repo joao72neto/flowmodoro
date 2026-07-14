@@ -5,8 +5,7 @@ import {
   fetchLocalSessions,
   updateLocalSession,
 } from "../local/sessions.repository";
-import { useModal } from "../../../shared/contexts/modal/modal.context";
-import { ApiError } from "../../../configs/api-error.configs";
+
 import { APP_LOCAL_DATA_QUERY_KEY } from "../../../global-query-keys";
 
 import type { SessionDTO } from "../dtos/sessions-response";
@@ -23,55 +22,36 @@ export const useFetchLocalSessions = ({
   page: number;
   size: number;
 }) => {
-  const { showError, hideModal } = useModal();
-
   return useQuery({
     queryKey: [APP_LOCAL_DATA_QUERY_KEY, SESSIONS_QUERY_KEY, page, size],
-    queryFn: async () => {
-      try {
-        return await fetchLocalSessions({ page, size });
-      } catch (error) {
-        if (error instanceof ApiError) {
-          showError({
-            title: "Erro ao carregar sessões locais",
-            message: error.message,
-            action: hideModal,
-          });
-        }
-        console.error(error);
-        throw error;
-      }
+    queryFn: async () => await fetchLocalSessions({ page, size }),
+
+    meta: {
+      errorTitle: "Erro ao carregar sessões locais",
     },
   });
 };
 
 export const useCreateLocalSession = () => {
-  const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: UpdateSessionDTO): Promise<SessionDTO> =>
       createLocalSession(data),
 
-    onError: (error: ApiError) => {
-      showError({
-        title: "Erro ao criar sessão local",
-        message: error.message,
-        action: hideModal,
-      });
+    meta: {
+      errorTitle: "Erro ao criar sessão local",
+      closeModalOnSuccess: true,
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
-      setModalLoading(false);
-      hideModal();
       triggerSync();
     },
   });
 };
 
 export const useUpdateLocalSession = () => {
-  const { showError, hideModal } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -83,12 +63,9 @@ export const useUpdateLocalSession = () => {
       data: UpdateSessionDTO;
     }): Promise<SessionDTO> => updateLocalSession({ id, data }),
 
-    onError: (error: ApiError) => {
-      showError({
-        title: "Erro ao atualizar sessão local",
-        message: error.message,
-        action: hideModal,
-      });
+    meta: {
+      errorTitle: "Erro ao atualizar sessão local",
+      closeModalOnSuccess: true,
     },
 
     onSuccess: () => {
@@ -98,24 +75,18 @@ export const useUpdateLocalSession = () => {
 };
 
 export const useDeleteLocalSession = () => {
-  const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: string) => deleteLocalSession(id),
 
-    onError: (error: ApiError) => {
-      showError({
-        title: "Erro ao deletar sessão local",
-        message: error.message,
-        action: hideModal,
-      });
+    meta: {
+      errorTitle: "Erro ao deletar sessão local",
+      closeModalOnSuccess: true,
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_LOCAL_DATA_QUERY_KEY] });
-      hideModal();
-      setModalLoading(false);
     },
   });
 };

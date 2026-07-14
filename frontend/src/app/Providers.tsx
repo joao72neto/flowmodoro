@@ -1,99 +1,94 @@
-import { useEffect, useState } from "react";
 import { TimerProvider } from "../features/timer/context/timer.provider";
-import LoadingApplication from "./LoadingApplication";
 
 import { ThemeProvider } from "../shared/contexts/theme/theme.provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  MutationCache,
+  QueryCache,
+} from "@tanstack/react-query";
 import { SessionProvider } from "../features/sessions/context/sessions.provider";
 import { ModalProvider } from "../shared/contexts/modal/modal.provider";
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
-  const [isReady, setIsReady] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
+import { useModal } from "../shared/contexts/modal/modal.context";
+import { useState } from "react";
+import { ApiError } from "../configs/api-error.configs";
 
-  useEffect(() => {
-    let isMounted = true;
-    let retryTimeout: ReturnType<typeof setTimeout>;
+const QueryClientWithModalConfig = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { showError, hideModal, setModalLoading } = useModal();
 
-    const loadingTimeout = setTimeout(() => {
-      if (isMounted) setShowLoading(true);
-    }, 1000);
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+          },
+        },
 
-    const wakeUp = async () => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+        queryCache: new QueryCache({
+          onError: (error, query) => {
+            if (error instanceof ApiError) {
+              showError({
+                title:
+                  (query.meta?.errorTitle as string) ||
+                  "Erro ao carregar dados",
+                message: error.message,
+                action: hideModal,
+              });
+            }
+          },
+        }),
 
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/health`, {
-          signal: controller.signal,
-        });
+        mutationCache: new MutationCache({
+          onError: (error, _variables, _context, mutation) => {
+            const errorTitle =
+              (mutation.meta?.errorTitle as string) || "Ocorreu um erro";
 
-        clearTimeout(timeoutId);
+            if (error instanceof ApiError) {
+              showError({
+                title: errorTitle,
+                message: error.message,
+                action: hideModal,
+              });
+            } else {
+              console.error(error);
+            }
 
-        if (!response.ok) {
-          throw new Error(
-            `Servidor respondendo com status: ${response.status}`,
-          );
-        }
+            setModalLoading(false);
+          },
 
-        if (isMounted) {
-          clearTimeout(loadingTimeout);
-          setIsReady(true);
-          setShowLoading(false);
-        }
-      } catch (error) {
-        clearTimeout(timeoutId);
-        const isAbortError =
-          error instanceof Error && error.name === "AbortError";
-
-        console.warn(
-          isAbortError
-            ? "Timeout na requisição de health check. Backend ainda ocupado..."
-            : "Backend ainda em cold start ou inacessível. Nova tentativa em 5s...",
-        );
-
-        if (isMounted) {
-          retryTimeout = setTimeout(wakeUp, 5000);
-        }
-      }
-    };
-
-    wakeUp();
-
-    return () => {
-      isMounted = false;
-      clearTimeout(loadingTimeout);
-      clearTimeout(retryTimeout);
-    };
-  }, []);
-
-  if (!isReady && showLoading) {
-    return <LoadingApplication />;
-  }
-
-  if (!isReady) {
-    return null;
-  }
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
+          onSuccess: (_data, _variables, _context, mutation) => {
+            if (mutation.meta?.closeModalOnSuccess) {
+              hideModal();
+              setModalLoading(false);
+            }
+          },
+        }),
+      }),
+  );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ModalProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
+
+const Providers = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ModalProvider>
+      <QueryClientWithModalConfig>
         <ThemeProvider>
           <SessionProvider>
             <TimerProvider>{children}</TimerProvider>
           </SessionProvider>
         </ThemeProvider>
-      </ModalProvider>
-    </QueryClientProvider>
+      </QueryClientWithModalConfig>
+    </ModalProvider>
   );
 };
 
