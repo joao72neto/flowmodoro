@@ -2,7 +2,10 @@ import { db } from "../../../local/indexedDB";
 import type { PaginationResponse } from "../../../shared/global.types";
 import type { SessionModel } from "./session.model";
 import type { SessionDTO, DailySessionsDTO } from "../dtos/sessions-response";
-import type { UpdateSessionDTO } from "../dtos/sessions-request";
+import type {
+  CreateSessionDTO,
+  UpdateSessionDTO,
+} from "../dtos/sessions-request";
 
 import { applyUpdates } from "./utils/apply-updates";
 import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
@@ -42,7 +45,7 @@ export const fetchSessions = async ({
 };
 
 export const createSession = async (
-  payload: UpdateSessionDTO,
+  payload: CreateSessionDTO,
 ): Promise<SessionDTO> => {
   const session: SessionModel = mapper.toEntity(payload);
 

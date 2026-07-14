@@ -62,6 +62,7 @@ export const SessionProvider = ({
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
     setCurrentPage(1);
     createSession({
+      id: crypto.randomUUID(),
       name: sessionName,
       focus: focusSeconds,
       ratio: restRatio / 100,

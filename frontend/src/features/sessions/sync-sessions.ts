@@ -2,12 +2,12 @@ import type { SessionModel } from "./local/session.model";
 import type { CreateSessionDTO } from "./dtos/sessions-request";
 
 import { db } from "../../local/indexedDB";
-import { createManySessions } from "./api/sessions.api";
+import { createSessions, deleteSessions } from "./api/sessions.api";
 
 import mapper from "./sessions.mappers";
 
 class SyncSessions {
-  async syncCreateSession() {
+  async syncCreateSessions() {
     const sessions: SessionModel[] = await db.sessions
       .where("pending_action")
       .equals("CREATE")
@@ -16,7 +16,23 @@ class SyncSessions {
     if (sessions.length === 0) return;
 
     const payload: CreateSessionDTO[] = mapper.toCreateSessionsDTO(sessions);
-    await createManySessions(payload);
+    await createSessions(payload);
+
+    await db.sessions.bulkPut(
+      sessions.map((s) => ({ ...s, pending_action: null })),
+    );
+  }
+
+  async syncDeleteSessions() {
+    const sessions: SessionModel[] = await db.sessions
+      .where("pending_action")
+      .equals("DELETE")
+      .toArray();
+
+    if (sessions.length === 0) return;
+
+    const ids: string[] = sessions.map((s) => s.id);
+    await deleteSessions(ids);
 
     await db.sessions.bulkPut(
       sessions.map((s) => ({ ...s, pending_action: null })),

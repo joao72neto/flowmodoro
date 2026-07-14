@@ -1,12 +1,17 @@
 import syncSessions from "../features/sessions/sync-sessions";
 
 export function initSync() {
+  const syncFunctions = [
+    syncSessions.syncCreateSessions,
+    syncSessions.syncDeleteSessions,
+  ];
+
   window.addEventListener("online", () => {
-    void syncSessions.syncCreateSession();
+    syncFunctions.forEach((fn) => void fn());
   });
 
   if (navigator.onLine) {
-    void syncSessions.syncCreateSession();
+    syncFunctions.forEach((fn) => void fn());
   }
 }
 

@@ -64,8 +64,8 @@ class SessionMapper {
     },
   });
 
-  toEntity = (session: UpdateSessionDTO): SessionModel => ({
-    id: crypto.randomUUID(),
+  toEntity = (session: CreateSessionDTO): SessionModel => ({
+    id: session.id,
     name: session.name || DEFAULT_SESSION.name,
     focus: session.focus || DEFAULT_SESSION.focus,
     rest: calculateRest(
