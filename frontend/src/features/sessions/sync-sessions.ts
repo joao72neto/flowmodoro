@@ -24,19 +24,17 @@ class SyncSessions {
   }
 
   async syncDeleteSessions() {
-    const sessions: SessionModel[] = await db.sessions
+    const sessions = await db.sessions
       .where("pending_action")
       .equals("DELETE")
       .toArray();
 
     if (sessions.length === 0) return;
 
-    const ids: string[] = sessions.map((s) => s.id);
-    await deleteSessions(ids);
+    const ids = sessions.map((s) => s.id);
 
-    await db.sessions.bulkPut(
-      sessions.map((s) => ({ ...s, pending_action: null })),
-    );
+    await deleteSessions(ids);
+    await db.sessions.bulkDelete(ids);
   }
 }
 export default new SyncSessions();

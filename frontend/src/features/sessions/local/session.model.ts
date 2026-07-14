@@ -7,5 +7,6 @@ export interface SessionModel {
   projectId?: string;
   tagId?: string;
   date: string;
+  deleted: boolean;
   pending_action: "DELETE" | "UPDATE" | "CREATE" | null;
 }

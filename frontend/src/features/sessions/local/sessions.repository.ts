@@ -19,7 +19,9 @@ export const fetchSessions = async ({
   page: number;
   size: number;
 }): Promise<PaginationResponse<DailySessionsDTO>> => {
-  const sessions = await db.sessions.toArray();
+  const sessions = await db.sessions
+    .filter((session) => !session.deleted)
+    .toArray();
   const projects = await db.projects.toArray();
   const tags = await db.tags.toArray();
 
@@ -81,5 +83,16 @@ export const updateSession = async ({
 };
 
 export const deleteSession = async (id: string) => {
-  await db.sessions.delete(id);
+  const session = await db.sessions.get(id);
+  if (!session) return;
+
+  if (session.pending_action === "CREATE") {
+    await db.sessions.delete(id);
+    return;
+  }
+
+  await db.sessions.update(id, {
+    deleted: true,
+    pending_action: "DELETE",
+  });
 };
