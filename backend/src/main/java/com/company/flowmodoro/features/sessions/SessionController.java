@@ -42,6 +42,17 @@ public class SessionController {
         this.createMapper = createMapper;
     }
 
+    @GetMapping
+    public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        return ResponseEntity.ok(
+            sessionService.consult(page - 1, size, userId)
+        );
+    }
+
     @PostMapping("/bulk")
     public ResponseEntity<List<SessionDTO>> saveAll(
         @RequestBody List<@Valid SessionCreateDTO> dtos,
@@ -66,15 +77,13 @@ public class SessionController {
         return ResponseEntity.status(201).body(mapper.toDTO(session));
     }
 
-    @GetMapping
-    public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "10") int size,
+    @PutMapping("/bulk")
+    public ResponseEntity<List<SessionDTO>> updateAll(
+        @RequestBody List<@Valid SessionUpdateDTO> dtos,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        return ResponseEntity.ok(
-            sessionService.consult(page - 1, size, userId)
-        );
+        List<SessionModel> sessions = sessionService.updateAll(dtos, userId);
+        return ResponseEntity.ok(mapper.toDTO(sessions));
     }
 
     @PutMapping("/{id}")
@@ -85,6 +94,15 @@ public class SessionController {
     ) {
         SessionModel session = sessionService.update(id, dto, userId);
         return ResponseEntity.ok(mapper.toDTO(session));
+    }
+
+    @DeleteMapping("/bulk")
+    public ResponseEntity<Void> deleteAll(
+        @RequestBody List<UUID> ids,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        sessionService.deleteAll(ids, userId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
