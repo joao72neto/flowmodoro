@@ -7,7 +7,7 @@ import type { UpdateSessionDTO } from "../dtos/sessions-request";
 import { applyUpdates } from "./utils/apply-updates";
 import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
 
-import mapper from "./sessions.mappers";
+import mapper from "../sessions.mappers";
 
 export const fetchLocalSessions = async ({
   page = 1,

@@ -4,15 +4,15 @@ import {
   deleteLocalSession,
   fetchLocalSessions,
   updateLocalSession,
-} from "../sessions.repository";
-import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import { ApiError } from "../../../../configs/api-error.configs";
-import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../global-query-keys";
+} from "../local/sessions.repository";
+import { useModal } from "../../../shared/contexts/modal/modal.context";
+import { ApiError } from "../../../configs/api-error.configs";
+import { APP_LOCAL_DATA_QUERY_KEY } from "../../../global-query-keys";
 
-import type { SessionDTO } from "../../dtos/sessions-response";
-import type { UpdateSessionDTO } from "../../dtos/sessions-request";
+import type { SessionDTO } from "../dtos/sessions-response";
+import type { UpdateSessionDTO } from "../dtos/sessions-request";
 
-import { triggerSync } from "../../../../local/sync-manager";
+import { triggerSync } from "../../../local/sync-manager";
 
 const SESSIONS_QUERY_KEY = "sessions";
 

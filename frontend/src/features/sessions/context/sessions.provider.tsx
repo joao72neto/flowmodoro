@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
-import { useCreateLocalSession } from "../local/hooks/useLocalSessions";
+import { useCreateLocalSession } from "../hooks/useLocalSessions";
 import { useFetchLocalTagsByProject } from "../../tags/local/hooks/useLocalTags";
 import { useFetchLocalProjects } from "../../projects/local/hooks/useLocalProjects";
 import { SessionContext } from "./sessions.context";

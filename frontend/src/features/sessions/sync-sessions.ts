@@ -4,7 +4,7 @@ import type { CreateSessionDTO } from "./dtos/sessions-request";
 import { db } from "../../local/indexedDB";
 import { createManySessions } from "./api/sessions.api";
 
-import mapper from "./local/sessions.mappers";
+import mapper from "./sessions.mappers";
 
 class SyncSessions {
   async syncCreateSession() {

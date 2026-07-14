@@ -26,7 +26,7 @@ import type { SessionDTO } from "../dtos/sessions-response";
 import {
   useDeleteLocalSession,
   useUpdateLocalSession,
-} from "../local/hooks/useLocalSessions";
+} from "../hooks/useLocalSessions";
 import { useFetchLocalTagsByProject } from "../../tags/local/hooks/useLocalTags";
 
 interface SessionDraft {

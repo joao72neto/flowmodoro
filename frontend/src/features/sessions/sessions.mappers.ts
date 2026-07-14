@@ -1,15 +1,15 @@
-import type { SessionModel } from "./session.model";
-import type { SessionDTO } from "../dtos/sessions-response";
+import type { SessionModel } from "./local/session.model";
+import type { SessionDTO } from "./dtos/sessions-response";
 import type {
   CreateSessionDTO,
   UpdateSessionDTO,
-} from "../dtos/sessions-request";
+} from "./dtos/sessions-request";
 
-import { DEFAULT_SESSION } from "./consts/default-session";
-import { calculateRest } from "./utils/calculate-rest";
+import { DEFAULT_SESSION } from "./local/consts/default-session";
+import { calculateRest } from "./local/utils/calculate-rest";
 
-import type { ProjectModel } from "../../projects/local/project.model";
-import type { TagModel } from "../../tags/local/tag.model";
+import type { ProjectModel } from "../projects/local/project.model";
+import type { TagModel } from "../tags/local/tag.model";
 
 class SessionMapper {
   toCreateSessionDTO = (session: SessionModel): CreateSessionDTO => ({

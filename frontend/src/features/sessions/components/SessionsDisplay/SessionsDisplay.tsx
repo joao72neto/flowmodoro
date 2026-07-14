@@ -9,7 +9,7 @@ import { useSessionContext } from "../../context/sessions.context";
 import SessionsSkeleton from "./SessionsSkeleton";
 import SessionsWrapper from "./SessionsWrapper";
 import SessionGroup from "./SessionGroup";
-import { useFetchLocalSessions } from "../../local/hooks/useLocalSessions";
+import { useFetchLocalSessions } from "../../hooks/useLocalSessions";
 
 const SessionsDisplay = () => {
   const SIZE = 7;

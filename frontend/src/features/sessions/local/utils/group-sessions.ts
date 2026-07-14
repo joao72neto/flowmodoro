@@ -7,7 +7,7 @@ import type {
 } from "../../dtos/sessions-response";
 import type { SessionModel } from "../session.model";
 
-import mapper from "../sessions.mappers";
+import mapper from "../../sessions.mappers";
 
 type DayMap = {
   [key: string]: {
