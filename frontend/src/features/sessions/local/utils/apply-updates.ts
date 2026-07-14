@@ -1,5 +1,5 @@
 import { DEFAULT_SESSION } from "../consts/default-session";
-import type { SessionPayloadDTO } from "../../dtos/sessions-request.dtos";
+import type { UpdateSessionDTO } from "../../dtos/sessions-request";
 import type { SessionModel } from "../session.model";
 import { calculateRest } from "./calculate-rest";
 
@@ -10,7 +10,7 @@ export const applyUpdates = ({
 }: {
   id: string;
   old?: SessionModel;
-  updated?: SessionPayloadDTO;
+  updated?: UpdateSessionDTO;
 }): SessionModel => {
   return {
     id,
@@ -25,9 +25,6 @@ export const applyUpdates = ({
     projectId:
       updated?.projectId || old?.projectId || DEFAULT_SESSION.projectId,
     tagId: updated?.tagId || old?.tagId || DEFAULT_SESSION.tagId,
-    pending_action:
-      updated?.pending_action ||
-      old?.pending_action ||
-      DEFAULT_SESSION.pending_action,
+    pending_action: "UPDATE",
   };
 };

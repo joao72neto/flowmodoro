@@ -5,12 +5,12 @@ import { sessionErrors, type SessionError } from "../consts/session-errors";
 import { createManySessions } from "../sessions.api";
 import type {
   CreateSessionDTO,
-  SessionPayloadDTO,
-} from "../../dtos/sessions-request.dtos";
-import type { SessionDTO } from "../../dtos/sessions-response.dtos";
+  UpdateSessionDTO,
+} from "../../dtos/sessions-request";
+import type { SessionDTO } from "../../dtos/sessions-response";
 
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import { APP_DATA_QUERY_KEY } from "../../../../query-key";
+import { APP_DATA_QUERY_KEY } from "../../../../global-query-keys";
 import {
   createSession,
   deleteSession,
@@ -79,7 +79,7 @@ export const useCreateSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: SessionPayloadDTO): Promise<SessionDTO> =>
+    mutationFn: (data: UpdateSessionDTO): Promise<SessionDTO> =>
       createSession(data),
 
     onError: (error: ApiError) => {

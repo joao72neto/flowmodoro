@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
+import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../global-query-keys";
 import { ApiError } from "../../../../configs/api-error.configs";
 import {
   createLocalTag,

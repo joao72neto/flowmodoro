@@ -3,7 +3,7 @@ import type { TagPayload, TagResponse } from "../tags.types";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { tagErrors, type TagError } from "../consts/tag-errors";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import { APP_DATA_QUERY_KEY } from "../../../../query-key";
+import { APP_DATA_QUERY_KEY } from "../../../../global-query-keys";
 import {
   createTag,
   deleteTag,

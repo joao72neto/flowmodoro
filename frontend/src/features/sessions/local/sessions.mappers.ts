@@ -1,22 +1,53 @@
 import type { SessionModel } from "./session.model";
-import type { SessionDTO } from "../dtos/sessions-response.dtos";
-import type { SessionPayloadDTO } from "../dtos/sessions-request.dtos";
+import type { SessionDTO } from "../dtos/sessions-response";
+import type {
+  CreateSessionDTO,
+  UpdateSessionDTO,
+} from "../dtos/sessions-request";
 
 import { DEFAULT_SESSION } from "./consts/default-session";
 import { calculateRest } from "./utils/calculate-rest";
+
 import type { ProjectModel } from "../../projects/local/project.model";
 import type { TagModel } from "../../tags/local/tag.model";
 
-export const modelToDTO = ({
-  session,
-  project,
-  tag,
-}: {
-  session: SessionModel;
-  project?: ProjectModel;
-  tag?: TagModel;
-}): SessionDTO => {
-  return {
+class SessionMapper {
+  toCreateSessionDTO = (session: SessionModel): CreateSessionDTO => ({
+    id: session.id,
+    name: session.name,
+    focus: session.focus,
+    ratio: session.ratio,
+    rest: session.rest,
+    projectId: session.projectId,
+    tagId: session.tagId,
+  });
+
+  toCreateSessionsDTO = (sessions: SessionModel[]): CreateSessionDTO[] => {
+    return sessions.map((s) => this.toCreateSessionDTO(s));
+  };
+
+  toUpdateSessionDTO = (session: SessionModel): UpdateSessionDTO => ({
+    name: session.name,
+    focus: session.focus,
+    ratio: session.ratio,
+    rest: session.rest,
+    projectId: session.projectId,
+    tagId: session.tagId,
+  });
+
+  toUpdateSessionsDTO = (sessions: SessionModel[]): UpdateSessionDTO[] => {
+    return sessions.map((s) => this.toUpdateSessionDTO(s));
+  };
+
+  toDTO = ({
+    session,
+    project,
+    tag,
+  }: {
+    session: SessionModel;
+    project?: ProjectModel;
+    tag?: TagModel;
+  }): SessionDTO => ({
     id: session.id,
     name: session.name,
     focus: session.focus,
@@ -31,20 +62,20 @@ export const modelToDTO = ({
       id: tag?.id || "",
       name: tag?.name || "",
     },
-  };
-};
+  });
 
-export const payloadToModel = (session: SessionPayloadDTO): SessionModel => ({
-  id: crypto.randomUUID(),
-  name: session.name || DEFAULT_SESSION.name,
-  focus: session.focus || DEFAULT_SESSION.focus,
-  ratio: session.ratio || DEFAULT_SESSION.ratio,
-  rest: calculateRest(
-    session.focus || DEFAULT_SESSION.focus,
-    session.ratio || DEFAULT_SESSION.ratio,
-  ),
-  projectId: session.projectId || DEFAULT_SESSION.projectId,
-  tagId: session.tagId || DEFAULT_SESSION.tagId,
-  date: new Date().toISOString(),
-  pending_action: "CREATE",
-});
+  toEntity = (session: UpdateSessionDTO): SessionModel => ({
+    id: crypto.randomUUID(),
+    name: session.name || DEFAULT_SESSION.name,
+    focus: session.focus || DEFAULT_SESSION.focus,
+    rest: calculateRest(
+      session.focus || DEFAULT_SESSION.focus,
+      session.ratio || DEFAULT_SESSION.ratio,
+    ),
+    ratio: session.ratio || DEFAULT_SESSION.ratio,
+    date: new Date().toISOString(),
+    pending_action: "CREATE",
+  });
+}
+
+export default new SessionMapper();

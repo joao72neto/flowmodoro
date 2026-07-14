@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
+import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../global-query-keys";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
   createLocalProject,

@@ -3,7 +3,7 @@ import type { ProjectPayload, ProjectResponse } from "../projects.types";
 import { ApiError } from "../../../../configs/api-error.configs";
 import { projectErrors, type ProjectError } from "../consts/project-errors";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import { APP_DATA_QUERY_KEY } from "../../../../query-key";
+import { APP_DATA_QUERY_KEY } from "../../../../global-query-keys";
 import {
   createProject,
   deleteProject,

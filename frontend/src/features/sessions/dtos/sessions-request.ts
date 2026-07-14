@@ -8,12 +8,11 @@ export interface CreateSessionDTO {
   tagId?: string;
 }
 
-export interface SessionPayloadDTO {
+export interface UpdateSessionDTO {
   focus: number;
   name: string;
   ratio?: number;
   rest?: number;
   projectId?: string;
   tagId?: string;
-  pending_action?: "DELETE" | "UPDATE" | "CREATE" | null;
 }

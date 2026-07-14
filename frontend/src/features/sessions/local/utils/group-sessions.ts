@@ -4,9 +4,10 @@ import type {
   DailySessionsDTO,
   SessionDTO,
   SessionGroupDTO,
-} from "../../dtos/sessions-response.dtos";
+} from "../../dtos/sessions-response";
 import type { SessionModel } from "../session.model";
-import { modelToDTO } from "../sessions.mappers";
+
+import mapper from "../sessions.mappers";
 
 type DayMap = {
   [key: string]: {
@@ -39,7 +40,7 @@ export const normalizeSessions = ({
   const tagsMap = new Map(tags.map((t) => [t.id, t]));
 
   return sessions.map((session) => ({
-    ...modelToDTO({
+    ...mapper.toDTO({
       session,
       project: projectsMap.get(session.projectId || ""),
       tag: tagsMap.get(session.tagId || ""),

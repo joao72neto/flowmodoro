@@ -1,15 +1,13 @@
 import { db } from "../../../local/indexedDB";
 import type { PaginationResponse } from "../../../shared/global.types";
 import type { SessionModel } from "./session.model";
-import type {
-  SessionDTO,
-  DailySessionsDTO,
-} from "../dtos/sessions-response.dtos";
-import type { SessionPayloadDTO } from "../dtos/sessions-request.dtos";
+import type { SessionDTO, DailySessionsDTO } from "../dtos/sessions-response";
+import type { UpdateSessionDTO } from "../dtos/sessions-request";
 
-import { payloadToModel, modelToDTO } from "./sessions.mappers";
 import { applyUpdates } from "./utils/apply-updates";
 import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
+
+import mapper from "./sessions.mappers";
 
 export const fetchLocalSessions = async ({
   page = 1,
@@ -44,16 +42,16 @@ export const fetchLocalSessions = async ({
 };
 
 export const createLocalSession = async (
-  payload: SessionPayloadDTO,
+  payload: UpdateSessionDTO,
 ): Promise<SessionDTO> => {
-  const session: SessionModel = payloadToModel(payload);
+  const session: SessionModel = mapper.toEntity(payload);
 
   await db.sessions.add(session);
 
   const project = await db.projects.get(session.projectId || "");
   const tag = await db.tags.get(session.tagId || "");
 
-  return modelToDTO({ session, project, tag });
+  return mapper.toDTO({ session, project, tag });
 };
 
 export const updateLocalSession = async ({
@@ -61,7 +59,7 @@ export const updateLocalSession = async ({
   data,
 }: {
   id: string;
-  data: SessionPayloadDTO;
+  data: UpdateSessionDTO;
 }): Promise<SessionDTO> => {
   const old = await db.sessions.get(id);
 
@@ -76,7 +74,7 @@ export const updateLocalSession = async ({
   const project = await db.projects.get(updatedSession.projectId || "");
   const tag = await db.tags.get(updatedSession.tagId || "");
 
-  return modelToDTO({ session: updatedSession, project, tag });
+  return mapper.toDTO({ session: updatedSession, project, tag });
 };
 
 export const deleteLocalSession = async (id: string) => {

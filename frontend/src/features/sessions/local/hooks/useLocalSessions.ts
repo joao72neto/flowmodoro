@@ -7,10 +7,10 @@ import {
 } from "../sessions.repository";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { ApiError } from "../../../../configs/api-error.configs";
-import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../query-key";
+import { APP_LOCAL_DATA_QUERY_KEY } from "../../../../global-query-keys";
 
-import type { SessionDTO } from "../../dtos/sessions-response.dtos";
-import type { SessionPayloadDTO } from "../../dtos/sessions-request.dtos";
+import type { SessionDTO } from "../../dtos/sessions-response";
+import type { UpdateSessionDTO } from "../../dtos/sessions-request";
 
 import { triggerSync } from "../../../../local/sync-manager";
 
@@ -50,7 +50,7 @@ export const useCreateLocalSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: SessionPayloadDTO): Promise<SessionDTO> =>
+    mutationFn: (data: UpdateSessionDTO): Promise<SessionDTO> =>
       createLocalSession(data),
 
     onError: (error: ApiError) => {
@@ -80,7 +80,7 @@ export const useUpdateLocalSession = () => {
       data,
     }: {
       id: string;
-      data: SessionPayloadDTO;
+      data: UpdateSessionDTO;
     }): Promise<SessionDTO> => updateLocalSession({ id, data }),
 
     onError: (error: ApiError) => {
