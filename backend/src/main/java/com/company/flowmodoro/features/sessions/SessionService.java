@@ -167,6 +167,29 @@ public class SessionService {
     }
 
     @Transactional
+    public void deleteAll(List<UUID> ids, UUID userId) {
+        List<SessionModel> sessions = sessionRepository.findAllById(ids);
+
+        if (sessions.size() != ids.size()) {
+            throw new InvalidSessionException(
+                SESSION_NOT_FOUND,
+                "Session not found for one or more ids"
+            );
+        }
+
+        sessions.forEach(session -> {
+            if (!session.getUserId().equals(userId)) {
+                throw new InvalidSessionException(
+                    SESSION_NOT_FOUND,
+                    "Session not found for this user"
+                );
+            }
+        });
+
+        sessionRepository.deleteAll(sessions);
+    }
+
+    @Transactional
     public void delete(UUID id, UUID userId) {
         SessionModel session = sessionRepository
             .findById(id)
