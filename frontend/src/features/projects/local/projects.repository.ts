@@ -3,8 +3,9 @@ import type { ProjectPayloadDTO } from "../dtos/projects-request";
 import type { ProjectDTO } from "../dtos/projects-response";
 
 import type { ProjectModel } from "./project.model";
-import { modelToDTO, payloadToModel } from "../projects.mappers";
 import { applyUpdates } from "./utils/apply-updates";
+
+import mapper from "../projects.mappers";
 
 export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
   const [projects, sessions] = await Promise.all([
@@ -32,10 +33,10 @@ export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
 export const createLocalProject = async (
   payload: ProjectPayloadDTO,
 ): Promise<ProjectDTO> => {
-  const project: ProjectModel = payloadToModel(payload);
+  const project: ProjectModel = mapper.fromPayload(payload);
 
   await db.projects.add(project);
-  return modelToDTO(project);
+  return mapper.fromModel(project);
 };
 
 export const updateLocalProject = async ({
@@ -55,7 +56,7 @@ export const updateLocalProject = async ({
 
   await db.projects.update(id, data);
 
-  return modelToDTO(updatedProject);
+  return mapper.fromModel(updatedProject);
 };
 
 export const deleteLocalProject = async (id: string) => {
