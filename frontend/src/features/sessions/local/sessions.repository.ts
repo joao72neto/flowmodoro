@@ -2,7 +2,10 @@ import { db } from "../../../local/indexedDB";
 import type { PaginationResponse } from "../../../shared/global.types";
 import type { SessionModel } from "./session.model";
 import type { SessionDTO, DailySessionsDTO } from "../dtos/sessions-response";
-import type { SessionPayloadDTO, SessionUpdateDTO } from "../dtos/sessions-request";
+import type {
+  SessionPayloadDTO,
+  SessionUpdateDTO,
+} from "../dtos/sessions-request";
 
 import { applyUpdates } from "./utils/apply-updates";
 import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
@@ -46,14 +49,14 @@ export const fetchSessions = async ({
 export const createSession = async (
   payload: SessionPayloadDTO,
 ): Promise<SessionDTO> => {
-  const session: SessionModel = mapper.toEntity(payload);
+  const session: SessionModel = mapper.fromPayload(payload);
 
   await db.sessions.add(session);
 
   const project = await db.projects.get(session.projectId || "");
   const tag = await db.tags.get(session.tagId || "");
 
-  return mapper.toDTO({ session, project, tag });
+  return mapper.buildDTO({ session, project, tag });
 };
 
 export const updateSession = async ({
@@ -76,7 +79,7 @@ export const updateSession = async ({
   const project = await db.projects.get(updatedSession.projectId || "");
   const tag = await db.tags.get(updatedSession.tagId || "");
 
-  return mapper.toDTO({ session: updatedSession, project, tag });
+  return mapper.buildDTO({ session: updatedSession, project, tag });
 };
 
 export const deleteSession = async (id: string) => {

@@ -9,7 +9,7 @@ import type { ProjectModel } from "../projects/local/project.model";
 import type { TagModel } from "../tags/local/tag.model";
 
 class SessionMapper {
-  toSessionPayloadDTO = (session: SessionModel): SessionPayloadDTO => ({
+  toPayload = (session: SessionModel): SessionPayloadDTO => ({
     id: session.id,
     name: session.name,
     focus: session.focus,
@@ -19,11 +19,24 @@ class SessionMapper {
     tagId: session.tagId,
   });
 
-  toSessionsPayloadDTO = (sessions: SessionModel[]): SessionPayloadDTO[] => {
-    return sessions.map((s) => this.toSessionPayloadDTO(s));
+  toPayloadList = (sessions: SessionModel[]): SessionPayloadDTO[] => {
+    return sessions.map((s) => this.toPayload(s));
   };
 
-  toDTO = ({
+  fromDTO = (session: SessionDTO): SessionModel => ({
+    id: session.id,
+    name: session.name,
+    focus: session.focus,
+    ratio: session.ratio,
+    rest: session.rest,
+    projectId: session.project.id,
+    tagId: session.tag.id,
+    date: session.date,
+    deleted: false,
+    pending_action: null,
+  });
+
+  buildDTO = ({
     session,
     project,
     tag,
@@ -48,7 +61,7 @@ class SessionMapper {
     },
   });
 
-  toEntity = (session: SessionPayloadDTO): SessionModel => ({
+  fromPayload = (session: SessionPayloadDTO): SessionModel => ({
     id: session.id,
     name: session.name || DEFAULT_SESSION.name,
     focus: session.focus || DEFAULT_SESSION.focus,

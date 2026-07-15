@@ -18,24 +18,10 @@ export const fetchSessions = async ({
   return res.data;
 };
 
-export const createSessions = async (
-  data: SessionPayloadDTO[],
-): Promise<SessionDTO[]> => {
-  const res = await api.post<SessionDTO[]>("/sessions/bulk", data);
-  return res.data;
-};
-
 export const createSession = async (
   data: SessionPayloadDTO,
 ): Promise<SessionDTO> => {
   const res = await api.post<SessionDTO>("/sessions", data);
-  return res.data;
-};
-
-export const updateSessions = async (
-  data: SessionPayloadDTO[],
-): Promise<SessionDTO[]> => {
-  const res = await api.put<SessionDTO[]>("/sessions/bulk", data);
   return res.data;
 };
 
@@ -50,10 +36,29 @@ export const updateSession = async ({
   return res.data;
 };
 
-export const deleteSessions = async (ids: string[]): Promise<void> => {
-  return api.delete(`/sessions/bulk`, { data: ids });
-};
-
 export const deleteSession = async (id: string) => {
   return api.delete(`/sessions/${id}`);
+};
+
+export const fetchPlainSessions = async (): Promise<SessionDTO[]> => {
+  const res = await api.get<SessionDTO[]>("/sessions/all");
+  return res.data;
+};
+
+export const createSessions = async (
+  data: SessionPayloadDTO[],
+): Promise<SessionDTO[]> => {
+  const res = await api.post<SessionDTO[]>("/sessions/bulk", data);
+  return res.data;
+};
+
+export const updateSessions = async (
+  data: SessionPayloadDTO[],
+): Promise<SessionDTO[]> => {
+  const res = await api.put<SessionDTO[]>("/sessions/bulk", data);
+  return res.data;
+};
+
+export const deleteSessions = async (ids: string[]): Promise<void> => {
+  return api.delete(`/sessions/bulk`, { data: ids });
 };

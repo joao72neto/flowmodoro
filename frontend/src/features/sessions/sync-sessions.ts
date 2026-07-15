@@ -17,6 +17,8 @@ class SyncSessions {
     await this.syncUpdateSessions();
   }
 
+  async syncFetchSessions() {}
+
   async syncCreateSessions() {
     const sessions: SessionModel[] = await db.sessions
       .where("pending_action")
@@ -25,7 +27,7 @@ class SyncSessions {
 
     if (sessions.length === 0) return;
 
-    const payload: SessionPayloadDTO[] = mapper.toSessionsPayloadDTO(sessions);
+    const payload: SessionPayloadDTO[] = mapper.toPayloadList(sessions);
     await createSessions(payload);
 
     await db.sessions.bulkPut(
@@ -55,7 +57,7 @@ class SyncSessions {
 
     if (sessions.length === 0) return;
 
-    const payload = mapper.toSessionsPayloadDTO(sessions);
+    const payload: SessionPayloadDTO[] = mapper.toPayloadList(sessions);
     await updateSessions(payload);
 
     await db.sessions.bulkPut(

@@ -40,7 +40,7 @@ export const normalizeSessions = ({
   const tagsMap = new Map(tags.map((t) => [t.id, t]));
 
   return sessions.map((session) => ({
-    ...mapper.toDTO({
+    ...mapper.buildDTO({
       session,
       project: projectsMap.get(session.projectId || ""),
       tag: tagsMap.get(session.tagId || ""),
