@@ -1,15 +1,16 @@
 import api from "../../../configs/api.configs";
-import type { ProjectPayload, ProjectResponse } from "./projects.types";
+import type { ProjectPayloadDTO } from "../dtos/projects-request";
+import type { ProjectDTO } from "../dtos/projects-response";
 
-export const fetchProjects = async (): Promise<ProjectResponse[]> => {
-  const res = await api.get<ProjectResponse[]>("/projects");
+export const fetchProjects = async (): Promise<ProjectDTO[]> => {
+  const res = await api.get<ProjectDTO[]>("/projects");
   return res.data;
 };
 
 export const createProject = async (
-  data: ProjectPayload,
-): Promise<ProjectResponse> => {
-  const res = await api.post<ProjectResponse>("/projects", data);
+  data: ProjectPayloadDTO,
+): Promise<ProjectDTO> => {
+  const res = await api.post<ProjectDTO>("/projects", data);
   return res.data;
 };
 
@@ -18,9 +19,9 @@ export const updateProject = async ({
   data,
 }: {
   id: number;
-  data: ProjectPayload;
-}): Promise<ProjectResponse> => {
-  const res = await api.put<ProjectResponse>(`/projects/${id}`, data);
+  data: ProjectPayloadDTO;
+}): Promise<ProjectDTO> => {
+  const res = await api.put<ProjectDTO>(`/projects/${id}`, data);
   return res.data;
 };
 
