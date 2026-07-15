@@ -4,6 +4,7 @@ export function initSync() {
   const syncFunctions = [
     syncSessions.syncCreateSessions,
     syncSessions.syncDeleteSessions,
+    syncSessions.syncUpdateSessions,
   ];
 
   window.addEventListener("online", () => {

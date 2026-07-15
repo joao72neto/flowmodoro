@@ -184,8 +184,6 @@ const SessionDetailsModal = ({
     setIsOpen(false);
   };
 
-  console.log("Projec", session.project);
-
   return (
     <ModalContainer close={handleClose} className="!gap-10 !overflow-visible">
       <Stack direction="row" justify="between" gap={5} className="w-full">

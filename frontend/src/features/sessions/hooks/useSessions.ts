@@ -10,8 +10,8 @@ import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
 
 import type { SessionDTO } from "../dtos/sessions-response";
 import type {
-  CreateSessionDTO,
-  UpdateSessionDTO,
+  SessionPayloadDTO,
+  SessionUpdateDTO,
 } from "../dtos/sessions-request";
 
 import { triggerSync } from "../../../local/sync-manager";
@@ -39,7 +39,7 @@ export const useCreateSession = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateSessionDTO): Promise<SessionDTO> =>
+    mutationFn: (data: SessionPayloadDTO): Promise<SessionDTO> =>
       createSession(data),
 
     meta: {
@@ -63,7 +63,7 @@ export const useUpdateSession = () => {
       data,
     }: {
       id: string;
-      data: UpdateSessionDTO;
+      data: SessionUpdateDTO;
     }): Promise<SessionDTO> => updateSession({ id, data }),
 
     meta: {
@@ -73,6 +73,7 @@ export const useUpdateSession = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync();
     },
   });
 };

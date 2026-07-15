@@ -1,8 +1,5 @@
 import api from "../../../configs/api.configs";
-import type {
-  CreateSessionDTO,
-  UpdateSessionDTO,
-} from "../dtos/sessions-request";
+import type { SessionPayloadDTO } from "../dtos/sessions-request";
 import type { SessionDTO } from "../dtos/sessions-response";
 import type { SessionGroupDTO } from "../dtos/sessions-response";
 import type { PaginationResponse } from "../../../shared/global.types";
@@ -22,21 +19,21 @@ export const fetchSessions = async ({
 };
 
 export const createSessions = async (
-  data: CreateSessionDTO[],
+  data: SessionPayloadDTO[],
 ): Promise<SessionDTO[]> => {
   const res = await api.post<SessionDTO[]>("/sessions/bulk", data);
   return res.data;
 };
 
 export const createSession = async (
-  data: UpdateSessionDTO,
+  data: SessionPayloadDTO,
 ): Promise<SessionDTO> => {
   const res = await api.post<SessionDTO>("/sessions", data);
   return res.data;
 };
 
 export const updateSessions = async (
-  data: UpdateSessionDTO[],
+  data: SessionPayloadDTO[],
 ): Promise<SessionDTO[]> => {
   const res = await api.put<SessionDTO[]>("/sessions/bulk", data);
   return res.data;
@@ -47,7 +44,7 @@ export const updateSession = async ({
   data,
 }: {
   id: string;
-  data: UpdateSessionDTO;
+  data: SessionPayloadDTO;
 }): Promise<SessionDTO> => {
   const res = await api.put<SessionDTO>(`/sessions/${id}`, data);
   return res.data;

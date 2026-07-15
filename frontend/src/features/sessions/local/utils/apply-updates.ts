@@ -1,5 +1,5 @@
 import { DEFAULT_SESSION } from "../consts/default-session";
-import type { UpdateSessionDTO } from "../../dtos/sessions-request";
+import type { SessionUpdateDTO } from "../../dtos/sessions-request";
 import type { SessionModel } from "../session.model";
 import { calculateRest } from "./calculate-rest";
 
@@ -10,7 +10,7 @@ export const applyUpdates = ({
 }: {
   id: string;
   old?: SessionModel;
-  updated?: UpdateSessionDTO;
+  updated?: SessionUpdateDTO;
 }): SessionModel => {
   return {
     id,

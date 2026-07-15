@@ -1,9 +1,6 @@
 import type { SessionModel } from "./local/session.model";
 import type { SessionDTO } from "./dtos/sessions-response";
-import type {
-  CreateSessionDTO,
-  UpdateSessionDTO,
-} from "./dtos/sessions-request";
+import type { SessionPayloadDTO } from "./dtos/sessions-request";
 
 import { DEFAULT_SESSION } from "./local/consts/default-session";
 import { calculateRest } from "./local/utils/calculate-rest";
@@ -12,7 +9,7 @@ import type { ProjectModel } from "../projects/local/project.model";
 import type { TagModel } from "../tags/local/tag.model";
 
 class SessionMapper {
-  toCreateSessionDTO = (session: SessionModel): CreateSessionDTO => ({
+  toSessionPayloadDTO = (session: SessionModel): SessionPayloadDTO => ({
     id: session.id,
     name: session.name,
     focus: session.focus,
@@ -22,21 +19,8 @@ class SessionMapper {
     tagId: session.tagId,
   });
 
-  toCreateSessionsDTO = (sessions: SessionModel[]): CreateSessionDTO[] => {
-    return sessions.map((s) => this.toCreateSessionDTO(s));
-  };
-
-  toUpdateSessionDTO = (session: SessionModel): UpdateSessionDTO => ({
-    name: session.name,
-    focus: session.focus,
-    ratio: session.ratio,
-    rest: session.rest,
-    projectId: session.projectId,
-    tagId: session.tagId,
-  });
-
-  toUpdateSessionsDTO = (sessions: SessionModel[]): UpdateSessionDTO[] => {
-    return sessions.map((s) => this.toUpdateSessionDTO(s));
+  toSessionsPayloadDTO = (sessions: SessionModel[]): SessionPayloadDTO[] => {
+    return sessions.map((s) => this.toSessionPayloadDTO(s));
   };
 
   toDTO = ({
@@ -64,7 +48,7 @@ class SessionMapper {
     },
   });
 
-  toEntity = (session: CreateSessionDTO): SessionModel => ({
+  toEntity = (session: SessionPayloadDTO): SessionModel => ({
     id: session.id,
     name: session.name || DEFAULT_SESSION.name,
     focus: session.focus || DEFAULT_SESSION.focus,
