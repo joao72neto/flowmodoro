@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 
-import type { ProjectDTO } from "../../projects/local/project.dtos";
+import type { ProjectDTO } from "../../projects/dtos/projects-response";
 import type { TagDTO } from "../../tags/local/tag.dtos";
 
 export interface ISaveSessionData {
@@ -31,7 +31,6 @@ interface ISessionContext {
 }
 
 export const SessionContext = createContext<ISessionContext | null>(null);
-
 
 export const useSessionContext = () => {
   const context = useContext(SessionContext);

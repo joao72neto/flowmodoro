@@ -1,6 +1,6 @@
 import { DEFAULT_PROJECT } from "../consts/default-project";
-import type { ProjectPayloadDTO } from "../project.dtos";
 import type { ProjectModel } from "../project.model";
+import type { ProjectPayloadDTO } from "../../dtos/projects-request";
 
 export const applyUpdates = ({
   id,

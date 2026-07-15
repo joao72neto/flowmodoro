@@ -3,7 +3,3 @@ export interface ProjectDTO {
   name: string;
   totalFocus: number;
 }
-
-export interface ProjectPayloadDTO {
-  name: string;
-}

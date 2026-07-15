@@ -1,7 +1,9 @@
 import { db } from "../../../local/indexedDB";
-import type { ProjectDTO, ProjectPayloadDTO } from "./project.dtos";
+import type { ProjectPayloadDTO } from "../dtos/projects-request";
+import type { ProjectDTO } from "../dtos/projects-response";
+
 import type { ProjectModel } from "./project.model";
-import { modelToDTO, payloadToModel } from "./projects.mappers";
+import { modelToDTO, payloadToModel } from "../projects.mappers";
 import { applyUpdates } from "./utils/apply-updates";
 
 export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {

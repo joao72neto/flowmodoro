@@ -7,8 +7,8 @@ import { GoSearch } from "react-icons/go";
 
 import Button from "../../../../shared/components/buttons/Button/Button";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
-import type { ProjectDTO } from "../../../projects/local/project.dtos";
 import type { TagDTO } from "../../../tags/local/tag.dtos";
+import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 
 const SessionSelector = ({
   children,

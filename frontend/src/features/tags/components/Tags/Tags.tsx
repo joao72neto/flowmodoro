@@ -18,7 +18,7 @@ import {
   useFetchLocalTagsByProject,
   useUpdateLocalTag,
 } from "../../local/hooks/useLocalTags";
-import type { ProjectDTO } from "../../../projects/local/project.dtos";
+import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 import type { TagDTO } from "../../local/tag.dtos";
 
 const Tags = ({

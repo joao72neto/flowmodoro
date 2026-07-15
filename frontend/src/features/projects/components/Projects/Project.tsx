@@ -8,7 +8,7 @@ import { IoTimeOutline } from "react-icons/io5";
 import DropdownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import type { ProjectDTO } from "../../local/project.dtos";
+import type { ProjectDTO } from "../../dtos/projects-response";
 
 const Project = ({
   projectData,

@@ -1,5 +1,7 @@
-import type { ProjectDTO, ProjectPayloadDTO } from "./project.dtos";
-import type { ProjectModel } from "./project.model";
+import type { ProjectDTO } from "./dtos/projects-response";
+import type { ProjectPayloadDTO } from "./dtos/projects-request";
+
+import type { ProjectModel } from "./local/project.model";
 
 export const modelToDTOArray = (projects: ProjectModel[]): ProjectDTO[] => {
   return projects.map((project) => modelToDTO(project));

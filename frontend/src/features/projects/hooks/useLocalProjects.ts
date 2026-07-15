@@ -1,15 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { APP_DATA_QUERY_KEY } from "../../../../global-query-key";
-import { useModal } from "../../../../shared/contexts/modal/modal.context";
+import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
+import { useModal } from "../../../shared/contexts/modal/modal.context";
 import {
   createLocalProject,
   deleteLocalProject,
   fetchLocalProjects,
   updateLocalProject,
-} from "../projects.repository";
-import { ApiError } from "../../../../configs/api-error.configs";
+} from "../local/projects.repository";
+import { ApiError } from "../../../configs/api-error.configs";
 
-import type { ProjectDTO, ProjectPayloadDTO } from "../project.dtos";
+import type { ProjectPayloadDTO } from "../dtos/projects-request";
+import type { ProjectDTO } from "../dtos/projects-response";
 
 const duplicatedErrorConfig = {
   title: "Projeto duplicado",

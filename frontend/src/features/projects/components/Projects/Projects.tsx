@@ -18,8 +18,8 @@ import {
   useDeleteLocalProject,
   useFetchLocalProjects,
   useUpdateLocalProject,
-} from "../../local/hooks/useLocalProjects";
-import type { ProjectDTO } from "../../local/project.dtos";
+} from "../../hooks/useLocalProjects";
+import type { ProjectDTO } from "../../dtos/projects-response";
 
 const Projects = () => {
   const { setModalLoading } = useModal();
