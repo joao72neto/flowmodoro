@@ -7,7 +7,7 @@ import { applyUpdates } from "./utils/apply-updates";
 
 import mapper from "../projects.mappers";
 
-export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
+export const fetchProjects = async (): Promise<ProjectDTO[]> => {
   const [projects, sessions] = await Promise.all([
     db.projects.orderBy("createdAt").reverse().toArray(),
     db.sessions.toArray(),
@@ -30,7 +30,7 @@ export const fetchLocalProjects = async (): Promise<ProjectDTO[]> => {
   }));
 };
 
-export const createLocalProject = async (
+export const createProject = async (
   payload: ProjectPayloadDTO,
 ): Promise<ProjectDTO> => {
   const project: ProjectModel = mapper.fromPayload(payload);
@@ -39,7 +39,7 @@ export const createLocalProject = async (
   return mapper.fromModel(project);
 };
 
-export const updateLocalProject = async ({
+export const updateProject = async ({
   id,
   data,
 }: {
@@ -59,7 +59,7 @@ export const updateLocalProject = async ({
   return mapper.fromModel(updatedProject);
 };
 
-export const deleteLocalProject = async (id: string) => {
+export const deleteProject = async (id: string) => {
   await db.tags.where("projectId").equals(id).delete();
   await db.projects.delete(id);
 };

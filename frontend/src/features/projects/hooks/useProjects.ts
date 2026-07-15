@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import {
-  createLocalProject,
-  deleteLocalProject,
-  fetchLocalProjects,
-  updateLocalProject,
+  createProject,
+  deleteProject,
+  fetchProjects,
+  updateProject,
 } from "../local/projects.repository";
 import { ApiError } from "../../../configs/api-error.configs";
 
@@ -18,38 +18,26 @@ const duplicatedErrorConfig = {
   action: () => {},
 };
 
-export const useFetchLocalProjects = () => {
-  const { showError, hideModal } = useModal();
-
+export const useFetchProjects = () => {
   const PROJECTS_QUERY_KEY = "projects";
 
   return useQuery({
     queryKey: [APP_DATA_QUERY_KEY, PROJECTS_QUERY_KEY],
-    queryFn: async () => {
-      try {
-        return await fetchLocalProjects();
-      } catch (error) {
-        if (error instanceof ApiError) {
-          showError({
-            title: "Erro ao carregar projetos locais",
-            message: error.message,
-            action: hideModal,
-          });
-        }
-        console.error(error);
-        throw error;
-      }
+    queryFn: async () => await fetchProjects(),
+
+    meta: {
+      errorTitle: "Erro ao carregar projetos",
     },
   });
 };
 
-export const useCreateLocalProject = () => {
+export const useCreateProject = () => {
   const { showError, hideModal } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: ProjectPayloadDTO): Promise<ProjectDTO> =>
-      createLocalProject(data),
+      createProject(data),
 
     onError: (error) => {
       if (error.name === "ConstraintError") {
@@ -74,7 +62,7 @@ export const useCreateLocalProject = () => {
   });
 };
 
-export const useUpdateLocalProject = () => {
+export const useUpdateProject = () => {
   const { showError, hideModal } = useModal();
   const queryClient = useQueryClient();
 
@@ -85,7 +73,7 @@ export const useUpdateLocalProject = () => {
     }: {
       id: string;
       data: ProjectPayloadDTO;
-    }): Promise<ProjectDTO> => updateLocalProject({ id, data }),
+    }): Promise<ProjectDTO> => updateProject({ id, data }),
 
     onError: (error) => {
       if (error.message.includes("ConstraintError")) {
@@ -110,16 +98,16 @@ export const useUpdateLocalProject = () => {
   });
 };
 
-export const useDeleteLocalProject = () => {
+export const useDeleteProject = () => {
   const { showError, hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => deleteLocalProject(id),
+    mutationFn: (id: string) => deleteProject(id),
 
     onError: (error: ApiError) => {
       showError({
-        title: "Erro ao deletar projeto local",
+        title: "Erro ao deletar projeto",
         message: error.message,
         action: hideModal,
       });

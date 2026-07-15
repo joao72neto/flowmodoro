@@ -12,9 +12,9 @@ import { CreateProjectSchema } from "../project.schema";
 import type { ProjectDTO } from "../dtos/projects-response";
 
 import type {
-  useCreateLocalProject,
-  useUpdateLocalProject,
-} from "../hooks/useLocalProjects";
+  useCreateProject,
+  useUpdateProject,
+} from "../hooks/useProjects";
 
 const ProjectModal = ({
   isOpen,
@@ -45,8 +45,8 @@ const ProjectModal = ({
 
   inputLabel?: string;
 
-  edit?: ReturnType<typeof useUpdateLocalProject>["mutate"];
-  save?: ReturnType<typeof useCreateLocalProject>["mutate"];
+  edit?: ReturnType<typeof useUpdateProject>["mutate"];
+  save?: ReturnType<typeof useCreateProject>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;

@@ -14,17 +14,17 @@ import Tags from "../../../tags/components/Tags/Tags";
 import ProjectsSkeleton from "./ProjectsSkeleton";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
-  useCreateLocalProject,
-  useDeleteLocalProject,
-  useFetchLocalProjects,
-  useUpdateLocalProject,
-} from "../../hooks/useLocalProjects";
+  useCreateProject,
+  useDeleteProject,
+  useFetchProjects,
+  useUpdateProject,
+} from "../../hooks/useProjects";
 import type { ProjectDTO } from "../../dtos/projects-response";
 
 const Projects = () => {
   const { setModalLoading } = useModal();
 
-  const { data: projects, isLoading } = useFetchLocalProjects();
+  const { data: projects, isLoading } = useFetchProjects();
 
   const [selectedProject, setSelectedProject] = useState<ProjectDTO | null>(
     null,
@@ -39,12 +39,12 @@ const Projects = () => {
     useModalFactory(ProjectModal);
 
   const { mutate: handleCreateProject, isPending: isSaving } =
-    useCreateLocalProject();
+    useCreateProject();
 
   const { mutate: handleEditProject, isPending: isUpdating } =
-    useUpdateLocalProject();
+    useUpdateProject();
 
-  const { mutate: handleDeleteProject } = useDeleteLocalProject();
+  const { mutate: handleDeleteProject } = useDeleteProject();
 
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
