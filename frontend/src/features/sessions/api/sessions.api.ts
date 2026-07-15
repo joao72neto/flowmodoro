@@ -40,11 +40,6 @@ export const deleteSession = async (id: string) => {
   return api.delete(`/sessions/${id}`);
 };
 
-export const fetchPlainSessions = async (): Promise<SessionDTO[]> => {
-  const res = await api.get<SessionDTO[]>("/sessions/all");
-  return res.data;
-};
-
 export const createSessions = async (
   data: SessionPayloadDTO[],
 ): Promise<SessionDTO[]> => {

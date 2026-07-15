@@ -2,7 +2,6 @@ package com.company.flowmodoro.features.sessions;
 
 import com.company.flowmodoro.common.dto.PageResponse;
 import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
-import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
 import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
@@ -47,11 +46,6 @@ public class SessionService {
 
         this.aggregator = aggregator;
         this.validator = validator;
-    }
-
-    public List<SessionModel> consultAll(UUID userId) {
-        List<SessionModel> sessions = sessionRepository.findByUserId(userId);
-        return sessions;
     }
 
     public PageResponse<DailySessionsDTO> consult(

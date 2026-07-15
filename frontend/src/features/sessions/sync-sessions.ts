@@ -17,8 +17,6 @@ class SyncSessions {
     await this.syncUpdateSessions();
   }
 
-  async syncFetchSessions() {}
-
   async syncCreateSessions() {
     const sessions: SessionModel[] = await db.sessions
       .where("pending_action")
