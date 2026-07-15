@@ -11,6 +11,12 @@ import {
 import mapper from "./sessions.mappers";
 
 class SyncSessions {
+  async syncSessions() {
+    await this.syncCreateSessions();
+    await this.syncDeleteSessions();
+    await this.syncUpdateSessions();
+  }
+
   async syncCreateSessions() {
     const sessions: SessionModel[] = await db.sessions
       .where("pending_action")

@@ -30,4 +30,6 @@ public interface SessionRepository extends JpaRepository<SessionModel, UUID> {
     );
 
     List<SessionModel> findByTagAndUserId(TagModel tag, UUID userId);
+
+    List<SessionModel> findByUserId(UUID userId);
 }

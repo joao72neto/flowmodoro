@@ -42,6 +42,14 @@ public class SessionController {
         this.createMapper = createMapper;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<SessionDTO>> consultAll(
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        List<SessionModel> sessions = sessionService.consultAll(userId);
+        return ResponseEntity.ok(mapper.toDTO(sessions));
+    }
+
     @GetMapping
     public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
         @RequestParam(defaultValue = "1") int page,

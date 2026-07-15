@@ -1,18 +1,12 @@
-import syncSessions from "../features/sessions/sync-sessions";
+import sync from "../features/sessions/sync-sessions";
 
 export function initSync() {
-  const syncFunctions = [
-    syncSessions.syncCreateSessions,
-    syncSessions.syncDeleteSessions,
-    syncSessions.syncUpdateSessions,
-  ];
-
   window.addEventListener("online", () => {
-    syncFunctions.forEach((fn) => void fn());
+    sync.syncSessions();
   });
 
   if (navigator.onLine) {
-    syncFunctions.forEach((fn) => void fn());
+    sync.syncSessions();
   }
 }
 
