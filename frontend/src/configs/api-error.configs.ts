@@ -33,5 +33,5 @@ export const handleApiError = (error: unknown): never => {
     }
   }
 
-  throw new ApiError("Erro interno na aplicação.", 500);
+  throw error;
 };
