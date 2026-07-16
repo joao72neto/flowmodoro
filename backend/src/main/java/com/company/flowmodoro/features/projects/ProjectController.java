@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.projects;
 
 import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
+import com.company.flowmodoro.features.projects.dtos.ProjectPayloadDTO;
 import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.mappers.ProjectMapper;
 import jakarta.validation.Valid;
@@ -33,8 +34,25 @@ public class ProjectController {
         this.projectMapper = projectMapper;
     }
 
+    @GetMapping
+    public ResponseEntity<List<ProjectDTO>> findAll(
+        @RequestHeader("X-User-Id") String userId
+    ) {
+        List<ProjectDTO> projects = projectService.findAll(userId);
+        return ResponseEntity.ok(projects);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProjectDTO> findById(
+        @PathVariable UUID id,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        ProjectModel project = projectService.findById(id, userId);
+        return ResponseEntity.ok(projectMapper.toDTO(project));
+    }
+
     @PostMapping("/bulk")
-    public ResponseEntity<List<ProjectDTO>> saveBulk(
+    public ResponseEntity<List<ProjectDTO>> saveAll(
         @Valid @RequestBody List<ProjectDTO> dtos,
         @RequestHeader("X-User-Id") UUID userId
     ) {
@@ -55,21 +73,13 @@ public class ProjectController {
         return ResponseEntity.status(201).body(projectMapper.toDTO(project));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProjectDTO>> findAll(
-        @RequestHeader("X-User-Id") String userId
-    ) {
-        List<ProjectDTO> projects = projectService.findAll(userId);
-        return ResponseEntity.ok(projects);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ProjectDTO> findById(
-        @PathVariable UUID id,
+    @PutMapping("/bulk")
+    public ResponseEntity<List<ProjectDTO>> updateAll(
+        @Valid @RequestBody List<ProjectPayloadDTO> dtos,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        ProjectModel project = projectService.findById(id, userId);
-        return ResponseEntity.ok(projectMapper.toDTO(project));
+        List<ProjectModel> updated = projectService.updateAll(dtos, userId);
+        return ResponseEntity.ok(projectMapper.toDTO(updated));
     }
 
     @PutMapping("/{id}")
