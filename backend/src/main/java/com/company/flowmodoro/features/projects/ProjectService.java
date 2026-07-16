@@ -4,6 +4,7 @@ import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
 import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
 import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
+import com.company.flowmodoro.features.projects.helpers.ProjectValidator;
 import com.company.flowmodoro.features.projects.mappers.ProjectUpdateMapper;
 import com.company.flowmodoro.features.sessions.SessionRepository;
 import java.util.List;
@@ -20,30 +21,40 @@ public class ProjectService {
 
     private final ProjectUpdateMapper projectUpdateMapper;
 
+    private final ProjectValidator validator;
+
     public ProjectService(
         ProjectRepository projectRepository,
         ProjectUpdateMapper projectUpdateMapper,
-        SessionRepository sessionRepository
+        SessionRepository sessionRepository,
+        ProjectValidator validator
     ) {
         this.projectRepository = projectRepository;
         this.sessionRepository = sessionRepository;
         this.projectUpdateMapper = projectUpdateMapper;
+        this.validator = validator;
+    }
+
+    @Transactional
+    public List<ProjectModel> saveAll(
+        List<ProjectModel> projects,
+        UUID userId
+    ) {
+        List<ProjectModel> entities = projects
+            .stream()
+            .map(project -> {
+                validator.existsByNameAndUserId(project.getName(), userId);
+                project.setUserId(userId);
+                return project;
+            })
+            .toList();
+
+        return projectRepository.saveAll(entities);
     }
 
     @Transactional
     public ProjectModel save(ProjectModel project, UUID userId) {
-        boolean exists = projectRepository.existsByNameAndUserId(
-            project.getName(),
-            userId
-        );
-
-        if (exists) {
-            throw new InvalidProjectException(
-                ProjectErrorCode.PROJECT_EXISTS,
-                "Projeto com nome '" + project.getName() + "' já existe"
-            );
-        }
-
+        validator.existsByNameAndUserId(project.getName(), userId);
         project.setUserId(userId);
         return projectRepository.save(project);
     }

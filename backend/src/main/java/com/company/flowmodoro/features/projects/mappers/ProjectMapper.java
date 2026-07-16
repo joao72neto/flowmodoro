@@ -15,6 +15,10 @@ public class ProjectMapper {
             .build();
     }
 
+    public List<ProjectModel> toEntity(List<ProjectDTO> dtos) {
+        return dtos.stream().map(this::toEntity).toList();
+    }
+
     public ProjectDTO toDTO(ProjectModel entity) {
         return ProjectDTO.builder()
             .id(entity.getId())

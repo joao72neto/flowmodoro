@@ -33,6 +33,16 @@ public class ProjectController {
         this.projectMapper = projectMapper;
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<List<ProjectDTO>> saveBulk(
+        @Valid @RequestBody List<ProjectDTO> dtos,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        List<ProjectModel> entities = projectMapper.toEntity(dtos);
+        List<ProjectModel> saved = projectService.saveAll(entities, userId);
+        return ResponseEntity.status(201).body(projectMapper.toDTO(saved));
+    }
+
     @PostMapping
     public ResponseEntity<ProjectDTO> save(
         @Valid @RequestBody ProjectDTO dto,
