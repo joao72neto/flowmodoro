@@ -3,10 +3,9 @@ package com.company.flowmodoro.features.projects;
 import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
 import com.company.flowmodoro.features.projects.dtos.ProjectPayloadDTO;
 import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
-import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
-import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
 import com.company.flowmodoro.features.projects.helpers.ProjectValidator;
 import com.company.flowmodoro.features.projects.mappers.ProjectUpdateMapper;
+import com.company.flowmodoro.features.sessions.SessionModel;
 import com.company.flowmodoro.features.sessions.SessionRepository;
 import java.util.List;
 import java.util.Map;
@@ -44,21 +43,10 @@ public class ProjectService {
     }
 
     public ProjectModel findById(UUID id, UUID userId) {
-        ProjectModel project = projectRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new InvalidProjectException(
-                    ProjectErrorCode.PROJECT_NOT_FOUND,
-                    "Project not found"
-                )
-            );
+        ProjectModel project = projectRepository.findById(id).orElse(null);
 
-        if (!project.getUserId().equals(userId)) {
-            throw new InvalidProjectException(
-                ProjectErrorCode.PROJECT_NOT_FOUND,
-                "Project not found for this user"
-            );
-        }
+        validator.validateProjectExists(project);
+        validator.validateProjectBelongsToUser(project, userId);
 
         return project;
     }
@@ -106,12 +94,7 @@ public class ProjectService {
             .map(dto -> {
                 ProjectModel project = projects.get(dto.getId());
 
-                if (project == null) {
-                    throw new InvalidProjectException(
-                        ProjectErrorCode.PROJECT_NOT_FOUND,
-                        "Project not found"
-                    );
-                }
+                validator.validateProjectExists(project);
 
                 validator.validateUniqueName(project, dto.getName(), userId);
 
@@ -134,6 +117,29 @@ public class ProjectService {
         updateMapper.apply(project, dto);
 
         return projectRepository.save(project);
+    }
+
+    @Transactional
+    public void deleteAll(List<UUID> ids, UUID userId) {
+        List<ProjectModel> projects = projectRepository.findAllById(ids);
+
+        validator.validateProjectsFound(ids, projects);
+
+        projects.forEach(project ->
+            validator.validateProjectBelongsToUser(project, userId)
+        );
+
+        projects.forEach(project -> {
+            List<SessionModel> sessions =
+                sessionRepository.findByProjectAndUserId(project, userId);
+
+            sessions.forEach(session -> {
+                session.setProject(null);
+                session.setTag(null);
+            });
+        });
+
+        projectRepository.deleteAll(projects);
     }
 
     @Transactional

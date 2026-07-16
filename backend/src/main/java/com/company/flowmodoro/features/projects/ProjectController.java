@@ -92,6 +92,15 @@ public class ProjectController {
         return ResponseEntity.ok(projectMapper.toDTO(project));
     }
 
+    @DeleteMapping("/bulk")
+    public ResponseEntity<Void> deleteAll(
+        @RequestBody List<UUID> ids,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        projectService.deleteAll(ids, userId);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @PathVariable UUID id,

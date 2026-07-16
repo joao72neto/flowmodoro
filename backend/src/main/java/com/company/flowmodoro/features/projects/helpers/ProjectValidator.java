@@ -4,6 +4,7 @@ import com.company.flowmodoro.features.projects.dtos.ProjectPayloadDTO;
 import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
 import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
+import java.util.List;
 import java.util.UUID;
 
 public class ProjectValidator {
@@ -36,6 +37,39 @@ public class ProjectValidator {
             throw new InvalidProjectException(
                 ProjectErrorCode.PROJECT_EXISTS,
                 "Projeto com nome '" + name + "' já existe"
+            );
+        }
+    }
+
+    public void validateProjectExists(ProjectModel project) {
+        if (project == null) {
+            throw new InvalidProjectException(
+                ProjectErrorCode.PROJECT_NOT_FOUND,
+                "Project not found"
+            );
+        }
+    }
+
+    public void validateProjectsFound(
+        List<UUID> ids,
+        List<ProjectModel> projects
+    ) {
+        if (projects.size() != ids.size()) {
+            throw new InvalidProjectException(
+                ProjectErrorCode.PROJECT_NOT_FOUND,
+                "One or more projects were not found"
+            );
+        }
+    }
+
+    public void validateProjectBelongsToUser(
+        ProjectModel project,
+        UUID userId
+    ) {
+        if (!project.getUserId().equals(userId)) {
+            throw new InvalidProjectException(
+                ProjectErrorCode.PROJECT_NOT_FOUND,
+                "Project not found for this user"
             );
         }
     }
