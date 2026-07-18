@@ -38,7 +38,7 @@ public class ProjectService {
         this.validator = validator;
     }
 
-    public List<ProjectDTO> findAll(String userId) {
+    public List<ProjectDTO> findAll(UUID userId) {
         return projectRepository.findAllWithTotalFocus(userId);
     }
 

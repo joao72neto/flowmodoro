@@ -25,7 +25,7 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, UUID> {
         		ORDER BY p.id DESC
         """
     )
-    List<ProjectDTO> findAllWithTotalFocus(String userId);
+    List<ProjectDTO> findAllWithTotalFocus(UUID userId);
 
     boolean existsByNameAndUserId(String name, UUID userId);
 }

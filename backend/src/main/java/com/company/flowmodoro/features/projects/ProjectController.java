@@ -36,7 +36,7 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> findAll(
-        @RequestHeader("X-User-Id") String userId
+        @RequestHeader("X-User-Id") UUID userId
     ) {
         List<ProjectDTO> projects = projectService.findAll(userId);
         return ResponseEntity.ok(projects);
