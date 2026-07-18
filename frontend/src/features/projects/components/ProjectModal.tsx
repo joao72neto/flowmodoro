@@ -11,10 +11,8 @@ import { CreateProjectSchema } from "../project.schema";
 
 import type { ProjectDTO } from "../dtos/projects-response";
 
-import type {
-  useCreateProject,
-  useUpdateProject,
-} from "../hooks/useProjects";
+import type { useCreateProject, useUpdateProject } from "../hooks/useProjects";
+import type { ProjectUpdateDTO } from "../dtos/projects-request";
 
 const ProjectModal = ({
   isOpen,
@@ -77,16 +75,19 @@ const ProjectModal = ({
     close();
   };
 
-  const onSubmit = (data: { name: string }) => {
+  const onSubmit = (data: ProjectUpdateDTO) => {
     if (defaultValues && edit) {
       edit({ id: defaultValues.id, data }, { onSuccess: closeAndReset });
       return;
     }
 
     if (save) {
-      save(data, {
-        onSuccess: closeAndReset,
-      });
+      save(
+        { id: crypto.randomUUID(), ...data },
+        {
+          onSuccess: closeAndReset,
+        },
+      );
     }
   };
 

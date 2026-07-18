@@ -7,8 +7,12 @@ import {
   updateProject,
 } from "../local/projects.repository";
 
-import type { ProjectPayloadDTO } from "../dtos/projects-request";
+import type {
+  ProjectPayloadDTO,
+  ProjectUpdateDTO,
+} from "../dtos/projects-request";
 import type { ProjectDTO } from "../dtos/projects-response";
+import { triggerSync } from "../../../local/sync-manager";
 
 const duplicatedErrorConfig = {
   title: "Projeto duplicado",
@@ -46,6 +50,7 @@ export const useCreateProject = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync()
     },
   });
 };
@@ -59,7 +64,7 @@ export const useUpdateProject = () => {
       data,
     }: {
       id: string;
-      data: ProjectPayloadDTO;
+      data: ProjectUpdateDTO;
     }): Promise<ProjectDTO> => updateProject({ id, data }),
 
     meta: {

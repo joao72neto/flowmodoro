@@ -49,7 +49,10 @@ export const fetchSessions = async ({
 export const createSession = async (
   payload: SessionPayloadDTO,
 ): Promise<SessionDTO> => {
-  const session: SessionModel = mapper.fromPayload(payload);
+  const session: SessionModel = {
+    ...mapper.fromPayload(payload),
+    pending_action: "CREATE",
+  };
 
   await db.sessions.add(session);
 

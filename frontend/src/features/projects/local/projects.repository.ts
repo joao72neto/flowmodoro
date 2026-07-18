@@ -1,5 +1,8 @@
 import { db } from "../../../local/indexedDB";
-import type { ProjectPayloadDTO } from "../dtos/projects-request";
+import type {
+  ProjectPayloadDTO,
+  ProjectUpdateDTO,
+} from "../dtos/projects-request";
 import type { ProjectDTO } from "../dtos/projects-response";
 
 import type { ProjectModel } from "./project.model";
@@ -33,7 +36,10 @@ export const fetchProjects = async (): Promise<ProjectDTO[]> => {
 export const createProject = async (
   payload: ProjectPayloadDTO,
 ): Promise<ProjectDTO> => {
-  const project: ProjectModel = mapper.fromPayload(payload);
+  const project: ProjectModel = {
+    ...mapper.fromPayload(payload),
+    pending_action: "CREATE",
+  };
 
   await db.projects.add(project);
   return mapper.fromModel(project);
@@ -44,7 +50,7 @@ export const updateProject = async ({
   data,
 }: {
   id: string;
-  data: ProjectPayloadDTO;
+  data: ProjectUpdateDTO;
 }): Promise<ProjectDTO> => {
   const old = await db.projects.get(id);
 

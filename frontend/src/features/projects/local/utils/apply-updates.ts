@@ -1,6 +1,6 @@
 import { DEFAULT_PROJECT } from "../consts/default-project";
 import type { ProjectModel } from "../project.model";
-import type { ProjectPayloadDTO } from "../../dtos/projects-request";
+import type { ProjectUpdateDTO } from "../../dtos/projects-request";
 
 export const applyUpdates = ({
   id,
@@ -9,11 +9,12 @@ export const applyUpdates = ({
 }: {
   id: string;
   old?: ProjectModel;
-  updated?: ProjectPayloadDTO;
+  updated?: ProjectUpdateDTO;
 }): ProjectModel => {
   return {
     id,
     name: updated?.name || old?.name || DEFAULT_PROJECT.name,
     createdAt: old?.createdAt || DEFAULT_PROJECT.createdAt,
+    pending_action: "UPDATE",
   };
 };

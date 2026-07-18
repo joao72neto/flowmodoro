@@ -72,7 +72,7 @@ class SessionMapper {
     ratio: session.ratio || DEFAULT_SESSION.ratio,
     date: new Date().toISOString(),
     deleted: false,
-    pending_action: "CREATE",
+    pending_action: null,
   });
 }
 

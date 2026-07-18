@@ -4,4 +4,5 @@ export const DEFAULT_PROJECT: ProjectModel = {
   id: crypto.randomUUID(),
   name: "Projeto padrão",
   createdAt: new Date().toISOString(),
+  pending_action: null,
 };

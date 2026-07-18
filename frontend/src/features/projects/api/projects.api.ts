@@ -28,3 +28,10 @@ export const updateProject = async ({
 export const deleteProject = async (id: number): Promise<void> => {
   return api.delete(`/projects/${id}`);
 };
+
+export const createProjects = async (
+  data: ProjectPayloadDTO[],
+): Promise<ProjectDTO[]> => {
+  const res = await api.post<ProjectDTO[]>("/projects/bulk", data);
+  return res.data;
+};

@@ -18,7 +18,12 @@ class ProjectMapper {
     id: crypto.randomUUID(),
     name: project.name,
     createdAt: new Date().toISOString(),
+    pending_action: null,
   });
+
+  fromPayloadList = (projects: ProjectPayloadDTO[]): ProjectModel[] => {
+    return projects.map((project) => this.fromPayload(project));
+  };
 }
 
 export default new ProjectMapper();

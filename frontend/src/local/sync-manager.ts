@@ -1,12 +1,15 @@
-import sync from "../features/sessions/sync-sessions";
+import sessions from "../features/sessions/sync-sessions";
+import projects from "../features/projects/sync-projects";
 
 export function initSync() {
   window.addEventListener("online", () => {
-    sync.syncSessions();
+    sessions.syncSessions();
+    projects.syncSessions();
   });
 
   if (navigator.onLine) {
-    sync.syncSessions();
+    sessions.syncSessions();
+    projects.syncSessions();
   }
 }
 
