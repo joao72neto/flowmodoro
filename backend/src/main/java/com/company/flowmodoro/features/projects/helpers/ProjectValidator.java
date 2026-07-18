@@ -1,12 +1,14 @@
+package com.company.flowmodoro.features.projects.helpers;
+
 import com.company.flowmodoro.features.projects.ProjectModel;
 import com.company.flowmodoro.features.projects.ProjectRepository;
-import com.company.flowmodoro.features.projects.dtos.ProjectPayloadDTO;
-import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.enums.ProjectErrorCode;
 import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProjectValidator {
 
     private final ProjectRepository projectRepository;
