@@ -12,7 +12,11 @@ import mapper from "../projects.mappers";
 
 export const fetchProjects = async (): Promise<ProjectDTO[]> => {
   const [projects, sessions] = await Promise.all([
-    db.projects.orderBy("createdAt").reverse().toArray(),
+    db.projects
+      .orderBy("createdAt")
+      .reverse()
+      .filter((project) => !project.deleted)
+      .toArray(),
     db.sessions.toArray(),
   ]);
 
@@ -66,6 +70,16 @@ export const updateProject = async ({
 };
 
 export const deleteProject = async (id: string) => {
-  await db.tags.where("projectId").equals(id).delete();
-  await db.projects.delete(id);
+  const project = await db.projects.get(id);
+  if (!project) return;
+
+  if (project.pending_action === "CREATE") {
+    await db.projects.delete(id);
+    return;
+  }
+
+  await db.projects.update(id, {
+    deleted: true,
+    pending_action: "DELETE",
+  });
 };

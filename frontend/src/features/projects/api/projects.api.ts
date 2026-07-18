@@ -35,3 +35,7 @@ export const createProjects = async (
   const res = await api.post<ProjectDTO[]>("/projects/bulk", data);
   return res.data;
 };
+
+export const deleteProjects = async (ids: string[]): Promise<void> => {
+  await api.delete(`/projects/bulk`, { data: ids });
+};

@@ -15,6 +15,7 @@ export const applyUpdates = ({
     id,
     name: updated?.name || old?.name || DEFAULT_PROJECT.name,
     createdAt: old?.createdAt || DEFAULT_PROJECT.createdAt,
+    deleted: false,
     pending_action: "UPDATE",
   };
 };

@@ -77,6 +77,7 @@ export const useUpdateProject = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync()
     },
   });
 };
@@ -94,6 +95,7 @@ export const useDeleteProject = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync()
     },
   });
 };

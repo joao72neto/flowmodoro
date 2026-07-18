@@ -18,6 +18,7 @@ class ProjectMapper {
     id: crypto.randomUUID(),
     name: project.name,
     createdAt: new Date().toISOString(),
+    deleted: false,
     pending_action: null,
   });
 
