@@ -22,6 +22,8 @@ class TagMapper {
       name: tag.name,
       projectId: tag.projectId,
       createdAt: new Date().toISOString(),
+      deleted: false,
+      pending_action: null,
     };
   };
 }
