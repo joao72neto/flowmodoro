@@ -1,7 +1,11 @@
 import { db } from "../../local/indexedDB";
 import type { ProjectModel } from "./local/project.model";
 import type { ProjectPayloadDTO } from "./dtos/projects-request";
-import { createProjects, deleteProjects } from "./api/projects.api";
+import {
+  createProjects,
+  deleteProjects,
+  updateProjects,
+} from "./api/projects.api";
 
 import mapper from "./projects.mappers";
 
@@ -9,6 +13,7 @@ class SyncProjects {
   async syncSessions() {
     await this.syncCreateProjects();
     await this.syncDeleteProjects();
+    await this.syncUpdateProjects();
   }
 
   async syncCreateProjects() {
@@ -21,6 +26,22 @@ class SyncProjects {
 
     const payload: ProjectPayloadDTO[] = mapper.fromModelList(projects);
     await createProjects(payload);
+
+    await db.projects.bulkPut(
+      projects.map((s) => ({ ...s, pending_action: null })),
+    );
+  }
+
+  async syncUpdateProjects() {
+    const projects: ProjectModel[] = await db.projects
+      .where("pending_action")
+      .equals("UPDATE")
+      .toArray();
+
+    if (projects.length === 0) return;
+
+    const payload: ProjectPayloadDTO[] = mapper.toPayloadList(projects);
+    await updateProjects(payload);
 
     await db.projects.bulkPut(
       projects.map((s) => ({ ...s, pending_action: null })),

@@ -17,6 +17,7 @@ export const fetchProjects = async (): Promise<ProjectDTO[]> => {
       .reverse()
       .filter((project) => !project.deleted)
       .toArray(),
+
     db.sessions.toArray(),
   ]);
 
@@ -64,8 +65,7 @@ export const updateProject = async ({
     updated: data,
   });
 
-  await db.projects.update(id, data);
-
+  await db.projects.update(id, updatedProject);
   return mapper.fromModel(updatedProject);
 };
 

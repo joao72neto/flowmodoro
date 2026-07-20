@@ -4,6 +4,15 @@ import type { ProjectPayloadDTO } from "./dtos/projects-request";
 import type { ProjectModel } from "./local/project.model";
 
 class ProjectMapper {
+  toPayload = (project: ProjectModel): ProjectPayloadDTO => ({
+    id: project.id,
+    name: project.name,
+  });
+
+  toPayloadList = (projects: ProjectModel[]): ProjectPayloadDTO[] => {
+    return projects.map((project) => this.toPayload(project));
+  };
+
   fromModel = (project: ProjectModel): ProjectDTO => ({
     id: project.id,
     name: project.name,

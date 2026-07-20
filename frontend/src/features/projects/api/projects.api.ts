@@ -36,6 +36,13 @@ export const createProjects = async (
   return res.data;
 };
 
+export const updateProjects = async (
+  data: ProjectPayloadDTO[],
+): Promise<ProjectDTO[]> => {
+  const res = await api.put<ProjectDTO[]>("/projects/bulk", data);
+  return res.data;
+};
+
 export const deleteProjects = async (ids: string[]): Promise<void> => {
   await api.delete(`/projects/bulk`, { data: ids });
 };
