@@ -1,18 +1,19 @@
 import api from "../../../configs/api.configs";
-import type { TagPayload, TagResponse } from "./tags.types";
+import type { TagDTO } from "../dtos/tags-response";
+import type { TagPayloadDTO } from "../dtos/tags-request";
 
 export const fetchTagsByProject = async (
   projectId: number,
-): Promise<TagResponse[]> => {
-  const res = await api.get<TagResponse[]>("/tags", {
+): Promise<TagDTO[]> => {
+  const res = await api.get<TagDTO[]>("/tags", {
     params: { projectId },
   });
 
   return res.data;
 };
 
-export const createTag = async (data: TagPayload): Promise<TagResponse> => {
-  const res = await api.post<TagResponse>("/tags", data);
+export const createTag = async (data: TagPayloadDTO): Promise<TagDTO> => {
+  const res = await api.post<TagDTO>("/tags", data);
   return res.data;
 };
 
@@ -21,9 +22,9 @@ export const updateTag = async ({
   data,
 }: {
   id: number;
-  data: TagPayload;
-}): Promise<TagResponse> => {
-  const res = await api.put<TagResponse>(`/tags/${id}`, data);
+  data: TagPayloadDTO;
+}): Promise<TagDTO> => {
+  const res = await api.put<TagDTO>(`/tags/${id}`, data);
   return res.data;
 };
 

@@ -4,8 +4,3 @@ export type TagDTO = {
   projectId: string;
   totalFocus: number;
 };
-
-export type TagPayloadDTO = {
-  name: string;
-  projectId: string;
-};

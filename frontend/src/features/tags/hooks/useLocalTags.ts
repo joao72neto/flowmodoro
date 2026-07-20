@@ -1,15 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useModal } from "../../../../shared/contexts/modal/modal.context";
-import { APP_DATA_QUERY_KEY } from "../../../../global-query-key";
-import { ApiError } from "../../../../configs/api-error.configs";
+import { useModal } from "../../../shared/contexts/modal/modal.context";
+import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
+import { ApiError } from "../../../configs/api-error.configs";
 import {
   createLocalTag,
   deleteLocalTag,
   fetchLocalTagsByProject,
   updateLocalTag,
-} from "../tags.respository";
+} from "../local/tags.respository";
 
-import type { TagDTO, TagPayloadDTO } from "../tag.dtos";
+import type { TagDTO } from "../dtos/tags-response";
+import type { TagPayloadDTO } from "../dtos/tags-request";
+
 
 const duplicatedErrorConfig = {
   title: "Tag duplicada",

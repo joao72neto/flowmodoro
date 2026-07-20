@@ -1,6 +1,7 @@
 import { DEFAULT_TAG } from "../consts/default-tag";
-import type { TagPayloadDTO } from "../tag.dtos";
 import type { TagModel } from "../tag.model";
+
+import type { TagPayloadDTO } from "../../dtos/tags-request";
 
 export const applyUpdates = ({
   id,

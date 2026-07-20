@@ -1,6 +1,8 @@
 import { db } from "../../../local/indexedDB";
 
-import type { TagDTO, TagPayloadDTO } from "./tag.dtos";
+import type { TagDTO } from "../dtos/tags-response";
+import type { TagPayloadDTO } from "../dtos/tags-request";
+
 import type { TagModel } from "./tag.model";
 import { modelToDTO, payloadToModel } from "./tags.mappers";
 import { applyUpdates } from "./utils/apply-updates";

@@ -24,7 +24,7 @@ import Input from "../../../shared/components/inputs/Input";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import type { SessionDTO } from "../dtos/sessions-response";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
-import { useFetchLocalTagsByProject } from "../../tags/local/hooks/useLocalTags";
+import { useFetchLocalTagsByProject } from "../../tags/hooks/useLocalTags";
 
 interface SessionDraft {
   title: string;

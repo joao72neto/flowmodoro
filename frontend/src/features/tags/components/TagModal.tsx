@@ -8,11 +8,11 @@ import { IoMdPricetag } from "react-icons/io";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateTagSchema } from "../tag.schema";
-import type { TagDTO } from "../local/tag.dtos";
+import type { TagDTO } from "../dtos/tags-response";
 import type {
   useCreateLocalTag,
   useUpdateLocalTag,
-} from "../local/hooks/useLocalTags";
+} from "../hooks/useLocalTags";
 
 const TagModal = ({
   isOpen,

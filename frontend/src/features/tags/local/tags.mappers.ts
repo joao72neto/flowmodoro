@@ -1,4 +1,5 @@
-import type { TagDTO, TagPayloadDTO } from "./tag.dtos";
+import type { TagDTO } from "../dtos/tags-response";
+import type { TagPayloadDTO } from "../dtos/tags-request";
 import type { TagModel } from "./tag.model";
 
 export const modelToDTOArray = (tags: TagModel[]): TagDTO[] => {
