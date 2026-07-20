@@ -7,6 +7,7 @@ import com.company.flowmodoro.features.tags.dtos.TagDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.enums.TagErrorCode;
 import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
+import com.company.flowmodoro.features.tags.helpers.TagValidator;
 import com.company.flowmodoro.features.tags.mappers.TagUpdateMapper;
 import java.util.List;
 import java.util.UUID;
@@ -24,34 +25,30 @@ public class TagService {
 
     private final SessionRepository sessionRepository;
 
+    private final TagValidator validator;
+
     public TagService(
         TagRepository tagRepository,
         ProjectService projectService,
         TagUpdateMapper tagUpdateMapper,
-        SessionRepository sessionRepository
+        SessionRepository sessionRepository,
+        TagValidator validator
     ) {
         this.tagRepository = tagRepository;
         this.projectService = projectService;
         this.tagUpdateMapper = tagUpdateMapper;
         this.sessionRepository = sessionRepository;
+        this.validator = validator;
     }
 
     @Transactional
     public TagModel save(TagModel tag, UUID projectId, UUID userId) {
-        boolean exists = tagRepository.existsByNameAndProjectId(
-            tag.getName(),
-            projectId
-        );
-
-        if (exists) {
-            throw new InvalidTagException(
-                TagErrorCode.TAG_EXISTS,
-                "Tag com nome '" + tag.getName() + "' já existe"
-            );
-        }
+        validator.validateUniqueName(tag.getName(), projectId);
 
         ProjectModel project = projectService.findById(projectId, userId);
+
         tag.setProject(project);
+
         return tagRepository.save(tag);
     }
 
