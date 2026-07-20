@@ -8,7 +8,7 @@ import { applyUpdates } from "./utils/apply-updates";
 
 import mapper from "../tags.mappers";
 
-export const fetchLocalTagsByProject = async (
+export const fetchTagsByProject = async (
   projectId: string,
 ): Promise<TagDTO[]> => {
   const [tags, sessions] = await Promise.all([
@@ -38,9 +38,7 @@ export const fetchLocalTagsByProject = async (
     );
 };
 
-export const createLocalTag = async (
-  payload: TagPayloadDTO,
-): Promise<TagDTO> => {
+export const createTag = async (payload: TagPayloadDTO): Promise<TagDTO> => {
   const tag: TagModel = mapper.fromPayload(payload);
 
   await db.tags.add(tag);
@@ -48,7 +46,7 @@ export const createLocalTag = async (
   return mapper.fromModel(tag);
 };
 
-export const updateLocalTag = async ({
+export const updateTag = async ({
   id,
   data,
 }: {
@@ -64,6 +62,6 @@ export const updateLocalTag = async ({
   return mapper.fromModel(updatedTag);
 };
 
-export const deleteLocalTag = async (id: string) => {
+export const deleteTag = async (id: string) => {
   await db.tags.delete(id);
 };

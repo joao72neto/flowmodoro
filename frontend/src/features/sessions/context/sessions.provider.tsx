@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
 import { useCreateSession } from "../hooks/useSessions";
-import { useFetchLocalTagsByProject } from "../../tags/hooks/useLocalTags";
+import { useFetchTagsByProject } from "../../tags/hooks/useTags";
 import { useFetchProjects } from "../../projects/hooks/useProjects";
 import { SessionContext } from "./sessions.context";
 import type { ISaveSessionData } from "./sessions.context";
@@ -41,9 +41,7 @@ export const SessionProvider = ({
     initialSessionDraft.selectedTagId,
   );
 
-  const { data: tags = [] } = useFetchLocalTagsByProject(
-    selectedProjectId || "",
-  );
+  const { data: tags = [] } = useFetchTagsByProject(selectedProjectId || "");
 
   const selectedTag = useMemo(
     () => tags.find((t) => t.id === selectedTagId) ?? null,

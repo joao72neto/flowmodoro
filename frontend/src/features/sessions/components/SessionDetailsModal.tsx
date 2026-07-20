@@ -24,7 +24,7 @@ import Input from "../../../shared/components/inputs/Input";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import type { SessionDTO } from "../dtos/sessions-response";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
-import { useFetchLocalTagsByProject } from "../../tags/hooks/useLocalTags";
+import { useFetchTagsByProject } from "../../tags/hooks/useTags";
 
 interface SessionDraft {
   title: string;
@@ -82,9 +82,7 @@ const SessionDetailsModal = ({
     draft ? draft.focus : session.focus,
   );
 
-  const { data: tags = [] } = useFetchLocalTagsByProject(
-    selectedProjectId || "",
-  );
+  const { data: tags = [] } = useFetchTagsByProject(selectedProjectId || "");
 
   useEffect(() => {
     if (mode === "view") {

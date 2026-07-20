@@ -13,11 +13,11 @@ import clsx from "clsx";
 import TagsSkeleton from "./TagsSkeleton";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
-  useCreateLocalTag,
-  useDeleteLocalTag,
-  useFetchLocalTagsByProject,
-  useUpdateLocalTag,
-} from "../../hooks/useLocalTags";
+  useCreateTag,
+  useDeleteTag,
+  useFetchTagsByProject,
+  useUpdateTag,
+} from "../../hooks/useTags";
 import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 import type { TagDTO } from "../../dtos/tags-response";
 
@@ -30,9 +30,7 @@ const Tags = ({
 }) => {
   const { setModalLoading } = useModal();
 
-  const { data: tags, isLoading } = useFetchLocalTagsByProject(
-    project.id || "",
-  );
+  const { data: tags, isLoading } = useFetchTagsByProject(project.id || "");
 
   const [editingTag, setEditingTag] = useState<TagDTO | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -43,11 +41,11 @@ const Tags = ({
   const { Modal: EditTag, openModal: openEditModal } =
     useModalFactory(TagModal);
 
-  const { mutate: handleCreateTag, isPending: isSaving } = useCreateLocalTag();
+  const { mutate: handleCreateTag, isPending: isSaving } = useCreateTag();
 
-  const { mutate: handleEditTag, isPending: isUpdating } = useUpdateLocalTag();
+  const { mutate: handleEditTag, isPending: isUpdating } = useUpdateTag();
 
-  const { mutate: handleDeleteTag } = useDeleteLocalTag();
+  const { mutate: handleDeleteTag } = useDeleteTag();
 
   const filteredTags = useMemo(() => {
     if (!tags) return [];

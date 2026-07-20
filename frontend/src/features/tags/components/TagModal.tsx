@@ -9,10 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { CreateTagSchema } from "../tag.schema";
 import type { TagDTO } from "../dtos/tags-response";
-import type {
-  useCreateLocalTag,
-  useUpdateLocalTag,
-} from "../hooks/useLocalTags";
+import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
 
 const TagModal = ({
   isOpen,
@@ -45,8 +42,8 @@ const TagModal = ({
   inputLabel?: string;
 
   projectId: string;
-  edit?: ReturnType<typeof useUpdateLocalTag>["mutate"];
-  save?: ReturnType<typeof useCreateLocalTag>["mutate"];
+  edit?: ReturnType<typeof useUpdateTag>["mutate"];
+  save?: ReturnType<typeof useCreateTag>["mutate"];
 
   confirmButtonText?: string;
   confirmButtonIcon?: React.ReactNode;
