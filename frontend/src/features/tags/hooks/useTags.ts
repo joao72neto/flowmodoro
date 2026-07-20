@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
-import { ApiError } from "../../../configs/api-error.configs";
 import {
   createTag,
   deleteTag,
@@ -19,52 +18,30 @@ const duplicatedErrorConfig = {
 };
 
 export const useFetchTagsByProject = (projectId: string) => {
-  const { showError, hideModal } = useModal();
-
   const TAGS_QUERY_KEY = "tags";
 
   return useQuery({
     queryKey: [APP_DATA_QUERY_KEY, TAGS_QUERY_KEY, projectId],
-    queryFn: async () => {
-      try {
-        return await fetchTagsByProject(projectId);
-      } catch (error) {
-        if (error instanceof ApiError) {
-          showError({
-            title: "Erro ao carregar tags",
-            message: error.message,
-            action: hideModal,
-          });
-        }
-        console.error(error);
-        throw error;
-      }
+    queryFn: async () => await fetchTagsByProject(projectId),
+
+    meta: {
+      errorTitle: "Erro ao carregar tags",
     },
   });
 };
 
 export const useCreateTag = () => {
-  const { showError, hideModal } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: TagPayloadDTO): Promise<TagDTO> => createTag(data),
 
-    onError: (error) => {
-      if (error.name === "ConstraintError") {
-        showError({
-          title: duplicatedErrorConfig.title,
-          message: duplicatedErrorConfig.message,
-          action: duplicatedErrorConfig.action,
-        });
-        return;
-      }
-
-      showError({
-        title: "Erro ao criar tag",
-        message: error.message,
-        action: hideModal,
-      });
+    meta: {
+      errorTitle: "Erro ao criar tag",
+      constraintError: {
+        title: duplicatedErrorConfig.title,
+        message: duplicatedErrorConfig.message,
+      },
     },
 
     onSuccess: () => {
@@ -74,7 +51,6 @@ export const useCreateTag = () => {
 };
 
 export const useUpdateTag = () => {
-  const { showError, hideModal } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -86,21 +62,12 @@ export const useUpdateTag = () => {
       data: TagPayloadDTO;
     }): Promise<TagDTO> => updateTag({ id, data }),
 
-    onError: (error) => {
-      if (error.message.includes("ConstraintError")) {
-        showError({
-          title: duplicatedErrorConfig.title,
-          message: duplicatedErrorConfig.message,
-          action: duplicatedErrorConfig.action,
-        });
-        return;
-      }
-
-      showError({
-        title: "Erro ao atualizar tag",
-        message: error.message,
-        action: hideModal,
-      });
+    meta: {
+      errorTitle: "Erro ao atualizar tag",
+      constraintError: {
+        title: duplicatedErrorConfig.title,
+        message: duplicatedErrorConfig.message,
+      },
     },
 
     onSuccess: () => {
@@ -110,18 +77,14 @@ export const useUpdateTag = () => {
 };
 
 export const useDeleteTag = () => {
-  const { showError, hideModal, setModalLoading } = useModal();
+  const { hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: string) => deleteTag(id),
 
-    onError: (error: ApiError) => {
-      showError({
-        title: "Erro ao deletar tag",
-        message: error.message,
-        action: hideModal,
-      });
+    meta: {
+      errorTitle: "Erro ao deletar tags",
     },
 
     onSuccess: () => {
