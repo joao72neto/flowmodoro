@@ -4,8 +4,9 @@ import type { TagDTO } from "../dtos/tags-response";
 import type { TagPayloadDTO } from "../dtos/tags-request";
 
 import type { TagModel } from "./tag.model";
-import { modelToDTO, payloadToModel } from "./tags.mappers";
 import { applyUpdates } from "./utils/apply-updates";
+
+import mapper from "../tags.mappers";
 
 export const fetchLocalTagsByProject = async (
   projectId: string,
@@ -40,11 +41,11 @@ export const fetchLocalTagsByProject = async (
 export const createLocalTag = async (
   payload: TagPayloadDTO,
 ): Promise<TagDTO> => {
-  const tag: TagModel = payloadToModel(payload);
+  const tag: TagModel = mapper.fromPayload(payload);
 
   await db.tags.add(tag);
 
-  return modelToDTO(tag);
+  return mapper.fromModel(tag);
 };
 
 export const updateLocalTag = async ({
@@ -60,7 +61,7 @@ export const updateLocalTag = async ({
 
   await db.tags.update(id, data);
 
-  return modelToDTO(updatedTag);
+  return mapper.fromModel(updatedTag);
 };
 
 export const deleteLocalTag = async (id: string) => {
