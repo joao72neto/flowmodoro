@@ -5,8 +5,6 @@ import com.company.flowmodoro.features.projects.ProjectService;
 import com.company.flowmodoro.features.sessions.SessionRepository;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
-import com.company.flowmodoro.features.tags.enums.TagErrorCode;
-import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
 import com.company.flowmodoro.features.tags.helpers.TagValidator;
 import com.company.flowmodoro.features.tags.mappers.TagUpdateMapper;
 import java.util.List;
@@ -21,7 +19,7 @@ public class TagService {
 
     private final ProjectService projectService;
 
-    private final TagUpdateMapper tagUpdateMapper;
+    private final TagUpdateMapper updateMapper;
 
     private final SessionRepository sessionRepository;
 
@@ -30,13 +28,13 @@ public class TagService {
     public TagService(
         TagRepository tagRepository,
         ProjectService projectService,
-        TagUpdateMapper tagUpdateMapper,
+        TagUpdateMapper updateMapper,
         SessionRepository sessionRepository,
         TagValidator validator
     ) {
         this.tagRepository = tagRepository;
         this.projectService = projectService;
-        this.tagUpdateMapper = tagUpdateMapper;
+        this.updateMapper = updateMapper;
         this.sessionRepository = sessionRepository;
         this.validator = validator;
     }
@@ -59,42 +57,26 @@ public class TagService {
 
     @Transactional
     public TagModel update(UUID id, TagUpdateDTO dto, UUID userId) {
-        TagModel tag = tagRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new InvalidTagException(
-                    TagErrorCode.TAG_NOT_FOUND,
-                    "Tag not found"
-                )
-            );
+        TagModel tag = tagRepository.findById(id).orElse(null);
 
-        boolean exists = tagRepository.existsByNameAndProjectId(
+        validator.validateTagExists(tag);
+
+        validator.validateUniqueName(
+            tag,
             dto.getName(),
             tag.getProject().getId()
         );
 
-        if (exists && !tag.getName().equals(dto.getName())) {
-            throw new InvalidTagException(
-                TagErrorCode.TAG_EXISTS,
-                "Tag com nome '" + dto.getName() + "' já existe"
-            );
-        }
-
         projectService.findById(tag.getProject().getId(), userId);
-        tagUpdateMapper.apply(tag, dto);
+        updateMapper.apply(tag, dto);
         return tagRepository.save(tag);
     }
 
     @Transactional
     public void delete(UUID id, UUID userId) {
-        TagModel tag = tagRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new InvalidTagException(
-                    TagErrorCode.TAG_NOT_FOUND,
-                    "Tag not found"
-                )
-            );
+        TagModel tag = tagRepository.findById(id).orElse(null);
+
+        validator.validateTagExists(tag);
 
         projectService.findById(tag.getProject().getId(), userId);
 

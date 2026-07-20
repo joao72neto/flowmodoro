@@ -1,5 +1,7 @@
 package com.company.flowmodoro.features.tags.helpers;
 
+import com.company.flowmodoro.features.projects.exceptions.InvalidProjectException;
+import com.company.flowmodoro.features.tags.TagModel;
 import com.company.flowmodoro.features.tags.TagRepository;
 import com.company.flowmodoro.features.tags.enums.TagErrorCode;
 import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
@@ -20,6 +22,28 @@ public class TagValidator {
             throw new InvalidTagException(
                 TagErrorCode.TAG_EXISTS,
                 "Tag com nome '" + name + "' já existe"
+            );
+        }
+    }
+
+    public void validateUniqueName(TagModel project, String name, UUID userId) {
+        if (project.getName().equals(name)) {
+            return;
+        }
+
+        if (tagRepository.existsByNameAndProjectId(name, userId)) {
+            throw new InvalidProjectException(
+                TagErrorCode.TAG_EXISTS,
+                "Tag com nome '" + name + "' já existe"
+            );
+        }
+    }
+
+    public void validateTagExists(TagModel tag) {
+        if (tag == null) {
+            throw new InvalidProjectException(
+                TagErrorCode.TAG_NOT_FOUND,
+                "Tag not found"
             );
         }
     }
