@@ -7,6 +7,7 @@ import { useFetchProjects } from "../../projects/hooks/useProjects";
 import { SessionContext } from "./sessions.context";
 import type { ISaveSessionData } from "./sessions.context";
 import { getStorageObject } from "../../../shared/utils/storage.utils";
+import type { SessionPayloadDTO } from "../dtos/sessions-request";
 
 export const SessionProvider = ({
   children,
@@ -28,6 +29,7 @@ export const SessionProvider = ({
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
     initialSessionDraft.selectedProjectId,
   );
+
   const { data: projects = [] } = useFetchProjects();
 
   const selectedProject = useMemo(
@@ -61,14 +63,16 @@ export const SessionProvider = ({
 
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
     setCurrentPage(1);
-    createSession({
+    const session: SessionPayloadDTO = {
       id: crypto.randomUUID(),
       name: sessionName,
       focus: focusSeconds,
       ratio: restRatio / 100,
-      projectId: selectedProject?.id,
-      tagId: selectedTag?.id,
-    });
+      projectId: selectedProjectId || undefined,
+      tagId: selectedTagId || undefined,
+    };
+
+    createSession(session);
   };
 
   return (

@@ -71,6 +71,8 @@ class SessionMapper {
     ),
     ratio: session.ratio || DEFAULT_SESSION.ratio,
     date: new Date().toISOString(),
+    projectId: session.projectId,
+    tagId: session.tagId,
     deleted: false,
     pending_action: null,
   });
