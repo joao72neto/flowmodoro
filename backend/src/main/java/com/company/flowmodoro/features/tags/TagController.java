@@ -32,6 +32,15 @@ public class TagController {
         this.mapper = mapper;
     }
 
+    @GetMapping
+    public ResponseEntity<List<TagDTO>> findByProject(
+        @RequestParam UUID projectId,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        List<TagDTO> tags = service.findAllByProject(projectId, userId);
+        return ResponseEntity.ok(tags);
+    }
+
     @PostMapping("/bulk")
     public ResponseEntity<List<TagDTO>> saveAll(
         @Valid @RequestBody List<TagPayloadDTO> dtos,
@@ -57,13 +66,14 @@ public class TagController {
         return ResponseEntity.status(201).body(mapper.toDTO(tag));
     }
 
-    @GetMapping
-    public ResponseEntity<List<TagDTO>> findByProject(
+    @PutMapping("/bulk")
+    public ResponseEntity<List<TagDTO>> updateAll(
+        @Valid @RequestBody List<TagPayloadDTO> dtos,
         @RequestParam UUID projectId,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        List<TagDTO> tags = service.findAllByProject(projectId, userId);
-        return ResponseEntity.ok(tags);
+        List<TagModel> tags = service.updateAll(dtos, projectId, userId);
+        return ResponseEntity.ok(mapper.toDTO(tags));
     }
 
     @PutMapping("/{id}")

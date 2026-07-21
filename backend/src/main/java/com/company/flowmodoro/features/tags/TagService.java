@@ -4,11 +4,15 @@ import com.company.flowmodoro.features.projects.ProjectModel;
 import com.company.flowmodoro.features.projects.ProjectService;
 import com.company.flowmodoro.features.sessions.SessionRepository;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
+import com.company.flowmodoro.features.tags.dtos.TagPayloadDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.helpers.TagValidator;
 import com.company.flowmodoro.features.tags.mappers.TagUpdateMapper;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +78,39 @@ public class TagService {
     public List<TagDTO> findAllByProject(UUID projectId, UUID userId) {
         projectService.findById(projectId, userId);
         return tagRepository.findAllWithTotalFocus(projectId, userId);
+    }
+
+    @Transactional
+    public List<TagModel> updateAll(
+        List<TagPayloadDTO> dtos,
+        UUID projectId,
+        UUID userId
+    ) {
+        List<UUID> ids = dtos.stream().map(TagPayloadDTO::getId).toList();
+
+        Map<UUID, TagModel> tags = tagRepository
+            .findAllById(ids)
+            .stream()
+            .collect(Collectors.toMap(TagModel::getId, Function.identity()));
+
+        List<TagModel> entities = dtos
+            .stream()
+            .map(dto -> {
+                TagModel tag = tags.get(dto.getId());
+
+                validator.validateTagExists(tag);
+
+                validator.validateUniqueName(tag, dto.getName(), projectId);
+
+                updateMapper.apply(tag, dto);
+
+                tag.setProject(projectService.findById(projectId, userId));
+
+                return tag;
+            })
+            .toList();
+
+        return tagRepository.saveAll(entities);
     }
 
     @Transactional
