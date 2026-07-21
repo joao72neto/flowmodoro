@@ -42,6 +42,7 @@ class TagMapper {
     return {
       id: tag.id,
       name: tag.name,
+      projectId: tag.projectId,
     };
   };
 

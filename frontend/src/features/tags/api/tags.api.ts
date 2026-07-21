@@ -1,6 +1,10 @@
 import api from "../../../configs/api.configs";
 import type { TagDTO } from "../dtos/tags-response";
-import type { TagCreateDTO, TagPayloadDTO } from "../dtos/tags-request";
+import type {
+  TagCreateDTO,
+  TagPayloadDTO,
+  TagUpdateBulkDTO,
+} from "../dtos/tags-request";
 
 export const fetchTagsByProject = async (
   projectId: number,
@@ -32,20 +36,14 @@ export const deleteTag = async (id: number): Promise<void> => {
   await api.delete(`/tags/${id}`);
 };
 
-export const createTags = async ({
-  data,
-  projectId,
-}: {
-  data: TagCreateDTO[];
-  projectId: string;
-}): Promise<TagDTO[]> => {
-  const res = await api.post<TagDTO[]>("/tags/bulk", data, {
-    params: { projectId },
-  });
+export const createTags = async (data: TagCreateDTO[]): Promise<TagDTO[]> => {
+  const res = await api.post<TagDTO[]>("/tags/bulk", data, {});
   return res.data;
 };
 
-export const updateTags = async (data: TagPayloadDTO[]): Promise<TagDTO[]> => {
+export const updateTags = async (
+  data: TagUpdateBulkDTO[],
+): Promise<TagDTO[]> => {
   const res = await api.put<TagDTO[]>("/tags/bulk", data);
   return res.data;
 };

@@ -20,7 +20,7 @@ class SyncTags {
     if (tags.length === 0) return;
 
     const payload: TagCreateDTO[] = mapper.toCreateDTOList(tags);
-    await createTags({ data: payload, projectId: tags[0].projectId });
+    await createTags(payload);
 
     await db.tags.bulkPut(tags.map((t) => ({ ...t, pending_action: null })));
   }

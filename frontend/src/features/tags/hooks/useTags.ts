@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
 import {
   createTag,
@@ -10,6 +9,7 @@ import {
 
 import type { TagDTO } from "../dtos/tags-response";
 import type { TagPayloadDTO } from "../dtos/tags-request";
+import { triggerSync } from "../../../local/sync-manager";
 
 const duplicatedErrorConfig = {
   title: "Tag duplicada",
@@ -46,6 +46,7 @@ export const useCreateTag = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync();
     },
   });
 };
@@ -72,12 +73,12 @@ export const useUpdateTag = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync();
     },
   });
 };
 
 export const useDeleteTag = () => {
-  const { hideModal, setModalLoading } = useModal();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -85,12 +86,12 @@ export const useDeleteTag = () => {
 
     meta: {
       errorTitle: "Erro ao deletar tags",
+      closeModalOnSuccess: true,
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
-      hideModal();
-      setModalLoading(false);
+      triggerSync();
     },
   });
 };
