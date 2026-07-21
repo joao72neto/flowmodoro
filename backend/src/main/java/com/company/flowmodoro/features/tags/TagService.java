@@ -40,6 +40,29 @@ public class TagService {
     }
 
     @Transactional
+    public List<TagModel> saveAll(
+        List<TagModel> tags,
+        UUID projectId,
+        UUID userId
+    ) {
+        validator.validateSameProject(tags, projectId);
+
+        List<TagModel> entities = tags
+            .stream()
+            .map(tag -> {
+                validator.validateUniqueName(tag.getName(), projectId);
+                ProjectModel project = projectService.findById(
+                    projectId,
+                    userId
+                );
+                tag.setProject(project);
+                return tag;
+            })
+            .toList();
+        return tagRepository.saveAll(entities);
+    }
+
+    @Transactional
     public TagModel save(TagModel tag, UUID projectId, UUID userId) {
         validator.validateUniqueName(tag.getName(), projectId);
 

@@ -5,4 +5,5 @@ import com.company.flowmodoro.exception.ErrorResponse.ErrorCode;
 public enum TagErrorCode implements ErrorCode {
     TAG_NOT_FOUND,
     TAG_EXISTS,
+    TAG_PROJECT_MISMATCH,
 }

@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.tags;
 
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
+import com.company.flowmodoro.features.tags.dtos.TagPayloadDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.mappers.TagMapper;
 import jakarta.validation.Valid;
@@ -22,26 +23,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/tags")
 public class TagController {
 
-    private final TagService tagService;
+    private final TagService service;
 
-    private final TagMapper tagMapper;
+    private final TagMapper mapper;
 
-    public TagController(TagService tagService, TagMapper tagMapper) {
-        this.tagService = tagService;
-        this.tagMapper = tagMapper;
+    public TagController(TagService service, TagMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<TagDTO>> saveAll(
+        @Valid @RequestBody List<TagDTO> dtos,
+        @RequestParam UUID projectId,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        List<TagModel> tags = service.saveAll(
+            mapper.toEntity(dtos),
+            projectId,
+            userId
+        );
+
+        return ResponseEntity.status(201).body(mapper.toDTO(tags));
     }
 
     @PostMapping
     public ResponseEntity<TagDTO> save(
-        @Valid @RequestBody TagDTO dto,
+        @Valid @RequestBody TagPayloadDTO dto,
+        @RequestParam UUID projectId,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        TagModel tag = tagService.save(
-            tagMapper.toEntity(dto),
-            dto.getProjectId(),
-            userId
-        );
-        return ResponseEntity.status(201).body(tagMapper.toDTO(tag));
+        TagModel tag = service.save(mapper.fromPayload(dto), projectId, userId);
+        return ResponseEntity.status(201).body(mapper.toDTO(tag));
     }
 
     @GetMapping
@@ -49,7 +62,7 @@ public class TagController {
         @RequestParam UUID projectId,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        List<TagDTO> tags = tagService.findAllByProject(projectId, userId);
+        List<TagDTO> tags = service.findAllByProject(projectId, userId);
         return ResponseEntity.ok(tags);
     }
 
@@ -59,8 +72,8 @@ public class TagController {
         @Valid @RequestBody TagUpdateDTO dto,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        TagModel tag = tagService.update(id, dto, userId);
-        return ResponseEntity.ok(tagMapper.toDTO(tag));
+        TagModel tag = service.update(id, dto, userId);
+        return ResponseEntity.ok(mapper.toDTO(tag));
     }
 
     @DeleteMapping("/{id}")
@@ -68,7 +81,7 @@ public class TagController {
         @PathVariable UUID id,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        tagService.delete(id, userId);
+        service.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
 }

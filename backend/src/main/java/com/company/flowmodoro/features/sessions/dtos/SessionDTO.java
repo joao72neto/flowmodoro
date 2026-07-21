@@ -1,7 +1,7 @@
 package com.company.flowmodoro.features.sessions.dtos;
 
 import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
-import com.company.flowmodoro.features.tags.dtos.TagSessionDTO;
+import com.company.flowmodoro.features.tags.dtos.TagPayloadDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
@@ -30,5 +30,5 @@ public class SessionDTO {
 
     private ProjectDTO project;
 
-    private TagSessionDTO tag;
+    private TagPayloadDTO tag;
 }

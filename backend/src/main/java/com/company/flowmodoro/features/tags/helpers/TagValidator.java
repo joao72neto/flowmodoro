@@ -5,6 +5,7 @@ import com.company.flowmodoro.features.tags.TagModel;
 import com.company.flowmodoro.features.tags.TagRepository;
 import com.company.flowmodoro.features.tags.enums.TagErrorCode;
 import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,19 @@ public class TagValidator {
             throw new InvalidTagException(
                 TagErrorCode.TAG_EXISTS,
                 "Tag com nome '" + name + "' já existe"
+            );
+        }
+    }
+
+    public void validateSameProject(List<TagModel> tags, UUID projectId) {
+        if (
+            tags
+                .stream()
+                .anyMatch(tag -> !tag.getProject().getId().equals(projectId))
+        ) {
+            throw new InvalidTagException(
+                TagErrorCode.TAG_PROJECT_MISMATCH,
+                "Tags precisam pertencer ao mesmo projeto"
             );
         }
     }
