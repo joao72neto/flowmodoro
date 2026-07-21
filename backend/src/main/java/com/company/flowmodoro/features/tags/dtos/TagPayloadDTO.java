@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.tags.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +18,7 @@ public class TagPayloadDTO {
 
     @NotBlank(message = "Tag name is required")
     private String name;
+
+    @NotNull(message = "Project ID is required")
+    private UUID projectId;
 }

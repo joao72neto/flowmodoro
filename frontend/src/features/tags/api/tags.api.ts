@@ -1,6 +1,6 @@
 import api from "../../../configs/api.configs";
 import type { TagDTO } from "../dtos/tags-response";
-import type { TagPayloadDTO } from "../dtos/tags-request";
+import type { TagCreateDTO, TagPayloadDTO } from "../dtos/tags-request";
 
 export const fetchTagsByProject = async (
   projectId: number,
@@ -36,7 +36,7 @@ export const createTags = async ({
   data,
   projectId,
 }: {
-  data: TagPayloadDTO[];
+  data: TagCreateDTO[];
   projectId: string;
 }): Promise<TagDTO[]> => {
   const res = await api.post<TagDTO[]>("/tags/bulk", data, {

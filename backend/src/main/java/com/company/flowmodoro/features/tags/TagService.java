@@ -2,6 +2,7 @@ package com.company.flowmodoro.features.tags;
 
 import com.company.flowmodoro.features.projects.ProjectModel;
 import com.company.flowmodoro.features.projects.ProjectService;
+import com.company.flowmodoro.features.projects.helpers.ProjectValidator;
 import com.company.flowmodoro.features.sessions.SessionModel;
 import com.company.flowmodoro.features.sessions.SessionRepository;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
@@ -30,34 +31,41 @@ public class TagService {
 
     private final TagValidator validator;
 
+    private final ProjectValidator projectValidator;
+
     public TagService(
         TagRepository tagRepository,
         ProjectService projectService,
         TagUpdateMapper updateMapper,
         SessionRepository sessionRepository,
-        TagValidator validator
+        TagValidator validator,
+        ProjectValidator projectValidator
     ) {
         this.tagRepository = tagRepository;
         this.projectService = projectService;
         this.updateMapper = updateMapper;
         this.sessionRepository = sessionRepository;
         this.validator = validator;
+        this.projectValidator = projectValidator;
     }
 
     @Transactional
-    public List<TagModel> saveAll(
-        List<TagModel> tags,
-        UUID projectId,
-        UUID userId
-    ) {
+    public List<TagModel> saveAll(List<TagModel> tags, UUID userId) {
         List<TagModel> entities = tags
             .stream()
             .map(tag -> {
-                validator.validateUniqueName(tag.getName(), projectId);
+                projectValidator.validateProjectExists(tag.getProject());
+
+                validator.validateUniqueName(
+                    tag.getName(),
+                    tag.getProject().getId()
+                );
+
                 ProjectModel project = projectService.findById(
-                    projectId,
+                    tag.getProject().getId(),
                     userId
                 );
+
                 tag.setProject(project);
                 return tag;
             })
@@ -66,10 +74,15 @@ public class TagService {
     }
 
     @Transactional
-    public TagModel save(TagModel tag, UUID projectId, UUID userId) {
-        validator.validateUniqueName(tag.getName(), projectId);
+    public TagModel save(TagModel tag, UUID userId) {
+        projectValidator.validateProjectExists(tag.getProject());
 
-        ProjectModel project = projectService.findById(projectId, userId);
+        validator.validateUniqueName(tag.getName(), tag.getProject().getId());
+
+        ProjectModel project = projectService.findById(
+            tag.getProject().getId(),
+            userId
+        );
 
         tag.setProject(project);
 

@@ -2,7 +2,7 @@ import { db } from "../../local/indexedDB";
 import type { TagModel } from "./local/tag.model";
 import { createTags } from "./api/tags.api";
 
-import type { TagPayloadDTO } from "./dtos/tags-request";
+import type { TagCreateDTO } from "./dtos/tags-request";
 
 import mapper from "./tags.mappers";
 
@@ -19,7 +19,7 @@ class SyncTags {
 
     if (tags.length === 0) return;
 
-    const payload: TagPayloadDTO[] = mapper.toPayloadList(tags);
+    const payload: TagCreateDTO[] = mapper.toCreateDTOList(tags);
     await createTags({ data: payload, projectId: tags[0].projectId });
 
     await db.tags.bulkPut(tags.map((t) => ({ ...t, pending_action: null })));
