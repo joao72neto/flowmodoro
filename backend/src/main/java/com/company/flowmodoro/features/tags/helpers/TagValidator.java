@@ -5,6 +5,7 @@ import com.company.flowmodoro.features.tags.TagModel;
 import com.company.flowmodoro.features.tags.TagRepository;
 import com.company.flowmodoro.features.tags.enums.TagErrorCode;
 import com.company.flowmodoro.features.tags.exceptions.InvalidTagException;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +45,24 @@ public class TagValidator {
             throw new InvalidProjectException(
                 TagErrorCode.TAG_NOT_FOUND,
                 "Tag not found"
+            );
+        }
+    }
+
+    public void validateTagsFound(List<UUID> ids, List<TagModel> tags) {
+        if (tags.size() != ids.size()) {
+            throw new InvalidTagException(
+                TagErrorCode.TAG_NOT_FOUND,
+                "One or more projects were not found"
+            );
+        }
+    }
+
+    public void validateTagBelongsToUser(TagModel tag, UUID userId) {
+        if (!tag.getProject().getUserId().equals(userId)) {
+            throw new InvalidTagException(
+                TagErrorCode.TAG_PROJECT_MISMATCH,
+                "Tag does not belong to this user"
             );
         }
     }

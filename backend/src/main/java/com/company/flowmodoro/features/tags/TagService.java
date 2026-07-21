@@ -2,6 +2,7 @@ package com.company.flowmodoro.features.tags;
 
 import com.company.flowmodoro.features.projects.ProjectModel;
 import com.company.flowmodoro.features.projects.ProjectService;
+import com.company.flowmodoro.features.sessions.SessionModel;
 import com.company.flowmodoro.features.sessions.SessionRepository;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
 import com.company.flowmodoro.features.tags.dtos.TagPayloadDTO;
@@ -131,14 +132,39 @@ public class TagService {
     }
 
     @Transactional
+    public void deleteAll(List<UUID> ids, UUID userId) {
+        List<TagModel> tags = tagRepository.findAllById(ids);
+
+        validator.validateTagsFound(ids, tags);
+
+        tags.forEach(tag -> {
+            validator.validateTagBelongsToUser(tag, userId);
+        });
+
+        tags.forEach(tag -> {
+            List<SessionModel> sessions = sessionRepository.findByTagAndUserId(
+                tag,
+                userId
+            );
+            sessions.forEach(session -> session.setTag(null));
+        });
+
+        tagRepository.deleteAll(tags);
+    }
+
+    @Transactional
     public void delete(UUID id, UUID userId) {
         TagModel tag = tagRepository.findById(id).orElse(null);
 
         validator.validateTagExists(tag);
 
-        projectService.findById(tag.getProject().getId(), userId);
+        validator.validateTagBelongsToUser(tag, userId);
 
-        var sessions = sessionRepository.findByTagAndUserId(tag, userId);
+        List<SessionModel> sessions = sessionRepository.findByTagAndUserId(
+            tag,
+            userId
+        );
+
         sessions.forEach(session -> session.setTag(null));
 
         tagRepository.delete(tag);

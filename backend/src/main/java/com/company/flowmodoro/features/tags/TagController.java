@@ -86,6 +86,15 @@ public class TagController {
         return ResponseEntity.ok(mapper.toDTO(tag));
     }
 
+    @DeleteMapping("/bulk")
+    public ResponseEntity<Void> deleteAll(
+        @RequestBody List<UUID> ids,
+        @RequestHeader("X-User-Id") UUID userId
+    ) {
+        service.deleteAll(ids, userId);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @PathVariable UUID id,
