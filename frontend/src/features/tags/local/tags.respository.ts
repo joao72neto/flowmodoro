@@ -66,8 +66,7 @@ export const updateTag = async ({
 
   const updatedTag: TagModel = applyUpdates({ id, old, updated: data });
 
-  await db.tags.update(id, data);
-
+  await db.tags.update(id, updatedTag);
   return mapper.fromModel(updatedTag);
 };
 

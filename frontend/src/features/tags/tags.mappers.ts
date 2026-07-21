@@ -1,5 +1,9 @@
 import type { TagDTO } from "./dtos/tags-response";
-import type { TagPayloadDTO, TagCreateDTO } from "./dtos/tags-request";
+import type {
+  TagPayloadDTO,
+  TagCreateDTO,
+  TagUpdateBulkDTO,
+} from "./dtos/tags-request";
 import type { TagModel } from "./local/tag.model";
 
 class TagMapper {
@@ -48,6 +52,17 @@ class TagMapper {
 
   toCreateDTOList = (tags: TagModel[]): TagCreateDTO[] => {
     return tags.map((tag) => this.toCreateDTO(tag));
+  };
+
+  toUpdateBulkDTO = (tag: TagModel): TagUpdateBulkDTO => {
+    return {
+      id: tag.id,
+      name: tag.name,
+    };
+  };
+
+  toUpdateBulkDTOList = (tags: TagModel[]): TagUpdateBulkDTO[] => {
+    return tags.map((tag) => this.toUpdateBulkDTO(tag));
   };
 }
 
