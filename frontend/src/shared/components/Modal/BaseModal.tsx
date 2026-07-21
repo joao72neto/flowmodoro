@@ -3,7 +3,7 @@ import Button from "../buttons/Button/Button";
 import { MdOutlineCancel } from "react-icons/md";
 import { GiConfirmed } from "react-icons/gi";
 import ModalContainer from "./ModalContainer";
-import type { VariantType } from "../../global.types";
+import type { VariantType } from "../../types/global.types";
 
 const BaseModal = ({
   title,

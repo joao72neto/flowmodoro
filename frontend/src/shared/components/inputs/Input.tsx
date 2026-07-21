@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { VariantType } from "../../global.types";
+import type { VariantType } from "../../types/global.types";
 import { forwardRef, type InputHTMLAttributes } from "react";
 
 const focusVariants = {

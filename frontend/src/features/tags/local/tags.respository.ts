@@ -7,6 +7,7 @@ import type { TagModel } from "./tag.model";
 import { applyUpdates } from "./utils/apply-updates";
 
 import mapper from "../tags.mappers";
+import { resolvePendingAction } from "../../../shared/utils/pending-action.utils";
 
 export const fetchTagsByProject = async (
   projectId: string,
@@ -51,7 +52,6 @@ export const createTag = async (payload: TagPayloadDTO): Promise<TagDTO> => {
   };
 
   await db.tags.add(tag);
-
   return mapper.fromModel(tag);
 };
 
@@ -63,8 +63,20 @@ export const updateTag = async ({
   data: TagPayloadDTO;
 }) => {
   const old = await db.tags.get(id);
+  if (!old) throw new Error("Tag not found locally");
 
-  const updatedTag: TagModel = applyUpdates({ id, old, updated: data });
+  const resolvedAction = resolvePendingAction(
+    old.pending_action ?? null,
+    "UPDATE",
+  );
+  const pending_action = resolvedAction;
+
+  const updatedTag: TagModel = applyUpdates({
+    id,
+    old,
+    updated: data,
+    pending_action,
+  });
 
   await db.tags.update(id, updatedTag);
   return mapper.fromModel(updatedTag);
@@ -74,13 +86,18 @@ export const deleteTag = async (id: string) => {
   const tag = await db.tags.get(id);
   if (!tag) return;
 
-  if (tag.pending_action === "CREATE") {
+  const resolvedAction = resolvePendingAction(
+    tag.pending_action ?? null,
+    "DELETE",
+  );
+
+  if (resolvedAction === "DISCARD") {
     await db.tags.delete(id);
     return;
   }
 
   await db.tags.update(id, {
     deleted: true,
-    pending_action: "DELETE",
+    pending_action: resolvedAction,
   });
 };

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { VariantType } from "../../global.types";
+import type { VariantType } from "../../types/global.types";
 import { variants } from "./Button/buttonVariants";
 
 import { type ButtonHTMLAttributes } from "react";
