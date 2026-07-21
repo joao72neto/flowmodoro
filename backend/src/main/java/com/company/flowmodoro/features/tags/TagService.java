@@ -6,7 +6,7 @@ import com.company.flowmodoro.features.projects.helpers.ProjectValidator;
 import com.company.flowmodoro.features.sessions.SessionModel;
 import com.company.flowmodoro.features.sessions.SessionRepository;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
-import com.company.flowmodoro.features.tags.dtos.TagPayloadDTO;
+import com.company.flowmodoro.features.tags.dtos.TagUpdateBulkDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.helpers.TagValidator;
 import com.company.flowmodoro.features.tags.mappers.TagUpdateMapper;
@@ -95,12 +95,8 @@ public class TagService {
     }
 
     @Transactional
-    public List<TagModel> updateAll(
-        List<TagPayloadDTO> dtos,
-        UUID projectId,
-        UUID userId
-    ) {
-        List<UUID> ids = dtos.stream().map(TagPayloadDTO::getId).toList();
+    public List<TagModel> updateAll(List<TagUpdateBulkDTO> dtos, UUID userId) {
+        List<UUID> ids = dtos.stream().map(TagUpdateBulkDTO::getId).toList();
 
         Map<UUID, TagModel> tags = tagRepository
             .findAllById(ids)
@@ -114,11 +110,17 @@ public class TagService {
 
                 validator.validateTagExists(tag);
 
-                validator.validateUniqueName(tag, dto.getName(), projectId);
+                validator.validateUniqueName(
+                    tag,
+                    dto.getName(),
+                    tag.getProject().getId()
+                );
 
                 updateMapper.apply(tag, dto);
 
-                tag.setProject(projectService.findById(projectId, userId));
+                tag.setProject(
+                    projectService.findById(tag.getProject().getId(), userId)
+                );
 
                 return tag;
             })

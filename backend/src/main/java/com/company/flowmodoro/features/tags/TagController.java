@@ -1,7 +1,8 @@
 package com.company.flowmodoro.features.tags;
 
+import com.company.flowmodoro.features.tags.dtos.TagCreateDTO;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
-import com.company.flowmodoro.features.tags.dtos.TagPayloadDTO;
+import com.company.flowmodoro.features.tags.dtos.TagUpdateBulkDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.mappers.TagMapper;
 import jakarta.validation.Valid;
@@ -43,7 +44,7 @@ public class TagController {
 
     @PostMapping("/bulk")
     public ResponseEntity<List<TagDTO>> saveAll(
-        @Valid @RequestBody List<TagPayloadDTO> dtos,
+        @Valid @RequestBody List<TagCreateDTO> dtos,
         @RequestHeader("X-User-Id") UUID userId
     ) {
         List<TagModel> tags = service.saveAll(
@@ -55,7 +56,7 @@ public class TagController {
 
     @PostMapping
     public ResponseEntity<TagDTO> save(
-        @Valid @RequestBody TagPayloadDTO dto,
+        @Valid @RequestBody TagCreateDTO dto,
         @RequestHeader("X-User-Id") UUID userId
     ) {
         TagModel tag = service.save(mapper.fromPayload(dto, userId), userId);
@@ -64,11 +65,10 @@ public class TagController {
 
     @PutMapping("/bulk")
     public ResponseEntity<List<TagDTO>> updateAll(
-        @Valid @RequestBody List<TagPayloadDTO> dtos,
-        @RequestParam UUID projectId,
+        @Valid @RequestBody List<TagUpdateBulkDTO> dtos,
         @RequestHeader("X-User-Id") UUID userId
     ) {
-        List<TagModel> tags = service.updateAll(dtos, projectId, userId);
+        List<TagModel> tags = service.updateAll(dtos, userId);
         return ResponseEntity.ok(mapper.toDTO(tags));
     }
 

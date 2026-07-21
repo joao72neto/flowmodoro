@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagPayloadDTO {
+public class TagCreateDTO {
 
     private UUID id;
 

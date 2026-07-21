@@ -3,7 +3,7 @@ package com.company.flowmodoro.features.tags.mappers;
 import com.company.flowmodoro.features.projects.ProjectService;
 import com.company.flowmodoro.features.tags.TagModel;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
-import com.company.flowmodoro.features.tags.dtos.TagPayloadDTO;
+import com.company.flowmodoro.features.tags.dtos.TagCreateDTO;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class TagMapper {
         return dtos.stream().map(this::toEntity).toList();
     }
 
-    public TagModel fromPayload(TagPayloadDTO dto, UUID userId) {
+    public TagModel fromPayload(TagCreateDTO dto, UUID userId) {
         return TagModel.builder()
             .id(dto.getId())
             .name(dto.getName())
@@ -33,7 +33,7 @@ public class TagMapper {
             .build();
     }
 
-    public List<TagModel> fromPayload(List<TagPayloadDTO> dtos, UUID userId) {
+    public List<TagModel> fromPayload(List<TagCreateDTO> dtos, UUID userId) {
         return dtos
             .stream()
             .map(dto -> fromPayload(dto, userId))
