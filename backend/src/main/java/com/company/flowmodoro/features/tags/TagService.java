@@ -45,8 +45,6 @@ public class TagService {
         UUID projectId,
         UUID userId
     ) {
-        validator.validateSameProject(tags, projectId);
-
         List<TagModel> entities = tags
             .stream()
             .map(tag -> {

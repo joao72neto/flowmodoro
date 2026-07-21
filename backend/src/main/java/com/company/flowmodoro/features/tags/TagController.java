@@ -34,12 +34,12 @@ public class TagController {
 
     @PostMapping("/bulk")
     public ResponseEntity<List<TagDTO>> saveAll(
-        @Valid @RequestBody List<TagDTO> dtos,
+        @Valid @RequestBody List<TagPayloadDTO> dtos,
         @RequestParam UUID projectId,
         @RequestHeader("X-User-Id") UUID userId
     ) {
         List<TagModel> tags = service.saveAll(
-            mapper.toEntity(dtos),
+            mapper.fromPayload(dtos),
             projectId,
             userId
         );

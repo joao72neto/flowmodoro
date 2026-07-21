@@ -21,6 +21,10 @@ public class TagMapper {
         return TagModel.builder().id(dto.getId()).name(dto.getName()).build();
     }
 
+    public List<TagModel> fromPayload(List<TagPayloadDTO> dtos) {
+        return dtos.stream().map(this::fromPayload).toList();
+    }
+
     public TagDTO toDTO(TagModel entity) {
         return TagDTO.builder()
             .id(entity.getId())
