@@ -12,7 +12,13 @@ export const fetchTagsByProject = async (
   projectId: string,
 ): Promise<TagDTO[]> => {
   const [tags, sessions] = await Promise.all([
-    db.tags.where("projectId").equals(projectId).toArray(),
+    db.tags
+      .where("projectId")
+      .equals(projectId)
+      .reverse()
+      .filter((t) => !t.deleted)
+      .toArray(),
+
     db.sessions.toArray(),
   ]);
 
@@ -66,5 +72,16 @@ export const updateTag = async ({
 };
 
 export const deleteTag = async (id: string) => {
-  await db.tags.delete(id);
+  const tag = await db.tags.get(id);
+  if (!tag) return;
+
+  if (tag.pending_action === "CREATE") {
+    await db.tags.delete(id);
+    return;
+  }
+
+  await db.tags.update(id, {
+    deleted: true,
+    pending_action: "DELETE",
+  });
 };
