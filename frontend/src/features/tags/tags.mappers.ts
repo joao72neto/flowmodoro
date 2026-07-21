@@ -26,6 +26,17 @@ class TagMapper {
       pending_action: null,
     };
   };
+
+  toPayload = (tag: TagModel): TagPayloadDTO => {
+    return {
+      name: tag.name,
+      projectId: tag.projectId,
+    };
+  };
+
+  toPayloadList = (tags: TagModel[]): TagPayloadDTO[] => {
+    return tags.map((tag) => this.toPayload(tag));
+  };
 }
 
 export default new TagMapper();

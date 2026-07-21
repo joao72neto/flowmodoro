@@ -1,5 +1,10 @@
 import { db } from "../../local/indexedDB";
 import type { TagModel } from "./local/tag.model";
+import { createTags } from "./api/tags.api";
+
+import type { TagPayloadDTO } from "./dtos/tags-request";
+
+import mapper from "./tags.mappers";
 
 class SyncTags {
   async syncTags() {
@@ -14,8 +19,8 @@ class SyncTags {
 
     if (tags.length === 0) return;
 
-    // const payload: TagPayloadDTO[] = mapper.toPayloadList(tags);
-    // await createTags(payload);
+    const payload: TagPayloadDTO[] = mapper.toPayloadList(tags);
+    await createTags({ data: payload, projectId: tags[0].projectId });
 
     await db.tags.bulkPut(tags.map((t) => ({ ...t, pending_action: null })));
   }

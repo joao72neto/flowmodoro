@@ -39,7 +39,10 @@ export const fetchTagsByProject = async (
 };
 
 export const createTag = async (payload: TagPayloadDTO): Promise<TagDTO> => {
-  const tag: TagModel = mapper.fromPayload(payload);
+  const tag: TagModel = {
+    ...mapper.fromPayload(payload),
+    pending_action: "CREATE",
+  };
 
   await db.tags.add(tag);
 
