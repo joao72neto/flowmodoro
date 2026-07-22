@@ -66,4 +66,13 @@ public class TagValidator {
             );
         }
     }
+
+    public void validateProjectIdIsNotNull(UUID projectId) {
+        if (projectId == null) {
+            throw new InvalidTagException(
+                TagErrorCode.TAG_PROJECT_MISMATCH,
+                "Project ID is required"
+            );
+        }
+    }
 }

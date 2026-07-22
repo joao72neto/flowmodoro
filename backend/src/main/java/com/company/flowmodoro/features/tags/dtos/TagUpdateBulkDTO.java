@@ -17,4 +17,6 @@ public class TagUpdateBulkDTO {
 
     @NotBlank(message = "Tag name is required")
     private String name;
+
+    private UUID projectId;
 }

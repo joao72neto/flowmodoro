@@ -98,7 +98,7 @@ public class TagService {
     public List<TagModel> updateAll(List<TagUpdateBulkDTO> dtos, UUID userId) {
         List<UUID> ids = dtos.stream().map(TagUpdateBulkDTO::getId).toList();
 
-        Map<UUID, TagModel> tags = tagRepository
+        Map<UUID, TagModel> existingTags = tagRepository
             .findAllById(ids)
             .stream()
             .collect(Collectors.toMap(TagModel::getId, Function.identity()));
@@ -106,27 +106,39 @@ public class TagService {
         List<TagModel> entities = dtos
             .stream()
             .map(dto -> {
-                TagModel tag = tags.get(dto.getId());
+                TagModel existing = existingTags.get(dto.getId());
 
-                validator.validateTagExists(tag);
+                if (existing == null) {
+                    return createFromBulkDTO(dto, userId);
+                }
 
                 validator.validateUniqueName(
-                    tag,
+                    existing,
                     dto.getName(),
-                    tag.getProject().getId()
+                    existing.getProject().getId()
                 );
-
-                updateMapper.apply(tag, dto);
-
-                tag.setProject(
-                    projectService.findById(tag.getProject().getId(), userId)
+                updateMapper.apply(existing, dto);
+                existing.setProject(
+                    projectService.findById(
+                        existing.getProject().getId(),
+                        userId
+                    )
                 );
-
-                return tag;
+                return existing;
             })
             .toList();
 
         return tagRepository.saveAll(entities);
+    }
+
+    private TagModel createFromBulkDTO(TagUpdateBulkDTO dto, UUID userId) {
+        validator.validateProjectIdIsNotNull(dto.getProjectId());
+
+        TagModel tag = new TagModel();
+        tag.setId(dto.getId());
+        tag.setName(dto.getName());
+        tag.setProject(projectService.findById(dto.getProjectId(), userId));
+        return tag;
     }
 
     @Transactional
