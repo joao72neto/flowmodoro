@@ -9,6 +9,7 @@ import type { ProjectModel } from "./project.model";
 import { applyUpdates } from "./utils/apply-updates";
 
 import mapper from "../projects.mappers";
+import { resolvePendingAction } from "../../../shared/utils/pending-action.utils";
 
 export const fetchProjects = async (): Promise<ProjectDTO[]> => {
   const [projects, sessions] = await Promise.all([
@@ -58,11 +59,18 @@ export const updateProject = async ({
   data: ProjectUpdateDTO;
 }): Promise<ProjectDTO> => {
   const old = await db.projects.get(id);
+  if (!old) throw new Error("Project not found locally");
+
+  const pending_action = resolvePendingAction(
+    old.pending_action ?? null,
+    "UPDATE",
+  );
 
   const updatedProject: ProjectModel = applyUpdates({
     id,
     old,
     updated: data,
+    pending_action,
   });
 
   await db.projects.update(id, updatedProject);
@@ -73,13 +81,18 @@ export const deleteProject = async (id: string) => {
   const project = await db.projects.get(id);
   if (!project) return;
 
-  if (project.pending_action === "CREATE") {
+  const resolvedAction = resolvePendingAction(
+    project.pending_action ?? null,
+    "DELETE",
+  );
+
+  if (resolvedAction === "DISCARD") {
     await db.projects.delete(id);
     return;
   }
 
   await db.projects.update(id, {
     deleted: true,
-    pending_action: "DELETE",
+    pending_action: resolvedAction,
   });
 };

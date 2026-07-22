@@ -13,7 +13,7 @@ export const applyUpdates = ({
   id: string;
   old?: TagModel;
   updated?: TagPayloadDTO;
-  pending_action?: PendingActionType;
+  pending_action: PendingActionType;
 }): TagModel => {
   return {
     id,

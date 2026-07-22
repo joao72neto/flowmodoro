@@ -10,6 +10,8 @@ import type {
 import { applyUpdates } from "./utils/apply-updates";
 import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
 
+import { resolvePendingAction } from "../../../shared/utils/pending-action.utils";
+
 import mapper from "../sessions.mappers";
 
 export const fetchSessions = async ({
@@ -70,18 +72,23 @@ export const updateSession = async ({
   data: SessionUpdateDTO;
 }): Promise<SessionDTO> => {
   const old = await db.sessions.get(id);
+  if (!old) throw new Error("Session not found locally");
+
+  const pending_action = resolvePendingAction(
+    old.pending_action ?? null,
+    "UPDATE",
+  );
 
   const updatedSession: SessionModel = applyUpdates({
     id,
     old,
     updated: data,
+    pending_action,
   });
 
   await db.sessions.update(id, updatedSession);
-
   const project = await db.projects.get(updatedSession.projectId || "");
   const tag = await db.tags.get(updatedSession.tagId || "");
-
   return mapper.buildDTO({ session: updatedSession, project, tag });
 };
 
@@ -89,13 +96,18 @@ export const deleteSession = async (id: string) => {
   const session = await db.sessions.get(id);
   if (!session) return;
 
-  if (session.pending_action === "CREATE") {
+  const resolvedAction = resolvePendingAction(
+    session.pending_action ?? null,
+    "DELETE",
+  );
+
+  if (resolvedAction === "DISCARD") {
     await db.sessions.delete(id);
     return;
   }
 
   await db.sessions.update(id, {
     deleted: true,
-    pending_action: "DELETE",
+    pending_action: resolvedAction,
   });
 };
