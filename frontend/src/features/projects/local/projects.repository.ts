@@ -86,13 +86,16 @@ export const deleteProject = async (id: string) => {
     "DELETE",
   );
 
-  if (resolvedAction === "DISCARD") {
-    await db.projects.delete(id);
-    return;
-  }
+  await db.transaction("rw", [db.projects, db.tags], async () => {
+    await db.tags.where("projectId").equals(id).delete();
 
-  await db.projects.update(id, {
-    deleted: true,
-    pending_action: resolvedAction,
+    if (resolvedAction === "DISCARD") {
+      await db.projects.delete(id);
+    } else {
+      await db.projects.update(id, {
+        deleted: true,
+        pending_action: resolvedAction,
+      });
+    }
   });
 };
