@@ -84,91 +84,76 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
             "border-l-4",
             borderColorClass,
           )}
+          direction="row"
           gap={3}
           onClick={
             isTogglable ? handleToggle : () => setShowSessionDetailsModal(true)
           }
         >
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full">
-            <div className="flex gap-3 items-center justify-between sm:justify-start w-full sm:w-auto sm:flex-1 min-w-0">
-              <div className="flex items-center gap-3 min-w-0">
-                {isTogglable && (
-                  <span
-                    className={clsx(
-                      "text-sm font-semibold px-3 py-1.5 rounded-full border border-border",
-                      "bg-neutral-60/30 text-neutral-30 shrink-0",
-                    )}
-                  >
-                    {sessionGroup.sessions.length}
-                  </span>
-                )}
-
-                <span className="text-lg sm:text-xl font-medium line-clamp-1 break-all">
-                  {capitalize(sessionGroup.name)}
-                </span>
-              </div>
-              {!showTagAndProject && (
-                <div className="flex items-center gap-2 sm:ml-auto shrink-0">
-                  <span className={clsx(totalFocusClasses)}>
-                    {formatToHour(sessionGroup.totalFocus)}
-                  </span>
+          <div className="flex flex-col w-full gap-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full">
+              <div className="flex gap-3 items-center justify-between sm:justify-start w-full sm:w-auto sm:flex-1 min-w-0">
+                <div className="flex items-center gap-3 min-w-0">
                   {isTogglable && (
-                    <GoChevronDown
+                    <span
                       className={clsx(
-                        "text-neutral-40 transition-transform duration-200 text-lg",
-                        isOpen && "rotate-180",
+                        "text-sm font-semibold px-3 py-1.5 rounded-full border border-border",
+                        "bg-neutral-60/30 text-neutral-30 shrink-0",
                       )}
-                    />
+                    >
+                      {sessionGroup.sessions.length}
+                    </span>
                   )}
+
+                  <span className="text-lg sm:text-xl font-medium line-clamp-1 break-all">
+                    {capitalize(sessionGroup.name)}
+                  </span>
                 </div>
-              )}
+              </div>
             </div>
 
             {showTagAndProject && (
-              <div className="flex justify-between w-full sm:w-auto sm:flex-1 sm:justify-end sm:items-center sm:gap-6 min-w-0">
-                <div className="flex items-center gap-2 min-w-0 sm:flex-1">
-                  {project?.name && (
-                    <Label icon={<GoProject />}>{project.name}</Label>
-                  )}
-                  {tag?.name && (
-                    <Label variant="secondary" icon={<IoMdPricetag />}>
-                      {tag.name}
-                    </Label>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className={clsx(totalFocusClasses)}>
-                    {formatToHour(sessionGroup.totalFocus)}
-                  </span>
-                  {isTogglable && (
-                    <GoChevronDown
-                      className={clsx(
-                        "text-neutral-40 transition-transform duration-200 text-lg",
-                        isOpen && "rotate-180",
-                      )}
-                    />
-                  )}
-                </div>
+              <div className="flex self-start items-center gap-2 min-w-0 sm:flex-1">
+                {project?.name && (
+                  <Label icon={<GoProject />}>{project.name}</Label>
+                )}
+                {tag?.name && (
+                  <Label variant="secondary" icon={<IoMdPricetag />}>
+                    {tag.name}
+                  </Label>
+                )}
               </div>
             )}
           </div>
-        </Stack>
-        <AnimatedCollapse show={isOpen}>
-          <div>
-            <Stack gap={2} className="mt-2 ml-5 border-l border-border pl-4">
-              {sessionGroup.sessions.map((session) => (
-                <Session
-                  key={session.id}
-                  session={session}
-                  onClick={() => {
-                    setSelectedSession(session);
-                    setShowSessionDetailsModal(true);
-                  }}
-                />
-              ))}
-            </Stack>
+
+          <div className="flex items-center gap-2">
+            <span className={clsx(totalFocusClasses)}>
+              {formatToHour(sessionGroup.totalFocus)}
+            </span>
+
+            <GoChevronDown
+              className={clsx(
+                "text-neutral-40 transition-transform duration-200 text-lg",
+                isOpen && "rotate-180",
+                !isTogglable && "opacity-0",
+              )}
+            />
           </div>
+        </Stack>
+
+        <AnimatedCollapse show={isOpen}>
+          <Stack gap={2} className="mt-2 ml-5 border-l border-border pl-4">
+            {sessionGroup.sessions.map((session) => (
+              <Session
+                key={session.id}
+                session={session}
+                onClick={() => {
+                  setSelectedSession(session);
+                  setShowSessionDetailsModal(true);
+                }}
+              />
+            ))}
+          </Stack>
         </AnimatedCollapse>
       </div>
 
