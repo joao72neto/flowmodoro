@@ -97,4 +97,37 @@ public class SessionValidator {
         session.setUserId(userId);
         return session;
     }
+
+    public void validateSessionsFound(
+        List<UUID> ids,
+        List<SessionModel> sessions
+    ) {
+        if (ids.size() != sessions.size()) {
+            throw new InvalidSessionException(
+                SessionErrorCode.SESSION_NOT_FOUND,
+                "Session not found for one or more ids"
+            );
+        }
+    }
+
+    public void validateSessionExists(SessionModel session) {
+        if (session == null) {
+            throw new InvalidSessionException(
+                SessionErrorCode.SESSION_NOT_FOUND,
+                "Session not found"
+            );
+        }
+    }
+
+    public void validateSessionBelongsToUser(
+        SessionModel session,
+        UUID userId
+    ) {
+        if (!session.getUserId().equals(userId)) {
+            throw new InvalidSessionException(
+                SessionErrorCode.SESSION_NOT_FOUND,
+                "Session not found for this user"
+            );
+        }
+    }
 }

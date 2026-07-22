@@ -3,8 +3,6 @@ package com.company.flowmodoro.features.sessions;
 import com.company.flowmodoro.common.dto.PageResponse;
 import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
-import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
-import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
 import com.company.flowmodoro.features.sessions.helpers.SessionValidator;
 import com.company.flowmodoro.features.sessions.mappers.SessionUpdateMapper;
 import java.time.LocalDate;
@@ -24,25 +22,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SessionService {
 
-    private static final SessionErrorCode SESSION_NOT_FOUND =
-        SessionErrorCode.SESSION_NOT_FOUND;
-
     private final SessionRepository sessionRepository;
 
     private final SessionAggregator aggregator;
 
     private final SessionValidator validator;
 
-    private final SessionUpdateMapper sessionUpdateMapper;
+    private final SessionUpdateMapper updateMapper;
 
     public SessionService(
         SessionRepository sessionRepository,
-        SessionUpdateMapper sessionUpdateMapper,
+        SessionUpdateMapper updateMapper,
         SessionAggregator aggregator,
         SessionValidator validator
     ) {
         this.sessionRepository = sessionRepository;
-        this.sessionUpdateMapper = sessionUpdateMapper;
+        this.updateMapper = updateMapper;
 
         this.aggregator = aggregator;
         this.validator = validator;
@@ -109,55 +104,62 @@ public class SessionService {
 
     @Transactional
     public List<SessionModel> updateAll(
-        List<SessionUpdateDTO> sessions,
+        List<SessionUpdateDTO> dtos,
         UUID userId
     ) {
-        Map<UUID, SessionUpdateDTO> updates = sessions
+        List<UUID> ids = dtos.stream().map(SessionUpdateDTO::getId).toList();
+
+        Map<UUID, SessionModel> existingSessions = sessionRepository
+            .findAllById(ids)
             .stream()
             .collect(
-                Collectors.toMap(SessionUpdateDTO::getId, Function.identity())
+                Collectors.toMap(SessionModel::getId, Function.identity())
             );
-
-        List<SessionModel> entities = sessionRepository.findAllById(
-            updates.keySet()
-        );
-
-        if (entities.size() != sessions.size()) {
-            throw new InvalidSessionException(
-                SESSION_NOT_FOUND,
-                "Session not found for one or more ids"
-            );
-        }
 
         List<String> errors = new ArrayList<>();
-        entities.forEach(entity -> {
-            SessionUpdateDTO dto = updates.get(entity.getId());
-            sessionUpdateMapper.apply(dto, entity);
-            validator.validateSessions(entity, errors);
-        });
+
+        List<SessionModel> entities = dtos
+            .stream()
+            .map(dto -> {
+                SessionModel existing = existingSessions.get(dto.getId());
+
+                if (existing == null) {
+                    return createFromBulkDTO(dto, userId);
+                }
+
+                validator.validateSessions(updateMapper.toEntity(dto), errors);
+
+                validator.validateSessionExists(existing);
+
+                updateMapper.apply(dto, existing);
+
+                existing.setUserId(userId);
+
+                return existing;
+            })
+            .toList();
 
         return sessionRepository.saveAll(entities);
     }
 
+    private SessionModel createFromBulkDTO(SessionUpdateDTO dto, UUID userId) {
+        SessionModel session = updateMapper.toEntity(dto);
+        session.setId(dto.getId());
+        session.setName(dto.getName());
+
+        validator.prepareSession(session, userId);
+        return session;
+    }
+
     @Transactional
     public SessionModel update(UUID id, SessionUpdateDTO dto, UUID userId) {
-        SessionModel session = sessionRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new InvalidSessionException(
-                    SESSION_NOT_FOUND,
-                    "Session not found with id: " + id
-                )
-            );
+        SessionModel session = sessionRepository.findById(id).orElse(null);
 
-        if (!session.getUserId().equals(userId)) {
-            throw new InvalidSessionException(
-                SESSION_NOT_FOUND,
-                "Session not found for this user"
-            );
-        }
+        validator.validateSessionExists(session);
 
-        sessionUpdateMapper.apply(dto, session);
+        validator.validateSessionBelongsToUser(session, userId);
+
+        updateMapper.apply(dto, session);
         validator.validateProjectAndTag(session, userId);
 
         List<String> errors = new ArrayList<>();
@@ -170,20 +172,10 @@ public class SessionService {
     public void deleteAll(List<UUID> ids, UUID userId) {
         List<SessionModel> sessions = sessionRepository.findAllById(ids);
 
-        if (sessions.size() != ids.size()) {
-            throw new InvalidSessionException(
-                SESSION_NOT_FOUND,
-                "Session not found for one or more ids"
-            );
-        }
+        validator.validateSessionsFound(ids, sessions);
 
         sessions.forEach(session -> {
-            if (!session.getUserId().equals(userId)) {
-                throw new InvalidSessionException(
-                    SESSION_NOT_FOUND,
-                    "Session not found for this user"
-                );
-            }
+            validator.validateSessionBelongsToUser(session, userId);
         });
 
         sessionRepository.deleteAll(sessions);
@@ -191,21 +183,11 @@ public class SessionService {
 
     @Transactional
     public void delete(UUID id, UUID userId) {
-        SessionModel session = sessionRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new InvalidSessionException(
-                    SESSION_NOT_FOUND,
-                    "Session not found with id: " + id
-                )
-            );
+        SessionModel session = sessionRepository.findById(id).orElse(null);
 
-        if (!session.getUserId().equals(userId)) {
-            throw new InvalidSessionException(
-                SESSION_NOT_FOUND,
-                "Session not found for this user"
-            );
-        }
+        validator.validateSessionExists(session);
+
+        validator.validateSessionBelongsToUser(session, userId);
 
         sessionRepository.deleteById(id);
     }

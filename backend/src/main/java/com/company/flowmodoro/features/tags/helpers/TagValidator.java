@@ -61,8 +61,8 @@ public class TagValidator {
     public void validateTagBelongsToUser(TagModel tag, UUID userId) {
         if (!tag.getProject().getUserId().equals(userId)) {
             throw new InvalidTagException(
-                TagErrorCode.TAG_PROJECT_MISMATCH,
-                "Tag does not belong to this user"
+                TagErrorCode.TAG_NOT_FOUND,
+                "Tag not found for this user"
             );
         }
     }
