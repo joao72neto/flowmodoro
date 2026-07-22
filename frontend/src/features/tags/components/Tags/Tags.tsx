@@ -11,7 +11,6 @@ import ExpandableButton from "../../../../shared/components/buttons/ExpandableBu
 import clsx from "clsx";
 
 import TagsSkeleton from "./TagsSkeleton";
-import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
   useCreateTag,
   useDeleteTag,
@@ -28,8 +27,6 @@ const Tags = ({
   project: ProjectDTO;
   onBack: () => void;
 }) => {
-  const { setModalLoading } = useModal();
-
   const { data: tags, isLoading } = useFetchTagsByProject(project.id || "");
 
   const [editingTag, setEditingTag] = useState<TagDTO | null>(null);
@@ -108,7 +105,6 @@ const Tags = ({
                   key={item.id}
                   tagData={item}
                   onDelete={() => {
-                    setModalLoading(true);
                     handleDeleteTag(item.id);
                   }}
                   onEdit={() => {

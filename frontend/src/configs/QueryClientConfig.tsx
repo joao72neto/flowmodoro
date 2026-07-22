@@ -17,7 +17,7 @@ const isConstraintError = (error: unknown) => {
 };
 
 const QueryClientConfig = ({ children }: { children: React.ReactNode }) => {
-  const { showError, hideModal, setModalLoading } = useModal();
+  const { showError, hideModal } = useModal();
 
   const [queryClient] = useState(
     () =>
@@ -59,7 +59,6 @@ const QueryClientConfig = ({ children }: { children: React.ReactNode }) => {
                   action: hideModal,
                 });
 
-                setModalLoading(false);
                 return;
               }
             }
@@ -76,13 +75,12 @@ const QueryClientConfig = ({ children }: { children: React.ReactNode }) => {
               console.error(error);
             }
 
-            setModalLoading(false);
+            return;
           },
 
           onSuccess: (_data, _variables, _context, mutation) => {
             if (mutation.meta?.closeModalOnSuccess) {
               hideModal();
-              setModalLoading(false);
             }
           },
         }),

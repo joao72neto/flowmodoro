@@ -12,7 +12,6 @@ import clsx from "clsx";
 import Tags from "../../../tags/components/Tags/Tags";
 
 import ProjectsSkeleton from "./ProjectsSkeleton";
-import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import {
   useCreateProject,
   useDeleteProject,
@@ -22,8 +21,6 @@ import {
 import type { ProjectDTO } from "../../dtos/projects-response";
 
 const Projects = () => {
-  const { setModalLoading } = useModal();
-
   const { data: projects, isLoading } = useFetchProjects();
 
   const [selectedProject, setSelectedProject] = useState<ProjectDTO | null>(
@@ -101,7 +98,6 @@ const Projects = () => {
                       key={item.id}
                       projectData={item}
                       onDelete={() => {
-                        setModalLoading(true);
                         handleDeleteProject(item.id);
                       }}
                       onEdit={() => {

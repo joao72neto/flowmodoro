@@ -43,7 +43,7 @@ const SessionDetailsModal = ({
   setIsOpen: (isOpen: boolean) => void;
   session: SessionDTO;
 }) => {
-  const { showDefault, hideModal, setModalLoading } = useModal();
+  const { showDefault, hideModal } = useModal();
 
   const { mutate: updateSession, isPending: isUpdating } = useUpdateSession();
   const { mutate: deleteSession } = useDeleteSession();
@@ -152,11 +152,9 @@ const SessionDetailsModal = ({
   };
 
   const handleConfirmDelete = () => {
-    setModalLoading(true);
     deleteSession(session.id, {
       onSuccess: () => {
         sessionStorage.removeItem(draftKey);
-        setModalLoading(false);
         setIsOpen(false);
         hideModal();
       },
