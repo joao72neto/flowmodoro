@@ -82,7 +82,7 @@ public class ProjectService {
     ) {
         List<UUID> ids = dtos.stream().map(ProjectPayloadDTO::getId).toList();
 
-        Map<UUID, ProjectModel> projects = projectRepository
+        Map<UUID, ProjectModel> existingProjects = projectRepository
             .findAllById(ids)
             .stream()
             .collect(
@@ -92,20 +92,33 @@ public class ProjectService {
         List<ProjectModel> entities = dtos
             .stream()
             .map(dto -> {
-                ProjectModel project = projects.get(dto.getId());
+                ProjectModel existing = existingProjects.get(dto.getId());
 
-                validator.validateProjectExists(project);
+                if (existing == null) {
+                    return createFromBulkDTO(dto, userId);
+                }
 
-                validator.validateUniqueName(project, dto.getName(), userId);
+                validator.validateProjectExists(existing);
 
-                updateMapper.apply(project, dto);
-                project.setUserId(userId);
+                validator.validateUniqueName(existing, dto.getName(), userId);
 
-                return project;
+                updateMapper.apply(existing, dto);
+
+                existing.setUserId(userId);
+
+                return existing;
             })
             .toList();
 
         return projectRepository.saveAll(entities);
+    }
+
+    private ProjectModel createFromBulkDTO(ProjectPayloadDTO dto, UUID userId) {
+        ProjectModel tag = new ProjectModel();
+        tag.setId(dto.getId());
+        tag.setName(dto.getName());
+        tag.setUserId(userId);
+        return tag;
     }
 
     @Transactional
