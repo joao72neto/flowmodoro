@@ -387,7 +387,6 @@ const SessionDetailsModal = ({
               icon={<MdSave size={20} />}
               variant="primary"
               disabled={!isReadyToSave || isUpdating}
-              loading={isUpdating}
               onClick={handleSave}
               className="flex-[2] shadow-lg shadow-primary/20"
             >

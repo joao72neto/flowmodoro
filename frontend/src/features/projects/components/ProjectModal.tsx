@@ -130,7 +130,6 @@ const ProjectModal = ({
             {cancelButtonText}
           </Button>
           <Button
-            loading={loading}
             type="submit"
             icon={<span className="text-xl">{confirmButtonIcon}</span>}
             className="w-full text-md! sm:w-[150px] sm:p-2!"

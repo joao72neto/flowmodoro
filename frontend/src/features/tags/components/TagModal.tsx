@@ -138,7 +138,6 @@ const TagModal = ({
             variant="secondary"
             icon={<span className="text-xl">{confirmButtonIcon}</span>}
             className="w-full text-md! sm:w-[150px] sm:p-2!"
-            loading={loading}
           >
             {confirmButtonText}
           </Button>
