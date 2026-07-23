@@ -1,17 +1,26 @@
-import React from "react";
-import { useCollapse } from "react-collapsed";
+import { AnimatePresence, motion } from "framer-motion";
+import type { ReactNode } from "react";
 
 interface AnimatedCollapseProps {
   show: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const AnimatedCollapse = ({ show, children }: AnimatedCollapseProps) => {
-  const { getCollapseProps } = useCollapse({ isExpanded: show });
-
   return (
-    <div {...getCollapseProps()} className="w-full">
-      <div>{children}</div>
-    </div>
+    <AnimatePresence initial={false}>
+      {show && (
+        <motion.div
+          key="collapse-content"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+          className="w-full overflow-hidden"
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

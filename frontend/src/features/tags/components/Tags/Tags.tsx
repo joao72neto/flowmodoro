@@ -20,6 +20,8 @@ import {
 import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 import type { TagDTO } from "../../dtos/tags-response";
 
+import { AnimatedList } from "../../../../shared/components/AnimatedList";
+
 const Tags = ({
   project,
   onBack,
@@ -100,19 +102,21 @@ const Tags = ({
                 }
               />
             ) : (
-              filteredTags.map((item) => (
-                <Tag
-                  key={item.id}
-                  tagData={item}
-                  onDelete={() => {
-                    handleDeleteTag(item.id);
-                  }}
-                  onEdit={() => {
-                    setEditingTag(item);
-                    openEditModal();
-                  }}
-                />
-              ))
+              <AnimatedList items={filteredTags} getKey={(item) => item.id}>
+                {(item) => (
+                  <Tag
+                    key={item.id}
+                    tagData={item}
+                    onDelete={() => {
+                      handleDeleteTag(item.id);
+                    }}
+                    onEdit={() => {
+                      setEditingTag(item);
+                      openEditModal();
+                    }}
+                  />
+                )}
+              </AnimatedList>
             )}
           </div>
         )}

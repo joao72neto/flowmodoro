@@ -20,7 +20,7 @@ import {
 } from "../../hooks/useProjects";
 import type { ProjectDTO } from "../../dtos/projects-response";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatedList } from "../../../../shared/components/AnimatedList";
 
 const Projects = () => {
   const { data: projects, isLoading } = useFetchProjects();
@@ -95,30 +95,22 @@ const Projects = () => {
                     }
                   />
                 ) : (
-                  <AnimatePresence initial={false}>
-                    {filteredProjects.map((item) => (
-                      <motion.div
-                        key={item.id}
-                        layout
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Project
-                          projectData={item}
-                          onDelete={() => {
-                            handleDeleteProject(item.id);
-                          }}
-                          onEdit={() => {
-                            setEditingProject(item);
-                            openEditModal();
-                          }}
-                          onSelectTags={setSelectedProject}
-                        />
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
+                  <AnimatedList
+                    items={filteredProjects}
+                    getKey={(item) => item.id}
+                  >
+                    {(item) => (
+                      <Project
+                        projectData={item}
+                        onDelete={() => handleDeleteProject(item.id)}
+                        onEdit={() => {
+                          setEditingProject(item);
+                          openEditModal();
+                        }}
+                        onSelectTags={setSelectedProject}
+                      />
+                    )}
+                  </AnimatedList>
                 )}
               </div>
             )}
