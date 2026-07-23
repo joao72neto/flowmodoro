@@ -5,7 +5,7 @@ import Providers from "./app/Providers";
 import { getSerwist } from "virtual:serwist";
 import Home from "./app/Home";
 
-import { initSync } from "./local/sync-manager";
+import { initSync } from "./local/sync/sync-manager";
 
 initSync();
 

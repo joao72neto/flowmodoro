@@ -12,7 +12,7 @@ import type {
   ProjectUpdateDTO,
 } from "../dtos/projects-request";
 import type { ProjectDTO } from "../dtos/projects-response";
-import { triggerSync } from "../../../local/sync-manager";
+import { triggerSync } from "../../../local/sync/sync-manager";
 
 const duplicatedErrorConfig = {
   title: "Projeto duplicado",

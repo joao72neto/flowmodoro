@@ -14,7 +14,7 @@ import type {
   SessionUpdateDTO,
 } from "../dtos/sessions-request";
 
-import { triggerSync } from "../../../local/sync-manager";
+import { triggerSync } from "../../../local/sync/sync-manager";
 
 const SESSIONS_QUERY_KEY = "sessions";
 

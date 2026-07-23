@@ -1,6 +1,6 @@
-import sessions from "../features/sessions/sync-sessions";
-import projects from "../features/projects/sync-projects";
-import tags from "../features/tags/sync-tags";
+import sessions from "../../features/sessions/sync-sessions";
+import projects from "../../features/projects/sync-projects";
+import tags from "../../features/tags/sync-tags";
 
 export const initSync = async () => {
   window.addEventListener("online", async () => {

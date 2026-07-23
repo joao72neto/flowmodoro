@@ -9,7 +9,7 @@ import {
 
 import type { TagDTO } from "../dtos/tags-response";
 import type { TagPayloadDTO } from "../dtos/tags-request";
-import { triggerSync } from "../../../local/sync-manager";
+import { triggerSync } from "../../../local/sync/sync-manager";
 
 const duplicatedErrorConfig = {
   title: "Tag duplicada",
