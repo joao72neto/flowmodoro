@@ -25,6 +25,7 @@ interface StackProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 const Stack = ({
@@ -36,9 +37,11 @@ const Stack = ({
   className,
   children,
   onClick,
+  style,
 }: StackProps) => {
   return (
     <div
+      style={style}
       onClick={onClick}
       className={clsx(
         "flex",

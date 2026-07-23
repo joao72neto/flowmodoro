@@ -79,11 +79,12 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
         <Stack
           className={clsx(
             "w-full shadow-lg rounded-2xl p-4 sm:p-5 border border-border relative overflow-hidden",
-            "transition-all hover:bg-neutral-80/40 hover:translate-x-0.5 cursor-pointer min-h-[80px]",
+            "transition-transform hover:bg-neutral-80/40 hover:translate-x-0.5 cursor-pointer min-h-[80px]",
             isOpen
               ? "bg-neutral-80/40 border-neutral-70/50"
               : "bg-neutral-80/90",
             "border-l-4",
+            "contain-content",
             borderColorClass,
           )}
           direction="row"
@@ -144,7 +145,14 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
         </Stack>
 
         <AnimatedCollapse show={isOpen}>
-          <Stack gap={2} className="mt-2 ml-5 border-l border-border pl-4">
+          <Stack
+            gap={2}
+            className="mt-2 ml-5 border-l border-border pl-4"
+            style={{
+              contentVisibility: "auto",
+              containIntrinsicSize: "0 60px",
+            }}
+          >
             <AnimatedList
               items={sessionGroup.sessions}
               getKey={(session) => session.id}

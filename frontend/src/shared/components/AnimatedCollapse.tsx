@@ -1,5 +1,7 @@
-import { AnimatePresence, motion } from "framer-motion";
 import type { ReactNode } from "react";
+import { useState, useEffect } from "react";
+
+import clsx from "clsx";
 
 interface AnimatedCollapseProps {
   show: boolean;
@@ -7,20 +9,22 @@ interface AnimatedCollapseProps {
 }
 
 export const AnimatedCollapse = ({ show, children }: AnimatedCollapseProps) => {
+  const [hasOpened, setHasOpened] = useState(show);
+
+  useEffect(() => {
+    if (show) setHasOpened(true);
+  }, [show]);
+
   return (
-    <AnimatePresence initial={false}>
-      {show && (
-        <motion.div
-          key="collapse-content"
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-          className="w-full overflow-hidden px-1"
-        >
-          {children}
-        </motion.div>
+    <div
+      className={clsx(
+        "grid w-full transition-[grid-template-rows,opacity] duration-250 ease-in-out",
+        show ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
       )}
-    </AnimatePresence>
+    >
+      {(show || hasOpened) && (
+        <div className="overflow-hidden min-h-0 px-1">{children}</div>
+      )}
+    </div>
   );
 };

@@ -14,7 +14,7 @@ const SideBar = ({ onClick }: { onClick?: () => void }) => {
             icon={
               <IoClose
                 size={24}
-                className="text-neutral-40 hover:text-danger hover:rotate-90 hover:scale-110 transition-[transform] duration-300"
+                className="text-neutral-40 hover:text-danger hover:rotate-90 hover:scale-110 transition-all duration-300"
               />
             }
             onClick={onClick}

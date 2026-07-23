@@ -55,7 +55,7 @@ const SessionsDisplay = () => {
                       items={sessionGroup.sessionGroups}
                       getKey={(group) => group.id}
                       className="w-full"
-                      enableLayoutAnimation={false}
+                      enableLayoutAnimation="position"
                     >
                       {(group) => (
                         <SessionGroup key={group.id} sessionGroup={group} />
