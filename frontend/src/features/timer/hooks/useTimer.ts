@@ -10,6 +10,8 @@ import { localStorageKeys } from "../../../shared/utils/storage.utils";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 
+import { setTick, getTick, subscribeTick } from "../utils/timer-tick.store";
+
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
@@ -21,7 +23,7 @@ const useTimer = () => {
     return saved ? JSON.parse(saved).mode : null;
   });
 
-  const [seconds, setSeconds] = useState(() => {
+  const initialSeconds = (() => {
     const saved = localStorage.getItem(localStorageKeys.timer);
     if (!saved) return 0;
     const { mode, seconds, lastUpdated } = JSON.parse(saved);
@@ -29,36 +31,83 @@ const useTimer = () => {
     if (mode === "focus") return seconds + diff;
     if (mode === "break") return Math.max(0, seconds - diff);
     return seconds;
-  });
-
-  const startTimeRef = useRef<number>(Date.now());
-  const baseSecondsRef = useRef<number>(seconds);
+  })();
 
   useEffect(() => {
-    localStorage.setItem(
-      localStorageKeys.timer,
-      JSON.stringify({ mode, seconds, lastUpdated: Date.now() }),
-    );
+    setTick(initialSeconds);
+  }, [initialSeconds]);
 
-    const faviconTime =
-      seconds < 60 ? seconds.toString() : Math.floor(seconds / 60).toString();
+  const startTimeRef = useRef<number>(Date.now());
+  const baseSecondsRef = useRef<number>(initialSeconds);
 
-    if (mode === "focus") {
-      updateFaviconWithTime({
-        time: faviconTime,
-        color: "#f59e0b",
-        textColor: "#222",
-      });
-    } else if (mode === "break") {
-      updateFaviconWithTime({
-        time: faviconTime,
-        color: "#22c55e",
-        textColor: "#000000",
-      });
-    } else {
-      resetFavicon();
-    }
-  }, [mode, seconds]);
+  useEffect(() => {
+    const persist = () => {
+      const currentSeconds = getTick();
+      localStorage.setItem(
+        localStorageKeys.timer,
+        JSON.stringify({
+          mode,
+          seconds: currentSeconds,
+          lastUpdated: Date.now(),
+        }),
+      );
+    };
+
+    persist();
+
+    if (mode !== "focus" && mode !== "break") return;
+
+    const interval = setInterval(persist, 5000);
+    window.addEventListener("beforeunload", persist);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("beforeunload", persist);
+      persist();
+    };
+  }, [mode]);
+
+  useEffect(() => {
+    const updateFavicon = () => {
+      const currentSeconds = getTick();
+      const faviconTime =
+        currentSeconds < 60
+          ? currentSeconds.toString()
+          : Math.floor(currentSeconds / 60).toString();
+
+      if (mode === "focus") {
+        updateFaviconWithTime({
+          time: faviconTime,
+          color: "#f59e0b",
+          textColor: "#222",
+        });
+      } else if (mode === "break") {
+        updateFaviconWithTime({
+          time: faviconTime,
+          color: "#22c55e",
+          textColor: "#000000",
+        });
+      } else {
+        resetFavicon();
+      }
+    };
+
+    updateFavicon();
+
+    if (mode !== "focus" && mode !== "break") return;
+
+    let lastText: string | null = null;
+    const unsub = subscribeTick(() => {
+      const s = getTick();
+      const text = s < 60 ? s.toString() : Math.floor(s / 60).toString();
+      if (text !== lastText) {
+        lastText = text;
+        updateFavicon();
+      }
+    });
+
+    return unsub;
+  }, [mode]);
 
   useEffect(() => {
     const syncTime = () => {
@@ -67,11 +116,11 @@ const useTimer = () => {
         const diffInSeconds = Math.floor((now - startTimeRef.current) / 1000);
 
         if (mode === "focus") {
-          setSeconds(baseSecondsRef.current + diffInSeconds);
+          setTick(baseSecondsRef.current + diffInSeconds);
         } else if (mode === "break") {
           const remaining = baseSecondsRef.current - diffInSeconds;
           if (remaining <= 0) {
-            setSeconds(0);
+            setTick(0);
             setMode(null);
 
             const sendNotification = async () => {
@@ -102,18 +151,34 @@ const useTimer = () => {
 
             sendNotification();
           } else {
-            setSeconds(remaining);
+            setTick(remaining);
           }
         }
       }
     };
 
-    const interval = setInterval(syncTime, 1000);
-    document.addEventListener("visibilitychange", syncTime);
+    let interval: ReturnType<typeof setInterval> | null = null;
+    const startInterval = () => {
+      if (interval) return;
+      interval = setInterval(syncTime, 1000);
+    };
+    const stopInterval = () => {
+      if (interval) clearInterval(interval);
+      interval = null;
+    };
+
+    const handleVisibility = () => {
+      syncTime();
+      if (document.hidden) stopInterval();
+      else startInterval();
+    };
+
+    if (!document.hidden) startInterval();
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      clearInterval(interval);
-      document.removeEventListener("visibilitychange", syncTime);
+      stopInterval();
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [mode]);
 
@@ -121,15 +186,15 @@ const useTimer = () => {
     const now = Date.now();
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
-    setSeconds(0);
+    setTick(0);
     setMode("focus");
   };
 
   const stopFocus = () => {
-    const finalFocusSeconds = seconds;
+    const finalFocusSeconds = getTick();
     setMode("stopped");
     const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
-    setSeconds(breakTime);
+    setTick(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
 
@@ -137,9 +202,7 @@ const useTimer = () => {
       title: "Sessão Finalizada! 🎉",
       message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds)}?`,
       action: () => {
-        handleSaveSession({
-          focusSeconds: finalFocusSeconds,
-        });
+        handleSaveSession({ focusSeconds: finalFocusSeconds });
       },
       cancel: () => {
         setMode(null);
@@ -152,14 +215,13 @@ const useTimer = () => {
 
   const startBreak = () => {
     startTimeRef.current = Date.now();
-    baseSecondsRef.current = seconds;
+    baseSecondsRef.current = getTick();
     setMode("break");
   };
 
   const skipBreak = () => {
     setMode(null);
-
-    setSeconds(0);
+    setTick(0);
     localStorage.removeItem(localStorageKeys.timer);
   };
 
@@ -169,7 +231,6 @@ const useTimer = () => {
     startBreak,
     skipBreak,
     mode,
-    seconds,
   };
 };
 

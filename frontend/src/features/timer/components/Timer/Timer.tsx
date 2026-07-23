@@ -3,8 +3,12 @@ import clsx from "clsx";
 
 import { formatTimer } from "../../../../shared/utils/number.utils";
 
+import { useSyncExternalStore } from "react";
+import { subscribeTick, getTick } from "../../utils/timer-tick.store";
+
 function Timer() {
-  const { mode, seconds } = useTimerContext();
+  const { mode } = useTimerContext();
+  const seconds = useSyncExternalStore(subscribeTick, getTick);
 
   const isRunning = mode !== null && mode !== "stopped";
 
