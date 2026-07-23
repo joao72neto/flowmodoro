@@ -7,6 +7,8 @@ import type {
 } from "../../dtos/sessions-response";
 import type { SessionModel } from "../session.model";
 
+import { getLocalDateKey } from "../../../../shared/utils/date.utils";
+
 import mapper from "../../sessions.mappers";
 
 type DayMap = {
@@ -54,7 +56,7 @@ export const buildDailySessions = (
   const daysMap: DayMap = {};
 
   sessions.forEach((session) => {
-    const dateKey = session.date.split("T")[0];
+    const dateKey = getLocalDateKey(session.date);
     const projectId = session.project?.id || "null";
     const tagId = session.tag?.id || "null";
     const groupKey = `${session.name}_${projectId}_${tagId}`;
