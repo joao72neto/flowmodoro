@@ -10,9 +10,10 @@ import type {
 import { applyUpdates } from "./utils/apply-updates";
 import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
 
-import { resolvePendingAction } from "../../../shared/utils/pending-action.utils";
-
 import mapper from "../sessions.mappers";
+import syncQueue from "../../../local/sync/sync-queue.service";
+
+import { triggerSync } from "../../../local/sync/sync-manager";
 
 export const fetchSessions = async ({
   page = 1,
@@ -56,7 +57,16 @@ export const createSession = async (
     pending_action: "CREATE",
   };
 
-  await db.sessions.add(session);
+  await db.sessions.put(session);
+
+  const saveToQueue = mapper.toPayload(session);
+  syncQueue.addToQueue({
+    entityType: "session",
+    action: "CREATE",
+    payload: saveToQueue,
+  });
+
+  triggerSync();
 
   const project = await db.projects.get(session.projectId || "");
   const tag = await db.tags.get(session.tagId || "");
@@ -74,21 +84,27 @@ export const updateSession = async ({
   const old = await db.sessions.get(id);
   if (!old) throw new Error("Session not found locally");
 
-  const pending_action = resolvePendingAction(
-    old.pending_action ?? null,
-    "UPDATE",
-  );
-
   const updatedSession: SessionModel = applyUpdates({
     id,
     old,
     updated: data,
-    pending_action,
+    pending_action: "UPDATE",
   });
 
   await db.sessions.update(id, updatedSession);
+
+  const saveToQueue = mapper.toPayload(updatedSession);
+  syncQueue.addToQueue({
+    entityType: "session",
+    action: "UPDATE",
+    payload: saveToQueue,
+  });
+
+  triggerSync();
+
   const project = await db.projects.get(updatedSession.projectId || "");
   const tag = await db.tags.get(updatedSession.tagId || "");
+
   return mapper.buildDTO({ session: updatedSession, project, tag });
 };
 
@@ -96,18 +112,14 @@ export const deleteSession = async (id: string) => {
   const session = await db.sessions.get(id);
   if (!session) return;
 
-  const resolvedAction = resolvePendingAction(
-    session.pending_action ?? null,
-    "DELETE",
-  );
-
-  if (resolvedAction === "DISCARD") {
-    await db.sessions.delete(id);
-    return;
-  }
-
-  await db.sessions.update(id, {
-    deleted: true,
-    pending_action: resolvedAction,
+  const saveToQueue = mapper.toPayload(session);
+  syncQueue.addToQueue({
+    entityType: "session",
+    action: "DELETE",
+    payload: saveToQueue,
   });
+
+  await db.sessions.delete(id);
+
+  triggerSync();
 };

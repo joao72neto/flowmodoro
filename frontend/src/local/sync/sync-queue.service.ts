@@ -9,11 +9,15 @@ import { db } from "../indexedDB";
 import type { SyncQueueModel } from "./sync-queue.model";
 
 class SyncQueueService {
-  async addToQueue<T extends SyncQueueModel["entityType"]>(
-    entityType: T,
-    action: SyncQueueModel["action"],
-    payload: Extract<SyncQueueModel, { entityType: T }>["payload"],
-  ) {
+  async addToQueue<T extends SyncQueueModel["entityType"]>({
+    entityType,
+    action,
+    payload,
+  }: {
+    entityType: T;
+    action: SyncQueueModel["action"];
+    payload: Extract<SyncQueueModel, { entityType: T }>["payload"];
+  }) {
     await db.syncQueue.add({
       entityType,
       action,
@@ -62,4 +66,4 @@ class SyncQueueService {
   }
 }
 
-export const syncQueue = new SyncQueueService();
+export default new SyncQueueService();

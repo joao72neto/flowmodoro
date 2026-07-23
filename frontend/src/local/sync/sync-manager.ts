@@ -1,18 +1,12 @@
-import sessions from "../../features/sessions/sync-sessions";
-import projects from "../../features/projects/sync-projects";
-import tags from "../../features/tags/sync-tags";
+import syncQueue from "./sync-queue.service";
 
 export const initSync = async () => {
-  window.addEventListener("online", async () => {
-    await projects.syncSessions();
-    await tags.syncTags();
-    await sessions.syncSessions();
-  });
+  const process = () => syncQueue.processQueue();
+
+  window.addEventListener("online", process);
 
   if (navigator.onLine) {
-    await projects.syncSessions();
-    await tags.syncTags();
-    await sessions.syncSessions();
+    await process();
   }
 };
 
