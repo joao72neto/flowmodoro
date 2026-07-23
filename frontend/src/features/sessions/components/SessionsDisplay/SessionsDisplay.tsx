@@ -44,23 +44,25 @@ const SessionsDisplay = () => {
         ) : (
           <>
             <SessionsWrapper>
-              {sessions.content.map((sessionGroup) => (
-                <DailySessions
-                  key={sessionGroup.date}
-                  groupName={formatToBRDate(sessionGroup.date)}
-                  totalFocus={formatToHour(sessionGroup.totalFocus)}
-                >
-                  <AnimatedList
-                    items={sessionGroup.sessionGroups}
-                    getKey={(group) => group.id}
-                    className="w-full"
+              {sessions.content.map((sessionGroup) => {
+                return (
+                  <DailySessions
+                    key={sessionGroup.date}
+                    groupName={formatToBRDate(sessionGroup.date)}
+                    totalFocus={formatToHour(sessionGroup.totalFocus)}
                   >
-                    {(group) => (
-                      <SessionGroup key={group.id} sessionGroup={group} />
-                    )}
-                  </AnimatedList>
-                </DailySessions>
-              ))}
+                    <AnimatedList
+                      items={sessionGroup.sessionGroups}
+                      getKey={(group) => group.id}
+                      className="w-full"
+                    >
+                      {(group) => (
+                        <SessionGroup key={group.id} sessionGroup={group} />
+                      )}
+                    </AnimatedList>
+                  </DailySessions>
+                );
+              })}
             </SessionsWrapper>
             {sessions.totalElements > SIZE && (
               <PageSelector

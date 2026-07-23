@@ -16,7 +16,7 @@ export const AnimatedCollapse = ({ show, children }: AnimatedCollapseProps) => {
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
-          className="w-full overflow-hidden"
+          className="w-full overflow-hidden px-1"
         >
           {children}
         </motion.div>

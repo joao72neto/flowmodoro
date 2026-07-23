@@ -19,7 +19,7 @@ export function AnimatedList<T>({
   enableLayoutAnimation = true,
 }: AnimatedListProps<T>) {
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence initial={false} mode="popLayout">
       {items.map((item) => (
         <motion.div
           key={getKey(item)}
