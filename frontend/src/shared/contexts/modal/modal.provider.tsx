@@ -1,6 +1,6 @@
 import Modal from "../../components/Modal/Modal";
 import { useState, useCallback } from "react";
-import type { ModalType } from "../../types/global.types";
+import type { ModalType } from "../../global.types";
 
 import { ModalContext } from "./modal.context";
 

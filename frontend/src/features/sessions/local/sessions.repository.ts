@@ -1,5 +1,5 @@
 import { db } from "../../../local/indexedDB";
-import type { PaginationResponse } from "../../../shared/types/global.types";
+import type { PaginationResponse } from "../../../shared/global.types";
 import type { SessionModel } from "./session.model";
 import type { SessionDTO, DailySessionsDTO } from "../dtos/sessions-response";
 import type {

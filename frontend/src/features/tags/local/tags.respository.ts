@@ -7,19 +7,14 @@ import type { TagModel } from "./tag.model";
 import { applyUpdates } from "./utils/apply-updates";
 
 import mapper from "../tags.mappers";
-import { resolvePendingAction } from "../../../shared/utils/pending-action.utils";
+
+import syncQueue from "../../../local/sync/sync-queue.service";
 
 export const fetchTagsByProject = async (
   projectId: string,
 ): Promise<TagDTO[]> => {
   const [tags, sessions] = await Promise.all([
-    db.tags
-      .where("projectId")
-      .equals(projectId)
-      .reverse()
-      .filter((t) => !t.deleted)
-      .toArray(),
-
+    db.tags.where("projectId").equals(projectId).reverse().toArray(),
     db.sessions.toArray(),
   ]);
 
@@ -46,12 +41,16 @@ export const fetchTagsByProject = async (
 };
 
 export const createTag = async (payload: TagPayloadDTO): Promise<TagDTO> => {
-  const tag: TagModel = {
-    ...mapper.fromPayload(payload),
-    pending_action: "CREATE",
-  };
+  const tag: TagModel = mapper.fromPayload(payload);
 
   await db.tags.add(tag);
+
+  const saveToQueue = mapper.toCreateDTO(tag);
+  await syncQueue.addToQueue({
+    entityType: "tag",
+    action: "CREATE",
+    payload: saveToQueue,
+  });
   return mapper.fromModel(tag);
 };
 
@@ -65,20 +64,21 @@ export const updateTag = async ({
   const old = await db.tags.get(id);
   if (!old) throw new Error("Tag not found locally");
 
-  const resolvedAction = resolvePendingAction(
-    old.pending_action ?? null,
-    "UPDATE",
-  );
-  const pending_action = resolvedAction;
-
   const updatedTag: TagModel = applyUpdates({
     id,
     old,
     updated: data,
-    pending_action,
   });
 
   await db.tags.update(id, updatedTag);
+
+  const saveToQueue = mapper.toCreateDTO(updatedTag);
+  await syncQueue.addToQueue({
+    entityType: "tag",
+    action: "UPDATE",
+    payload: saveToQueue,
+  });
+
   return mapper.fromModel(updatedTag);
 };
 
@@ -86,18 +86,12 @@ export const deleteTag = async (id: string) => {
   const tag = await db.tags.get(id);
   if (!tag) return;
 
-  const resolvedAction = resolvePendingAction(
-    tag.pending_action ?? null,
-    "DELETE",
-  );
-
-  if (resolvedAction === "DISCARD") {
-    await db.tags.delete(id);
-    return;
-  }
-
-  await db.tags.update(id, {
-    deleted: true,
-    pending_action: resolvedAction,
+  const saveToQueue = mapper.toCreateDTO(tag);
+  await syncQueue.addToQueue({
+    entityType: "tag",
+    action: "DELETE",
+    payload: saveToQueue,
   });
+
+  await db.tags.delete(id);
 };

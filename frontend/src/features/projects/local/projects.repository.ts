@@ -92,4 +92,5 @@ export const deleteProject = async (id: string) => {
   });
 
   await db.projects.delete(id);
+  await db.tags.where("projectId").equals(id).delete();
 };

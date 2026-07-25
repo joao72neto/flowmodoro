@@ -5,6 +5,4 @@ export const DEFAULT_TAG: TagModel = {
   name: "Tag padrão",
   projectId: "",
   createdAt: new Date().toISOString(),
-  deleted: false,
-  pending_action: null,
 };
