@@ -21,6 +21,8 @@ import { db } from "../indexedDB";
 import type { SyncQueueModel } from "./sync-queue.model";
 
 class SyncQueueService {
+  private isProcessing = false;
+
   async addToQueue<T extends SyncQueueModel["entityType"]>({
     entityType,
     action,
@@ -82,58 +84,89 @@ class SyncQueueService {
 
   async processQueue() {
     if (!navigator.onLine) return;
+    if (this.isProcessing) return;
 
-    const pendingOps = await db.syncQueue
-      .orderBy("id")
-      .filter((op) => op.status === "pending")
-      .toArray();
+    this.isProcessing = true;
 
-    for (const op of pendingOps) {
-      try {
-        await db.syncQueue.update(op.id!, { status: "processing" });
+    try {
+      const pendingOps = await db.syncQueue
+        .orderBy("id")
+        .filter((op) => op.status === "pending")
+        .toArray();
 
-        if (op.entityType === "session") {
-          if (op.action === "CREATE") {
-            await createSessions([op.payload]);
-          } else if (op.action === "UPDATE") {
-            await updateSessions([op.payload]);
-          } else if (op.action === "DELETE") {
-            await deleteSessions([op.payload.id]);
-          }
+      const getPriority = (op: SyncQueueModel) => {
+        if (op.action === "CREATE" || op.action === "UPDATE") {
+          if (op.entityType === "project") return 1;
+          if (op.entityType === "tag") return 2;
+          if (op.entityType === "session") return 3;
+        } else if (op.action === "DELETE") {
+          if (op.entityType === "session") return 4;
+          if (op.entityType === "tag") return 5;
+          if (op.entityType === "project") return 6;
+        }
+        return 99;
+      };
+
+      pendingOps.sort((a, b) => {
+        const priorityA = getPriority(a);
+        const priorityB = getPriority(b);
+
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB;
         }
 
-        if (op.entityType === "project") {
-          if (op.action === "CREATE") {
-            await createProjects([op.payload]);
-          } else if (op.action === "UPDATE") {
-            await updateProjects([op.payload]);
-          } else if (op.action === "DELETE") {
-            await deleteProjects([op.payload.id]);
-          }
-        }
+        return Number(a.id!) - Number(b.id!);
+      });
 
-        if (op.entityType === "tag") {
-          if (op.action === "CREATE") {
-            await createTags([op.payload]);
-          } else if (op.action === "UPDATE") {
-            await updateTags([op.payload]);
-          } else if (op.action === "DELETE") {
-            await deleteTags([op.payload.id]);
-          }
-        }
+      for (const op of pendingOps) {
+        try {
+          await db.syncQueue.update(op.id!, { status: "processing" });
 
-        await db.syncQueue.delete(op.id!);
-      } catch (error) {
-        const retries = op.retries + 1;
-        if (retries >= 5) {
-          await db.syncQueue.update(op.id!, {
-            status: "failed",
-            error: String(error),
-          });
-        } else {
-          await db.syncQueue.update(op.id!, { retries, status: "pending" });
+          if (op.entityType === "session") {
+            if (op.action === "CREATE") {
+              await createSessions([op.payload]);
+            } else if (op.action === "UPDATE") {
+              await updateSessions([op.payload]);
+            } else if (op.action === "DELETE") {
+              await deleteSessions([op.payload.id]);
+            }
+          }
+
+          if (op.entityType === "project") {
+            if (op.action === "CREATE") {
+              await createProjects([op.payload]);
+            } else if (op.action === "UPDATE") {
+              await updateProjects([op.payload]);
+            } else if (op.action === "DELETE") {
+              await deleteProjects([op.payload.id]);
+            }
+          }
+
+          if (op.entityType === "tag") {
+            if (op.action === "CREATE") {
+              await createTags([op.payload]);
+            } else if (op.action === "UPDATE") {
+              await updateTags([op.payload]);
+            } else if (op.action === "DELETE") {
+              await deleteTags([op.payload.id]);
+            }
+          }
+
+          await db.syncQueue.delete(op.id!);
+        } catch (error) {
+          const retries = op.retries + 1;
+          if (retries >= 5) {
+            await db.syncQueue.update(op.id!, {
+              status: "failed",
+              error: String(error),
+            });
+          } else {
+            await db.syncQueue.update(op.id!, { retries, status: "pending" });
+          }
         }
       }
+    } finally {
+      this.isProcessing = false;
     }
   }
 }

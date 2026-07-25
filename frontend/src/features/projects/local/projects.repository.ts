@@ -9,16 +9,12 @@ import type { ProjectModel } from "./project.model";
 import { applyUpdates } from "./utils/apply-updates";
 
 import mapper from "../projects.mappers";
-import { resolvePendingAction } from "../../../shared/utils/pending-action.utils";
+
+import syncQueue from "../../../local/sync/sync-queue.service";
 
 export const fetchProjects = async (): Promise<ProjectDTO[]> => {
   const [projects, sessions] = await Promise.all([
-    db.projects
-      .orderBy("createdAt")
-      .reverse()
-      .filter((project) => !project.deleted)
-      .toArray(),
-
+    db.projects.orderBy("createdAt").reverse().toArray(),
     db.sessions.toArray(),
   ]);
 
@@ -42,12 +38,17 @@ export const fetchProjects = async (): Promise<ProjectDTO[]> => {
 export const createProject = async (
   payload: ProjectPayloadDTO,
 ): Promise<ProjectDTO> => {
-  const project: ProjectModel = {
-    ...mapper.fromPayload(payload),
-    pending_action: "CREATE",
-  };
+  const project: ProjectModel = mapper.fromPayload(payload);
 
   await db.projects.add(project);
+
+  const saveToQueue = mapper.toPayload(project);
+  await syncQueue.addToQueue({
+    entityType: "project",
+    action: "CREATE",
+    payload: saveToQueue,
+  });
+
   return mapper.fromModel(project);
 };
 
@@ -61,19 +62,21 @@ export const updateProject = async ({
   const old = await db.projects.get(id);
   if (!old) throw new Error("Project not found locally");
 
-  const pending_action = resolvePendingAction(
-    old.pending_action ?? null,
-    "UPDATE",
-  );
-
   const updatedProject: ProjectModel = applyUpdates({
     id,
     old,
     updated: data,
-    pending_action,
   });
 
   await db.projects.update(id, updatedProject);
+
+  const saveToQueue = mapper.toPayload(updatedProject);
+  await syncQueue.addToQueue({
+    entityType: "project",
+    action: "UPDATE",
+    payload: saveToQueue,
+  });
+
   return mapper.fromModel(updatedProject);
 };
 
@@ -81,21 +84,12 @@ export const deleteProject = async (id: string) => {
   const project = await db.projects.get(id);
   if (!project) return;
 
-  const resolvedAction = resolvePendingAction(
-    project.pending_action ?? null,
-    "DELETE",
-  );
-
-  await db.transaction("rw", [db.projects, db.tags], async () => {
-    await db.tags.where("projectId").equals(id).delete();
-
-    if (resolvedAction === "DISCARD") {
-      await db.projects.delete(id);
-    } else {
-      await db.projects.update(id, {
-        deleted: true,
-        pending_action: resolvedAction,
-      });
-    }
+  const saveToQueue = mapper.toPayload(project);
+  await syncQueue.addToQueue({
+    entityType: "project",
+    action: "DELETE",
+    payload: saveToQueue,
   });
+
+  await db.projects.delete(id);
 };

@@ -13,8 +13,6 @@ import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
 import mapper from "../sessions.mappers";
 import syncQueue from "../../../local/sync/sync-queue.service";
 
-import { triggerSync } from "../../../local/sync/sync-manager";
-
 export const fetchSessions = async ({
   page = 1,
   size = 10,
@@ -61,8 +59,6 @@ export const createSession = async (
     payload: saveToQueue,
   });
 
-  triggerSync();
-
   const project = await db.projects.get(session.projectId || "");
   const tag = await db.tags.get(session.tagId || "");
 
@@ -94,8 +90,6 @@ export const updateSession = async ({
     payload: saveToQueue,
   });
 
-  triggerSync();
-
   const project = await db.projects.get(updatedSession.projectId || "");
   const tag = await db.tags.get(updatedSession.tagId || "");
 
@@ -114,6 +108,4 @@ export const deleteSession = async (id: string) => {
   });
 
   await db.sessions.delete(id);
-
-  triggerSync();
 };

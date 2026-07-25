@@ -13,6 +13,7 @@ import type {
   SessionPayloadDTO,
   SessionUpdateDTO,
 } from "../dtos/sessions-request";
+import { triggerSync } from "../../../local/sync/sync-manager";
 
 const SESSIONS_QUERY_KEY = "sessions";
 
@@ -47,6 +48,7 @@ export const useCreateSession = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync();
     },
   });
 };
@@ -70,6 +72,7 @@ export const useUpdateSession = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync();
     },
   });
 };
@@ -87,6 +90,7 @@ export const useDeleteSession = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync();
     },
   });
 };
