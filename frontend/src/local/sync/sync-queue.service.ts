@@ -4,6 +4,18 @@ import {
   deleteSessions,
 } from "../../features/sessions/api/sessions.api";
 
+import {
+  createProjects,
+  updateProjects,
+  deleteProjects,
+} from "../../features/projects/api/projects.api";
+
+import {
+  createTags,
+  updateTags,
+  deleteTags,
+} from "../../features/tags/api/tags.api";
+
 import { db } from "../indexedDB";
 
 import type { SyncQueueModel } from "./sync-queue.model";
@@ -87,6 +99,26 @@ class SyncQueueService {
             await updateSessions([op.payload]);
           } else if (op.action === "DELETE") {
             await deleteSessions([op.payload.id]);
+          }
+        }
+
+        if (op.entityType === "project") {
+          if (op.action === "CREATE") {
+            await createProjects([op.payload]);
+          } else if (op.action === "UPDATE") {
+            await updateProjects([op.payload]);
+          } else if (op.action === "DELETE") {
+            await deleteProjects([op.payload.id]);
+          }
+        }
+
+        if (op.entityType === "tag") {
+          if (op.action === "CREATE") {
+            await createTags([op.payload]);
+          } else if (op.action === "UPDATE") {
+            await updateTags([op.payload]);
+          } else if (op.action === "DELETE") {
+            await deleteTags([op.payload.id]);
           }
         }
 
