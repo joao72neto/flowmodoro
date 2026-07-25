@@ -1,5 +1,3 @@
-import type { PendingActionType } from "../../../shared/types/pending-action.types";
-
 export interface SessionModel {
   id: string;
   name: string;
@@ -9,6 +7,4 @@ export interface SessionModel {
   projectId?: string;
   tagId?: string;
   date: string;
-  deleted: boolean;
-  pending_action: PendingActionType;
 }

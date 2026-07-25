@@ -2,18 +2,15 @@ import { DEFAULT_SESSION } from "../consts/default-session";
 import type { SessionUpdateDTO } from "../../dtos/sessions-request";
 import type { SessionModel } from "../session.model";
 import { calculateRest } from "./calculate-rest";
-import type { PendingActionType } from "../../../../shared/types/pending-action.types";
 
 export const applyUpdates = ({
   id,
   old,
   updated,
-  pending_action,
 }: {
   id: string;
   old?: SessionModel;
   updated?: SessionUpdateDTO;
-  pending_action: PendingActionType;
 }): SessionModel => {
   return {
     id,
@@ -28,7 +25,5 @@ export const applyUpdates = ({
     projectId:
       updated?.projectId || old?.projectId || DEFAULT_SESSION.projectId,
     tagId: updated?.tagId || old?.tagId || DEFAULT_SESSION.tagId,
-    deleted: false,
-    pending_action,
   };
 };

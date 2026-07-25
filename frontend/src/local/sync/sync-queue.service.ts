@@ -18,23 +18,63 @@ class SyncQueueService {
     action: SyncQueueModel["action"];
     payload: Extract<SyncQueueModel, { entityType: T }>["payload"];
   }) {
-    await db.syncQueue.add({
-      entityType,
-      action,
-      payload,
-      status: "pending",
-      timestamp: new Date(),
-      retries: 0,
-    } as SyncQueueModel);
+    const entityId = payload.id;
+
+    await db.transaction("rw", db.syncQueue, async () => {
+      const existingOps = await db.syncQueue
+        .filter(
+          (op) =>
+            op.entityType === entityType &&
+            op.status === "pending" &&
+            op.payload.id === entityId,
+        )
+        .toArray();
+
+      const existingOp = existingOps[0];
+
+      if (existingOp) {
+        if (existingOp.action === "CREATE" && action === "UPDATE") {
+          await db.syncQueue.update(existingOp.id!, { payload });
+          return;
+        }
+
+        if (existingOp.action === "CREATE" && action === "DELETE") {
+          await db.syncQueue.delete(existingOp.id!);
+          return;
+        }
+
+        if (existingOp.action === "UPDATE" && action === "UPDATE") {
+          await db.syncQueue.update(existingOp.id!, { payload });
+          return;
+        }
+
+        if (existingOp.action === "UPDATE" && action === "DELETE") {
+          await db.syncQueue.update(existingOp.id!, {
+            action: "DELETE",
+            payload,
+          });
+          return;
+        }
+      } else {
+        await db.syncQueue.add({
+          entityType,
+          action,
+          payload,
+          status: "pending",
+          timestamp: new Date(),
+          retries: 0,
+        } as SyncQueueModel);
+      }
+    });
   }
 
   async processQueue() {
     if (!navigator.onLine) return;
 
     const pendingOps = await db.syncQueue
-      .where("status")
-      .equals("pending")
-      .sortBy("timestamp");
+      .orderBy("id")
+      .filter((op) => op.status === "pending")
+      .toArray();
 
     for (const op of pendingOps) {
       try {

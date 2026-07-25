@@ -23,19 +23,6 @@ class SessionMapper {
     return sessions.map((s) => this.toPayload(s));
   };
 
-  fromDTO = (session: SessionDTO): SessionModel => ({
-    id: session.id,
-    name: session.name,
-    focus: session.focus,
-    ratio: session.ratio,
-    rest: session.rest,
-    projectId: session.project.id,
-    tagId: session.tag.id,
-    date: session.date,
-    deleted: false,
-    pending_action: null,
-  });
-
   buildDTO = ({
     session,
     project,
@@ -73,8 +60,6 @@ class SessionMapper {
     date: new Date().toISOString(),
     projectId: session.projectId,
     tagId: session.tagId,
-    deleted: false,
-    pending_action: null,
   });
 }
 
