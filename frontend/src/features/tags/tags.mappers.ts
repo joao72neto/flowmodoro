@@ -1,7 +1,7 @@
 import type { TagDTO } from "./dtos/tags-response";
 import type {
+  TagUpdateDTO,
   TagPayloadDTO,
-  TagCreateDTO,
   TagUpdateBulkDTO,
 } from "./dtos/tags-request";
 import type { TagModel } from "./local/tag.model";
@@ -29,27 +29,19 @@ class TagMapper {
     };
   };
 
-  toPayload = (tag: TagModel): TagPayloadDTO => {
+  toUpdateDTO = (tag: TagModel): TagUpdateDTO => {
     return {
       name: tag.name,
       projectId: tag.projectId,
     };
   };
 
-  toPayloadList = (tags: TagModel[]): TagPayloadDTO[] => {
-    return tags.map((tag) => this.toPayload(tag));
-  };
-
-  toCreateDTO = (tag: TagModel): TagCreateDTO => {
+  toPayload = (tag: TagModel): TagPayloadDTO => {
     return {
       id: tag.id,
       name: tag.name,
       projectId: tag.projectId,
     };
-  };
-
-  toCreateDTOList = (tags: TagModel[]): TagCreateDTO[] => {
-    return tags.map((tag) => this.toCreateDTO(tag));
   };
 
   toUpdateBulkDTO = (tag: TagModel): TagUpdateBulkDTO => {
@@ -57,10 +49,6 @@ class TagMapper {
       id: tag.id,
       name: tag.name,
     };
-  };
-
-  toUpdateBulkDTOList = (tags: TagModel[]): TagUpdateBulkDTO[] => {
-    return tags.map((tag) => this.toUpdateBulkDTO(tag));
   };
 }
 

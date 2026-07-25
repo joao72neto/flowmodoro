@@ -1,7 +1,7 @@
 import { DEFAULT_TAG } from "../consts/default-tag";
 import type { TagModel } from "../tag.model";
 
-import type { TagPayloadDTO } from "../../dtos/tags-request";
+import type { TagUpdateDTO } from "../../dtos/tags-request";
 
 export const applyUpdates = ({
   id,
@@ -10,7 +10,7 @@ export const applyUpdates = ({
 }: {
   id: string;
   old?: TagModel;
-  updated?: TagPayloadDTO;
+  updated?: TagUpdateDTO;
 }): TagModel => {
   return {
     id,

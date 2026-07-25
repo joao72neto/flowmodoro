@@ -1,6 +1,6 @@
 import type { SessionPayloadDTO } from "../../features/sessions/dtos/sessions-request";
 import type { ProjectPayloadDTO } from "../../features/projects/dtos/projects-request";
-import type { TagCreateDTO } from "../../features/tags/dtos/tags-request";
+import type { TagPayloadDTO } from "../../features/tags/dtos/tags-request";
 
 export type SessionSyncItem = {
   entityType: "session";
@@ -14,7 +14,7 @@ export type ProjectSyncItem = {
 
 export type TagSyncItem = {
   entityType: "tag";
-  payload: TagCreateDTO;
+  payload: TagPayloadDTO;
 };
 
 export type SyncQueueModel = {

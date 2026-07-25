@@ -90,7 +90,10 @@ const TagModal = ({
     }
 
     if (save) {
-      save({ name: data.name, projectId }, { onSuccess: closeAndReset });
+      save(
+        { id: "", name: data.name, projectId },
+        { onSuccess: closeAndReset },
+      );
     }
   };
 

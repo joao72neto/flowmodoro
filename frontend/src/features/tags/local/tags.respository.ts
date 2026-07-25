@@ -1,7 +1,7 @@
 import { db } from "../../../local/indexedDB";
 
 import type { TagDTO } from "../dtos/tags-response";
-import type { TagPayloadDTO } from "../dtos/tags-request";
+import type { TagPayloadDTO, TagUpdateDTO } from "../dtos/tags-request";
 
 import type { TagModel } from "./tag.model";
 import { applyUpdates } from "./utils/apply-updates";
@@ -45,7 +45,7 @@ export const createTag = async (payload: TagPayloadDTO): Promise<TagDTO> => {
 
   await db.tags.add(tag);
 
-  const saveToQueue = mapper.toCreateDTO(tag);
+  const saveToQueue = mapper.toPayload(tag);
   await syncQueue.addToQueue({
     entityType: "tag",
     action: "CREATE",
@@ -59,7 +59,7 @@ export const updateTag = async ({
   data,
 }: {
   id: string;
-  data: TagPayloadDTO;
+  data: TagUpdateDTO;
 }) => {
   const old = await db.tags.get(id);
   if (!old) throw new Error("Tag not found locally");
@@ -72,7 +72,7 @@ export const updateTag = async ({
 
   await db.tags.update(id, updatedTag);
 
-  const saveToQueue = mapper.toCreateDTO(updatedTag);
+  const saveToQueue = mapper.toPayload(updatedTag);
   await syncQueue.addToQueue({
     entityType: "tag",
     action: "UPDATE",
@@ -86,7 +86,7 @@ export const deleteTag = async (id: string) => {
   const tag = await db.tags.get(id);
   if (!tag) return;
 
-  const saveToQueue = mapper.toCreateDTO(tag);
+  const saveToQueue = mapper.toPayload(tag);
   await syncQueue.addToQueue({
     entityType: "tag",
     action: "DELETE",

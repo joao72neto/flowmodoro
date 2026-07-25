@@ -19,10 +19,6 @@ class SessionMapper {
     tagId: session.tagId,
   });
 
-  toPayloadList = (sessions: SessionModel[]): SessionPayloadDTO[] => {
-    return sessions.map((s) => this.toPayload(s));
-  };
-
   buildDTO = ({
     session,
     project,

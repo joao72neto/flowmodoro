@@ -1,4 +1,4 @@
-export type TagCreateDTO = {
+export type TagPayloadDTO = {
   id: string;
   name: string;
   projectId: string;
@@ -9,7 +9,7 @@ export type TagUpdateBulkDTO = {
   name: string;
 };
 
-export type TagPayloadDTO = {
+export type TagUpdateDTO = {
   name: string;
   projectId: string;
 };

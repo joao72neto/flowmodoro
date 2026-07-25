@@ -8,7 +8,7 @@ import {
 } from "../local/tags.respository";
 
 import type { TagDTO } from "../dtos/tags-response";
-import type { TagPayloadDTO } from "../dtos/tags-request";
+import type { TagPayloadDTO, TagUpdateDTO } from "../dtos/tags-request";
 import { triggerSync } from "../../../local/sync/sync-manager";
 
 const duplicatedErrorConfig = {
@@ -60,7 +60,7 @@ export const useUpdateTag = () => {
       data,
     }: {
       id: string;
-      data: TagPayloadDTO;
+      data: TagUpdateDTO;
     }): Promise<TagDTO> => updateTag({ id, data }),
 
     meta: {
