@@ -8,11 +8,14 @@ import { PRESETS } from "../../consts/ratio-presets";
 import { useTimerContext } from "../../context/timer.context";
 import type { RatioPreset } from "../../consts/ratio-presets";
 import { useSessionContext } from "../../../sessions/context/sessions.context";
+import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 
 function RatioSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const { restRatio, setRestRatio } = useSessionContext();
   const { mode } = useTimerContext();
+
+  const { theme } = useTheme();
 
   const isFocusRunning = mode === "focus";
 
@@ -70,7 +73,10 @@ function RatioSelector() {
         )}
       </button>
 
-      <AnimatedCollapse overflow show={isOpen && !isFocusRunning}>
+      <AnimatedCollapse
+        overflow={theme === "light"}
+        show={isOpen && !isFocusRunning}
+      >
         <div className="pt-2">
           <RatioSlider
             presets={PRESETS as RatioPreset[]}

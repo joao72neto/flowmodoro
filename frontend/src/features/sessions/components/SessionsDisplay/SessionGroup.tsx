@@ -15,12 +15,15 @@ import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
 import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
+import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 
 const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
   const [showSessionDetailsModal, setShowSessionDetailsModal] = useState(false);
   const [selectedSession, setSelectedSession] = useState<SessionDTO>(
     sessionGroup.sessions[0],
   );
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     setSelectedSession(sessionGroup.sessions[0]);
@@ -147,7 +150,10 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
         <AnimatedCollapse show={isOpen}>
           <Stack
             gap={2}
-            className="mt-2 ml-5 border-l border-border pl-4"
+            className={clsx(
+              "mt-2 ml-5 border-l border-border pl-4",
+              theme === "light" && "pb-4",
+            )}
             style={{
               contentVisibility: "auto",
               containIntrinsicSize: "0 60px",
