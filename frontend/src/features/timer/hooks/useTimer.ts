@@ -35,7 +35,8 @@ const useTimer = () => {
 
   useEffect(() => {
     setTick(initialSeconds);
-  }, [initialSeconds]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const startTimeRef = useRef<number>(Date.now());
   const baseSecondsRef = useRef<number>(initialSeconds);
@@ -194,6 +195,7 @@ const useTimer = () => {
     const finalFocusSeconds = getTick();
     setMode("stopped");
     const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
+
     setTick(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
