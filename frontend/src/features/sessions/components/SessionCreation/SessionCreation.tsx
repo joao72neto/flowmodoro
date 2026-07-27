@@ -154,9 +154,10 @@ const SessionCreation = () => {
             {showProjectSelector && (
               <SessionSelector
                 value={selectedProject}
-                onChange={(project) =>
-                  setSelectedProjectId(project?.id ?? null)
-                }
+                onChange={(project) => {
+                  setSelectedProjectId(project?.id ?? null);
+                  setSelectedTagId(null);
+                }}
                 disabled={isTimerRunning}
                 title="Projetos"
                 variant="primary"
