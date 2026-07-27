@@ -156,7 +156,7 @@ const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
             <AnimatedList
               items={sessionGroup.sessions}
               getKey={(session) => session.id}
-              className="w-full"
+              className="w-full px-1"
             >
               {(session) => (
                 <Session

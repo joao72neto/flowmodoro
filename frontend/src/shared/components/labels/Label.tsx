@@ -24,7 +24,7 @@ const Label = ({
   return (
     <div
       className={clsx(
-        "flex items-center gap-1.5 sm:max-w-[110px] shrink-0",
+        "flex items-center gap-1.5 shrink-0",
         "px-2.5 py-0.5 sm:py-1 rounded-lg border",
         "transition-[scale] duration-200 ease-out hover:scale-[1.02] cursor-default select-none",
         bgColor,

@@ -70,7 +70,7 @@ function RatioSelector() {
         )}
       </button>
 
-      <AnimatedCollapse show={isOpen && !isFocusRunning}>
+      <AnimatedCollapse overflow show={isOpen && !isFocusRunning}>
         <div className="pt-2">
           <RatioSlider
             presets={PRESETS as RatioPreset[]}

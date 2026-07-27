@@ -6,9 +6,14 @@ import clsx from "clsx";
 interface AnimatedCollapseProps {
   show: boolean;
   children: ReactNode;
+  overflow?: boolean;
 }
 
-export const AnimatedCollapse = ({ show, children }: AnimatedCollapseProps) => {
+export const AnimatedCollapse = ({
+  show,
+  children,
+  overflow = false,
+}: AnimatedCollapseProps) => {
   const [hasOpened, setHasOpened] = useState(show);
 
   useEffect(() => {
@@ -23,7 +28,9 @@ export const AnimatedCollapse = ({ show, children }: AnimatedCollapseProps) => {
       )}
     >
       {(show || hasOpened) && (
-        <div className="overflow-hidden min-h-0 px-1">{children}</div>
+        <div className={clsx("min-h-0 px-1", !overflow && "overflow-hidden")}>
+          {children}
+        </div>
       )}
     </div>
   );

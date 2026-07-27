@@ -51,7 +51,7 @@ Caso a sessão seja salva, ela aparecerá na parte inferior da tela, agrupada po
 
 ### Design Responsivo
 
-A aplicação funciona tanto em desktop quanto em dispositivos móveis e possui suporte completo a PWA.
+A aplicação funciona tanto em desktop quanto em dispositivos móveis e possui suporte a PWA.
 
 Em navegadores como o Chrome no celular, é possível instalar a aplicação para que ela fique disponível como um app nativo no dispositivo.
 
@@ -68,23 +68,21 @@ Em navegadores como o Chrome no celular, é possível instalar a aplicação par
 
 - **React 19** com **TypeScript** e **Vite**
 - **Tailwind CSS 4** para estilização
-- **React Context API** para gerenciamento de estado
+- **IndexedDB** com **Dexie** para armazenamento local
+- **React Query** para gerenciamento de estado
 - **Axios** para comunicação com a API
 
 ## 🚀 Deploy
 
-O deploy foi realizado em plataformas gratuitas. Por conta disso, em alguns momentos pode haver:
+O deploy foi realizado em plataformas gratuitas:
 
-- **cold start** da API
-- **sleep** do banco de dados por falta de uso
+- [**Vercel**](https://vercel.com/) para o frontend
+- [**Render**](https://render.com/) para a API Spring
+- [**Aiven**](https://aiven.io/) para o banco de dados
 
-### Plataformas utilizadas
+Por conta da limitação de recursos e cold start da API, o projeto utiliza uma abordagem **offline-first** para proporcionar uma experiência offline, em que os dados são armazenados localmente e sincronizados com o backend apenas quando houver conexão disponível.
 
-- **Frontend:** Vercel
-- **API Spring:** Render
-- **Banco de Dados:** Aiven
-
-A aplicação pode ser acessada aqui:  
+A aplicação pode ser acessada em:
 👉 https://flowmodoro-jsn.vercel.app/
 
 ## 🏁 Como rodar localmente
