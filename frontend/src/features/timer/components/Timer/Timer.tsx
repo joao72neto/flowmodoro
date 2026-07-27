@@ -6,10 +6,27 @@ import { formatTimer } from "../../../../shared/utils/number.utils";
 import { useSyncExternalStore } from "react";
 import { subscribeTick, getTick } from "../../utils/timer-tick.store";
 
-function Timer() {
-  const { mode } = useTimerContext();
+const TimerDigits = ({
+  mode,
+}: {
+  mode: "focus" | "break" | "stopped" | null;
+}) => {
   const seconds = useSyncExternalStore(subscribeTick, getTick);
 
+  return (
+    <div
+      className={clsx(
+        "transition-all",
+        seconds > 3600 ? "text-5xl" : "text-6xl",
+      )}
+    >
+      {mode ? formatTimer(seconds) : "00:00"}
+    </div>
+  );
+};
+
+const Timer = () => {
+  const { mode } = useTimerContext();
   const isRunning = mode !== null && mode !== "stopped";
 
   const modeConfig = {
@@ -62,20 +79,12 @@ function Timer() {
             <span>{config.label}</span>
           </div>
         )}
-
-        <div
-          className={clsx(
-            "transition-all",
-            seconds > 3600 ? "text-5xl" : "text-6xl",
-            config.glow,
-            config.text,
-          )}
-        >
-          {mode ? formatTimer(seconds) : "00:00"}
+        <div className={clsx(config.glow, config.text)}>
+          <TimerDigits mode={mode} />
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Timer;
