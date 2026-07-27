@@ -89,9 +89,15 @@ class SyncQueueService {
     this.isProcessing = true;
 
     try {
+      const now = new Date();
+
       const pendingOps = await db.syncQueue
         .orderBy("id")
-        .filter((op) => op.status === "pending")
+        .filter(
+          (op) =>
+            (op.status === "pending" || op.status === "failed") &&
+            (!op.nextAttemptAt || op.nextAttemptAt <= now),
+        )
         .toArray();
 
       const getPriority = (op: SyncQueueModel) => {
@@ -155,14 +161,16 @@ class SyncQueueService {
           await db.syncQueue.delete(op.id!);
         } catch (error) {
           const retries = op.retries + 1;
-          if (retries >= 5) {
-            await db.syncQueue.update(op.id!, {
-              status: "failed",
-              error: String(error),
-            });
-          } else {
-            await db.syncQueue.update(op.id!, { retries, status: "pending" });
-          }
+
+          const delayMs = Math.min(5_000 * 2 ** retries, 5 * 60_000);
+          const nextAttemptAt = new Date(Date.now() + delayMs);
+
+          await db.syncQueue.update(op.id!, {
+            retries,
+            status: "pending",
+            nextAttemptAt,
+            error: String(error),
+          });
         }
       }
     } finally {

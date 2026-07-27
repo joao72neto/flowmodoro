@@ -24,4 +24,5 @@ export type SyncQueueModel = {
   timestamp: Date;
   retries: number;
   error?: string;
+  nextAttemptAt?: Date;
 } & (SessionSyncItem | ProjectSyncItem | TagSyncItem);
