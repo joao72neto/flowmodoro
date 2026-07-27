@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 import {
   updateFaviconWithTime,
@@ -183,15 +183,15 @@ const useTimer = () => {
     };
   }, [mode]);
 
-  const startFocus = () => {
+  const startFocus = useCallback(() => {
     const now = Date.now();
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
     setTick(0);
     setMode("focus");
-  };
+  }, []);
 
-  const stopFocus = () => {
+  const stopFocus = useCallback(() => {
     const finalFocusSeconds = getTick();
     setMode("stopped");
     const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
@@ -213,19 +213,19 @@ const useTimer = () => {
       confirmLabel: "Salvar",
       cancelLabel: "Descartar",
     });
-  };
+  }, [BREAK_RATIO, handleSaveSession, hideModal, showDefault]);
 
-  const startBreak = () => {
+  const startBreak = useCallback(() => {
     startTimeRef.current = Date.now();
     baseSecondsRef.current = getTick();
     setMode("break");
-  };
+  }, []);
 
-  const skipBreak = () => {
+  const skipBreak = useCallback(() => {
     setMode(null);
     setTick(0);
     localStorage.removeItem(localStorageKeys.timer);
-  };
+  }, []);
 
   return {
     startFocus,
