@@ -29,6 +29,10 @@ class TagMapper {
     };
   };
 
+  fromPayloadList = (tags: TagPayloadDTO[]): TagModel[] => {
+    return tags.map((tag) => this.fromPayload(tag));
+  };
+
   toUpdateDTO = (tag: TagModel): TagUpdateDTO => {
     return {
       name: tag.name,

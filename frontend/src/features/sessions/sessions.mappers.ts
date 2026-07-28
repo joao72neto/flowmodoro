@@ -57,6 +57,10 @@ class SessionMapper {
     projectId: session.projectId,
     tagId: session.tagId,
   });
+
+  fromPayloadList = (sessions: SessionPayloadDTO[]): SessionModel[] => {
+    return sessions.map((session) => this.fromPayload(session));
+  };
 }
 
 export default new SessionMapper();

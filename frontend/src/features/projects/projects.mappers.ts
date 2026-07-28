@@ -20,6 +20,9 @@ class ProjectMapper {
     name: project.name,
     createdAt: new Date().toISOString(),
   });
+
+  fromPayloadList = (projects: ProjectPayloadDTO[]): ProjectModel[] =>
+    projects.map(this.fromPayload);
 }
 
 export default new ProjectMapper();
