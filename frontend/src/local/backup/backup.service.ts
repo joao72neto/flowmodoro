@@ -9,6 +9,42 @@ import type { BackupData } from "./backup.schema";
 import { backupSchema } from "./backup.schema";
 
 class BackupService {
+  private readonly VERSION = 1;
+
+  async exportData(): Promise<void> {
+    try {
+      const [projects, tags, sessions] = await Promise.all([
+        db.projects.toArray(),
+        db.tags.toArray(),
+        db.sessions.toArray(),
+      ]);
+
+      const backup: BackupData = {
+        version: this.VERSION,
+        exportedAt: new Date().toISOString(),
+        projects,
+        tags,
+        sessions,
+      };
+
+      const blob = new Blob([JSON.stringify(backup, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `flowmodoro-backup-${this.formatDateForFilename(new Date())}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      throw new Error("Não foi possível gerar o backup. Tente novamente.");
+    }
+  }
+
   async importData(file: File): Promise<void> {
     const raw = await file.text();
     const data = this.parseAndValidate(raw);
@@ -29,7 +65,8 @@ class BackupService {
           );
         },
       );
-    } catch {
+    } catch (err) {
+      console.error(err);
       throw new Error(
         "Não foi possível restaurar o backup. O arquivo pode estar corrompido.",
       );
@@ -55,6 +92,10 @@ class BackupService {
     }
 
     return result.data;
+  }
+
+  private formatDateForFilename(date: Date): string {
+    return date.toISOString().replace(/[:.]/g, "-").slice(0, 19);
   }
 }
 

@@ -5,7 +5,7 @@ import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
 
 import { useClickOutside } from "../../shared/hooks/useClickOutside";
-import { useImportBackup } from "../../local/backup/useBackup";
+import { useExportBackup, useImportBackup } from "../../local/backup/useBackup";
 
 import Button from "../../shared/components/buttons/Button/Button";
 import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
@@ -25,6 +25,13 @@ function BackupMenu() {
     isPending: uploadIsPending,
   } = useImportBackup();
 
+  const {
+    mutate: download,
+    error: downloadError,
+    reset: resetDownload,
+    isPending: downloadIsPending,
+  } = useExportBackup();
+
   useClickOutside(containerRef, () => setIsOpen(false));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +40,7 @@ function BackupMenu() {
     e.target.value = "";
   };
 
-  const errorMessage = uploadError?.message;
+  const errorMessage = uploadError?.message || downloadError?.message;
 
   if (errorMessage) {
     showError({
@@ -41,7 +48,9 @@ function BackupMenu() {
       message: errorMessage,
       action: () => {},
     });
+
     resetUpload();
+    resetDownload();
   }
 
   return (
@@ -75,6 +84,7 @@ function BackupMenu() {
                 variant="secondary"
                 className="rounded-full"
                 loading={uploadIsPending}
+                disabled={downloadIsPending}
                 onClick={() => fileInputRef.current?.click()}
               >
                 Upload
@@ -90,7 +100,9 @@ function BackupMenu() {
                 icon={<FiDownload />}
                 variant="secondary"
                 className="rounded-full"
-                onClick={() => {}}
+                loading={downloadIsPending}
+                disabled={uploadIsPending}
+                onClick={() => download()}
               >
                 Download
               </Button>

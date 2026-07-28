@@ -5,6 +5,15 @@ import { APP_DATA_QUERY_KEY } from "../../global-query-key";
 
 import { triggerSync } from "../sync/sync-manager";
 
+export const useExportBackup = () => {
+  return useMutation({
+    mutationFn: (): Promise<void> => backupService.exportData(),
+    meta: {
+      errorTitle: "Erro ao exportar backup",
+    },
+  });
+};
+
 export const useImportBackup = () => {
   const queryClient = useQueryClient();
 
