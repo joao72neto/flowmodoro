@@ -1,41 +1,23 @@
-import { useState, useCallback, useEffect } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import backupService from "./backup.service";
+import { APP_DATA_QUERY_KEY } from "../../global-query-key";
 
-type BackupAction = "upload" | "download" | null;
+import { triggerSync } from "../sync/sync-manager";
 
-const ERROR_DISMISS_MS = 5000;
+export const useImportBackup = () => {
+  const queryClient = useQueryClient();
 
-export function useBackup() {
-  const [loadingAction, setLoadingAction] = useState<BackupAction>(null);
-  const [error, setError] = useState<string | null>(null);
+  return useMutation({
+    mutationFn: (file: File): Promise<void> => backupService.importData(file),
 
-  useEffect(() => {
-    if (!error) return;
+    meta: {
+      errorTitle: "Erro ao importar backup",
+    },
 
-    const timer = setTimeout(() => setError(null), ERROR_DISMISS_MS);
-    return () => clearTimeout(timer);
-  }, [error]);
-
-  const upload = useCallback(async (file: File) => {
-    setError(null);
-    setLoadingAction("upload");
-    try {
-      await backupService.importData(file);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Erro inesperado ao importar.",
-      );
-    } finally {
-      setLoadingAction(null);
-    }
-  }, []);
-
-  return {
-    upload,
-    isUploading: loadingAction === "upload",
-    isDownloading: loadingAction === "download",
-    error,
-    clearError: () => setError(null),
-  };
-}
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
+      triggerSync();
+    },
+  });
+};

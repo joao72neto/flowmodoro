@@ -3,12 +3,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FiUpload, FiDownload } from "react-icons/fi";
 import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
+
 import { useClickOutside } from "../../shared/hooks/useClickOutside";
-import { useBackup } from "../../local/backup/useBackup";
+import { useImportBackup } from "../../local/backup/useBackup";
+
 import Button from "../../shared/components/buttons/Button/Button";
 import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
-
 import { useModal } from "../../shared/contexts/modal/modal.context";
+
 function BackupMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -16,7 +18,12 @@ function BackupMenu() {
 
   const { showError } = useModal();
 
-  const { upload, isUploading, isDownloading, error, clearError } = useBackup();
+  const {
+    mutate: upload,
+    error: uploadError,
+    reset: resetUpload,
+    isPending: uploadIsPending,
+  } = useImportBackup();
 
   useClickOutside(containerRef, () => setIsOpen(false));
 
@@ -26,13 +33,15 @@ function BackupMenu() {
     e.target.value = "";
   };
 
-  if (error) {
+  const errorMessage = uploadError?.message;
+
+  if (errorMessage) {
     showError({
-      title: "Erro ao fazer backup",
-      message: error,
+      title: "Erro ao realizar backup",
+      message: errorMessage,
       action: () => {},
     });
-    clearError();
+    resetUpload();
   }
 
   return (
@@ -60,14 +69,12 @@ function BackupMenu() {
             <motion.div
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0 }}
             >
               <Button
                 icon={<FiUpload />}
                 variant="secondary"
                 className="rounded-full"
-                loading={isUploading}
-                disabled={isDownloading}
+                loading={uploadIsPending}
                 onClick={() => fileInputRef.current?.click()}
               >
                 Upload
@@ -83,8 +90,6 @@ function BackupMenu() {
                 icon={<FiDownload />}
                 variant="secondary"
                 className="rounded-full"
-                loading={isDownloading}
-                disabled={isUploading}
                 onClick={() => {}}
               >
                 Download
