@@ -10,6 +10,8 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 
+import BackupMenu from "./BackupMenu";
+
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -57,6 +59,8 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
           </ExpandableButton>
         </div>
       )}
+
+      <BackupMenu onUpload={() => {}} onDownload={() => {}} />
     </div>
   );
 };

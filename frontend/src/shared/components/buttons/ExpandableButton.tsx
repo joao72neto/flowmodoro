@@ -9,6 +9,7 @@ interface ExpandableButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> 
   children: React.ReactNode;
   variant?: VariantType;
   loading?: boolean;
+  disableExpansion?: boolean;
 }
 
 function ExpandableButton({
@@ -18,6 +19,7 @@ function ExpandableButton({
   className,
   disabled,
   loading,
+  disableExpansion = false,
   ...props
 }: ExpandableButtonProps) {
   return (
@@ -26,8 +28,9 @@ function ExpandableButton({
       disabled={disabled || loading}
       className={clsx(
         variants[variant || "primary"],
-        "group flex items-center justify-center gap-0 hover:gap-2",
+        "group flex items-center justify-center gap-0",
         "overflow-hidden whitespace-nowrap px-4!",
+        !disableExpansion && "hover:gap-2",
         className,
       )}
     >
@@ -41,7 +44,7 @@ function ExpandableButton({
       <span
         className={clsx(
           "max-w-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out",
-          "group-hover:max-w-xs group-hover:opacity-100",
+          !disableExpansion && "group-hover:max-w-xs group-hover:opacity-100",
           loading && "hidden",
         )}
       >
