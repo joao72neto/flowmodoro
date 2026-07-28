@@ -47,7 +47,7 @@ function BackupMenu() {
   return (
     <div
       ref={containerRef}
-      className="fixed bottom-0 left-0 p-4 flex flex-col items-start"
+      className="fixed bottom-0 left-0 px-3 py-4 flex flex-col items-start"
     >
       <input
         ref={fileInputRef}
@@ -64,7 +64,7 @@ function BackupMenu() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="flex flex-col gap-3 pb-3"
+            className="flex flex-col gap-3 pb-3 overflow-hidden px-1 pt-1"
           >
             <motion.div
               initial={{ opacity: 0, x: -8 }}
@@ -111,7 +111,7 @@ function BackupMenu() {
             <LuDatabaseBackup size={25} />
           </motion.span>
         }
-        className={clsx("rounded-full!", { "bg-neutral-60!": isOpen })}
+        className={clsx("rounded-full! ml-1!", { "bg-neutral-60!": isOpen })}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         Backup dos Dados
