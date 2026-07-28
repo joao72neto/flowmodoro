@@ -16,7 +16,7 @@ class ProjectMapper {
   });
 
   fromPayload = (project: ProjectPayloadDTO): ProjectModel => ({
-    id: crypto.randomUUID(),
+    id: project.id,
     name: project.name,
     createdAt: new Date().toISOString(),
   });

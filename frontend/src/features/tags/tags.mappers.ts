@@ -22,7 +22,7 @@ class TagMapper {
 
   fromPayload = (tag: TagPayloadDTO): TagModel => {
     return {
-      id: crypto.randomUUID(),
+      id: tag.id,
       name: tag.name,
       projectId: tag.projectId,
       createdAt: new Date().toISOString(),

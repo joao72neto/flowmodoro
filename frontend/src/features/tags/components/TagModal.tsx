@@ -91,7 +91,7 @@ const TagModal = ({
 
     if (save) {
       save(
-        { id: "", name: data.name, projectId },
+        { id: crypto.randomUUID(), name: data.name, projectId },
         { onSuccess: closeAndReset },
       );
     }
