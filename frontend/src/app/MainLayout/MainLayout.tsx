@@ -60,7 +60,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       )}
 
-      <BackupMenu onUpload={() => {}} onDownload={() => {}} />
+      <BackupMenu />
     </div>
   );
 };

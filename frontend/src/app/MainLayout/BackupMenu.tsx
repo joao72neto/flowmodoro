@@ -4,30 +4,50 @@ import { FiUpload, FiDownload } from "react-icons/fi";
 import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
 import { useClickOutside } from "../../shared/hooks/useClickOutside";
+import { useBackup } from "../../local/backup/useBackup";
 import Button from "../../shared/components/buttons/Button/Button";
 import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
 
-type BackupMenuProps = {
-  onUpload?: () => void;
-  onDownload?: () => void;
-};
-
-const menuItems = (onUpload?: () => void, onDownload?: () => void) => [
-  { icon: <FiUpload />, label: "Upload", onClick: onUpload },
-  { icon: <FiDownload />, label: "Download", onClick: onDownload },
-];
-
-const BackupMenu = ({ onUpload, onDownload }: BackupMenuProps) => {
+import { useModal } from "../../shared/contexts/modal/modal.context";
+function BackupMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { showError } = useModal();
+
+  const { upload, isUploading, isDownloading, error, clearError } = useBackup();
 
   useClickOutside(containerRef, () => setIsOpen(false));
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) upload(file);
+    e.target.value = "";
+  };
+
+  if (error) {
+    showError({
+      title: "Erro ao fazer backup",
+      message: error,
+      action: () => {},
+    });
+    clearError();
+  }
 
   return (
     <div
       ref={containerRef}
       className="fixed bottom-0 left-0 p-4 flex flex-col items-start"
     >
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="application/json"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -37,23 +57,39 @@ const BackupMenu = ({ onUpload, onDownload }: BackupMenuProps) => {
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="flex flex-col gap-3 pb-3"
           >
-            {menuItems(onUpload, onDownload).map((item, i) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
+            <motion.div
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0 }}
+            >
+              <Button
+                icon={<FiUpload />}
+                variant="secondary"
+                className="rounded-full"
+                loading={isUploading}
+                disabled={isDownloading}
+                onClick={() => fileInputRef.current?.click()}
               >
-                <Button
-                  icon={item.icon}
-                  variant="secondary"
-                  className="rounded-full"
-                  onClick={item.onClick}
-                >
-                  {item.label}
-                </Button>
-              </motion.div>
-            ))}
+                Upload
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.05 }}
+            >
+              <Button
+                icon={<FiDownload />}
+                variant="secondary"
+                className="rounded-full"
+                loading={isDownloading}
+                disabled={isUploading}
+                onClick={() => {}}
+              >
+                Download
+              </Button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -70,13 +106,13 @@ const BackupMenu = ({ onUpload, onDownload }: BackupMenuProps) => {
             <LuDatabaseBackup size={25} />
           </motion.span>
         }
-        className={clsx("rounded-full!", { "bg-secondary/70!": isOpen })}
+        className={clsx("rounded-full!", { "bg-neutral-60!": isOpen })}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         Backup dos Dados
       </ExpandableButton>
     </div>
   );
-};
+}
 
 export default BackupMenu;
