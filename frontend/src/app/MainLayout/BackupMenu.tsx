@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiUpload, FiDownload } from "react-icons/fi";
 import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
 
@@ -10,6 +9,7 @@ import { useExportBackup, useImportBackup } from "../../local/backup/useBackup";
 import Button from "../../shared/components/buttons/Button/Button";
 import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
 import { useModal } from "../../shared/contexts/modal/modal.context";
+import { CiImport, CiExport } from "react-icons/ci";
 
 function BackupMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,10 +54,7 @@ function BackupMenu() {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed bottom-0 left-0 px-3 py-4 flex flex-col items-start"
-    >
+    <div ref={containerRef} className="relative flex flex-col items-start">
       <input
         ref={fileInputRef}
         type="file"
@@ -73,21 +70,21 @@ function BackupMenu() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="flex flex-col gap-3 pb-3 overflow-hidden px-1 pt-1"
+            className="absolute bottom-full left-0 flex flex-col gap-3 pb-3 overflow-hidden px-1 pt-1"
           >
             <motion.div
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
             >
               <Button
-                icon={<FiUpload />}
+                icon={<CiImport />}
                 variant="secondary"
                 className="rounded-full"
                 loading={uploadIsPending}
                 disabled={downloadIsPending}
                 onClick={() => fileInputRef.current?.click()}
               >
-                Upload
+                Importar
               </Button>
             </motion.div>
 
@@ -97,14 +94,14 @@ function BackupMenu() {
               transition={{ delay: 0.05 }}
             >
               <Button
-                icon={<FiDownload />}
+                icon={<CiExport />}
                 variant="secondary"
                 className="rounded-full"
                 loading={downloadIsPending}
                 disabled={uploadIsPending}
                 onClick={() => download()}
               >
-                Download
+                Exportar
               </Button>
             </motion.div>
           </motion.div>

@@ -1,16 +1,14 @@
-import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
 import SideBar from "./SideBar";
 import MainContentContainer from "./MainContentContainer";
 
 import { useNotificationPermission } from "../../shared/hooks/useNotificationPermission";
 import SideBarContainer from "./SideBarContainer";
 
-import { PiCaretLeftBold } from "react-icons/pi";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 
-import BackupMenu from "./BackupMenu";
+import Footer from "./Footer";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
@@ -28,8 +26,11 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }, [isSidebarOpen]);
 
   return (
-    <div className="relative min-h-screen flex overflow-x-hidden items-center">
-      <MainContentContainer>{children}</MainContentContainer>
+    <div className="relative min-h-screen flex overflow-x-hidden">
+      <div className="flex flex-col w-full">
+        <MainContentContainer>{children}</MainContentContainer>
+        <Footer setIsSidebarOpen={setIsSidebarOpen} />
+      </div>
 
       <div
         className={clsx(
@@ -42,25 +43,6 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       <SideBarContainer isOpen={isSidebarOpen}>
         <SideBar onClick={() => setIsSidebarOpen(false)} />
       </SideBarContainer>
-
-      {!isSidebarOpen && (
-        <div className="fixed bottom-0 right-0 p-4 z-10">
-          <ExpandableButton
-            icon={
-              <PiCaretLeftBold
-                size={25}
-                className="transition duration-200 hover:-translate-x-1"
-              />
-            }
-            className="rounded-full!"
-            onClick={() => setIsSidebarOpen(true)}
-          >
-            Projetos e Tags
-          </ExpandableButton>
-        </div>
-      )}
-
-      <BackupMenu />
     </div>
   );
 };
