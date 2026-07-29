@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 
 import Footer from "./Footer";
+import SyncStatus from "./SyncStatus";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
@@ -27,10 +28,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="relative min-h-screen flex overflow-x-hidden">
+      <div className="fixed top-4 left-4">
+        <SyncStatus />
+      </div>
+
       <MainContentContainer>{children}</MainContentContainer>
-
       <Footer setIsSidebarOpen={setIsSidebarOpen} />
-
       <div
         className={clsx(
           "fixed inset-0 bg-black/50 backdrop-blur-md z-20 transition-all duration-300",
@@ -38,7 +41,6 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         )}
         onClick={() => setIsSidebarOpen(false)}
       />
-
       <SideBarContainer isOpen={isSidebarOpen}>
         <SideBar onClick={() => setIsSidebarOpen(false)} />
       </SideBarContainer>
