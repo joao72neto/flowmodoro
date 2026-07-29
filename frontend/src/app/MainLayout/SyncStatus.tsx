@@ -78,7 +78,7 @@ const SyncStatus = () => {
             transition={{ duration: 0.15 }}
             className={clsx(
               "absolute top-full mt-1 left-0",
-              "max-w-[200px] whitespace-normal break-words text-left",
+              "whitespace-nowrap text-left",
               "rounded-md bg-neutral-60 px-2 py-1 text-xs text-white shadow-md z-30",
             )}
           >
