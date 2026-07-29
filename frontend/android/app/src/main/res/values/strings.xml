@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">flowmodoro</string>
+    <string name="title_activity_main">flowmodoro</string>
+    <string name="package_name">com.joao.flowmodoro</string>
+    <string name="custom_url_scheme">com.joao.flowmodoro</string>
+</resources>
