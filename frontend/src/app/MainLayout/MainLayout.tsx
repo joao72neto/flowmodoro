@@ -28,11 +28,13 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="relative min-h-screen flex overflow-x-hidden">
-      <div className="fixed top-4 left-4">
-        <SyncStatus />
+      <div className="flex flex-col w-full">
+        <div className="flex justify-start items-center pt-5 px-5">
+          <SyncStatus />
+        </div>
+        <MainContentContainer>{children}</MainContentContainer>
       </div>
 
-      <MainContentContainer>{children}</MainContentContainer>
       <Footer setIsSidebarOpen={setIsSidebarOpen} />
       <div
         className={clsx(
