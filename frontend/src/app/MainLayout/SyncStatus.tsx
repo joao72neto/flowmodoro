@@ -77,9 +77,9 @@ const SyncStatus = () => {
             exit={{ opacity: 0, y: -4, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             className={clsx(
-              "absolute top-full mt-1 left-0",
+              "absolute top-full mt-2 left-0",
               "whitespace-nowrap text-left",
-              "rounded-md bg-neutral-60 px-2 py-1 text-xs text-white shadow-md z-30",
+              "rounded-md bg-neutral-60 px-2 py-1 text-xs text-neutral-20 shadow-md z-30",
             )}
           >
             {label}
