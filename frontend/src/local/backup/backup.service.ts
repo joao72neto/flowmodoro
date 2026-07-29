@@ -6,6 +6,7 @@ import tagMapper from "../../features/tags/tags.mappers";
 
 import type { BackupData } from "./backup.schema";
 
+import syncQueue from "../sync/sync-queue.service";
 import { backupSchema } from "./backup.schema";
 
 class BackupService {
@@ -49,6 +50,10 @@ class BackupService {
     const raw = await file.text();
     const data = this.parseAndValidate(raw);
 
+    const projectModels = projectMapper.fromPayloadList(data.projects);
+    const tagModels = tagMapper.fromPayloadList(data.tags);
+    const sessionModels = sessionMapper.fromPayloadList(data.sessions);
+
     try {
       await db.transaction(
         "rw",
@@ -56,15 +61,35 @@ class BackupService {
         db.tags,
         db.sessions,
         async () => {
-          await db.projects.bulkPut(
-            projectMapper.fromPayloadList(data.projects),
-          );
-          await db.tags.bulkPut(tagMapper.fromPayloadList(data.tags));
-          await db.sessions.bulkPut(
-            sessionMapper.fromPayloadList(data.sessions),
-          );
+          await db.projects.bulkPut(projectModels);
+          await db.tags.bulkPut(tagModels);
+          await db.sessions.bulkPut(sessionModels);
         },
       );
+
+      data.sessions.map((session) => {
+        syncQueue.addToQueue({
+          entityType: "session",
+          action: "CREATE",
+          payload: session,
+        });
+      });
+
+      data.projects.map((project) => {
+        syncQueue.addToQueue({
+          entityType: "project",
+          action: "CREATE",
+          payload: project,
+        });
+      });
+
+      data.tags.map((tag) => {
+        syncQueue.addToQueue({
+          entityType: "tag",
+          action: "CREATE",
+          payload: tag,
+        });
+      });
     } catch (err) {
       console.error(err);
       throw new Error(
