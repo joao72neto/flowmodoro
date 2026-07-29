@@ -11,7 +11,7 @@ const Footer = ({
   return (
     <footer
       className={clsx(
-        "flex fixed bottom-0 w-full p-2 justify-between border-t",
+        "flex fixed bottom-0 w-full p-3 justify-between border-t",
         "border-border items-center bg-neutral-100",
       )}
     >
@@ -19,8 +19,8 @@ const Footer = ({
 
       <div
         className={clsx(
-          "fixed bottom-2 left-[50%] translate-x-[-50%] flex flex-col gap-1",
-          "items-center justify-self-center text-[11px] sm:text-xs",
+          "fixed bottom-3 left-[50%] translate-x-[-50%] flex flex-col gap-1",
+          "items-center justify-self-center text-[11px] sm:text-xs text-neutral-20",
         )}
       >
         <p>João Salvador Neto</p>
