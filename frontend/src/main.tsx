@@ -6,8 +6,10 @@ import { getSerwist } from "virtual:serwist";
 import Home from "./app/Home";
 
 import { initSync } from "./local/sync/sync-manager";
+import alarm from "./mobile/alarm.service";
 
 initSync();
+alarm.init();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

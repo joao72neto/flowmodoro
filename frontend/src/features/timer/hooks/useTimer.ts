@@ -11,10 +11,14 @@ import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 
 import { setTick, getTick, subscribeTick } from "../utils/timer-tick.store";
+import useAlarm from "../../../mobile/useAlarm";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
+
+  const { playAlarm, stopAlarm } = useAlarm();
 
   const BREAK_RATIO = restRatio / 100;
 
@@ -110,7 +114,21 @@ const useTimer = () => {
     return unsub;
   }, [mode]);
 
+  LocalNotifications.addListener(
+    "localNotificationActionPerformed",
+    (notificationAction) => {
+      if (notificationAction.notification.id === 1) {
+        stopAlarm();
+      }
+    },
+  );
+
   useEffect(() => {
+    if (mode === "break") {
+      const targetTime = new Date(Date.now() + baseSecondsRef.current * 1000);
+      playAlarm(targetTime);
+    }
+
     const syncTime = () => {
       if (mode === "focus" || mode === "break") {
         const now = Date.now();
@@ -123,34 +141,6 @@ const useTimer = () => {
           if (remaining <= 0) {
             setTick(0);
             setMode(null);
-
-            const sendNotification = async () => {
-              if (Notification.permission !== "granted") return;
-
-              const notificationData = {
-                body: "Sua pausa acabou. Hora de voltar ao foco!",
-                icon: "/flowmodoro-icon.svg",
-                vibrate: [200, 100, 200],
-                tag: "break-finished",
-                requireInteraction: true,
-              };
-
-              try {
-                if ("serviceWorker" in navigator) {
-                  const registration = await navigator.serviceWorker.ready;
-                  registration.showNotification(
-                    "Pausa Finalizada!",
-                    notificationData,
-                  );
-                } else {
-                  new Notification("Pausa Finalizada!", notificationData);
-                }
-              } catch (error) {
-                console.error("Error showing notification:", error);
-              }
-            };
-
-            sendNotification();
           } else {
             setTick(remaining);
           }
@@ -181,6 +171,7 @@ const useTimer = () => {
       stopInterval();
       document.removeEventListener("visibilitychange", handleVisibility);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   const startFocus = useCallback(() => {
