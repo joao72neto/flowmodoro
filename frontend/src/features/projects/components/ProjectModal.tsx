@@ -14,6 +14,8 @@ import type { ProjectDTO } from "../dtos/projects-response";
 import type { useCreateProject, useUpdateProject } from "../hooks/useProjects";
 import type { ProjectUpdateDTO } from "../dtos/projects-request";
 
+import { v4 as uuidv4 } from "uuid";
+
 const ProjectModal = ({
   isOpen,
   defaultValues,
@@ -83,7 +85,7 @@ const ProjectModal = ({
 
     if (save) {
       save(
-        { id: crypto.randomUUID(), ...data },
+        { id: uuidv4(), ...data },
         {
           onSuccess: closeAndReset,
         },

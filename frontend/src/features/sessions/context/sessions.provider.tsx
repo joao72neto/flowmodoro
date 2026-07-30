@@ -9,6 +9,8 @@ import type { ISaveSessionData } from "./sessions.context";
 import { getStorageObject } from "../../../shared/utils/storage.utils";
 import type { SessionPayloadDTO } from "../dtos/sessions-request";
 
+import { v4 as uuidv4 } from "uuid";
+
 export const SessionProvider = ({
   children,
 }: {
@@ -62,7 +64,7 @@ export const SessionProvider = ({
   const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
     setCurrentPage(1);
     const session: SessionPayloadDTO = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       name: sessionName,
       focus: focusSeconds,
       ratio: restRatio / 100,

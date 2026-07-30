@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export const localStorageKeys = {
   timer: "flowmodoro_timer_state",
   restRatio: "flowmodoro_rest_ratio",
@@ -15,7 +17,7 @@ export const sessionStorageKeys = {
 export const getAnonymousUserId = (): string => {
   let id = localStorage.getItem(localStorageKeys.userId);
   if (!id) {
-    id = crypto.randomUUID();
+    id = uuidv4();
     localStorage.setItem(localStorageKeys.userId, id);
   }
   return id;

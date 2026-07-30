@@ -11,6 +11,8 @@ import { CreateTagSchema } from "../tag.schema";
 import type { TagDTO } from "../dtos/tags-response";
 import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
 
+import { v4 as uuidv4 } from "uuid";
+
 const TagModal = ({
   isOpen,
   defaultValues,
@@ -91,7 +93,7 @@ const TagModal = ({
 
     if (save) {
       save(
-        { id: crypto.randomUUID(), name: data.name, projectId },
+        { id: uuidv4(), name: data.name, projectId },
         { onSuccess: closeAndReset },
       );
     }
