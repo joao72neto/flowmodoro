@@ -1,4 +1,4 @@
-package com.joao.flowmodoro;
+package com.joao.flowmodoro.plugins;
 
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
@@ -10,10 +10,9 @@ import com.getcapacitor.annotation.CapacitorPlugin
 class HelloPlugin : Plugin() {
 
     @PluginMethod
-    fun hello (call: PluginCall) {
+    fun hello(call: PluginCall) {
         val ret = JSObject()
         ret.put("message", "Hello from Kotlin")
         call.resolve(ret)
     }
-
 }

@@ -12,6 +12,8 @@ import { useSessionContext } from "../../context/sessions.context";
 import { useEffect, useState } from "react";
 import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 
+import { FlowmodoroPlugin } from "../../../../mobile/plugins";
+
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
     useTimerContext();
@@ -193,7 +195,10 @@ const SessionCreation = () => {
           {mode === null ? (
             <button
               title="Iniciar foco"
-              onClick={startFocus}
+              onClick={() => {
+                startFocus();
+                FlowmodoroPlugin.startTimer();
+              }}
               className={clsx(buttonClasses, !isExpanded && "hidden")}
             >
               <FaPlayCircle />
@@ -201,7 +206,10 @@ const SessionCreation = () => {
           ) : mode === "focus" ? (
             <button
               title="Parar foco"
-              onClick={stopFocus}
+              onClick={() => {
+                stopFocus();
+                FlowmodoroPlugin.stopTimer();
+              }}
               className={buttonClasses}
             >
               <FaStopCircle />

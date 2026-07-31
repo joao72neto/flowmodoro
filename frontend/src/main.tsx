@@ -7,18 +7,6 @@ import Home from "./app/Home";
 
 import { initSync } from "./local/sync/sync-manager";
 
-import { registerPlugin } from "@capacitor/core";
-
-interface HelloPlugin {
-  hello(): Promise<{ message: string }>;
-}
-
-const HelloPlugin = registerPlugin<HelloPlugin>("Hello");
-
-const res = await HelloPlugin.hello();
-
-console.log(res.message);
-
 initSync();
 
 createRoot(document.getElementById("root")!).render(
