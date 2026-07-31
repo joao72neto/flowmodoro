@@ -6,7 +6,6 @@ import { getSerwist } from "virtual:serwist";
 import Home from "./app/Home";
 
 import { initSync } from "./local/sync/sync-manager";
-import alarm from "./mobile/alarm.service";
 
 import { registerPlugin } from "@capacitor/core";
 
@@ -21,7 +20,6 @@ const res = await HelloPlugin.hello();
 console.log(res.message);
 
 initSync();
-alarm.init();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

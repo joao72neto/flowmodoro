@@ -1,28 +1,23 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-import {
-  updateFaviconWithTime,
-  resetFavicon,
-} from "../../../shared/utils/favicon.utils";
-
 import { formatToHour } from "../../../shared/utils/number.utils";
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 
 import { setTick, getTick, subscribeTick } from "../utils/timer-tick.store";
-import useAlarm from "../../../mobile/useAlarm";
-import { LocalNotifications } from "@capacitor/local-notifications";
+import type { TimerMode } from "../timer.types";
+
+import { updateFavicon } from "../utils/timer.utils";
+import { sendNotification } from "../utils/timer.utils";
 
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
 
-  const { playAlarm, stopAlarm } = useAlarm();
-
   const BREAK_RATIO = restRatio / 100;
 
-  const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(() => {
+  const [mode, setMode] = useState<TimerMode>(() => {
     const saved = localStorage.getItem(localStorageKeys.timer);
     return saved ? JSON.parse(saved).mode : null;
   });
@@ -73,31 +68,7 @@ const useTimer = () => {
   }, [mode]);
 
   useEffect(() => {
-    const updateFavicon = () => {
-      const currentSeconds = getTick();
-      const faviconTime =
-        currentSeconds < 60
-          ? currentSeconds.toString()
-          : Math.floor(currentSeconds / 60).toString();
-
-      if (mode === "focus") {
-        updateFaviconWithTime({
-          time: faviconTime,
-          color: "#f59e0b",
-          textColor: "#222",
-        });
-      } else if (mode === "break") {
-        updateFaviconWithTime({
-          time: faviconTime,
-          color: "#22c55e",
-          textColor: "#000000",
-        });
-      } else {
-        resetFavicon();
-      }
-    };
-
-    updateFavicon();
+    updateFavicon(mode);
 
     if (mode !== "focus" && mode !== "break") return;
 
@@ -107,28 +78,14 @@ const useTimer = () => {
       const text = s < 60 ? s.toString() : Math.floor(s / 60).toString();
       if (text !== lastText) {
         lastText = text;
-        updateFavicon();
+        updateFavicon(mode);
       }
     });
 
     return unsub;
   }, [mode]);
 
-  LocalNotifications.addListener(
-    "localNotificationActionPerformed",
-    (notificationAction) => {
-      if (notificationAction.notification.id === 1) {
-        stopAlarm();
-      }
-    },
-  );
-
   useEffect(() => {
-    if (mode === "break") {
-      const targetTime = new Date(Date.now() + baseSecondsRef.current * 1000);
-      playAlarm(targetTime);
-    }
-
     const syncTime = () => {
       if (mode === "focus" || mode === "break") {
         const now = Date.now();
@@ -141,6 +98,7 @@ const useTimer = () => {
           if (remaining <= 0) {
             setTick(0);
             setMode(null);
+            sendNotification();
           } else {
             setTick(remaining);
           }
@@ -171,7 +129,6 @@ const useTimer = () => {
       stopInterval();
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   const startFocus = useCallback(() => {
