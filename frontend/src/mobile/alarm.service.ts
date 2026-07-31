@@ -10,6 +10,7 @@ class AlarmService {
         audioChannelNum: 1,
         isUrl: false,
       });
+
       console.log("Áudio carregado com sucesso!");
 
       await LocalNotifications.createChannel({

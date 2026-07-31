@@ -8,6 +8,18 @@ import Home from "./app/Home";
 import { initSync } from "./local/sync/sync-manager";
 import alarm from "./mobile/alarm.service";
 
+import { registerPlugin } from "@capacitor/core";
+
+interface HelloPlugin {
+  hello(): Promise<{ message: string }>;
+}
+
+const HelloPlugin = registerPlugin<HelloPlugin>("Hello");
+
+const res = await HelloPlugin.hello();
+
+console.log(res.message);
+
 initSync();
 alarm.init();
 
