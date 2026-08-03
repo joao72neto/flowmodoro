@@ -14,6 +14,8 @@ import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 
 import { FlowmodoroPlugin } from "../../../../mobile/plugins";
 
+import { getTick } from "../../../timer/utils/timer-tick.store";
+
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
     useTimerContext();
@@ -83,6 +85,28 @@ const SessionCreation = () => {
       }
 
       startBreak();
+    }
+  };
+
+  const handleStartFocus = async () => {
+    await FlowmodoroPlugin.requestNotificationPermission();
+    await FlowmodoroPlugin.startFocus();
+    startFocus();
+  };
+
+  const handleStartBreak = async () => {
+    await FlowmodoroPlugin.startBreak({
+      focusDurationMillis: getTick() * 1000,
+    });
+    startBreak();
+  };
+
+  const handleStopTimer = async ({ type }: { type: "focus" | "break" }) => {
+    await FlowmodoroPlugin.stopTimer();
+    if (type === "focus") {
+      stopFocus();
+    } else {
+      skipBreak();
     }
   };
 
@@ -195,10 +219,7 @@ const SessionCreation = () => {
           {mode === null ? (
             <button
               title="Iniciar foco"
-              onClick={() => {
-                startFocus();
-                FlowmodoroPlugin.startTimer();
-              }}
+              onClick={handleStartFocus}
               className={clsx(buttonClasses, !isExpanded && "hidden")}
             >
               <FaPlayCircle />
@@ -206,10 +227,7 @@ const SessionCreation = () => {
           ) : mode === "focus" ? (
             <button
               title="Parar foco"
-              onClick={() => {
-                stopFocus();
-                FlowmodoroPlugin.stopTimer();
-              }}
+              onClick={() => handleStopTimer({ type: "focus" })}
               className={buttonClasses}
             >
               <FaStopCircle />
@@ -217,7 +235,7 @@ const SessionCreation = () => {
           ) : mode === "stopped" ? (
             <button
               title="Iniciar pausa"
-              onClick={startBreak}
+              onClick={handleStartBreak}
               className={buttonClasses}
             >
               <FaPlayCircle />
@@ -225,7 +243,7 @@ const SessionCreation = () => {
           ) : (
             <button
               title="Pular pausa"
-              onClick={skipBreak}
+              onClick={() => handleStopTimer({ type: "break" })}
               className={buttonClasses}
             >
               <IoPlaySkipForwardCircleSharp />
