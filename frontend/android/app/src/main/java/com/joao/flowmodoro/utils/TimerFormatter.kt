@@ -1,0 +1,10 @@
+package com.joao.flowmodoro.utils
+
+object TimeFormatter {
+    fun format(elapsedMillis: Long): String {
+        val totalSeconds = elapsedMillis / 1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+}
