@@ -6,7 +6,7 @@ import {
   updateSession,
 } from "../local/sessions.repository";
 
-import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
+import { APP_DATA_QUERY_KEY } from "../../../consts/global-query-key";
 
 import type { SessionDTO } from "../dtos/sessions-response";
 import type {

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { APP_DATA_QUERY_KEY } from "../../../global-query-key";
+import { APP_DATA_QUERY_KEY } from "../../../consts/global-query-key";
 import {
   createProject,
   deleteProject,

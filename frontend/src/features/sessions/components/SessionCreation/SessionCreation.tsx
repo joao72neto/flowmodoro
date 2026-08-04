@@ -15,6 +15,7 @@ import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 import { FlowmodoroPlugin } from "../../../../mobile/plugins";
 
 import { getTick } from "../../../timer/utils/timer-tick.store";
+import { isNative } from "../../../../consts/platform";
 
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
@@ -89,21 +90,30 @@ const SessionCreation = () => {
   };
 
   const handleStartFocus = async () => {
-    await FlowmodoroPlugin.requestNotificationPermission();
-    await FlowmodoroPlugin.startFocus({ anchorMillis: Date.now() });
+    if (isNative) {
+      await FlowmodoroPlugin.requestNotificationPermission();
+      await FlowmodoroPlugin.startFocus({ anchorMillis: Date.now() });
+    }
+
     startFocus();
   };
 
   const handleStartBreak = async () => {
-    await FlowmodoroPlugin.startBreak({
-      anchorMillis: Date.now(),
-      restDurationMillis: getTick() * 1000,
-    });
+    if (isNative) {
+      await FlowmodoroPlugin.startBreak({
+        anchorMillis: Date.now(),
+        restDurationMillis: getTick() * 1000,
+      });
+    }
+
     startBreak();
   };
 
   const handleStopTimer = async ({ type }: { type: "focus" | "break" }) => {
-    await FlowmodoroPlugin.stopTimer();
+    if (isNative) {
+      await FlowmodoroPlugin.stopTimer();
+    }
+
     if (type === "focus") {
       stopFocus();
     } else {
