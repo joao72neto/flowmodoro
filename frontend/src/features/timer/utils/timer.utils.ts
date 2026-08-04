@@ -39,9 +39,12 @@ export const sendNotification = async () => {
   };
 
   try {
-    if ("serviceWorker" in navigator) {
+    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
       const registration = await navigator.serviceWorker.ready;
-      registration.showNotification("Pausa Finalizada!", notificationData);
+      await registration.showNotification(
+        "Pausa Finalizada!",
+        notificationData,
+      );
     } else {
       new Notification("Pausa Finalizada!", notificationData);
     }

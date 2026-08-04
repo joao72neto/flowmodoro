@@ -6,11 +6,9 @@ export interface FlowmodoroPlugin {
   startBreak({
     anchorMillis,
     restDurationMillis,
-    ratio,
   }: {
     anchorMillis: number;
     restDurationMillis: number;
-    ratio?: number;
   }): Promise<void>;
   stopTimer(): Promise<void>;
 }

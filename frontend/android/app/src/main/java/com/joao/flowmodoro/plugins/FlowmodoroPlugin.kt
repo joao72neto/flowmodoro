@@ -27,11 +27,6 @@ class FlowmodoroPlugin : Plugin() {
         }
     }
 
-    @PermissionCallback
-    private fun notificationPermsCallback(call: PluginCall) {
-        call.resolve()
-    }
-
     @PluginMethod
     fun startFocus(call: PluginCall) {
         val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
@@ -46,23 +41,16 @@ class FlowmodoroPlugin : Plugin() {
     fun startBreak(call: PluginCall) {
         val restDurationMillis = call.getNumber("restDurationMillis")
             ?: return call.reject("restDurationMillis é obrigatório")
-        val ratio = call.getDouble("ratio") ?: 0.2
         val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
 
         dispatch(Intent(context, TimerService::class.java).apply {
             action = TimerService.ACTION_START_BREAK
-            putExtra(TimerService.EXTRA_FOCUS_DURATION, restDurationMillis)
-            putExtra(TimerService.EXTRA_RATIO, ratio)
+            putExtra(TimerService.EXTRA_REST_DURATION, restDurationMillis)
             putExtra(TimerService.EXTRA_ANCHOR, anchorMillis)
         })
         call.resolve()
     }
 
-    private fun PluginCall.getNumber(name: String): Long? {
-        return getLong(name)
-            ?: getInt(name)?.toLong()
-            ?: getDouble(name)?.toLong()
-    }
 
     @PluginMethod
     fun stopTimer(call: PluginCall) {
@@ -71,6 +59,17 @@ class FlowmodoroPlugin : Plugin() {
         }
         context.startService(intent)
         call.resolve()
+    }
+
+    @PermissionCallback
+    private fun notificationPermsCallback(call: PluginCall) {
+        call.resolve()
+    }
+
+    private fun PluginCall.getNumber(name: String): Long? {
+        return getLong(name)
+            ?: getInt(name)?.toLong()
+            ?: getDouble(name)?.toLong()
     }
 
     private fun dispatch(intent: Intent) {
