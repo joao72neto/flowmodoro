@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { useModal } from "../contexts/modal/modal.context";
+import { isNative } from "../../consts/platform";
 
 export const useNotificationPermission = () => {
   const { showInfo, hideModal } = useModal();
 
   useEffect(() => {
+    if (isNative) return;
+
     (async () => {
       if (!("Notification" in window)) {
         showInfo({

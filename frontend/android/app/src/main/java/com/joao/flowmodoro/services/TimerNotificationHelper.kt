@@ -3,11 +3,14 @@ package com.joao.flowmodoro.services
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.joao.flowmodoro.MainActivity
 import com.joao.flowmodoro.R
 
 class TimerNotificationHelper(private val context: Context) {
@@ -52,12 +55,14 @@ class TimerNotificationHelper(private val context: Context) {
 
     fun buildTimerNotification(time: String, isBreak: Boolean): Notification {
         val label = if (isBreak) "Descanso" else "Foco"
+
         return NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
             .setContentTitle("Flowmodoro · $label")
             .setContentText("Tempo: $time")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
+            .setContentIntent(buildContentIntent())
             .build()
     }
 
@@ -73,7 +78,25 @@ class TimerNotificationHelper(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setAutoCancel(true)
+            .setContentIntent(buildContentIntent())
             .build()
+
         manager.notify(NOTIFICATION_ID_ALARM, notification)
     }
+
+    private fun buildContentIntent(): PendingIntent {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+
+        return PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
 }
