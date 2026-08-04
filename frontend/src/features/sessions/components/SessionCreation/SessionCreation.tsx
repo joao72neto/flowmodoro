@@ -90,13 +90,14 @@ const SessionCreation = () => {
 
   const handleStartFocus = async () => {
     await FlowmodoroPlugin.requestNotificationPermission();
-    await FlowmodoroPlugin.startFocus();
+    await FlowmodoroPlugin.startFocus({ anchorMillis: Date.now() });
     startFocus();
   };
 
   const handleStartBreak = async () => {
     await FlowmodoroPlugin.startBreak({
-      focusDurationMillis: getTick() * 1000,
+      anchorMillis: Date.now(),
+      restDurationMillis: getTick() * 1000,
     });
     startBreak();
   };

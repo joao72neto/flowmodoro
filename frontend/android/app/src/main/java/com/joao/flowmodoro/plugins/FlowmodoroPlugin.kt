@@ -34,8 +34,26 @@ class FlowmodoroPlugin : Plugin() {
 
     @PluginMethod
     fun startFocus(call: PluginCall) {
+        val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
         dispatch(Intent(context, TimerService::class.java).apply {
             action = TimerService.ACTION_START_FOCUS
+            putExtra(TimerService.EXTRA_ANCHOR, anchorMillis)
+        })
+        call.resolve()
+    }
+
+    @PluginMethod
+    fun startBreak(call: PluginCall) {
+        val restDurationMillis = call.getNumber("restDurationMillis")
+            ?: return call.reject("restDurationMillis é obrigatório")
+        val ratio = call.getDouble("ratio") ?: 0.2
+        val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
+
+        dispatch(Intent(context, TimerService::class.java).apply {
+            action = TimerService.ACTION_START_BREAK
+            putExtra(TimerService.EXTRA_FOCUS_DURATION, restDurationMillis)
+            putExtra(TimerService.EXTRA_RATIO, ratio)
+            putExtra(TimerService.EXTRA_ANCHOR, anchorMillis)
         })
         call.resolve()
     }
@@ -44,23 +62,6 @@ class FlowmodoroPlugin : Plugin() {
         return getLong(name)
             ?: getInt(name)?.toLong()
             ?: getDouble(name)?.toLong()
-    }
-
-    @PluginMethod
-    fun startBreak(call: PluginCall) {
-        val focusDurationMillis = call.getNumber("focusDurationMillis")
-        if (focusDurationMillis == null) {
-            call.reject("focusDurationMillis é obrigatório")
-            return
-        }
-        val ratio = call.getDouble("ratio") ?: 0.2
-
-        dispatch(Intent(context, TimerService::class.java).apply {
-            action = TimerService.ACTION_START_BREAK
-            putExtra(TimerService.EXTRA_FOCUS_DURATION, focusDurationMillis)
-            putExtra(TimerService.EXTRA_RATIO, ratio)
-        })
-        call.resolve()
     }
 
     @PluginMethod

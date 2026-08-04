@@ -2,12 +2,14 @@ import { registerPlugin } from "@capacitor/core";
 
 export interface FlowmodoroPlugin {
   requestNotificationPermission(): Promise<void>;
-  startFocus(): Promise<void>;
+  startFocus({ anchorMillis }: { anchorMillis: number }): Promise<void>;
   startBreak({
-    focusDurationMillis,
+    anchorMillis,
+    restDurationMillis,
     ratio,
   }: {
-    focusDurationMillis: number;
+    anchorMillis: number;
+    restDurationMillis: number;
     ratio?: number;
   }): Promise<void>;
   stopTimer(): Promise<void>;

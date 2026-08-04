@@ -11,6 +11,8 @@ import type { TimerMode } from "../timer.types";
 import { updateFavicon } from "../utils/timer.utils";
 import { sendNotification } from "../utils/timer.utils";
 
+import { App } from "@capacitor/app";
+
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
@@ -95,6 +97,7 @@ const useTimer = () => {
           setTick(baseSecondsRef.current + diffInSeconds);
         } else if (mode === "break") {
           const remaining = baseSecondsRef.current - diffInSeconds;
+
           if (remaining <= 0) {
             setTick(0);
             setMode(null);
@@ -107,26 +110,56 @@ const useTimer = () => {
     };
 
     let interval: ReturnType<typeof setInterval> | null = null;
+
     const startInterval = () => {
       if (interval) return;
       interval = setInterval(syncTime, 1000);
     };
+
     const stopInterval = () => {
       if (interval) clearInterval(interval);
       interval = null;
     };
 
-    const handleVisibility = () => {
-      syncTime();
-      if (document.hidden) stopInterval();
-      else startInterval();
+    let appStateListener: Awaited<ReturnType<typeof App.addListener>> | null =
+      null;
+
+    const setupAppListener = async () => {
+      appStateListener = await App.addListener(
+        "appStateChange",
+        ({ isActive }) => {
+          syncTime();
+
+          if (isActive) {
+            startInterval();
+          } else {
+            stopInterval();
+          }
+        },
+      );
     };
 
-    if (!document.hidden) startInterval();
+    setupAppListener();
+
+    const handleVisibility = () => {
+      syncTime();
+
+      if (document.hidden) {
+        stopInterval();
+      } else {
+        startInterval();
+      }
+    };
+
+    if (!document.hidden) {
+      startInterval();
+    }
+
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       stopInterval();
+      appStateListener?.remove();
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [mode]);

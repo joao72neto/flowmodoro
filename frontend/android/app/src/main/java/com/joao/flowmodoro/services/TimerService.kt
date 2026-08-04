@@ -5,103 +5,83 @@ import android.content.Intent
 import android.os.IBinder
 import com.joao.flowmodoro.utils.TimeFormatter
 import kotlinx.coroutines.*
+import com.joao.flowmodoro.alarm.BreakAlarmManager
 
 class TimerService : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var tickerJob: Job? = null
     private lateinit var notificationHelper: TimerNotificationHelper
+    private lateinit var breakAlarmManager: BreakAlarmManager
 
     override fun onCreate() {
         super.onCreate()
         notificationHelper = TimerNotificationHelper(this)
         notificationHelper.createChannels()
+        breakAlarmManager = BreakAlarmManager(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val anchor = intent?.getLongExtra(EXTRA_ANCHOR, System.currentTimeMillis())
+            ?: System.currentTimeMillis()
+
         when (intent?.action) {
-            ACTION_START_FOCUS -> startFocus()
+            ACTION_START_FOCUS -> startFocus(anchor)
             ACTION_START_BREAK -> {
                 val focusDuration = intent.getLongExtra(EXTRA_FOCUS_DURATION, 0L)
                 val ratio = intent.getDoubleExtra(EXTRA_RATIO, 0.2)
-                startBreak(focusDuration, ratio)
+                startBreak(anchor, focusDuration, ratio)
             }
 
             ACTION_STOP -> stopTimer()
-            else -> {
-                stopSelf()
-            }
+            else -> stopSelf()
         }
         return START_STICKY
     }
 
-    private fun startFocus() {
+    private fun startFocus(anchor: Long) {
         tickerJob?.cancel()
-        val startTime = System.currentTimeMillis()
-
         startForeground(
             TimerNotificationHelper.NOTIFICATION_ID_TIMER,
-            notificationHelper.buildTimerNotification("00:00", isBreak = false)
+            notificationHelper.buildTimerNotification("00:00", false)
         )
 
         tickerJob = serviceScope.launch {
             while (isActive) {
-                val elapsed = System.currentTimeMillis() - startTime
-                notificationHelper.updateTimerNotification(
-                    TimeFormatter.format(elapsed),
-                    isBreak = false
-                )
+                val elapsed = System.currentTimeMillis() - anchor
+                notificationHelper.updateTimerNotification(TimeFormatter.format(elapsed), false)
                 delay(1000)
             }
         }
     }
 
-    private fun startBreak(focusDurationMillis: Long, ratio: Double) {
+
+    private fun startBreak(anchor: Long, restDurationMillis: Long, ratio: Double) {
         tickerJob?.cancel()
-
-        val breakDuration = (focusDurationMillis * ratio).toLong()
-
-        if (breakDuration <= 0L) {
-            return
-        }
-
-        val endTime = System.currentTimeMillis() + breakDuration
 
         startForeground(
             TimerNotificationHelper.NOTIFICATION_ID_TIMER,
             notificationHelper.buildTimerNotification(
-                TimeFormatter.format(breakDuration),
-                isBreak = true
+                TimeFormatter.format(restDurationMillis),
+                true
             )
         )
+        breakAlarmManager.schedule(anchor, restDurationMillis)
 
         tickerJob = serviceScope.launch {
             while (isActive) {
-                val remaining = endTime - System.currentTimeMillis()
-
-                if (remaining <= 0) {
-                    notificationHelper.updateTimerNotification("00:00", isBreak = true)
-                    onBreakFinished()
-                    break
-                }
-
-                notificationHelper.updateTimerNotification(
-                    TimeFormatter.format(remaining),
-                    isBreak = true
-                )
-
+                val elapsed = System.currentTimeMillis() - anchor
+                val remaining = restDurationMillis - elapsed
+                if (remaining <= 0) break
+                notificationHelper.updateTimerNotification(TimeFormatter.format(remaining), true)
                 delay(1000)
             }
         }
     }
 
-    private fun onBreakFinished() {
-        notificationHelper.notifyBreakFinished()
-        stopTimer()
-    }
-
     private fun stopTimer() {
         tickerJob?.cancel()
+        breakAlarmManager.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
@@ -114,6 +94,7 @@ class TimerService : Service() {
     override fun onBind(p0: Intent?): IBinder? = null
 
     companion object {
+        const val EXTRA_ANCHOR = "extra_anchor"
         const val ACTION_START_FOCUS = "com.joao.flowmodoro.action.START_FOCUS"
         const val ACTION_START_BREAK = "com.joao.flowmodoro.action.START_BREAK"
         const val ACTION_STOP = "com.joao.flowmodoro.action.STOP"
