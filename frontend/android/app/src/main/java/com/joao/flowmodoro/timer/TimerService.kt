@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.IBinder
 import kotlinx.coroutines.*
 import com.joao.flowmodoro.alarm.AlarmManager
+import android.os.Build
+import android.provider.Settings
 
 class TimerService : Service() {
 
@@ -66,7 +68,11 @@ class TimerService : Service() {
     private fun startBreak(anchor: Long, restDurationMillis: Long) {
         tickerJob?.cancel()
 
-        alarmManager.schedule(anchor, restDurationMillis)
+        if (alarmManager.canScheduleExactAlarms()) {
+            alarmManager.schedule(anchor, restDurationMillis)
+        } else {
+            requestExactAlarmPermission()
+        }
 
         tickerJob = serviceScope.launch {
             while (isActive) {
@@ -90,6 +96,16 @@ class TimerService : Service() {
         alarmManager.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
+    }
+
+    private fun requestExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+
+            startActivity(intent)
+        }
     }
 
     override fun onDestroy() {
