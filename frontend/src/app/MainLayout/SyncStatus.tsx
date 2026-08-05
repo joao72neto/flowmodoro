@@ -7,8 +7,14 @@ import { MdErrorOutline } from "react-icons/md";
 import { BsCloudCheck } from "react-icons/bs";
 
 import { clsx } from "clsx";
+import { MdCloudOff } from "react-icons/md";
 
-type SyncStatusState = "synced" | "syncing" | "error";
+import { useEffect } from "react";
+
+import { Network } from "@capacitor/network";
+import { isNative } from "../../consts/platform";
+
+type SyncStatusState = "offline" | "synced" | "syncing" | "error";
 
 const iconMap: Record<
   SyncStatusState,
@@ -26,11 +32,45 @@ const iconMap: Record<
     icon: <MdErrorOutline size={25} className="text-danger" />,
     label: "Falha ao sincronizar",
   },
+
+  offline: {
+    icon: <MdCloudOff size={25} className="text-warning" />,
+    label: "Sem conexão",
+  },
 };
 
 const SyncStatus = () => {
   const [isHovered, setIsHovered] = useState(false);
   const queue = useLiveQuery(() => db.syncQueue.toArray(), []);
+
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    if (isNative) {
+      Network.getStatus().then((status) => {
+        setIsOnline(status.connected);
+      });
+
+      const listener = Network.addListener("networkStatusChange", (status) => {
+        setIsOnline(status.connected);
+      });
+
+      return () => {
+        listener.then((l) => l.remove());
+      };
+    }
+
+    const onOnline = () => setIsOnline(true);
+    const onOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
+  }, []);
 
   if (!queue) return null;
 
@@ -39,8 +79,13 @@ const SyncStatus = () => {
     (item) => item.status === "pending" || item.status === "processing",
   ).length;
 
-  const status: SyncStatusState =
-    failedCount > 0 ? "error" : pendingCount > 0 ? "syncing" : "synced";
+  const status: SyncStatusState = !isOnline
+    ? "offline"
+    : failedCount > 0
+      ? "error"
+      : pendingCount > 0
+        ? "syncing"
+        : "synced";
 
   const { icon, label } = iconMap[status];
 

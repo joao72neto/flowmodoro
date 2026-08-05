@@ -1,11 +1,26 @@
+import { Network } from "@capacitor/network";
+
 import syncQueue from "./sync-queue.service";
+import { isNative } from "../../consts/platform";
 
 const SYNC_EVENT = "sync-queue:trigger";
 
 export const initSync = () => {
   const process = () => syncQueue.processQueue();
 
-  window.addEventListener("online", process);
+  if (isNative) {
+    Network.addListener("networkStatusChange", (status) => {
+      if (status.connected) process();
+    });
+
+    Network.getStatus().then((status) => {
+      if (status.connected) process();
+    });
+  } else {
+    window.addEventListener("online", process);
+
+    if (navigator.onLine) process();
+  }
 
   window.addEventListener(SYNC_EVENT, process);
 
@@ -14,8 +29,6 @@ export const initSync = () => {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") process();
   });
-
-  if (navigator.onLine) process();
 };
 
 export const triggerSync = () => {
