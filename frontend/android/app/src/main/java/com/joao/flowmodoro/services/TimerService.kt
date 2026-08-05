@@ -17,8 +17,16 @@ class TimerService : Service() {
     override fun onCreate() {
         super.onCreate()
         notificationHelper = TimerNotificationHelper(this)
-        notificationHelper.createChannels()
         breakAlarmManager = BreakAlarmManager(this)
+        notificationHelper.createChannels()
+
+        startForeground(
+            TimerNotificationHelper.NOTIFICATION_ID_TIMER,
+            notificationHelper.buildTimerNotification(
+                "00:00",
+                false
+            )
+        )
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -40,15 +48,16 @@ class TimerService : Service() {
 
     private fun startFocus(anchor: Long) {
         tickerJob?.cancel()
-        startForeground(
-            TimerNotificationHelper.NOTIFICATION_ID_TIMER,
-            notificationHelper.buildTimerNotification("00:00", false)
-        )
 
         tickerJob = serviceScope.launch {
             while (isActive) {
                 val elapsed = System.currentTimeMillis() - anchor
-                notificationHelper.updateTimerNotification(TimeFormatter.format(elapsed), false)
+
+                notificationHelper.updateTimerNotification(
+                    TimeFormatter.format(elapsed),
+                    false
+                )
+
                 delay(1000)
             }
         }
@@ -58,21 +67,20 @@ class TimerService : Service() {
     private fun startBreak(anchor: Long, restDurationMillis: Long) {
         tickerJob?.cancel()
 
-        startForeground(
-            TimerNotificationHelper.NOTIFICATION_ID_TIMER,
-            notificationHelper.buildTimerNotification(
-                TimeFormatter.format(restDurationMillis),
-                true
-            )
-        )
         breakAlarmManager.schedule(anchor, restDurationMillis)
 
         tickerJob = serviceScope.launch {
             while (isActive) {
                 val elapsed = System.currentTimeMillis() - anchor
                 val remaining = restDurationMillis - elapsed
+
                 if (remaining <= 0) break
-                notificationHelper.updateTimerNotification(TimeFormatter.format(remaining), true)
+
+                notificationHelper.updateTimerNotification(
+                    TimeFormatter.format(remaining),
+                    true
+                )
+
                 delay(1000)
             }
         }
