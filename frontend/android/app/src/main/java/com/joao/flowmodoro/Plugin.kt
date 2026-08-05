@@ -1,4 +1,4 @@
-package com.joao.flowmodoro.plugins
+package com.joao.flowmodoro
 
 import android.Manifest
 import android.content.Intent
@@ -9,14 +9,14 @@ import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
-import com.joao.flowmodoro.services.TimerService
+import com.joao.flowmodoro.timer.TimerService
 
 @CapacitorPlugin(
     name = "Flowmodoro", permissions = [
         Permission(strings = [Manifest.permission.POST_NOTIFICATIONS], alias = "notifications")
     ]
 )
-class FlowmodoroPlugin : Plugin() {
+class Plugin : Plugin() {
 
     @PluginMethod
     fun requestNotificationPermission(call: PluginCall) {

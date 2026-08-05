@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 
-class BreakAlarmManager(
+class AlarmManager(
     private val context: Context
 ) {
 
@@ -32,7 +32,7 @@ class BreakAlarmManager(
     }
 
     private fun pendingIntent(): PendingIntent {
-        val intent = Intent(context, BreakAlarmReceiver::class.java)
+        val intent = Intent(context, AlarmReceiver::class.java)
 
         return PendingIntent.getBroadcast(
             context,

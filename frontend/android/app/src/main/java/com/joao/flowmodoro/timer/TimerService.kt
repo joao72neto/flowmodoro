@@ -1,23 +1,22 @@
-package com.joao.flowmodoro.services
+package com.joao.flowmodoro.timer
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.joao.flowmodoro.utils.TimeFormatter
 import kotlinx.coroutines.*
-import com.joao.flowmodoro.alarm.BreakAlarmManager
+import com.joao.flowmodoro.alarm.AlarmManager
 
 class TimerService : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var tickerJob: Job? = null
     private lateinit var notificationHelper: TimerNotificationHelper
-    private lateinit var breakAlarmManager: BreakAlarmManager
+    private lateinit var alarmManager: AlarmManager
 
     override fun onCreate() {
         super.onCreate()
         notificationHelper = TimerNotificationHelper(this)
-        breakAlarmManager = BreakAlarmManager(this)
+        alarmManager = AlarmManager(this)
         notificationHelper.createChannels()
 
         startForeground(
@@ -67,7 +66,7 @@ class TimerService : Service() {
     private fun startBreak(anchor: Long, restDurationMillis: Long) {
         tickerJob?.cancel()
 
-        breakAlarmManager.schedule(anchor, restDurationMillis)
+        alarmManager.schedule(anchor, restDurationMillis)
 
         tickerJob = serviceScope.launch {
             while (isActive) {
@@ -88,7 +87,7 @@ class TimerService : Service() {
 
     private fun stopTimer() {
         tickerJob?.cancel()
-        breakAlarmManager.cancel()
+        alarmManager.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }

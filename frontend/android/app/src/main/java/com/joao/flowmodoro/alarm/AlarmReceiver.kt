@@ -7,10 +7,10 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import com.joao.flowmodoro.R
-import com.joao.flowmodoro.services.TimerNotificationHelper
-import com.joao.flowmodoro.services.TimerService
+import com.joao.flowmodoro.timer.TimerNotificationHelper
+import com.joao.flowmodoro.timer.TimerService
 
-class BreakAlarmReceiver : BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val notificationHelper = TimerNotificationHelper(context)
         notificationHelper.notifyBreakFinished()

@@ -25,11 +25,11 @@
         </activity>
 
         <service
-            android:name=".services.TimerService"
+            android:name=".timer.TimerService"
             android:foregroundServiceType="specialUse" />
 
         <receiver
-            android:name=".alarm.BreakAlarmReceiver"
+            android:name=".alarm.AlarmReceiver"
             android:exported="false" />
 
         <provider

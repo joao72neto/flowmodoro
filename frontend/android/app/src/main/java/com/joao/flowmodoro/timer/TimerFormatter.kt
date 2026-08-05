@@ -1,7 +1,6 @@
-package com.joao.flowmodoro.utils
+package com.joao.flowmodoro.timer
 
 import java.util.Locale
-
 
 object TimeFormatter {
     fun format(elapsedMillis: Long): String {
