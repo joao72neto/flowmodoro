@@ -17,7 +17,7 @@ class TimerNotificationHelper(private val context: Context) {
 
     companion object {
         const val CHANNEL_TIMER_ID = "flowmodoro_timer"
-        const val CHANNEL_ALARM_ID = "flowmodoro_alarm"
+        const val CHANNEL_BREAK_FINISHED_ID = "flowmodoro_break_finished_v2"
         const val NOTIFICATION_ID_TIMER = 1
         const val NOTIFICATION_ID_ALARM = 2
     }
@@ -33,18 +33,10 @@ class TimerNotificationHelper(private val context: Context) {
             setSound(null, null)
         }
 
-        val alarmAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_ALARM)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .build()
-
         val alarmChannel = NotificationChannel(
-            CHANNEL_ALARM_ID, "Fim do descanso", NotificationManager.IMPORTANCE_HIGH
+            CHANNEL_BREAK_FINISHED_ID, "Fim do descanso", NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            setSound(
-                RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM),
-                alarmAttributes
-            )
+            setSound(null, null)
             enableVibration(true)
             lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         }
@@ -71,7 +63,7 @@ class TimerNotificationHelper(private val context: Context) {
     }
 
     fun notifyBreakFinished() {
-        val notification = NotificationCompat.Builder(context, CHANNEL_ALARM_ID)
+        val notification = NotificationCompat.Builder(context, CHANNEL_BREAK_FINISHED_ID)
             .setContentTitle("Descanso terminou!")
             .setContentText("Hora de voltar pro foco.")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -98,5 +90,4 @@ class TimerNotificationHelper(private val context: Context) {
                     PendingIntent.FLAG_IMMUTABLE
         )
     }
-
 }
