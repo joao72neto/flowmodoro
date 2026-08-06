@@ -1,19 +1,24 @@
 import SideBar from "./SideBar";
-import MainContentContainer from "./MainContentContainer";
+import MainContentContainer from "./containers/MainContentContainer";
 
 import { useNotificationPermission } from "../../shared/hooks/useNotificationPermission";
-import SideBarContainer from "./SideBarContainer";
+import SideBarContainer from "./containers/SideBarContainer";
 
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 
-import Footer from "./Footer";
+import LoadingScreen from "./LoadingScreen";
+
+import Footer from "./Footer/Footer";
 import SyncStatus from "./SyncStatus";
+
+import { useAppReady } from "../../shared/hooks/useAppReady";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isReady = useAppReady();
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -25,6 +30,10 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       }
     };
   }, [isSidebarOpen]);
+
+  if (!isReady) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="relative min-h-screen flex overflow-x-hidden">

@@ -3,12 +3,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
 
-import { useClickOutside } from "../../shared/hooks/useClickOutside";
-import { useExportBackup, useImportBackup } from "../../local/backup/useBackup";
+import { useClickOutside } from "../../../shared/hooks/useClickOutside";
+import { useExportBackup, useImportBackup } from "../../../local/backup/useBackup";
 
-import Button from "../../shared/components/buttons/Button/Button";
-import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
-import { useModal } from "../../shared/contexts/modal/modal.context";
+import Button from "../../../shared/components/buttons/Button/Button";
+import ExpandableButton from "../../../shared/components/buttons/ExpandableButton";
+import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { CiImport, CiExport } from "react-icons/ci";
 
 function BackupMenu() {

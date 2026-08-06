@@ -1,4 +1,4 @@
-import ExpandableButton from "../../shared/components/buttons/ExpandableButton";
+import ExpandableButton from "../../../shared/components/buttons/ExpandableButton";
 import { PiCaretLeftBold } from "react-icons/pi";
 import BackupMenu from "./BackupMenu";
 import clsx from "clsx";
