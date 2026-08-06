@@ -9,10 +9,13 @@ import type { BackupData } from "./backup.schema";
 import syncQueue from "../sync/sync-queue.service";
 import { backupSchema } from "./backup.schema";
 
+import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
+
 class BackupService {
   private readonly VERSION = 1;
 
-  async exportData(): Promise<void> {
+  async exportWeb(): Promise<void> {
     try {
       const [projects, tags, sessions] = await Promise.all([
         db.projects.toArray(),
@@ -40,6 +43,44 @@ class BackupService {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      throw new Error("Não foi possível gerar o backup. Tente novamente.");
+    }
+  }
+
+  async exportNative(): Promise<void> {
+    try {
+      const [projects, tags, sessions] = await Promise.all([
+        db.projects.toArray(),
+        db.tags.toArray(),
+        db.sessions.toArray(),
+      ]);
+
+      const backup: BackupData = {
+        version: this.VERSION,
+        exportedAt: new Date().toISOString(),
+        projects,
+        tags,
+        sessions,
+      };
+
+      const fileName = `flowmodoro-backup-${this.formatDateForFilename(new Date())}.json`;
+      const content = JSON.stringify(backup, null, 2);
+
+      const result = await Filesystem.writeFile({
+        path: fileName,
+        data: content,
+        directory: Directory.Cache,
+        encoding: Encoding.UTF8,
+      });
+
+      await Share.share({
+        title: "Backup do Flowmodoro",
+        text: "Backup dos seus dados do Flowmodoro",
+        url: result.uri,
+        dialogTitle: "Salvar backup",
+      });
     } catch (err) {
       console.error(err);
       throw new Error("Não foi possível gerar o backup. Tente novamente.");

@@ -4,10 +4,12 @@ import backupService from "./backup.service";
 import { APP_DATA_QUERY_KEY } from "../../consts/global-query-key";
 
 import { triggerSync } from "../sync/sync-manager";
+import { isNative } from "../../consts/platform";
 
 export const useExportBackup = () => {
   return useMutation({
-    mutationFn: (): Promise<void> => backupService.exportData(),
+    mutationFn: (): Promise<void> =>
+      isNative ? backupService.exportNative() : backupService.exportWeb(),
     meta: {
       errorTitle: "Erro ao exportar backup",
     },
