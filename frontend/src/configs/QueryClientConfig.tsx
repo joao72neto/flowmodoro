@@ -26,6 +26,10 @@ const QueryClientConfig = ({ children }: { children: React.ReactNode }) => {
           queries: {
             retry: false,
             refetchOnWindowFocus: false,
+            networkMode: "always",
+          },
+          mutations: {
+            networkMode: "always",
           },
         },
 
