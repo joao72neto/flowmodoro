@@ -17,6 +17,12 @@ import { FlowmodoroPlugin } from "../../../../mobile/plugins";
 import { getTick } from "../../../timer/utils/timer-tick.store";
 import { isNative } from "../../../../consts/platform";
 
+import { ensureAllPermissions } from "../../permissions.utils";
+import type { PluginListenerHandle } from "@capacitor/core";
+
+import { useRef } from "react";
+import { App } from "@capacitor/app";
+
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
     useTimerContext();
@@ -31,6 +37,8 @@ const SessionCreation = () => {
     projects,
     tags,
   } = useSessionContext();
+
+  const pendingAction = useRef<"start-focus" | null>(null);
 
   const [sessionName, setSessionName] = useState(contextSessionName);
 
@@ -72,6 +80,40 @@ const SessionCreation = () => {
     return () => clearTimeout(timer);
   }, [sessionName, selectedProject, selectedTag]);
 
+  useEffect(() => {
+    if (!isNative) {
+      return;
+    }
+
+    const setup = async () => {
+      const listener = await App.addListener("resume", async () => {
+        if (!pendingAction.current) {
+          return;
+        }
+
+        const ok = await ensureAllPermissions();
+        if (!ok) {
+          return;
+        }
+
+        pendingAction.current = null;
+        startFocusTimer();
+      });
+
+      return listener;
+    };
+
+    let listener: PluginListenerHandle | undefined;
+    setup().then((l) => {
+      listener = l;
+    });
+
+    return () => {
+      listener?.remove();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const commitSessionName = () => {
     setContextSessionName(sessionName);
   };
@@ -89,13 +131,27 @@ const SessionCreation = () => {
     }
   };
 
-  const handleStartFocus = async () => {
+  const startFocusTimer = async () => {
     if (isNative) {
-      await FlowmodoroPlugin.requestNotificationPermission();
       await FlowmodoroPlugin.startFocus({ anchorMillis: Date.now() });
     }
-
     startFocus();
+  };
+
+  const handleStartFocus = async () => {
+    if (isNative) {
+      pendingAction.current = "start-focus";
+
+      const ok = await ensureAllPermissions();
+
+      if (!ok) {
+        return;
+      }
+
+      pendingAction.current = null;
+    }
+
+    startFocusTimer();
   };
 
   const handleStartBreak = async () => {
@@ -105,7 +161,6 @@ const SessionCreation = () => {
         restDurationMillis: getTick() * 1000,
       });
     }
-
     startBreak();
   };
 

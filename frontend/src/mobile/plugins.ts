@@ -1,7 +1,10 @@
 import { registerPlugin } from "@capacitor/core";
 
 export interface FlowmodoroPlugin {
-  requestNotificationPermission(): Promise<void>;
+  ensureNotificationPermission(): Promise<{ granted: boolean }>;
+  ensureExactAlarmPermission(): Promise<{ granted: boolean }>;
+  ensureBatteryOptimization(): Promise<{ granted: boolean }>;
+
   startFocus({ anchorMillis }: { anchorMillis: number }): Promise<void>;
   startBreak({
     anchorMillis,

@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 
 class AlarmManager(
@@ -13,15 +12,6 @@ class AlarmManager(
 
     private val alarmManager =
         context.getSystemService(AlarmManager::class.java)
-
-
-    fun canScheduleExactAlarms(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            alarmManager.canScheduleExactAlarms()
-        } else {
-            true
-        }
-    }
 
     fun schedule(anchor: Long, breakDurationMillis: Long) {
         val triggerAt = anchor + breakDurationMillis
