@@ -11,7 +11,6 @@ import ExpandableButton from "../../../../shared/components/buttons/ExpandableBu
 import clsx from "clsx";
 import Tags from "../../../tags/components/Tags/Tags";
 
-import ProjectsSkeleton from "./ProjectsSkeleton";
 import {
   useCreateProject,
   useDeleteProject,
@@ -23,7 +22,7 @@ import type { ProjectDTO } from "../../dtos/projects-response";
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
 
 const Projects = () => {
-  const { data: projects, isLoading } = useFetchProjects();
+  const { data: projects } = useFetchProjects();
 
   const [selectedProject, setSelectedProject] = useState<ProjectDTO | null>(
     null,
@@ -76,44 +75,40 @@ const Projects = () => {
               />
             </div>
 
-            {isLoading ? (
-              <ProjectsSkeleton />
-            ) : (
-              <div
-                className={clsx(
-                  "flex-1 flex flex-col gap-2 p-1 overflow-auto contain-content scrollbar-hidden",
-                  isEmpty && "justify-center",
-                )}
-              >
-                {isEmpty ? (
-                  <EmptyProjects
-                    title={searchQuery ? "Nenhum resultado" : "Sem projetos"}
-                    message={
-                      searchQuery
-                        ? `Não encontramos nada para "${searchQuery}".`
-                        : "Crie seu primeiro projeto para começar a organizar seu tempo."
-                    }
-                  />
-                ) : (
-                  <AnimatedList
-                    items={filteredProjects}
-                    getKey={(item) => item.id}
-                  >
-                    {(item) => (
-                      <Project
-                        projectData={item}
-                        onDelete={() => handleDeleteProject(item.id)}
-                        onEdit={() => {
-                          setEditingProject(item);
-                          openEditModal();
-                        }}
-                        onSelectTags={setSelectedProject}
-                      />
-                    )}
-                  </AnimatedList>
-                )}
-              </div>
-            )}
+            <div
+              className={clsx(
+                "flex-1 flex flex-col gap-2 p-1 overflow-auto contain-content scrollbar-hidden",
+                isEmpty && "justify-center",
+              )}
+            >
+              {isEmpty ? (
+                <EmptyProjects
+                  title={searchQuery ? "Nenhum resultado" : "Sem projetos"}
+                  message={
+                    searchQuery
+                      ? `Não encontramos nada para "${searchQuery}".`
+                      : "Crie seu primeiro projeto para começar a organizar seu tempo."
+                  }
+                />
+              ) : (
+                <AnimatedList
+                  items={filteredProjects}
+                  getKey={(item) => item.id}
+                >
+                  {(item) => (
+                    <Project
+                      projectData={item}
+                      onDelete={() => handleDeleteProject(item.id)}
+                      onEdit={() => {
+                        setEditingProject(item);
+                        openEditModal();
+                      }}
+                      onSelectTags={setSelectedProject}
+                    />
+                  )}
+                </AnimatedList>
+              )}
+            </div>
 
             <ExpandableButton
               icon={<GoPlus size={25} />}

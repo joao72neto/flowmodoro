@@ -10,7 +10,6 @@ import EmptyTags from "./EmptyTags";
 import ExpandableButton from "../../../../shared/components/buttons/ExpandableButton";
 import clsx from "clsx";
 
-import TagsSkeleton from "./TagsSkeleton";
 import {
   useCreateTag,
   useDeleteTag,
@@ -29,7 +28,7 @@ const Tags = ({
   project: ProjectDTO;
   onBack: () => void;
 }) => {
-  const { data: tags, isLoading } = useFetchTagsByProject(project.id || "");
+  const { data: tags } = useFetchTagsByProject(project.id || "");
 
   const [editingTag, setEditingTag] = useState<TagDTO | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -83,43 +82,40 @@ const Tags = ({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        {isLoading ? (
-          <TagsSkeleton />
-        ) : (
-          <div
-            className={clsx(
-              "flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden",
-              isEmpty && "justify-center",
-            )}
-          >
-            {isEmpty ? (
-              <EmptyTags
-                title={searchQuery ? "Nenhum resultado" : "Sem tags"}
-                message={
-                  searchQuery
-                    ? `Não encontramos nada para "${searchQuery}".`
-                    : "Crie sua primeira tag para começar a organizar seu tempo."
-                }
-              />
-            ) : (
-              <AnimatedList items={filteredTags} getKey={(item) => item.id}>
-                {(item) => (
-                  <Tag
-                    key={item.id}
-                    tagData={item}
-                    onDelete={() => {
-                      handleDeleteTag(item.id);
-                    }}
-                    onEdit={() => {
-                      setEditingTag(item);
-                      openEditModal();
-                    }}
-                  />
-                )}
-              </AnimatedList>
-            )}
-          </div>
-        )}
+
+        <div
+          className={clsx(
+            "flex-1 flex flex-col gap-2 overflow-auto contain-content scrollbar-hidden",
+            isEmpty && "justify-center",
+          )}
+        >
+          {isEmpty ? (
+            <EmptyTags
+              title={searchQuery ? "Nenhum resultado" : "Sem tags"}
+              message={
+                searchQuery
+                  ? `Não encontramos nada para "${searchQuery}".`
+                  : "Crie sua primeira tag para começar a organizar seu tempo."
+              }
+            />
+          ) : (
+            <AnimatedList items={filteredTags} getKey={(item) => item.id}>
+              {(item) => (
+                <Tag
+                  key={item.id}
+                  tagData={item}
+                  onDelete={() => {
+                    handleDeleteTag(item.id);
+                  }}
+                  onEdit={() => {
+                    setEditingTag(item);
+                    openEditModal();
+                  }}
+                />
+              )}
+            </AnimatedList>
+          )}
+        </div>
 
         <ExpandableButton
           icon={<GoPlus size={25} />}
