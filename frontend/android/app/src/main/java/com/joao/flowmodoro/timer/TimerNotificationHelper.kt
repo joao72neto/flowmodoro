@@ -14,7 +14,7 @@ import com.joao.flowmodoro.R
 class TimerNotificationHelper(private val context: Context) {
 
     companion object {
-        const val CHANNEL_TIMER_ID = "flowmodoro_timer"
+        const val CHANNEL_TIMER_ID = "flowmodoro_timer_v2"
         const val CHANNEL_BREAK_FINISHED_ID = "flowmodoro_break_finished_v2"
         const val NOTIFICATION_ID_TIMER = 1
         const val NOTIFICATION_ID_ALARM = 2
@@ -26,7 +26,7 @@ class TimerNotificationHelper(private val context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val timerChannel = NotificationChannel(
-            CHANNEL_TIMER_ID, "Timer em andamento", NotificationManager.IMPORTANCE_LOW
+            CHANNEL_TIMER_ID, "Timer em andamento", NotificationManager.IMPORTANCE_HIGH
         ).apply {
             setSound(null, null)
         }
