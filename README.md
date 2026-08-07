@@ -55,6 +55,12 @@ A aplicação funciona tanto em desktop quanto em dispositivos móveis e possui 
 
 Em navegadores como o Chrome no celular, é possível instalar a aplicação para que ela fique disponível como um app nativo no dispositivo.
 
+## Aplicação Nativa via Capacitor
+
+A aplicação também possui suporte a dispositivos Android por meio do Capacitor.
+
+A versão nativa oferece funcionalidades adicionais, como a execução do timer em segundo plano por meio de um Foreground Service e um alarme para notificar o término do período de descanso.
+
 ## 🛠️ Tecnologias
 
 ### Backend
@@ -71,6 +77,10 @@ Em navegadores como o Chrome no celular, é possível instalar a aplicação par
 - **IndexedDB** com **Dexie** para armazenamento local
 - **React Query** para gerenciamento de estado
 - **Axios** para comunicação com a API
+
+### Android
+- **Capacitor** para desenvolvimento de aplicativo nativo
+- **Kotlin** para criação de plugins nativos
 
 ## 🚀 Deploy
 
