@@ -6,6 +6,7 @@ export interface SessionPayloadDTO {
   rest?: number;
   projectId?: string;
   tagId?: string;
+  date?: string;
 }
 
 export interface SessionUpdateDTO {

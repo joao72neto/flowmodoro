@@ -19,6 +19,7 @@ const sessionSchema = z.object({
   rest: z.number().optional(),
   projectId: z.uuid("projectId da sessão inválido").optional(),
   tagId: z.uuid("tagId da sessão inválido").optional(),
+  date: z.string().optional(),
 });
 
 export const backupSchema = z.object({
