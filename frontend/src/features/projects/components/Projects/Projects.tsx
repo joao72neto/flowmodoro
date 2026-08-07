@@ -20,9 +20,11 @@ import {
 import type { ProjectDTO } from "../../dtos/projects-response";
 
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
+import { useSessionContext } from "../../../sessions/context/sessions.context";
 
 const Projects = () => {
   const { data: projects } = useFetchProjects();
+  const { setSelectedProjectId, setSelectedTagId } = useSessionContext();
 
   const [selectedProject, setSelectedProject] = useState<ProjectDTO | null>(
     null,
@@ -98,7 +100,11 @@ const Projects = () => {
                   {(item) => (
                     <Project
                       projectData={item}
-                      onDelete={() => handleDeleteProject(item.id)}
+                      onDelete={() => {
+                        handleDeleteProject(item.id);
+                        setSelectedProjectId(null);
+                        setSelectedTagId(null);
+                      }}
                       onEdit={() => {
                         setEditingProject(item);
                         openEditModal();
