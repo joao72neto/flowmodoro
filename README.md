@@ -55,7 +55,7 @@ A aplicação funciona tanto em desktop quanto em dispositivos móveis e possui 
 
 Em navegadores como o Chrome no celular, é possível instalar a aplicação para que ela fique disponível como um app nativo no dispositivo.
 
-## Aplicação Nativa via Capacitor
+### Suporte a Android
 
 A aplicação também possui suporte a dispositivos Android por meio do Capacitor.
 
