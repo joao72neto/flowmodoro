@@ -17,6 +17,8 @@ import { triggerSync } from "../../../local/sync/sync-manager";
 
 const SESSIONS_QUERY_KEY = "sessions";
 
+import { keepPreviousData } from "@tanstack/react-query";
+
 export const useFetchSessions = ({
   page,
   size,
@@ -27,7 +29,7 @@ export const useFetchSessions = ({
   return useQuery({
     queryKey: [APP_DATA_QUERY_KEY, SESSIONS_QUERY_KEY, page, size],
     queryFn: async () => await fetchSessions({ page, size }),
-
+    placeholderData: keepPreviousData,
     meta: {
       errorTitle: "Erro ao carregar sessões",
     },
