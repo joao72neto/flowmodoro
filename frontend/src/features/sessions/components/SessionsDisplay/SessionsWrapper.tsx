@@ -1,7 +1,16 @@
-const SessionsWrapper = ({ children }: { children: React.ReactNode }) => {
+import { forwardRef } from "react";
+
+const SessionsWrapper = forwardRef<
+  HTMLDivElement,
+  { children: React.ReactNode }
+>(({ children }, ref) => {
   return (
-    <div className="flex flex-col gap-6 min-w-[300px] w-full">{children}</div>
+    <div ref={ref} className="flex flex-col gap-6 min-w-[300px] w-full">
+      {children}
+    </div>
   );
-};
+});
+
+SessionsWrapper.displayName = "SessionsWrapper";
 
 export default SessionsWrapper;
