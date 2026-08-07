@@ -14,10 +14,10 @@ export const baseStyle = clsx(
   "hover:scale-105",
   "hover:brightness-110",
   "active:scale-95",
-  "disabled:opacity-50",
+  "disabled:saturate-50",
+  "disabled:brightness-75",
   "disabled:cursor-not-allowed",
   "disabled:hover:scale-100",
-  "disabled:hover:brightness-100",
   "disabled:active:scale-100",
 );
 
