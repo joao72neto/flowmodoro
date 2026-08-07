@@ -20,6 +20,8 @@ import { isNative } from "../../../../consts/platform";
 import { ensureAllPermissions } from "../../permissions.utils";
 import type { PluginListenerHandle } from "@capacitor/core";
 
+import { IoClose } from "react-icons/io5";
+
 import { useRef } from "react";
 import { App } from "@capacitor/app";
 
@@ -218,18 +220,37 @@ const SessionCreation = () => {
             {sessionName}
           </div>
         ) : (
-          <input
-            className={clsx(
-              "flex-1 min-w-0 py-1",
-              "bg-transparent text-neutral-10 text-base sm:text-lg",
-              "focus:outline-none placeholder:text-neutral-40",
+          <div className="flex justify-between items-center flex-1">
+            <input
+              className={clsx(
+                "flex-1 min-w-0 py-1",
+                "bg-transparent text-neutral-10 text-base sm:text-lg",
+                "focus:outline-none placeholder:text-neutral-40",
+              )}
+              placeholder="Estou focando em..."
+              value={sessionName}
+              onKeyDown={handleKeyDown}
+              onBlur={commitSessionName}
+              onChange={(e) => setSessionName(e.target.value)}
+            />
+
+            {isExpanded && (
+              <button
+                className={clsx(
+                  "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
+                  "transition-colors duration-200",
+                  "hover:text-neutral-20",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2",
+                )}
+                type="button"
+                title="Limpar texto"
+                aria-label="Limpar texto"
+                onClick={() => setSessionName("")}
+              >
+                <IoClose />
+              </button>
             )}
-            placeholder="Estou focando em..."
-            value={sessionName}
-            onKeyDown={handleKeyDown}
-            onBlur={commitSessionName}
-            onChange={(e) => setSessionName(e.target.value)}
-          />
+          </div>
         )}
 
         <div
