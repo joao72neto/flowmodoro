@@ -14,7 +14,7 @@ import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 
 import { FlowmodoroPlugin } from "../../../../mobile/plugins";
 
-import { getTick } from "../../../timer/utils/timer-tick.store";
+import { getTotalFocus } from "../../../timer/utils/timer-tick.store";
 import { isNative } from "../../../../consts/platform";
 
 import { ensureAllPermissions } from "../../permissions.utils";
@@ -30,6 +30,7 @@ const SessionCreation = () => {
     useTimerContext();
 
   const {
+    restRatio,
     setSessionName: setContextSessionName,
     sessionName: contextSessionName,
     selectedProject,
@@ -134,10 +135,12 @@ const SessionCreation = () => {
   };
 
   const startFocusTimer = async () => {
-    if (isNative) {
-      await FlowmodoroPlugin.startFocus({ anchorMillis: Date.now() });
-    }
+    const anchorMillis = Date.now();
     startFocus();
+
+    if (isNative) {
+      await FlowmodoroPlugin.startFocus({ anchorMillis });
+    }
   };
 
   const handleStartFocus = async () => {
@@ -157,13 +160,15 @@ const SessionCreation = () => {
   };
 
   const handleStartBreak = async () => {
+    const anchorMillis = Date.now();
+    startBreak();
+
     if (isNative) {
       await FlowmodoroPlugin.startBreak({
-        anchorMillis: Date.now(),
-        restDurationMillis: getTick() * 1000,
+        anchorMillis,
+        restDurationMillis: getTotalFocus() * (restRatio / 100),
       });
     }
-    startBreak();
   };
 
   const handleStopTimer = async ({ type }: { type: "focus" | "break" }) => {

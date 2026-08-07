@@ -5,13 +5,19 @@ import { localStorageKeys } from "../../../shared/utils/storage.utils";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 
-import { setTick, getTick, subscribeTick } from "../utils/timer-tick.store";
+import {
+  setTick,
+  getTick,
+  setTotalFocus,
+  subscribeTick,
+} from "../utils/timer-tick.store";
 import type { TimerMode } from "../timer.types";
 
 import { updateFavicon } from "../utils/timer.utils";
 import { sendNotification } from "../utils/timer.utils";
 
 import { App } from "@capacitor/app";
+import { isNative } from "../../../consts/platform";
 
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
@@ -93,6 +99,8 @@ const useTimer = () => {
         const now = Date.now();
         const diffInSeconds = Math.floor((now - startTimeRef.current) / 1000);
 
+        setTotalFocus(now - startTimeRef.current);
+
         if (mode === "focus") {
           setTick(baseSecondsRef.current + diffInSeconds);
         } else if (mode === "break") {
@@ -101,7 +109,10 @@ const useTimer = () => {
           if (remaining <= 0) {
             setTick(0);
             setMode(null);
-            sendNotification();
+
+            if (!isNative) {
+              sendNotification();
+            }
           } else {
             setTick(remaining);
           }

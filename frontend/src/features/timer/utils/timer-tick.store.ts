@@ -1,6 +1,7 @@
 type Listener = () => void;
 
 let seconds = 0;
+let totalFocus = 0;
 let listeners: Listener[] = [];
 
 export function setTick(value: number) {
@@ -10,6 +11,15 @@ export function setTick(value: number) {
 
 export function getTick() {
   return seconds;
+}
+
+export function setTotalFocus(value: number) {
+  totalFocus = value;
+  listeners.forEach((l) => l());
+}
+
+export function getTotalFocus() {
+  return totalFocus;
 }
 
 export function subscribeTick(listener: Listener) {
