@@ -6,6 +6,7 @@ import { isNative } from "../../consts/platform";
 const SYNC_EVENT = "sync-queue:trigger";
 
 export const initSync = () => {
+  syncQueue.init();
   const process = () => syncQueue.processQueue();
 
   if (isNative) {
