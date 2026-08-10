@@ -2,13 +2,14 @@ import { useTimerContext } from "../../context/timer.context";
 import clsx from "clsx";
 
 import { formatTimer } from "../../../../shared/utils/number.utils";
+import { useSeconds } from "../../hooks/useSeconds";
 
 const TimerDigits = ({
   mode,
 }: {
   mode: "focus" | "break" | "stopped" | null;
 }) => {
-  const { seconds } = useTimerContext();
+  const seconds = useSeconds();
 
   return (
     <div

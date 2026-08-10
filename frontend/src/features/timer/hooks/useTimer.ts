@@ -9,6 +9,9 @@ import { formatToHour } from "../../../shared/utils/number.utils";
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
+import type { TimerMode } from "../timer.types";
+
+import { getSeconds, setSeconds } from "../timer.store";
 
 const useTimer = () => {
   const { restRatio, handleSaveSession } = useSessionContext();
@@ -16,32 +19,35 @@ const useTimer = () => {
 
   const BREAK_RATIO = restRatio / 100;
 
-  const [mode, setMode] = useState<"focus" | "break" | "stopped" | null>(() => {
+  const [mode, setMode] = useState<TimerMode>(() => {
     const saved = localStorage.getItem(localStorageKeys.timer);
     return saved ? JSON.parse(saved).mode : null;
   });
 
-  const [seconds, setSeconds] = useState(() => {
+  useEffect(() => {
     const saved = localStorage.getItem(localStorageKeys.timer);
-    if (!saved) return 0;
+    if (!saved) return setSeconds(0);
+
     const { mode, seconds, lastUpdated } = JSON.parse(saved);
     const diff = Math.floor((Date.now() - lastUpdated) / 1000);
-    if (mode === "focus") return seconds + diff;
-    if (mode === "break") return Math.max(0, seconds - diff);
-    return seconds;
-  });
+
+    if (mode === "focus") setSeconds(seconds + diff);
+    if (mode === "break") setSeconds(Math.max(0, seconds - diff));
+  }, []);
 
   const startTimeRef = useRef<number>(Date.now());
-  const baseSecondsRef = useRef<number>(seconds);
+  const baseSecondsRef = useRef<number>(getSeconds());
 
   useEffect(() => {
     localStorage.setItem(
       localStorageKeys.timer,
-      JSON.stringify({ mode, seconds, lastUpdated: Date.now() }),
+      JSON.stringify({ mode, seconds: getSeconds(), lastUpdated: Date.now() }),
     );
 
     const faviconTime =
-      seconds < 60 ? seconds.toString() : Math.floor(seconds / 60).toString();
+      getSeconds() < 60
+        ? getSeconds().toString()
+        : Math.floor(getSeconds() / 60).toString();
 
     if (mode === "focus") {
       updateFaviconWithTime({
@@ -58,7 +64,7 @@ const useTimer = () => {
     } else {
       resetFavicon();
     }
-  }, [mode, seconds]);
+  }, [mode]);
 
   useEffect(() => {
     const syncTime = () => {
@@ -126,7 +132,7 @@ const useTimer = () => {
   };
 
   const stopFocus = () => {
-    const finalFocusSeconds = seconds;
+    const finalFocusSeconds = getSeconds();
     setMode("stopped");
     const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
     setSeconds(breakTime);
@@ -152,7 +158,7 @@ const useTimer = () => {
 
   const startBreak = () => {
     startTimeRef.current = Date.now();
-    baseSecondsRef.current = seconds;
+    baseSecondsRef.current = getSeconds();
     setMode("break");
   };
 
@@ -169,7 +175,6 @@ const useTimer = () => {
     startBreak,
     skipBreak,
     mode,
-    seconds,
   };
 };
 
