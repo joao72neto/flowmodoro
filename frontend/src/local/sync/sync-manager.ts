@@ -3,6 +3,7 @@ import syncQueue from "./sync-queue.service";
 const SYNC_EVENT = "sync-queue:trigger";
 
 export const initSync = () => {
+  syncQueue.init();
   const process = () => syncQueue.processQueue();
 
   window.addEventListener("online", process);

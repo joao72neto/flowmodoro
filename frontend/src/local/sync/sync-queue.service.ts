@@ -23,6 +23,13 @@ import type { SyncQueueModel } from "./sync-queue.model";
 class SyncQueueService {
   private isProcessing = false;
 
+  async init() {
+    await db.syncQueue
+      .where("status")
+      .equals("processing")
+      .modify({ status: "pending" });
+  }
+
   async addToQueue<T extends SyncQueueModel["entityType"]>({
     entityType,
     action,
