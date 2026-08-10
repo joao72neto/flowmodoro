@@ -37,15 +37,15 @@ const SessionsDisplay = () => {
   }
 
   return (
-    <LayoutGroup>
-      <div className="flex flex-col gap-6 w-full items-center relative">
-        {!sessions || sessions.content.length === 0 ? (
-          <EmptySessions />
-        ) : (
-          <>
-            <SessionsWrapper>
-              {sessions.content.map((sessionGroup) => {
-                return (
+    <div className="flex flex-col gap-6 w-full items-center relative">
+      {!sessions || sessions.content.length === 0 ? (
+        <EmptySessions />
+      ) : (
+        <>
+          <SessionsWrapper>
+            {sessions.content.map((sessionGroup) => {
+              return (
+                <LayoutGroup id={sessionGroup.date} key={sessionGroup.date}>
                   <DailySessions
                     key={sessionGroup.date}
                     groupName={formatToBRDate(sessionGroup.date)}
@@ -62,20 +62,20 @@ const SessionsDisplay = () => {
                       )}
                     </AnimatedList>
                   </DailySessions>
-                );
-              })}
-            </SessionsWrapper>
-            {sessions.totalElements > SIZE && (
-              <PageSelector
-                goToPage={goToPage}
-                currentPage={currentPage}
-                totalPages={totalPages}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </LayoutGroup>
+                </LayoutGroup>
+              );
+            })}
+          </SessionsWrapper>
+          {sessions.totalElements > SIZE && (
+            <PageSelector
+              goToPage={goToPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          )}
+        </>
+      )}
+    </div>
   );
 };
 

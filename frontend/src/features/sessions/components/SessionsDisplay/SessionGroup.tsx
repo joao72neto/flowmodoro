@@ -17,177 +17,195 @@ import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 
-const SessionGroup = ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
-  const [showSessionDetailsModal, setShowSessionDetailsModal] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<SessionDTO>(
-    sessionGroup.sessions[0],
-  );
+import { useCallback, memo } from "react";
 
-  const { theme } = useTheme();
+const SessionGroup = memo(
+  ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
+    const [showSessionDetailsModal, setShowSessionDetailsModal] =
+      useState(false);
+    const [selectedSession, setSelectedSession] = useState<SessionDTO>(
+      sessionGroup.sessions[0],
+    );
 
-  useEffect(() => {
-    setSelectedSession(sessionGroup.sessions[0]);
-  }, [sessionGroup.sessions]);
+    const { theme } = useTheme();
 
-  const storageKey = sessionStorageKeys.isSessionGroupOpen(sessionGroup.id);
+    useEffect(() => {
+      setSelectedSession(sessionGroup.sessions[0]);
+    }, [sessionGroup.sessions[0]?.id]);
 
-  const [isOpen, setIsOpen] = useState(() => {
-    return sessionStorage.getItem(storageKey) === "true";
-  });
+    const storageKey = sessionStorageKeys.isSessionGroupOpen(sessionGroup.id);
 
-  const handleToggle = () => {
-    setIsOpen((prev) => {
-      const next = !prev;
-      sessionStorage.setItem(storageKey, String(next));
-      return next;
+    const [isOpen, setIsOpen] = useState(() => {
+      return sessionStorage.getItem(storageKey) === "true";
     });
-  };
 
-  const isTogglable = sessionGroup.sessions.length > 1;
+    const handleToggle = useCallback(() => {
+      setIsOpen((prev) => {
+        const next = !prev;
+        sessionStorage.setItem(storageKey, String(next));
+        return next;
+      });
+    }, [storageKey]);
 
-  useEffect(() => {
-    if (!isTogglable) {
-      setIsOpen(false);
-      sessionStorage.removeItem(storageKey);
-    }
-  }, [isTogglable, storageKey]);
+    const isTogglable = sessionGroup.sessions.length > 1;
 
-  const tag = sessionGroup.sessions[0].tag;
-  const project = sessionGroup.sessions[0].project;
-  const hasTagOrProject = tag.id !== "" || project.id !== "";
-  const showTagAndProject = hasTagOrProject;
+    useEffect(() => {
+      if (!isTogglable) {
+        setIsOpen(false);
+        sessionStorage.removeItem(storageKey);
+      }
+    }, [isTogglable, storageKey]);
 
-  const totalFocusClasses = clsx(
-    "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
-    "border border-border px-3 py-1 rounded-lg shadow font-semibold",
-  );
+    const tag = sessionGroup.sessions[0].tag;
+    const project = sessionGroup.sessions[0].project;
+    const hasTagOrProject = tag.id !== "" || project.id !== "";
+    const showTagAndProject = hasTagOrProject;
 
-  const firstRatio = Math.round((sessionGroup.sessions[0]?.ratio || 0) * 100);
+    const totalFocusClasses = clsx(
+      "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
+      "border border-border px-3 py-1 rounded-lg shadow font-semibold",
+    );
 
-  const isUniform = sessionGroup.sessions.every(
-    (session) => Math.round(session.ratio * 100) === firstRatio,
-  );
+    const firstRatio = Math.round((sessionGroup.sessions[0]?.ratio || 0) * 100);
 
-  const borderColors: Record<number, string> = {
-    10: "border-l-danger",
-    20: "border-l-primary",
-    30: "border-l-success",
-  };
+    const isUniform = sessionGroup.sessions.every(
+      (session) => Math.round(session.ratio * 100) === firstRatio,
+    );
 
-  const borderColorClass = isUniform ? borderColors[firstRatio] : undefined;
+    const borderColors: Record<number, string> = {
+      10: "border-l-danger",
+      20: "border-l-primary",
+      30: "border-l-success",
+    };
 
-  return (
-    <>
-      <div className="flex flex-col w-full">
-        <Stack
-          className={clsx(
-            "w-full shadow-lg rounded-2xl p-4 sm:p-5 border border-border relative overflow-hidden",
-            "transition-transform hover:bg-neutral-80/40 hover:translate-x-0.5 cursor-pointer min-h-[80px]",
-            isOpen
-              ? "bg-neutral-80/40 border-neutral-70/50"
-              : "bg-neutral-80/90",
-            "border-l-4",
-            "contain-content",
-            borderColorClass,
-          )}
-          direction="row"
-          gap={3}
-          onClick={
-            isTogglable ? handleToggle : () => setShowSessionDetailsModal(true)
-          }
-        >
-          <div className="flex flex-col w-full gap-3">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full">
-              <div className="flex gap-3 items-center justify-between sm:justify-start w-full sm:w-auto sm:flex-1 min-w-0">
-                <div className="flex items-center gap-3 min-w-0">
-                  {isTogglable && (
-                    <span
-                      className={clsx(
-                        "text-sm font-semibold px-3 py-1.5 rounded-full border border-border",
-                        "bg-neutral-60/30 text-neutral-30 shrink-0",
-                      )}
-                    >
-                      {sessionGroup.sessions.length}
+    const borderColorClass = isUniform ? borderColors[firstRatio] : undefined;
+
+    const handleDetails = useCallback(
+      (sessionId: string) => {
+        const session = sessionGroup.sessions.find((s) => s.id === sessionId);
+        if (session) {
+          setSelectedSession(session);
+          setShowSessionDetailsModal(true);
+        }
+      },
+      [sessionGroup.sessions],
+    );
+
+    return (
+      <>
+        <div className="flex flex-col w-full">
+          <Stack
+            className={clsx(
+              "w-full shadow-lg rounded-2xl p-4 sm:p-5 border border-border relative overflow-hidden",
+              "transition-transform hover:bg-neutral-80/40 hover:translate-x-0.5 cursor-pointer min-h-[80px]",
+              isOpen
+                ? "bg-neutral-80/40 border-neutral-70/50"
+                : "bg-neutral-80/90",
+              "border-l-4",
+              "contain-content",
+              borderColorClass,
+            )}
+            direction="row"
+            gap={3}
+            onClick={
+              isTogglable
+                ? handleToggle
+                : () => setShowSessionDetailsModal(true)
+            }
+          >
+            <div className="flex flex-col w-full gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full">
+                <div className="flex gap-3 items-center justify-between sm:justify-start w-full sm:w-auto sm:flex-1 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0">
+                    {isTogglable && (
+                      <span
+                        className={clsx(
+                          "text-sm font-semibold px-3 py-1.5 rounded-full border border-border",
+                          "bg-neutral-60/30 text-neutral-30 shrink-0",
+                        )}
+                      >
+                        {sessionGroup.sessions.length}
+                      </span>
+                    )}
+
+                    <span className="text-lg sm:text-xl font-medium line-clamp-1 break-all">
+                      {capitalize(sessionGroup.name)}
                     </span>
-                  )}
-
-                  <span className="text-lg sm:text-xl font-medium line-clamp-1 break-all">
-                    {capitalize(sessionGroup.name)}
-                  </span>
+                  </div>
                 </div>
               </div>
+
+              {showTagAndProject && (
+                <div className="flex self-start items-center gap-2 min-w-0 sm:flex-1">
+                  {project?.name && (
+                    <Label icon={<GoProject />}>{project.name}</Label>
+                  )}
+                  {tag?.name && (
+                    <Label variant="secondary" icon={<IoMdPricetag />}>
+                      {tag.name}
+                    </Label>
+                  )}
+                </div>
+              )}
             </div>
 
-            {showTagAndProject && (
-              <div className="flex self-start items-center gap-2 min-w-0 sm:flex-1">
-                {project?.name && (
-                  <Label icon={<GoProject />}>{project.name}</Label>
+            <div className="flex items-center gap-2">
+              <span className={clsx(totalFocusClasses)}>
+                {formatToHour(sessionGroup.totalFocus)}
+              </span>
+
+              <GoChevronDown
+                className={clsx(
+                  "text-neutral-40 transition-transform duration-200 text-lg",
+                  isOpen && "rotate-180",
+                  !isTogglable && "opacity-0",
                 )}
-                {tag?.name && (
-                  <Label variant="secondary" icon={<IoMdPricetag />}>
-                    {tag.name}
-                  </Label>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className={clsx(totalFocusClasses)}>
-              {formatToHour(sessionGroup.totalFocus)}
-            </span>
-
-            <GoChevronDown
-              className={clsx(
-                "text-neutral-40 transition-transform duration-200 text-lg",
-                isOpen && "rotate-180",
-                !isTogglable && "opacity-0",
-              )}
-            />
-          </div>
-        </Stack>
-
-        <AnimatedCollapse show={isOpen}>
-          <Stack
-            gap={2}
-            className={clsx(
-              "mt-2 ml-5 border-l border-border pl-4",
-              theme === "light" && "pb-4",
-            )}
-            style={{
-              contentVisibility: "auto",
-              containIntrinsicSize: "0 60px",
-            }}
-          >
-            <AnimatedList
-              items={sessionGroup.sessions}
-              getKey={(session) => session.id}
-              className="w-full px-1"
-            >
-              {(session) => (
-                <Session
-                  key={session.id}
-                  session={session}
-                  onClick={() => {
-                    setSelectedSession(session);
-                    setShowSessionDetailsModal(true);
-                  }}
-                />
-              )}
-            </AnimatedList>
+              />
+            </div>
           </Stack>
-        </AnimatedCollapse>
-      </div>
 
-      {showSessionDetailsModal && (
-        <SessionDetailsModal
-          isOpen={showSessionDetailsModal}
-          setIsOpen={setShowSessionDetailsModal}
-          session={selectedSession}
-        />
-      )}
-    </>
-  );
-};
+          <AnimatedCollapse show={isOpen}>
+            <Stack
+              gap={2}
+              className={clsx(
+                "mt-2 ml-5 border-l border-border pl-4",
+                theme === "light" && "pb-4",
+              )}
+              style={{
+                contentVisibility: "auto",
+                containIntrinsicSize: "0 60px",
+              }}
+            >
+              <AnimatedList
+                items={sessionGroup.sessions}
+                getKey={(session) => session.id}
+                className="w-full px-1"
+                enableLayoutAnimation="position"
+              >
+                {(session) => (
+                  <Session
+                    key={session.id}
+                    session={session}
+                    onClick={handleDetails}
+                  />
+                )}
+              </AnimatedList>
+            </Stack>
+          </AnimatedCollapse>
+        </div>
 
-export default SessionGroup;
+        {showSessionDetailsModal && (
+          <SessionDetailsModal
+            isOpen={showSessionDetailsModal}
+            setIsOpen={setShowSessionDetailsModal}
+            session={selectedSession}
+          />
+        )}
+      </>
+    );
+  },
+);
+
+SessionGroup.displayName = "SessionGroup";
+
+export default memo(SessionGroup);
