@@ -3,11 +3,12 @@ import { useMemo } from "react";
 import useTimer from "../hooks/useTimer";
 
 export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
-  const { startFocus, stopFocus, startBreak, skipBreak, mode } = useTimer();
+  const { startFocus, stopFocus, startBreak, skipBreak, mode, seconds } =
+    useTimer();
 
   const value = useMemo(
-    () => ({ startFocus, stopFocus, startBreak, skipBreak, mode }),
-    [startFocus, stopFocus, startBreak, skipBreak, mode],
+    () => ({ startFocus, stopFocus, startBreak, skipBreak, mode, seconds }),
+    [startFocus, stopFocus, startBreak, skipBreak, mode, seconds],
   );
 
   return (
