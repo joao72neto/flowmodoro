@@ -1,6 +1,5 @@
 export const formatToBRDate = (value: string) => {
   const [year, month, day] = value.split("-").map(Number);
-
   const inputDate = new Date(year, month - 1, day);
   const today = new Date();
 
@@ -13,7 +12,23 @@ export const formatToBRDate = (value: string) => {
   if (diffInDays === 0) return "Hoje";
   if (diffInDays === 1) return "Ontem";
 
-  return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`;
+  const weekdays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const months = [
+    "Jan",
+    "Fev",
+    "Mar",
+    "Abr",
+    "Mai",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Set",
+    "Out",
+    "Nov",
+    "Dez",
+  ];
+
+  return `${weekdays[inputDate.getDay()]}, ${String(day).padStart(2, "0")} ${months[month - 1]}`;
 };
 
 export const getLocalDateKey = (isoDate: string): string => {
