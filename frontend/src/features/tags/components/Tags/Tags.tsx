@@ -21,6 +21,7 @@ import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 import type { TagDTO } from "../../dtos/tags-response";
 
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
+import { useSessionContext } from "../../../sessions/context/sessions.context";
 
 const Tags = ({
   project,
@@ -30,6 +31,7 @@ const Tags = ({
   onBack: () => void;
 }) => {
   const { data: tags, isLoading } = useFetchTagsByProject(project.id || "");
+  const { setSelectedTagId } = useSessionContext();
 
   const [editingTag, setEditingTag] = useState<TagDTO | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -109,6 +111,7 @@ const Tags = ({
                     tagData={item}
                     onDelete={() => {
                       handleDeleteTag(item.id);
+                      setSelectedTagId(null);
                     }}
                     onEdit={() => {
                       setEditingTag(item);
