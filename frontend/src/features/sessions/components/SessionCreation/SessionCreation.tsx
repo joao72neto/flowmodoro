@@ -3,14 +3,18 @@ import clsx from "clsx";
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
 
-import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/context/timer.context";
 import { useSessionContext } from "../../context/sessions.context";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { localStorageKeys } from "../../../../shared/utils/storage.utils";
+import type { ProjectDTO } from "../../../projects/dtos/projects-response";
+import type { TagDTO } from "../../../tags/dtos/tags-response";
+
+const projectIcon = <IoMdPricetag />;
+const tagIcon = <IoMdPricetag />;
 
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
@@ -84,6 +88,21 @@ const SessionCreation = () => {
     }
   };
 
+  const handleSelectedProject = useCallback(
+    (project: ProjectDTO | null) => {
+      setSelectedProjectId(project?.id ?? null);
+      setSelectedTagId(null);
+    },
+    [setSelectedProjectId, setSelectedTagId],
+  );
+
+  const handleSelecteTag = useCallback(
+    (tag: TagDTO | null) => {
+      setSelectedTagId(tag?.id ?? null);
+    },
+    [setSelectedTagId],
+  );
+
   return (
     <div
       className={clsx(
@@ -152,27 +171,24 @@ const SessionCreation = () => {
             )}
           >
             {showProjectSelector && (
-              <SessionSelector
+              <SessionSelector<ProjectDTO>
                 value={selectedProject}
-                onChange={(project) => {
-                  setSelectedProjectId(project?.id ?? null);
-                  setSelectedTagId(null);
-                }}
+                onChange={handleSelectedProject}
                 disabled={isTimerRunning}
                 title="Projetos"
                 variant="primary"
                 items={projects}
                 placeholder="Pesquisar projeto..."
                 emptyMsg="Nenhum projeto encontrado"
-                icon={<GoProject />}
+                icon={projectIcon}
               >
                 Projetos
               </SessionSelector>
             )}
             {showTagSelector && (
-              <SessionSelector
+              <SessionSelector<TagDTO>
                 value={selectedTag}
-                onChange={(tag) => setSelectedTagId(tag?.id ?? null)}
+                onChange={handleSelecteTag}
                 disabled={isTimerRunning}
                 title="Tags"
                 variant="secondary"
@@ -183,7 +199,7 @@ const SessionCreation = () => {
                     ? "Nenhuma tag encontrada"
                     : "Selecione um projeto primeiro"
                 }
-                icon={<IoMdPricetag />}
+                icon={tagIcon}
               >
                 Tags
               </SessionSelector>
