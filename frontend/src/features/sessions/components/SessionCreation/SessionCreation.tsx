@@ -9,12 +9,16 @@ import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/context/timer.context";
 import { useSessionContext } from "../../context/sessions.context";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { localStorageKeys } from "../../../../shared/utils/storage.utils";
+import type { ProjectDTO } from "../../../projects/dtos/projects-response";
+import type { TagDTO } from "../../../tags/dtos/tags-response";
+
+const projectIcon = <GoProject />;
+const tagIcon = <IoMdPricetag />;
 
 import { FlowmodoroPlugin } from "../../../../mobile/plugins";
 
-import { getTotalFocus } from "../../../timer/utils/timer-tick.store";
 import { isNative } from "../../../../consts/platform";
 
 import { ensureAllPermissions } from "../../permissions.utils";
@@ -24,13 +28,15 @@ import { IoClose } from "react-icons/io5";
 
 import { useRef } from "react";
 import { App } from "@capacitor/app";
+import { useSeconds } from "../../../timer/hooks/useSeconds";
 
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
     useTimerContext();
 
+  const seconds = useSeconds();
+
   const {
-    restRatio,
     setSessionName: setContextSessionName,
     sessionName: contextSessionName,
     selectedProject,
@@ -166,7 +172,7 @@ const SessionCreation = () => {
     if (isNative) {
       await FlowmodoroPlugin.startBreak({
         anchorMillis,
-        restDurationMillis: getTotalFocus() * (restRatio / 100),
+        restDurationMillis: seconds * 1000,
       });
     }
   };
@@ -182,6 +188,21 @@ const SessionCreation = () => {
       skipBreak();
     }
   };
+
+  const handleSelectedProject = useCallback(
+    (project: ProjectDTO | null) => {
+      setSelectedProjectId(project?.id ?? null);
+      setSelectedTagId(null);
+    },
+    [setSelectedProjectId, setSelectedTagId],
+  );
+
+  const handleSelecteTag = useCallback(
+    (tag: TagDTO | null) => {
+      setSelectedTagId(tag?.id ?? null);
+    },
+    [setSelectedTagId],
+  );
 
   return (
     <div
@@ -270,27 +291,24 @@ const SessionCreation = () => {
             )}
           >
             {showProjectSelector && (
-              <SessionSelector
+              <SessionSelector<ProjectDTO>
                 value={selectedProject}
-                onChange={(project) => {
-                  setSelectedProjectId(project?.id ?? null);
-                  setSelectedTagId(null);
-                }}
+                onChange={handleSelectedProject}
                 disabled={isTimerRunning}
                 title="Projetos"
                 variant="primary"
                 items={projects}
                 placeholder="Pesquisar projeto..."
                 emptyMsg="Nenhum projeto encontrado"
-                icon={<GoProject />}
+                icon={projectIcon}
               >
                 Projetos
               </SessionSelector>
             )}
             {showTagSelector && (
-              <SessionSelector
+              <SessionSelector<TagDTO>
                 value={selectedTag}
-                onChange={(tag) => setSelectedTagId(tag?.id ?? null)}
+                onChange={handleSelecteTag}
                 disabled={isTimerRunning}
                 title="Tags"
                 variant="secondary"
@@ -301,7 +319,7 @@ const SessionCreation = () => {
                     ? "Nenhuma tag encontrada"
                     : "Selecione um projeto primeiro"
                 }
-                icon={<IoMdPricetag />}
+                icon={tagIcon}
               >
                 Tags
               </SessionSelector>

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import DropdownContainer from "../../../../shared/components/Dropdown/DropdownContainer";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
 import Input from "../../../../shared/components/inputs/Input";
 import { GoSearch } from "react-icons/go";
@@ -10,7 +10,7 @@ import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse
 import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 import type { TagDTO } from "../../../tags/dtos/tags-response";
 
-const SessionSelector = ({
+const SessionSelector = <T extends ProjectDTO | TagDTO>({
   children,
   title = "Title",
   icon,
@@ -26,12 +26,12 @@ const SessionSelector = ({
   children: React.ReactNode;
   title?: string;
   icon?: React.ReactNode;
-  items?: ProjectDTO[] | TagDTO[];
+  items?: T[];
   variant?: "primary" | "secondary";
   placeholder?: string;
   emptyMsg?: string;
-  value: ProjectDTO | TagDTO | null;
-  onChange: (item: ProjectDTO | TagDTO | null) => void;
+  value: T | null;
+  onChange: (item: T | null) => void;
   disabled?: boolean;
   align?: "left" | "right" | "auto";
 }) => {
@@ -55,6 +55,7 @@ const SessionSelector = ({
 
   const handleConfirmItem = () => {
     const item = items.find((item) => item.id === activeItemId) || null;
+
     onChange(item);
     setIsOpen(false);
     setSearchQuery("");
@@ -85,10 +86,12 @@ const SessionSelector = ({
         )}
       >
         {icon && <span className="text-lg">{icon}</span>}
+
         <span className="truncate max-w-16 sm:max-w-24 text-sm font-medium">
           {value ? value.name : children}
         </span>
       </div>
+
       <DropdownContainer
         className={clsx("p-4 w-56 sm:w-60")}
         isOpen={isOpen}
@@ -132,6 +135,7 @@ const SessionSelector = ({
                   key={item.id}
                 >
                   <span className="text-sm">{item.name}</span>
+
                   <div
                     className={clsx(
                       "w-4 h-4 border rounded-full flex items-center justify-center transition-all duration-200",
@@ -165,6 +169,7 @@ const SessionSelector = ({
               >
                 Limpar
               </Button>
+
               <Button
                 variant="primary"
                 className="w-full text-sm!"
@@ -180,4 +185,6 @@ const SessionSelector = ({
   );
 };
 
-export default SessionSelector;
+SessionSelector.displayName = "SessionSelector";
+
+export default memo(SessionSelector) as typeof SessionSelector;

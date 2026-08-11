@@ -2,16 +2,14 @@ import { useTimerContext } from "../../context/timer.context";
 import clsx from "clsx";
 
 import { formatTimer } from "../../../../shared/utils/number.utils";
-
-import { useSyncExternalStore } from "react";
-import { subscribeTick, getTick } from "../../utils/timer-tick.store";
+import { useSeconds } from "../../hooks/useSeconds";
 
 const TimerDigits = ({
   mode,
 }: {
   mode: "focus" | "break" | "stopped" | null;
 }) => {
-  const seconds = useSyncExternalStore(subscribeTick, getTick);
+  const seconds = useSeconds();
 
   return (
     <div

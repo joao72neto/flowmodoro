@@ -1,25 +1,24 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { formatToHour } from "../../../shared/utils/number.utils";
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
-
-import {
-  setTick,
-  getTick,
-  setTotalFocus,
-  subscribeTick,
-} from "../utils/timer-tick.store";
 import type { TimerMode } from "../timer.types";
 
-import { updateFavicon } from "../utils/timer.utils";
-import { sendNotification } from "../utils/timer.utils";
+import { setSeconds } from "../timer.store";
+import { useSeconds } from "./useSeconds";
 
-import { App } from "@capacitor/app";
 import { isNative } from "../../../consts/platform";
 
+import {
+  updateFaviconWithTime,
+  resetFavicon,
+} from "../../../shared/utils/favicon.utils";
+
 const useTimer = () => {
+  const seconds = useSeconds();
+
   const { restRatio, handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
 
@@ -30,68 +29,34 @@ const useTimer = () => {
     return saved ? JSON.parse(saved).mode : null;
   });
 
-  const initialSeconds = (() => {
-    const saved = localStorage.getItem(localStorageKeys.timer);
-    if (!saved) return 0;
-    const { mode, seconds, lastUpdated } = JSON.parse(saved);
-    const diff = Math.floor((Date.now() - lastUpdated) / 1000);
-    if (mode === "focus") return seconds + diff;
-    if (mode === "break") return Math.max(0, seconds - diff);
-    return seconds;
-  })();
-
-  useEffect(() => {
-    setTick(initialSeconds);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const startTimeRef = useRef<number>(Date.now());
-  const baseSecondsRef = useRef<number>(initialSeconds);
+  const baseSecondsRef = useRef<number>(seconds);
 
   useEffect(() => {
-    const persist = () => {
-      const currentSeconds = getTick();
-      localStorage.setItem(
-        localStorageKeys.timer,
-        JSON.stringify({
-          mode,
-          seconds: currentSeconds,
-          lastUpdated: Date.now(),
-        }),
-      );
-    };
+    localStorage.setItem(
+      localStorageKeys.timer,
+      JSON.stringify({ mode, seconds, lastUpdated: Date.now() }),
+    );
 
-    persist();
+    const faviconTime =
+      seconds < 60 ? seconds.toString() : Math.floor(seconds / 60).toString();
 
-    if (mode !== "focus" && mode !== "break") return;
-
-    const interval = setInterval(persist, 5000);
-    window.addEventListener("beforeunload", persist);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("beforeunload", persist);
-      persist();
-    };
-  }, [mode]);
-
-  useEffect(() => {
-    updateFavicon(mode);
-
-    if (mode !== "focus" && mode !== "break") return;
-
-    let lastText: string | null = null;
-    const unsub = subscribeTick(() => {
-      const s = getTick();
-      const text = s < 60 ? s.toString() : Math.floor(s / 60).toString();
-      if (text !== lastText) {
-        lastText = text;
-        updateFavicon(mode);
-      }
-    });
-
-    return unsub;
-  }, [mode]);
+    if (mode === "focus") {
+      updateFaviconWithTime({
+        time: faviconTime,
+        color: "#f59e0b",
+        textColor: "#222",
+      });
+    } else if (mode === "break") {
+      updateFaviconWithTime({
+        time: faviconTime,
+        color: "#22c55e",
+        textColor: "#000000",
+      });
+    } else {
+      resetFavicon();
+    }
+  }, [mode, seconds]);
 
   useEffect(() => {
     const syncTime = () => {
@@ -99,96 +64,47 @@ const useTimer = () => {
         const now = Date.now();
         const diffInSeconds = Math.floor((now - startTimeRef.current) / 1000);
 
-        setTotalFocus(now - startTimeRef.current);
-
         if (mode === "focus") {
-          setTick(baseSecondsRef.current + diffInSeconds);
+          setSeconds(baseSecondsRef.current + diffInSeconds);
         } else if (mode === "break") {
           const remaining = baseSecondsRef.current - diffInSeconds;
 
           if (remaining <= 0) {
-            setTick(0);
+            setSeconds(0);
             setMode(null);
 
             if (!isNative) {
               sendNotification();
             }
           } else {
-            setTick(remaining);
+            setSeconds(remaining);
           }
         }
       }
     };
 
-    let interval: ReturnType<typeof setInterval> | null = null;
-
-    const startInterval = () => {
-      if (interval) return;
-      interval = setInterval(syncTime, 1000);
-    };
-
-    const stopInterval = () => {
-      if (interval) clearInterval(interval);
-      interval = null;
-    };
-
-    let appStateListener: Awaited<ReturnType<typeof App.addListener>> | null =
-      null;
-
-    const setupAppListener = async () => {
-      appStateListener = await App.addListener(
-        "appStateChange",
-        ({ isActive }) => {
-          syncTime();
-
-          if (isActive) {
-            startInterval();
-          } else {
-            stopInterval();
-          }
-        },
-      );
-    };
-
-    setupAppListener();
-
-    const handleVisibility = () => {
-      syncTime();
-
-      if (document.hidden) {
-        stopInterval();
-      } else {
-        startInterval();
-      }
-    };
-
-    if (!document.hidden) {
-      startInterval();
-    }
-
-    document.addEventListener("visibilitychange", handleVisibility);
+    const interval = setInterval(syncTime, 1000);
+    document.addEventListener("visibilitychange", syncTime);
 
     return () => {
-      stopInterval();
-      appStateListener?.remove();
-      document.removeEventListener("visibilitychange", handleVisibility);
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", syncTime);
     };
   }, [mode]);
 
-  const startFocus = useCallback(() => {
+  const startFocus = () => {
     const now = Date.now();
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
-    setTick(0);
+    setSeconds(0);
     setMode("focus");
-  }, []);
+  };
 
-  const stopFocus = useCallback(() => {
-    const finalFocusSeconds = getTick();
+  const stopFocus = () => {
+    const finalFocusSeconds = seconds;
     setMode("stopped");
     const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
-
-    setTick(breakTime);
+    setSeconds(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
 
@@ -196,7 +112,9 @@ const useTimer = () => {
       title: "Sessão Finalizada! 🎉",
       message: `Deseja salvar a sessão atual de ${formatToHour(finalFocusSeconds)}?`,
       action: () => {
-        handleSaveSession({ focusSeconds: finalFocusSeconds });
+        handleSaveSession({
+          focusSeconds: finalFocusSeconds,
+        });
       },
       cancel: () => {
         setMode(null);
@@ -205,19 +123,20 @@ const useTimer = () => {
       confirmLabel: "Salvar",
       cancelLabel: "Descartar",
     });
-  }, [BREAK_RATIO, handleSaveSession, hideModal, showDefault]);
+  };
 
-  const startBreak = useCallback(() => {
+  const startBreak = () => {
     startTimeRef.current = Date.now();
-    baseSecondsRef.current = getTick();
+    baseSecondsRef.current = seconds;
     setMode("break");
-  }, []);
+  };
 
-  const skipBreak = useCallback(() => {
+  const skipBreak = () => {
     setMode(null);
-    setTick(0);
+
+    setSeconds(0);
     localStorage.removeItem(localStorageKeys.timer);
-  }, []);
+  };
 
   return {
     startFocus,
@@ -229,3 +148,29 @@ const useTimer = () => {
 };
 
 export default useTimer;
+
+const sendNotification = async () => {
+  if (Notification.permission !== "granted") return;
+
+  const notificationData = {
+    body: "Sua pausa acabou. Hora de voltar ao foco!",
+    icon: "/flowmodoro-icon.svg",
+    vibrate: [200, 100, 200],
+    tag: "break-finished",
+    requireInteraction: true,
+  };
+
+  try {
+    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+      const registration = await navigator.serviceWorker.ready;
+      await registration.showNotification(
+        "Pausa Finalizada!",
+        notificationData,
+      );
+    } else {
+      new Notification("Pausa Finalizada!", notificationData);
+    }
+  } catch (error) {
+    console.error("Error showing notification:", error);
+  }
+};

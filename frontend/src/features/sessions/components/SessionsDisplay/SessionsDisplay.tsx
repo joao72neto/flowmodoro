@@ -31,15 +31,15 @@ const SessionsDisplay = () => {
   const paginationRef = useRef<HTMLDivElement>(null);
 
   return (
-    <LayoutGroup>
-      <div className="flex flex-col gap-6 w-full items-center relative">
-        {!sessions || sessions.content.length === 0 ? (
-          <EmptySessions />
-        ) : (
-          <>
-            <SessionsWrapper ref={paginationRef}>
-              {sessions.content.map((sessionGroup) => {
-                return (
+    <div className="flex flex-col gap-6 w-full items-center relative">
+      {!sessions || sessions.content.length === 0 ? (
+        <EmptySessions />
+      ) : (
+        <>
+          <SessionsWrapper ref={paginationRef}>
+            {sessions.content.map((sessionGroup) => {
+              return (
+                <LayoutGroup id={sessionGroup.date} key={sessionGroup.date}>
                   <DailySessions
                     key={sessionGroup.date}
                     groupName={formatToBRDate(sessionGroup.date)}
@@ -56,27 +56,27 @@ const SessionsDisplay = () => {
                       )}
                     </AnimatedList>
                   </DailySessions>
-                );
-              })}
-            </SessionsWrapper>
-            {sessions.totalElements > SIZE && (
-              <PageSelector
-                goToPage={(page) => {
-                  goToPage(page);
+                </LayoutGroup>
+              );
+            })}
+          </SessionsWrapper>
+          {sessions.totalElements > SIZE && (
+            <PageSelector
+              goToPage={(page) => {
+                goToPage(page);
 
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth",
-                  });
-                }}
-                currentPage={currentPage}
-                totalPages={totalPages}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </LayoutGroup>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              }}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          )}
+        </>
+      )}
+    </div>
   );
 };
 
