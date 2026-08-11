@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import { IoPlaySkipForwardCircleSharp } from "react-icons/io5";
 
+import { GoProject } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import SessionSelector from "./SessionSelector";
 
@@ -13,7 +14,7 @@ import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 import type { TagDTO } from "../../../tags/dtos/tags-response";
 
-const projectIcon = <IoMdPricetag />;
+const projectIcon = <GoProject />;
 const tagIcon = <IoMdPricetag />;
 
 const SessionCreation = () => {
