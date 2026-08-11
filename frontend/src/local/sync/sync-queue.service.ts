@@ -19,6 +19,7 @@ import {
 import { db } from "../indexedDB";
 
 import type { SyncQueueModel } from "./sync-queue.model";
+import { ApiError } from "../../configs/api-error.configs";
 
 class SyncQueueService {
   private isProcessing = false;
@@ -167,8 +168,16 @@ class SyncQueueService {
 
           await db.syncQueue.delete(op.id!);
         } catch (error) {
-          const retries = op.retries + 1;
+          if (error instanceof ApiError && error.code?.endsWith("_NOT_FOUND")) {
+            await db.syncQueue.delete(op.id!);
+            console.warn(
+              `Operação ${op.id} ignorada: entidade não encontrada (${error.code})`,
+              op,
+            );
+            return;
+          }
 
+          const retries = op.retries + 1;
           const delayMs = Math.min(5_000 * 2 ** retries, 5 * 60_000);
           const nextAttemptAt = new Date(Date.now() + delayMs);
 
