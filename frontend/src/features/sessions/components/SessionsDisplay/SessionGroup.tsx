@@ -31,7 +31,7 @@ const SessionGroup = memo(
 
     useEffect(() => {
       setSelectedSession(sessionGroup.sessions[0]);
-    }, [sessionGroup.sessions[0]?.id]);
+    }, [sessionGroup.sessions]);
 
     const storageKey = sessionStorageKeys.isSessionGroupOpen(sessionGroup.id);
 
