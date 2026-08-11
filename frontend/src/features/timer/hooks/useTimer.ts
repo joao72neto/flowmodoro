@@ -11,9 +11,12 @@ import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 import type { TimerMode } from "../timer.types";
 
-import { getSeconds, setSeconds } from "../timer.store";
+import { setSeconds } from "../timer.store";
+import { useSeconds } from "./useSeconds";
 
 const useTimer = () => {
+  const seconds = useSeconds();
+
   const { restRatio, handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
 
@@ -24,30 +27,17 @@ const useTimer = () => {
     return saved ? JSON.parse(saved).mode : null;
   });
 
-  useEffect(() => {
-    const saved = localStorage.getItem(localStorageKeys.timer);
-    if (!saved) return setSeconds(0);
-
-    const { mode, seconds, lastUpdated } = JSON.parse(saved);
-    const diff = Math.floor((Date.now() - lastUpdated) / 1000);
-
-    if (mode === "focus") setSeconds(seconds + diff);
-    if (mode === "break") setSeconds(Math.max(0, seconds - diff));
-  }, []);
-
   const startTimeRef = useRef<number>(Date.now());
-  const baseSecondsRef = useRef<number>(getSeconds());
+  const baseSecondsRef = useRef<number>(seconds);
 
   useEffect(() => {
     localStorage.setItem(
       localStorageKeys.timer,
-      JSON.stringify({ mode, seconds: getSeconds(), lastUpdated: Date.now() }),
+      JSON.stringify({ mode, seconds, lastUpdated: Date.now() }),
     );
 
     const faviconTime =
-      getSeconds() < 60
-        ? getSeconds().toString()
-        : Math.floor(getSeconds() / 60).toString();
+      seconds < 60 ? seconds.toString() : Math.floor(seconds / 60).toString();
 
     if (mode === "focus") {
       updateFaviconWithTime({
@@ -64,7 +54,7 @@ const useTimer = () => {
     } else {
       resetFavicon();
     }
-  }, [mode]);
+  }, [mode, seconds]);
 
   useEffect(() => {
     const syncTime = () => {
@@ -132,7 +122,7 @@ const useTimer = () => {
   };
 
   const stopFocus = () => {
-    const finalFocusSeconds = getSeconds();
+    const finalFocusSeconds = seconds;
     setMode("stopped");
     const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
     setSeconds(breakTime);
@@ -158,7 +148,7 @@ const useTimer = () => {
 
   const startBreak = () => {
     startTimeRef.current = Date.now();
-    baseSecondsRef.current = getSeconds();
+    baseSecondsRef.current = seconds;
     setMode("break");
   };
 
