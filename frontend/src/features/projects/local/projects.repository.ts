@@ -11,6 +11,7 @@ import { applyUpdates } from "./utils/apply-updates";
 import mapper from "../projects.mappers";
 
 import syncQueue from "../../../local/sync/sync-queue.service";
+import { sumFocusBy } from "../../../shared/utils/sum-focus-by/sum-focus-by.util";
 
 export const fetchProjects = async (): Promise<ProjectDTO[]> => {
   const [projects, sessions] = await Promise.all([
@@ -18,16 +19,7 @@ export const fetchProjects = async (): Promise<ProjectDTO[]> => {
     db.sessions.toArray(),
   ]);
 
-  const focusPerProject = sessions.reduce(
-    (acumulador, session) => {
-      const pId = session.projectId;
-      if (!pId) return acumulador;
-
-      acumulador[pId] = (acumulador[pId] || 0) + (session.focus || 0);
-      return acumulador;
-    },
-    {} as Record<string, number>,
-  );
+  const focusPerProject = sumFocusBy(sessions, (session) => session.projectId);
 
   return projects.map((project) => ({
     ...project,
