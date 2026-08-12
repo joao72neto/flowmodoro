@@ -8,10 +8,12 @@ export interface FlowmodoroPlugin {
   startFocus({ anchorMillis }: { anchorMillis: number }): Promise<void>;
   startBreak({
     anchorMillis,
-    restDurationMillis,
+    totalFocusMillis,
+    restRatio,
   }: {
     anchorMillis: number;
-    restDurationMillis: number;
+    totalFocusMillis: number;
+    restRatio: number;
   }): Promise<void>;
   stopTimer(): Promise<void>;
 }

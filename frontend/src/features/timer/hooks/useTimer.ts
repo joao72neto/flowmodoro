@@ -6,8 +6,8 @@ import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 import type { TimerMode } from "../timer.types";
 
-import { setSeconds } from "../timer.store";
-import { useSeconds } from "./useSeconds";
+import { setSeconds, setTotalFocus } from "../timer.store";
+import { useSeconds } from "./useTimerStore";
 
 import { isNative } from "../../../consts/platform";
 
@@ -63,6 +63,8 @@ const useTimer = () => {
       if (mode === "focus" || mode === "break") {
         const now = Date.now();
         const diffInSeconds = Math.floor((now - startTimeRef.current) / 1000);
+
+        setTotalFocus(now - startTimeRef.current);
 
         if (mode === "focus") {
           setSeconds(baseSecondsRef.current + diffInSeconds);

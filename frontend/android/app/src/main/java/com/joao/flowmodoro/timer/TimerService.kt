@@ -35,8 +35,9 @@ class TimerService : Service() {
         when (intent?.action) {
             ACTION_START_FOCUS -> startFocus(anchor)
             ACTION_START_BREAK -> {
-                val restDurationMillis = intent.getLongExtra(EXTRA_REST_DURATION, 0L)
-                startBreak(anchor, restDurationMillis)
+                val restRatio = intent.getDoubleExtra(EXTRA_REST_RATIO, 0.2)
+                val totalFocus = intent.getLongExtra(EXTRA_TOTAL_FOCUS, 0L)
+                startBreak(anchor, totalFocus, restRatio)
             }
 
             ACTION_STOP -> stopTimer()
@@ -63,15 +64,17 @@ class TimerService : Service() {
     }
 
 
-    private fun startBreak(anchor: Long, restDurationMillis: Long) {
+    private fun startBreak(anchor: Long, totalFocus: Long, restRatio: Double) {
         tickerJob?.cancel()
 
-        alarmManager.schedule(anchor, restDurationMillis)
+        val breakDuration = (totalFocus * restRatio).toLong();
+
+        alarmManager.schedule(anchor, breakDuration)
 
         tickerJob = serviceScope.launch {
             while (isActive) {
                 val elapsed = System.currentTimeMillis() - anchor
-                val remaining = restDurationMillis - elapsed
+                val remaining = breakDuration - elapsed
 
                 if (remaining <= 0) break
 
@@ -104,6 +107,7 @@ class TimerService : Service() {
         const val ACTION_START_FOCUS = "com.joao.flowmodoro.action.START_FOCUS"
         const val ACTION_START_BREAK = "com.joao.flowmodoro.action.START_BREAK"
         const val ACTION_STOP = "com.joao.flowmodoro.action.STOP"
-        const val EXTRA_REST_DURATION = "extra_rest_duration"
+        const val EXTRA_TOTAL_FOCUS = "extra_total_focus"
+        const val EXTRA_REST_RATIO = "extra_rest_ratio"
     }
 }

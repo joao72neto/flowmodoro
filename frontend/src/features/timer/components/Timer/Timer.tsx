@@ -2,7 +2,7 @@ import { useTimerContext } from "../../context/timer.context";
 import clsx from "clsx";
 
 import { formatTimer } from "../../../../shared/utils/number.utils";
-import { useSeconds } from "../../hooks/useSeconds";
+import { useSeconds } from "../../hooks/useTimerStore";
 
 const TimerDigits = ({
   mode,

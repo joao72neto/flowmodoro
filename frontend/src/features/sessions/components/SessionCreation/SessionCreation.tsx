@@ -28,15 +28,16 @@ import { IoClose } from "react-icons/io5";
 
 import { useRef } from "react";
 import { App } from "@capacitor/app";
-import { useSeconds } from "../../../timer/hooks/useSeconds";
+import { useTotalFocus } from "../../../timer/hooks/useTimerStore";
 
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
     useTimerContext();
 
-  const seconds = useSeconds();
+  const totalFocusMillis = useTotalFocus();
 
   const {
+    restRatio,
     setSessionName: setContextSessionName,
     sessionName: contextSessionName,
     selectedProject,
@@ -170,9 +171,11 @@ const SessionCreation = () => {
     startBreak();
 
     if (isNative) {
+      const normalizedRestRatio = restRatio / 100;
       await FlowmodoroPlugin.startBreak({
         anchorMillis,
-        restDurationMillis: seconds * 1000,
+        totalFocusMillis,
+        restRatio: normalizedRestRatio,
       });
     }
   };

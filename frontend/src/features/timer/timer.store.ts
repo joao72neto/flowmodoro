@@ -5,6 +5,7 @@ type Listener = () => void;
 const saved = localStorage.getItem(localStorageKeys.timer);
 
 let seconds = 0;
+let totalFocus = 0;
 
 if (saved) {
   const { mode, seconds: savedSeconds, lastUpdated } = JSON.parse(saved);
@@ -23,6 +24,15 @@ export function setSeconds(value: number) {
 
 export function getSeconds() {
   return seconds;
+}
+
+export function setTotalFocus(value: number) {
+  totalFocus = value;
+  listeners.forEach((l) => l());
+}
+
+export function getTotalFocus() {
+  return totalFocus;
 }
 
 export function subscribe(listener: Listener) {

@@ -120,15 +120,21 @@ class Plugin : Plugin() {
 
     @PluginMethod
     fun startBreak(call: PluginCall) {
-        val restDurationMillis = call.getNumber("restDurationMillis")
-            ?: return call.reject("restDurationMillis é obrigatório")
+        val totalFocusMillis = call.getNumber("totalFocusMillis")
+            ?: return call.reject("totalFocusMillis é obrigatório")
+
         val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
+
+        val restRatio = call.getDouble("restRatio") ?: 0.2
+
 
         dispatch(Intent(context, TimerService::class.java).apply {
             action = TimerService.ACTION_START_BREAK
-            putExtra(TimerService.EXTRA_REST_DURATION, restDurationMillis)
+            putExtra(TimerService.EXTRA_TOTAL_FOCUS, totalFocusMillis)
             putExtra(TimerService.EXTRA_ANCHOR, anchorMillis)
+            putExtra(TimerService.EXTRA_REST_RATIO, restRatio)
         })
+
         call.resolve()
     }
 
