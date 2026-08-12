@@ -9,6 +9,7 @@ import { applyUpdates } from "./utils/apply-updates";
 import mapper from "../tags.mappers";
 
 import syncQueue from "../../../local/sync/sync-queue.service";
+import { sumFocusBy } from "../../../shared/utils/sum-focus-by/sum-focus-by.util";
 
 export const fetchTagsByProject = async (
   projectId: string,
@@ -18,16 +19,7 @@ export const fetchTagsByProject = async (
     db.sessions.toArray(),
   ]);
 
-  const focusPerTag = sessions.reduce(
-    (acumulador, session) => {
-      const tId = session.tagId;
-      if (!tId) return acumulador;
-
-      acumulador[tId] = (acumulador[tId] || 0) + (session.focus || 0);
-      return acumulador;
-    },
-    {} as Record<string, number>,
-  );
+  const focusPerTag = sumFocusBy(sessions, (session) => session.tagId);
 
   return tags
     .map((tag) => ({

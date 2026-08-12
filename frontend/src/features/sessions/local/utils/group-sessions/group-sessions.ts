@@ -1,15 +1,15 @@
-import type { ProjectModel } from "../../../projects/local/project.model";
-import type { TagModel } from "../../../tags/local/tag.model";
+import type { ProjectModel } from "../../../../projects/local/project.model";
+import type { TagModel } from "../../../../tags/local/tag.model";
 import type {
   DailySessionsDTO,
   SessionDTO,
   SessionGroupDTO,
-} from "../../dtos/sessions-response";
-import type { SessionModel } from "../session.model";
+} from "../../../dtos/sessions-response";
+import type { SessionModel } from "../../session.model";
 
-import { getLocalDateKey } from "../../../../shared/utils/date.utils";
+import { getLocalDateKey } from "../../../../../shared/utils/date.utils";
 
-import mapper from "../../sessions.mappers";
+import mapper from "../../../sessions.mappers";
 
 type DayMap = {
   [key: string]: {
