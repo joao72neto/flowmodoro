@@ -8,7 +8,7 @@ import type {
 } from "../dtos/sessions-request";
 
 import { applyUpdates } from "./utils/apply-updates";
-import { buildDailySessions, normalizeSessions } from "./utils/group-sessions";
+import { buildDailySessions, normalizeSessions } from "./utils/group-sessions/group-sessions";
 
 import mapper from "../sessions.mappers";
 import syncQueue from "../../../local/sync/sync-queue.service";

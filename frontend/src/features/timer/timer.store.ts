@@ -10,8 +10,13 @@ if (saved) {
   const { mode, seconds: savedSeconds, lastUpdated } = JSON.parse(saved);
   const diff = Math.floor((Date.now() - lastUpdated) / 1000);
 
-  seconds =
-    mode === "focus" ? savedSeconds + diff : Math.max(0, savedSeconds - diff);
+  if (mode === "focus") {
+    seconds = savedSeconds + diff;
+  } else if (mode === "break") {
+    seconds = Math.max(0, savedSeconds - diff);
+  } else {
+    seconds = savedSeconds;
+  }
 }
 
 let listeners: Listener[] = [];
