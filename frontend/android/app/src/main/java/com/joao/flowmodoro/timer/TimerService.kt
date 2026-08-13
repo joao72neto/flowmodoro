@@ -17,7 +17,6 @@ class TimerService : Service() {
         super.onCreate()
         notificationHelper = TimerNotificationHelper(this)
         alarmManager = AlarmManager(this)
-        notificationHelper.createChannels()
 
         startForeground(
             TimerNotificationHelper.NOTIFICATION_ID_TIMER,
