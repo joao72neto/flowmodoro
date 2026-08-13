@@ -28,6 +28,7 @@ public class SessionCreateMapper {
                     ? TagModel.builder().id(sessionDTO.getTagId()).build()
                     : null
             )
+            .date(sessionDTO.getDate())
             .build();
     }
 

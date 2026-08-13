@@ -83,7 +83,9 @@ public class SessionValidator {
         List<String> errors = new ArrayList<>();
 
         if (session.getDate() == null) {
-            session.setDate(LocalDate.now());
+            session.setDate(
+                session.getDate() != null ? session.getDate() : LocalDate.now()
+            );
         }
 
         if (session.getRatio() == null) {
