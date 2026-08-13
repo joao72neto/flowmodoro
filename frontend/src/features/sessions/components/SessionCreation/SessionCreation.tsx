@@ -29,10 +29,13 @@ import { IoClose } from "react-icons/io5";
 import { useRef } from "react";
 import { App } from "@capacitor/app";
 import { useTotalFocus } from "../../../timer/hooks/useTimerStore";
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 
 const SessionCreation = () => {
   const { mode, startBreak, startFocus, stopFocus, skipBreak } =
     useTimerContext();
+
+  const { showDefault, hideModal } = useModal();
 
   const totalFocusMillis = useTotalFocus();
 
@@ -188,7 +191,17 @@ const SessionCreation = () => {
     if (type === "focus") {
       stopFocus();
     } else {
-      skipBreak();
+      showDefault({
+        title: "Atenção!",
+        message: "Tem certeza que deseja pular o intervalo?",
+        confirmLabel: "Sim",
+        cancelLabel: "Não",
+        action: () => {
+          skipBreak();
+          hideModal();
+        },
+        cancel: () => hideModal,
+      });
     }
   };
 
