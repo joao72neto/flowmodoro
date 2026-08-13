@@ -4,7 +4,7 @@ import { formatToHour } from "../../../../shared/utils/number.utils";
 import { capitalize } from "../../../../shared/utils/string.utils";
 
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import SessionDetailsModal from "../SessionDetailsModal";
 import Session from "./Session";
 import Label from "../../../../shared/components/labels/Label";
@@ -14,10 +14,18 @@ import { IoMdPricetag } from "react-icons/io";
 import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
 import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 
-import { AnimatedList } from "../../../../shared/components/AnimatedList";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 
-import { useCallback, memo } from "react";
+const BORDER_COLORS: Record<number, string> = {
+  10: "border-l-danger",
+  20: "border-l-primary",
+  30: "border-l-success",
+};
+
+const TOTAL_FOCUS_CLASSES = clsx(
+  "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
+  "border border-border px-3 py-1 rounded-lg shadow font-semibold",
+);
 
 const SessionGroup = memo(
   ({ sessionGroup }: { sessionGroup: SessionGroupDTO }) => {
@@ -61,24 +69,13 @@ const SessionGroup = memo(
     const hasTagOrProject = tag.id !== "" || project.id !== "";
     const showTagAndProject = hasTagOrProject;
 
-    const totalFocusClasses = clsx(
-      "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
-      "border border-border px-3 py-1 rounded-lg shadow font-semibold",
-    );
-
     const firstRatio = Math.round((sessionGroup.sessions[0]?.ratio || 0) * 100);
 
     const isUniform = sessionGroup.sessions.every(
       (session) => Math.round(session.ratio * 100) === firstRatio,
     );
 
-    const borderColors: Record<number, string> = {
-      10: "border-l-danger",
-      20: "border-l-primary",
-      30: "border-l-success",
-    };
-
-    const borderColorClass = isUniform ? borderColors[firstRatio] : undefined;
+    const borderColorClass = isUniform ? BORDER_COLORS[firstRatio] : undefined;
 
     const handleDetails = useCallback(
       (sessionId: string) => {
@@ -150,7 +147,7 @@ const SessionGroup = memo(
             </div>
 
             <div className="flex items-center gap-2">
-              <span className={clsx(totalFocusClasses)}>
+              <span className={TOTAL_FOCUS_CLASSES}>
                 {formatToHour(sessionGroup.totalFocus)}
               </span>
 
@@ -176,20 +173,15 @@ const SessionGroup = memo(
                 containIntrinsicSize: "0 60px",
               }}
             >
-              <AnimatedList
-                items={sessionGroup.sessions}
-                getKey={(session) => session.id}
-                className="w-full px-1"
-                enableLayoutAnimation="position"
-              >
-                {(session) => (
+              <div className="w-full px-1 flex flex-col gap-2">
+                {sessionGroup.sessions.map((session) => (
                   <Session
                     key={session.id}
                     session={session}
                     onClick={handleDetails}
                   />
-                )}
-              </AnimatedList>
+                ))}
+              </div>
             </Stack>
           </AnimatedCollapse>
         </div>
@@ -208,4 +200,4 @@ const SessionGroup = memo(
 
 SessionGroup.displayName = "SessionGroup";
 
-export default memo(SessionGroup);
+export default SessionGroup;

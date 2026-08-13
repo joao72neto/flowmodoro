@@ -10,6 +10,17 @@ import type { SessionDTO } from "../../dtos/sessions-response";
 
 import { memo } from "react";
 
+const BORDER_COLORS: Record<number, string> = {
+  10: "border-l-danger",
+  20: "border-l-primary",
+  30: "border-l-success",
+};
+
+const FOCUS_CLASSES = clsx(
+  "shrink-0 whitespace-nowrap text-sm bg-neutral-80/50 border border-border",
+  "px-2 py-0.5 rounded-md shadow flex items-center h-fit ml-auto self-center",
+);
+
 const Session = memo(
   ({
     session,
@@ -18,21 +29,11 @@ const Session = memo(
     session: SessionDTO;
     onClick?: (id: string) => void;
   }) => {
-    const borderColors: Record<number, string> = {
-      10: "border-l-danger",
-      20: "border-l-primary",
-      30: "border-l-success",
-    };
-
-    const borderColorClass = borderColors[session.ratio * 100];
+    const ratioKey = Math.round(session.ratio * 100);
+    const borderColorClass = BORDER_COLORS[ratioKey];
 
     const showTagAndProject =
       session.tag.id !== "" || session.project.id !== "";
-
-    const focusClasses = clsx(
-      "shrink-0 whitespace-nowrap text-sm bg-neutral-80/50 border border-border",
-      "px-2 py-0.5 rounded-md shadow flex items-center",
-    );
 
     return (
       <div onClick={() => onClick?.(session.id)} className="w-full">
@@ -67,9 +68,7 @@ const Session = memo(
               </div>
             )}
           </div>
-          <span className={clsx(focusClasses, "h-fit ml-auto self-center")}>
-            {formatToHour(session.focus)}
-          </span>
+          <span className={FOCUS_CLASSES}>{formatToHour(session.focus)}</span>
         </div>
       </div>
     );
@@ -78,4 +77,4 @@ const Session = memo(
 
 Session.displayName = "Session";
 
-export default memo(Session);
+export default Session;

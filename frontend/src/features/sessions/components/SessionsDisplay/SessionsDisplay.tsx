@@ -11,7 +11,7 @@ import SessionGroup from "./SessionGroup";
 import { useFetchSessions } from "../../hooks/useSessions";
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
 
-import { LayoutGroup, animate } from "framer-motion";
+import { animate } from "framer-motion";
 import { useRef } from "react";
 
 const SessionsDisplay = () => {
@@ -48,24 +48,22 @@ const SessionsDisplay = () => {
           <SessionsWrapper ref={paginationRef}>
             {sessions.content.map((sessionGroup) => {
               return (
-                <LayoutGroup id={sessionGroup.date} key={sessionGroup.date}>
-                  <DailySessions
-                    key={sessionGroup.date}
-                    groupName={formatToBRDate(sessionGroup.date)}
-                    totalFocus={formatToHour(sessionGroup.totalFocus)}
+                <DailySessions
+                  key={sessionGroup.date}
+                  groupName={formatToBRDate(sessionGroup.date)}
+                  totalFocus={formatToHour(sessionGroup.totalFocus)}
+                >
+                  <AnimatedList
+                    items={sessionGroup.sessionGroups}
+                    getKey={(group) => group.id}
+                    className="w-full"
+                    enableLayoutAnimation={false}
                   >
-                    <AnimatedList
-                      items={sessionGroup.sessionGroups}
-                      getKey={(group) => group.id}
-                      className="w-full"
-                      enableLayoutAnimation="position"
-                    >
-                      {(group) => (
-                        <SessionGroup key={group.id} sessionGroup={group} />
-                      )}
-                    </AnimatedList>
-                  </DailySessions>
-                </LayoutGroup>
+                    {(group) => (
+                      <SessionGroup key={group.id} sessionGroup={group} />
+                    )}
+                  </AnimatedList>
+                </DailySessions>
               );
             })}
           </SessionsWrapper>
