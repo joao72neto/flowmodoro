@@ -5,11 +5,15 @@ interface PageSelectorProps {
   currentPage: number;
   totalPages: number;
   goToPage: (page: number) => void;
+  goToEndPage: () => void;
+  goToStartPage: () => void;
 }
 
 const PageSelector = ({
   currentPage,
   totalPages,
+  goToEndPage,
+  goToStartPage,
   goToPage,
 }: PageSelectorProps) => {
   if (totalPages <= 1) return null;
@@ -32,7 +36,7 @@ const PageSelector = ({
     <div className="flex items-center gap-1">
       <button
         type="button"
-        onClick={() => goToPage(1)}
+        onClick={goToStartPage}
         disabled={currentPage === 1}
         className={clsx(
           "group px-3 py-1 cursor-pointer",
@@ -70,7 +74,7 @@ const PageSelector = ({
       </div>
 
       <button
-        onClick={() => goToPage(totalPages)}
+        onClick={goToEndPage}
         disabled={currentPage === totalPages}
         className={clsx(
           "group px-3 py-1 cursor-pointer",

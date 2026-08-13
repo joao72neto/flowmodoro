@@ -11,7 +11,7 @@ import SessionGroup from "./SessionGroup";
 import { useFetchSessions } from "../../hooks/useSessions";
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
 
-import { LayoutGroup } from "framer-motion";
+import { LayoutGroup, animate } from "framer-motion";
 import { useRef } from "react";
 
 const SessionsDisplay = () => {
@@ -29,6 +29,15 @@ const SessionsDisplay = () => {
   });
 
   const paginationRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollToPage = (page: number) => {
+    goToPage(page);
+    animate(window.scrollY, 550, {
+      duration: 0.6,
+      ease: "easeOut",
+      onUpdate: (value) => window.scrollTo(0, value),
+    });
+  };
 
   return (
     <div className="flex flex-col gap-6 w-full items-center relative">
@@ -62,14 +71,9 @@ const SessionsDisplay = () => {
           </SessionsWrapper>
           {sessions.totalElements > SIZE && (
             <PageSelector
-              goToPage={(page) => {
-                goToPage(page);
-
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }}
+              goToEndPage={() => handleScrollToPage(totalPages)}
+              goToPage={(page) => handleScrollToPage(page)}
+              goToStartPage={() => handleScrollToPage(1)}
               currentPage={currentPage}
               totalPages={totalPages}
             />
