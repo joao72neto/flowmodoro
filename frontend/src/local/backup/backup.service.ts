@@ -108,29 +108,35 @@ class BackupService {
         },
       );
 
-      data.sessions.map((session) => {
-        syncQueue.addToQueue({
-          entityType: "session",
-          action: "CREATE",
-          payload: session,
-        });
-      });
+      await Promise.all(
+        data.projects.map((project) =>
+          syncQueue.addToQueue({
+            entityType: "project",
+            action: "UPDATE",
+            payload: project,
+          }),
+        ),
+      );
 
-      data.projects.map((project) => {
-        syncQueue.addToQueue({
-          entityType: "project",
-          action: "CREATE",
-          payload: project,
-        });
-      });
+      await Promise.all(
+        data.tags.map((tag) =>
+          syncQueue.addToQueue({
+            entityType: "tag",
+            action: "UPDATE",
+            payload: tag,
+          }),
+        ),
+      );
 
-      data.tags.map((tag) => {
-        syncQueue.addToQueue({
-          entityType: "tag",
-          action: "CREATE",
-          payload: tag,
-        });
-      });
+      await Promise.all(
+        data.sessions.map((session) =>
+          syncQueue.addToQueue({
+            entityType: "session",
+            action: "UPDATE",
+            payload: session,
+          }),
+        ),
+      );
     } catch (err) {
       console.error(err);
       throw new Error(

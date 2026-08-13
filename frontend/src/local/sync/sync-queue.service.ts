@@ -21,6 +21,8 @@ import { db } from "../indexedDB";
 import type { SyncQueueModel } from "./sync-queue.model";
 import { ApiError } from "../../configs/api-error.configs";
 
+const MAX_RETRIES = 5;
+
 class SyncQueueService {
   private isProcessing = false;
 
@@ -45,18 +47,24 @@ class SyncQueueService {
     await db.transaction("rw", db.syncQueue, async () => {
       const existingOps = await db.syncQueue
         .filter(
-          (op) =>
-            op.entityType === entityType &&
-            op.status === "pending" &&
-            op.payload.id === entityId,
+          (op) => op.entityType === entityType && op.payload.id === entityId,
         )
         .toArray();
 
       const existingOp = existingOps[0];
 
       if (existingOp) {
+        const baseUpdate = {
+          payload,
+          status: "pending" as const,
+          retries: 0,
+          error: undefined,
+          errorMessage: undefined,
+          nextAttemptAt: undefined,
+        };
+
         if (existingOp.action === "CREATE" && action === "UPDATE") {
-          await db.syncQueue.update(existingOp.id!, { payload });
+          await db.syncQueue.update(existingOp.id!, baseUpdate);
           return;
         }
 
@@ -66,17 +74,22 @@ class SyncQueueService {
         }
 
         if (existingOp.action === "UPDATE" && action === "UPDATE") {
-          await db.syncQueue.update(existingOp.id!, { payload });
+          await db.syncQueue.update(existingOp.id!, baseUpdate);
           return;
         }
 
         if (existingOp.action === "UPDATE" && action === "DELETE") {
           await db.syncQueue.update(existingOp.id!, {
+            ...baseUpdate,
             action: "DELETE",
-            payload,
           });
           return;
         }
+
+        await db.syncQueue.update(existingOp.id!, {
+          ...baseUpdate,
+          action,
+        });
       } else {
         await db.syncQueue.add({
           entityType,
@@ -88,6 +101,45 @@ class SyncQueueService {
         } as SyncQueueModel);
       }
     });
+  }
+
+  async retryItem(id: string) {
+    await db.syncQueue.update(id, {
+      status: "pending",
+      retries: 0,
+      nextAttemptAt: undefined,
+      error: undefined,
+      errorMessage: undefined,
+    });
+    this.processQueue();
+  }
+
+  async removeItem(id: string) {
+    await db.syncQueue.delete(id);
+  }
+
+  async retryAllFailed() {
+    const failedOps = await db.syncQueue
+      .where("status")
+      .equals("failed")
+      .toArray();
+
+    for (const op of failedOps) {
+      if (op.id) {
+        await db.syncQueue.update(op.id, {
+          status: "pending",
+          retries: 0,
+          nextAttemptAt: undefined,
+          error: undefined,
+          errorMessage: undefined,
+        });
+      }
+    }
+    this.processQueue();
+  }
+
+  async removeAllFailed() {
+    await db.syncQueue.where("status").equals("failed").delete();
   }
 
   async processQueue() {
@@ -103,7 +155,7 @@ class SyncQueueService {
         .orderBy("id")
         .filter(
           (op) =>
-            (op.status === "pending" || op.status === "failed") &&
+            op.status === "pending" &&
             (!op.nextAttemptAt || op.nextAttemptAt <= now),
         )
         .toArray();
@@ -174,19 +226,37 @@ class SyncQueueService {
               `Operação ${op.id} ignorada: entidade não encontrada (${error.code})`,
               op,
             );
-            return;
+            continue;
           }
 
           const retries = op.retries + 1;
-          const delayMs = Math.min(5_000 * 2 ** retries, 5 * 60_000);
-          const nextAttemptAt = new Date(Date.now() + delayMs);
+          const errorMessage =
+            error instanceof ApiError
+              ? error.message
+              : error instanceof Error
+                ? error.message
+                : String(error);
 
-          await db.syncQueue.update(op.id!, {
-            retries,
-            status: "pending",
-            nextAttemptAt,
-            error: String(error),
-          });
+          if (retries >= MAX_RETRIES) {
+            await db.syncQueue.update(op.id!, {
+              retries,
+              status: "failed",
+              error: String(error),
+              errorMessage,
+              nextAttemptAt: undefined,
+            });
+          } else {
+            const delayMs = Math.min(5_000 * 2 ** retries, 5 * 60_000);
+            const nextAttemptAt = new Date(Date.now() + delayMs);
+
+            await db.syncQueue.update(op.id!, {
+              retries,
+              status: "pending",
+              nextAttemptAt,
+              error: String(error),
+              errorMessage,
+            });
+          }
         }
       }
     } finally {
@@ -196,3 +266,4 @@ class SyncQueueService {
 }
 
 export default new SyncQueueService();
+

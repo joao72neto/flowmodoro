@@ -7,6 +7,7 @@ export type TagPayloadDTO = {
 export type TagUpdateBulkDTO = {
   id: string;
   name: string;
+  projectId?: string;
 };
 
 export type TagUpdateDTO = {
