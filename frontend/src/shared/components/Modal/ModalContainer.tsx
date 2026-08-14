@@ -16,7 +16,7 @@ const panelVariants = {
 };
 
 const panelVariantsLight = {
-  hidden: { opacity: 0, scale: 0.9 },
+  hidden: { opacity: 0, scale: 0.98 },
   visible: { opacity: 1, scale: 1 },
 };
 
