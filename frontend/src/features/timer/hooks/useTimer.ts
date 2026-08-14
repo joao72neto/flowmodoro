@@ -106,7 +106,7 @@ const useTimer = () => {
     const finalFocusSeconds = seconds;
     setTotalFocus(finalFocusSeconds * 1000);
     setMode("stopped");
-    const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
+    const breakTime = Math.ceil(finalFocusSeconds * BREAK_RATIO);
     setSeconds(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();
