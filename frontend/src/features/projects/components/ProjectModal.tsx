@@ -15,6 +15,7 @@ import type { useCreateProject, useUpdateProject } from "../hooks/useProjects";
 import type { ProjectUpdateDTO } from "../dtos/projects-request";
 
 import { v4 as uuidv4 } from "uuid";
+import { isNative } from "../../../consts/platform";
 
 const ProjectModal = ({
   isOpen,
@@ -70,8 +71,6 @@ const ProjectModal = ({
     },
   });
 
-  if (!isOpen) return null;
-
   const closeAndReset = () => {
     reset();
     close();
@@ -94,7 +93,11 @@ const ProjectModal = ({
   };
 
   return (
-    <ModalContainer close={close}>
+    <ModalContainer
+      enableHeavyAnimations={!isNative}
+      isOpen={isOpen}
+      close={close}
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6 w-full"

@@ -16,8 +16,6 @@ export const useModalFactory = <P extends ModalInjectedProps>(
 
   const Modal = useCallback(
     (props: Omit<P, keyof ModalInjectedProps>) => {
-      if (!isOpen) return null;
-
       return (
         <ModalComponent {...(props as P)} isOpen={isOpen} close={closeModal} />
       );

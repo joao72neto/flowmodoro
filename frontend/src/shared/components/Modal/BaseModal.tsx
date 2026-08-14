@@ -5,7 +5,10 @@ import { GiConfirmed } from "react-icons/gi";
 import ModalContainer from "./ModalContainer";
 import type { VariantType } from "../../global.types";
 
+import { isNative } from "../../../consts/platform";
+
 const BaseModal = ({
+  isOpen,
   title,
   children,
   closeButtonText,
@@ -16,6 +19,7 @@ const BaseModal = ({
   onConfirm,
   isLoading,
 }: {
+  isOpen: boolean;
   title: string;
   children: React.ReactNode;
   closeButtonVariant?: VariantType;
@@ -27,7 +31,7 @@ const BaseModal = ({
   isLoading?: boolean;
 }) => {
   return (
-    <ModalContainer>
+    <ModalContainer isOpen={isOpen} enableHeavyAnimations={!isNative}>
       {title && <h1 className="font-bold text-xl">{title}</h1>}
 
       <div className="px-5">{children}</div>

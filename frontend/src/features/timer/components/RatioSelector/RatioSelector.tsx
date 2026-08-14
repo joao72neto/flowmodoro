@@ -9,6 +9,7 @@ import { useTimerContext } from "../../context/timer.context";
 import type { RatioPreset } from "../../consts/ratio-presets";
 import { useSessionContext } from "../../../sessions/context/sessions.context";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
+import { isNative } from "../../../../consts/platform";
 
 function RatioSelector() {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,6 +75,7 @@ function RatioSelector() {
       </button>
 
       <AnimatedCollapse
+        enableHeavyAnimations={!isNative}
         overflow={theme === "light"}
         show={isOpen && !isFocusRunning}
       >

@@ -11,6 +11,8 @@ import { CreateTagSchema } from "../tag.schema";
 import type { TagDTO } from "../dtos/tags-response";
 import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
 
+import { isNative } from "../../../consts/platform";
+
 import { v4 as uuidv4 } from "uuid";
 
 const TagModal = ({
@@ -69,8 +71,6 @@ const TagModal = ({
     },
   });
 
-  if (!isOpen) return null;
-
   const closeAndReset = () => {
     reset();
     close();
@@ -100,7 +100,11 @@ const TagModal = ({
   };
 
   return (
-    <ModalContainer close={close}>
+    <ModalContainer
+      enableHeavyAnimations={!isNative}
+      isOpen={isOpen}
+      close={close}
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6 w-full"

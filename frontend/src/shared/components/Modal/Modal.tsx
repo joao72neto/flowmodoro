@@ -3,6 +3,7 @@ import { modalConfig } from "../../../configs/modal.configs";
 import type { ModalType, VariantType } from "../../global.types";
 
 const Modal = ({
+  isOpen,
   type = "default",
   title,
   closeButtonText,
@@ -14,6 +15,7 @@ const Modal = ({
   onConfirm,
   isLoading,
 }: {
+  isOpen: boolean;
   type?: ModalType;
   title?: string;
   closeButtonText?: string;
@@ -28,6 +30,7 @@ const Modal = ({
   const config = modalConfig[type];
   return (
     <BaseModal
+      isOpen={isOpen}
       closeButtonText={closeButtonText ?? config.closeButtonText}
       confirmButtonText={confirmButtonText ?? config.confirmButtonText}
       title={title ?? config.title}

@@ -11,8 +11,7 @@ import SessionGroup from "./SessionGroup";
 import { useFetchSessions } from "../../hooks/useSessions";
 import { AnimatedList } from "../../../../shared/components/AnimatedList";
 
-import { animate } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 const SessionsDisplay = () => {
   const SIZE = 7;
@@ -32,20 +31,30 @@ const SessionsDisplay = () => {
 
   const handleScrollToPage = (page: number) => {
     goToPage(page);
-    animate(window.scrollY, 550, {
-      duration: 0.6,
-      ease: "easeOut",
-      onUpdate: (value) => window.scrollTo(0, value),
-    });
   };
 
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        paginationRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [currentPage]);
+
   return (
-    <div className="flex flex-col gap-6 w-full items-center relative">
+    <div
+      ref={paginationRef}
+      className="flex flex-col gap-6 w-full items-center relative"
+    >
       {!sessions || sessions.content.length === 0 ? (
         <EmptySessions />
       ) : (
         <>
-          <SessionsWrapper ref={paginationRef}>
+          <SessionsWrapper>
             {sessions.content.map((sessionGroup) => {
               return (
                 <DailySessions

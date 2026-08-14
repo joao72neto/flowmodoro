@@ -162,7 +162,7 @@ const SessionGroup = memo(
             </div>
           </Stack>
 
-          <AnimatedCollapse enableAnimation={!isNative} show={isOpen}>
+          <AnimatedCollapse enableHeavyAnimations={!isNative} show={isOpen}>
             <Stack
               gap={2}
               className={clsx(
@@ -187,13 +187,11 @@ const SessionGroup = memo(
           </AnimatedCollapse>
         </div>
 
-        {showSessionDetailsModal && (
-          <SessionDetailsModal
-            isOpen={showSessionDetailsModal}
-            setIsOpen={setShowSessionDetailsModal}
-            session={selectedSession}
-          />
-        )}
+        <SessionDetailsModal
+          isOpen={showSessionDetailsModal}
+          setIsOpen={setShowSessionDetailsModal}
+          session={selectedSession}
+        />
       </>
     );
   },

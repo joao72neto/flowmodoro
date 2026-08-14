@@ -44,7 +44,7 @@ const DailySessions = ({
         </span>
       </div>
 
-      <AnimatedCollapse enableAnimation={!isNative} show={isOpen}>
+      <AnimatedCollapse enableHeavyAnimations={!isNative} show={isOpen}>
         <Stack gap={2} className={clsx(theme === "light" && "pb-4")}>
           {children}
         </Stack>

@@ -228,23 +228,22 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-      {modalType && (
-        <Modal
-          type={modalType}
-          title={modalTitle}
-          closeButtonText={cancelLabel}
-          confirmButtonText={confirmLabel}
-          onClose={handleCancel}
-          onConfirm={
-            modalType === "warning" || modalType === "default" || confirmLabel
-              ? handleConfirm
-              : undefined
-          }
-          isLoading={isModalLoading}
-        >
-          {modalMessage}
-        </Modal>
-      )}
+      <Modal
+        isOpen={modalType !== null}
+        type={modalType ?? "default"}
+        title={modalTitle}
+        closeButtonText={cancelLabel}
+        confirmButtonText={confirmLabel}
+        onClose={handleCancel}
+        onConfirm={
+          modalType === "warning" || modalType === "default" || confirmLabel
+            ? handleConfirm
+            : undefined
+        }
+        isLoading={isModalLoading}
+      >
+        {modalMessage}
+      </Modal>
     </ModalContext.Provider>
   );
 };

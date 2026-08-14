@@ -26,6 +26,8 @@ import type { SessionDTO } from "../dtos/sessions-response";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
 import { useFetchTagsByProject } from "../../tags/hooks/useTags";
 
+import { isNative } from "../../../consts/platform";
+
 interface SessionDraft {
   title: string;
   selectedProjectId: string | null;
@@ -108,8 +110,6 @@ const SessionDetailsModal = ({
     }
   }, [mode, title, selectedProjectId, selectedTagId, ratio, focus, draftKey]);
 
-  if (!isOpen) return null;
-
   const isReadyToSave =
     title.trim() !== "" &&
     (title.trim() !== session.name.trim() ||
@@ -181,7 +181,12 @@ const SessionDetailsModal = ({
   };
 
   return (
-    <ModalContainer close={handleClose} className="!gap-10 !overflow-visible">
+    <ModalContainer
+      isOpen={isOpen}
+      enableHeavyAnimations={!isNative}
+      close={handleClose}
+      className="!gap-10 !overflow-visible"
+    >
       <Stack direction="row" justify="between" gap={5} className="w-full">
         {mode === "edit" ? (
           <input

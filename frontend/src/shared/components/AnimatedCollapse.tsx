@@ -6,14 +6,14 @@ interface AnimatedCollapseProps {
   show: boolean;
   children: ReactNode;
   overflow?: boolean;
-  enableAnimation?: boolean;
+  enableHeavyAnimations?: boolean;
 }
 
 export const AnimatedCollapse = ({
   show,
   children,
   overflow = false,
-  enableAnimation = true,
+  enableHeavyAnimations = true,
 }: AnimatedCollapseProps) => {
   const [shouldRender, setShouldRender] = useState(show);
 
@@ -29,10 +29,15 @@ export const AnimatedCollapse = ({
     }
   };
 
-  if (!enableAnimation) {
+  if (!enableHeavyAnimations) {
     if (!show) return null;
     return (
-      <div className={clsx("w-full", !overflow && "overflow-hidden")}>
+      <div
+        className={clsx(
+          "w-full animate-fade-in-simple",
+          !overflow && "overflow-hidden",
+        )}
+      >
         {children}
       </div>
     );
