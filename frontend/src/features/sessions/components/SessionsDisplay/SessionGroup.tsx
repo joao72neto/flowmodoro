@@ -15,6 +15,7 @@ import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
 import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
+import { isNative } from "../../../../consts/platform";
 
 const BORDER_COLORS: Record<number, string> = {
   10: "border-l-danger",
@@ -161,7 +162,7 @@ const SessionGroup = memo(
             </div>
           </Stack>
 
-          <AnimatedCollapse show={isOpen}>
+          <AnimatedCollapse enableAnimation={!isNative} show={isOpen}>
             <Stack
               gap={2}
               className={clsx(

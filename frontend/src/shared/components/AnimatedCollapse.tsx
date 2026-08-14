@@ -1,18 +1,19 @@
 import type { ReactNode } from "react";
 import { useState, useEffect } from "react";
-
 import clsx from "clsx";
 
 interface AnimatedCollapseProps {
   show: boolean;
   children: ReactNode;
   overflow?: boolean;
+  enableAnimation?: boolean;
 }
 
 export const AnimatedCollapse = ({
   show,
   children,
   overflow = false,
+  enableAnimation = true,
 }: AnimatedCollapseProps) => {
   const [shouldRender, setShouldRender] = useState(show);
 
@@ -27,6 +28,15 @@ export const AnimatedCollapse = ({
       setShouldRender(false);
     }
   };
+
+  if (!enableAnimation) {
+    if (!show) return null;
+    return (
+      <div className={clsx("w-full", !overflow && "overflow-hidden")}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -44,4 +54,3 @@ export const AnimatedCollapse = ({
     </div>
   );
 };
-
