@@ -183,12 +183,15 @@ const SessionCreation = () => {
     }
   };
 
-  const handleStopTimer = async ({ type }: { type: "focus" | "break" }) => {
+  const stopForegroundTimer = async () => {
     if (isNative) {
       await FlowmodoroPlugin.stopTimer();
     }
+  };
 
+  const handleStopTimer = async ({ type }: { type: "focus" | "break" }) => {
     if (type === "focus") {
+      await stopForegroundTimer();
       stopFocus();
     } else {
       showDefault({
@@ -196,7 +199,8 @@ const SessionCreation = () => {
         message: "Tem certeza que deseja pular o intervalo?",
         confirmLabel: "Sim",
         cancelLabel: "Não",
-        action: () => {
+        action: async () => {
+          await stopForegroundTimer();
           skipBreak();
           hideModal();
         },

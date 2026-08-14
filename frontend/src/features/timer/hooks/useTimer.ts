@@ -64,9 +64,8 @@ const useTimer = () => {
         const now = Date.now();
         const diffInSeconds = Math.floor((now - startTimeRef.current) / 1000);
 
-        setTotalFocus(now - startTimeRef.current);
-
         if (mode === "focus") {
+          setTotalFocus(now - startTimeRef.current);
           setSeconds(baseSecondsRef.current + diffInSeconds);
         } else if (mode === "break") {
           const remaining = baseSecondsRef.current - diffInSeconds;
@@ -98,12 +97,14 @@ const useTimer = () => {
     const now = Date.now();
     startTimeRef.current = now;
     baseSecondsRef.current = 0;
+    setTotalFocus(0);
     setSeconds(0);
     setMode("focus");
   };
 
   const stopFocus = () => {
     const finalFocusSeconds = seconds;
+    setTotalFocus(finalFocusSeconds * 1000);
     setMode("stopped");
     const breakTime = Math.floor(finalFocusSeconds * BREAK_RATIO);
     setSeconds(breakTime);
@@ -135,7 +136,7 @@ const useTimer = () => {
 
   const skipBreak = () => {
     setMode(null);
-
+    setTotalFocus(0);
     setSeconds(0);
     localStorage.removeItem(localStorageKeys.timer);
   };

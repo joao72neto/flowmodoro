@@ -90,7 +90,7 @@ class TimerService : Service() {
                 if (remaining <= 0) break
 
                 notificationHelper.updateTimerNotification(
-                    TimeFormatter.format(remaining),
+                    TimeFormatter.formatCountdown(remaining),
                     true
                 )
 

@@ -120,7 +120,7 @@ class Plugin : Plugin() {
 
     @PluginMethod
     fun startBreak(call: PluginCall) {
-        val totalFocusMillis = call.getNumber("totalFocusMillis")
+        val totalFocusMillis = call.getNumber("totalFocusMillis")?.toLong()
             ?: return call.reject("totalFocusMillis é obrigatório")
 
         val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
