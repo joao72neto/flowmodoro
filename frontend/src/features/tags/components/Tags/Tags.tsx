@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
 import { PiCaretLeftBold } from "react-icons/pi";
 import { RxUpdate } from "react-icons/rx";
@@ -47,17 +47,25 @@ const Tags = ({
 
   const { mutate: handleDeleteTag } = useDeleteTag();
 
-  const filteredTags = useMemo(() => {
-    if (!tags) return [];
+  const previousFilteredTags = useRef<TagDTO[]>([]);
 
-    return tags
+  const filteredTags = useMemo(() => {
+    if (!tags || tags.length === 0) {
+      return previousFilteredTags.current;
+    }
+
+    const result = tags
       .filter((tag) => tag.projectId === project.id)
       .filter((tag) =>
         tag.name.toLowerCase().includes(searchQuery.toLowerCase()),
       );
+
+    previousFilteredTags.current = result;
+
+    return result;
   }, [tags, project.id, searchQuery]);
 
-  const isEmpty = filteredTags.length === 0;
+  const isEmpty = previousFilteredTags.current.length === 0;
 
   return (
     <>

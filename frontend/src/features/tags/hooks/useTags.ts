@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { APP_DATA_QUERY_KEY } from "../../../consts/global-query-key";
 import {
   createTag,
@@ -23,6 +28,7 @@ export const useFetchTagsByProject = (projectId: string) => {
   return useQuery({
     queryKey: [APP_DATA_QUERY_KEY, TAGS_QUERY_KEY, projectId],
     queryFn: async () => await fetchTagsByProject(projectId),
+    placeholderData: keepPreviousData,
 
     meta: {
       errorTitle: "Erro ao carregar tags",
