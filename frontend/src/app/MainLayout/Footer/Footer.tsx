@@ -12,7 +12,7 @@ const Footer = ({
     <footer
       className={clsx(
         "flex fixed bottom-0 w-full p-3 justify-between border-t",
-        "border-border items-center bg-neutral-100",
+        "border-border items-center bg-neutral-100 z-10",
       )}
     >
       <BackupMenu />
