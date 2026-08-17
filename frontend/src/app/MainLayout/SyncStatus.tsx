@@ -114,6 +114,7 @@ const SyncStatus = () => {
   return (
     <div
       className="relative flex items-center"
+      onClick={() => (isNative ? setIsHovered((prev) => !prev) : undefined)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -125,7 +126,7 @@ const SyncStatus = () => {
           }
         }}
         className={clsx(
-          "flex items-center gap-2 rounded-lg p-1.5 transition-colors focus:outline-none",
+          "flex items-center gap-2 rounded-lg transition-colors focus:outline-none",
           failedCount > 0 && "cursor-pointer hover:bg-neutral-80",
         )}
         aria-label={label}
@@ -151,7 +152,7 @@ const SyncStatus = () => {
             exit={{ opacity: 0, y: -4, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             className={clsx(
-              "absolute top-full mt-2 left-0",
+              "absolute top-full mt-1 left-0",
               "whitespace-nowrap text-left",
               "rounded-md bg-neutral-60 px-2.5 py-1.5 text-xs text-neutral-20 shadow-md z-30 flex flex-col gap-0.5",
             )}
