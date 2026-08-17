@@ -11,7 +11,10 @@ object TimeFormatter {
     }
 
     fun formatCountdown(remainingMillis: Long): String {
-        val totalSeconds = Math.max(0L, remainingMillis + 999) / 1000
+        val totalSeconds = Math.max(0L, remainingMillis)
+            .plus(500)
+            .div(1000)
+
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
         return String.format(Locale.ROOT, "%02d:%02d", minutes, seconds)
