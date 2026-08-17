@@ -128,7 +128,7 @@ const SessionCreation = () => {
   }, []);
 
   const commitSessionName = () => {
-    setContextSessionName(sessionName);
+    setContextSessionName(sessionName.trim());
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

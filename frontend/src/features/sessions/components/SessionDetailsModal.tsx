@@ -191,7 +191,7 @@ const SessionDetailsModal = ({
         {mode === "edit" ? (
           <input
             type="text"
-            value={title}
+            value={title.trim()}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Nome da sessão"
             className={clsx(
