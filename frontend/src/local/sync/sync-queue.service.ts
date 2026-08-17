@@ -21,7 +21,7 @@ import { db } from "../indexedDB";
 import type { SyncQueueModel } from "./sync-queue.model";
 import { ApiError } from "../../configs/api-error.configs";
 
-const MAX_RETRIES = 5;
+const MAX_RETRIES = 3;
 
 class SyncQueueService {
   private isProcessing = false;
@@ -220,15 +220,6 @@ class SyncQueueService {
 
           await db.syncQueue.delete(op.id!);
         } catch (error) {
-          if (error instanceof ApiError && error.code?.endsWith("_NOT_FOUND")) {
-            await db.syncQueue.delete(op.id!);
-            console.warn(
-              `Operação ${op.id} ignorada: entidade não encontrada (${error.code})`,
-              op,
-            );
-            continue;
-          }
-
           const retries = op.retries + 1;
           const errorMessage =
             error instanceof ApiError
@@ -246,7 +237,7 @@ class SyncQueueService {
               nextAttemptAt: undefined,
             });
           } else {
-            const delayMs = Math.min(5_000 * 2 ** retries, 5 * 60_000);
+            const delayMs = Math.min(5_000 * 2 ** retries, 3 * 60_000);
             const nextAttemptAt = new Date(Date.now() + delayMs);
 
             await db.syncQueue.update(op.id!, {
@@ -266,4 +257,3 @@ class SyncQueueService {
 }
 
 export default new SyncQueueService();
-

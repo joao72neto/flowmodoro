@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../../local/indexedDB";
 import { IoSyncOutline, IoRefresh, IoTrashOutline } from "react-icons/io5";
@@ -10,6 +10,8 @@ import { Network } from "@capacitor/network";
 import { isNative } from "../../consts/platform";
 import syncQueue from "../../local/sync/sync-queue.service";
 import type { SyncQueueModel } from "../../local/sync/sync-queue.model";
+
+import { useClickOutside } from "../../shared/hooks/useClickOutside";
 
 type SyncStatusState = "offline" | "synced" | "syncing" | "error";
 
@@ -48,11 +50,22 @@ const actionLabels: Record<SyncQueueModel["action"], string> = {
 };
 
 const SyncStatus = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [isHovered, setIsHovered] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const queue = useLiveQuery(() => db.syncQueue.toArray(), []);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  const resetPanel = () => {
+    setIsPanelOpen(false);
+    setIsHovered(false);
+  };
+
+  useClickOutside(containerRef, () => {
+    resetPanel();
+  });
 
   useEffect(() => {
     if (isNative) {
@@ -173,12 +186,13 @@ const SyncStatus = () => {
       <AnimatePresence>
         {isPanelOpen && failedCount > 0 && (
           <motion.div
+            ref={containerRef}
             initial={{ opacity: 0, y: -8, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className={clsx(
-              "absolute top-full mt-2 left-0 w-80 max-w-[90vw]",
+              "absolute top-full mt-2 left-0 w-90 max-w-[90vw]",
               "rounded-xl bg-neutral-80 border border-neutral-60 p-4 shadow-xl z-40 text-left text-xs",
             )}
           >
@@ -190,16 +204,22 @@ const SyncStatus = () => {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => syncQueue.retryAllFailed()}
-                  className="text-primary hover:underline text-[11px] font-medium"
+                  onClick={() => {
+                    syncQueue.retryAllFailed();
+                    resetPanel();
+                  }}
+                  className="text-primary hover:cursor-pointer hover:underline text-[11px] font-medium"
                   title="Tentar sincronizar tudo novamente"
                 >
                   Tentar todos
                 </button>
                 <button
                   type="button"
-                  onClick={() => syncQueue.removeAllFailed()}
-                  className="text-neutral-40 hover:text-danger text-[11px]"
+                  onClick={() => {
+                    syncQueue.removeAllFailed();
+                    resetPanel();
+                  }}
+                  className="text-neutral-40 hover:text-danger hover:cursor-pointer text-[11px]"
                   title="Remover todos da fila"
                 >
                   Limpar todos
@@ -207,7 +227,7 @@ const SyncStatus = () => {
               </div>
             </div>
 
-            <div className="mt-3 max-h-60 overflow-y-auto flex flex-col gap-2.5 pr-1">
+            <div className="mt-3 max-h-60 overflow-y-auto flex flex-col gap-2.5 pr-1 scrollbar-hidden contain-content">
               {failedItems.map((item) => (
                 <div
                   key={item.id}
@@ -229,16 +249,26 @@ const SyncStatus = () => {
                   <div className="flex items-center justify-end gap-2 mt-1 pt-1 border-t border-neutral-60/40">
                     <button
                       type="button"
-                      onClick={() => item.id && syncQueue.retryItem(item.id)}
-                      className="flex items-center gap-1 text-[11px] text-primary hover:underline"
+                      onClick={() => {
+                        if (item.id) {
+                          syncQueue.retryItem(item.id);
+                          resetPanel();
+                        }
+                      }}
+                      className="flex items-center hover:cursor-pointer gap-1 text-[11px] text-primary hover:underline"
                     >
                       <IoRefresh size={13} />
                       <span>Tentar novamente</span>
                     </button>
                     <button
                       type="button"
-                      onClick={() => item.id && syncQueue.removeItem(item.id)}
-                      className="flex items-center gap-1 text-[11px] text-neutral-40 hover:text-danger"
+                      onClick={() => {
+                        if (item.id) {
+                          syncQueue.removeItem(item.id);
+                          resetPanel();
+                        }
+                      }}
+                      className="flex items-center hover:cursor-pointer gap-1 text-[11px] text-neutral-40 hover:text-danger"
                     >
                       <IoTrashOutline size={13} />
                       <span>Ignorar</span>

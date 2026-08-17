@@ -29,8 +29,6 @@ const Tags = ({
   project: ProjectDTO;
   onBack: () => void;
 }) => {
-  console.log("Olha o projeto", project);
-
   const { data: tags } = useFetchTagsByProject(project.id || "");
   const { setSelectedTagId } = useSessionContext();
 
