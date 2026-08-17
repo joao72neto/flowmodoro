@@ -12,6 +12,8 @@ import { backupSchema } from "./backup.schema";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { Share } from "@capacitor/share";
 
+import { localStorageKeys } from "../../shared/utils/storage.utils";
+
 class BackupService {
   private readonly VERSION = 1;
 
@@ -23,7 +25,14 @@ class BackupService {
         db.sessions.toArray(),
       ]);
 
+      const userId = localStorage.getItem(localStorageKeys.userId);
+
+      if (!userId) {
+        throw new Error("id do usuário não encontrado");
+      }
+
       const backup: BackupData = {
+        userId,
         version: this.VERSION,
         exportedAt: new Date().toISOString(),
         projects,
@@ -57,7 +66,14 @@ class BackupService {
         db.sessions.toArray(),
       ]);
 
+      const userId = localStorage.getItem(localStorageKeys.userId);
+
+      if (!userId) {
+        throw new Error("id do usuário não encontrado");
+      }
+
       const backup: BackupData = {
+        userId,
         version: this.VERSION,
         exportedAt: new Date().toISOString(),
         projects,
@@ -161,6 +177,10 @@ class BackupService {
       throw new Error(
         `Arquivo inválido: ${path ? `${path} — ` : ""}${firstIssue.message}`,
       );
+    }
+
+    if (result.data?.userId !== localStorage.getItem(localStorageKeys.userId)) {
+      throw new Error("id do usuário não corresponde ao id do usuário logado");
     }
 
     return result.data;

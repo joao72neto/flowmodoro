@@ -23,6 +23,7 @@ const sessionSchema = z.object({
 });
 
 export const backupSchema = z.object({
+  userId: z.uuid("id do é obrigatório"),
   version: z.number().default(1),
   exportedAt: z.string().default(() => new Date().toISOString()),
   projects: z.array(projectSchema),
