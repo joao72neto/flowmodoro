@@ -229,7 +229,7 @@ const SessionCreation = () => {
       className={clsx(
         "relative z-10 w-full",
         "border border-border p-4 rounded-2xl shadow-lg",
-        "transition-[max-width] duration-250 bg-neutral-80/40",
+        "transition-[max-width, colors] duration-250 bg-neutral-80/40",
         isBreakRunning || isTimerStopped
           ? "focus-within:border-success/50 focus-within:shadow-[0_0_20px_rgba(34,197,94,0.08)]"
           : "focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
