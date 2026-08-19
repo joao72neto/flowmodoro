@@ -78,7 +78,7 @@ class TimerService : Service() {
         stopAlarmSound()
         tickerJob?.cancel()
 
-        val breakDuration = (totalFocus * restRatio).toLong()
+        val breakDuration = calculateBreakTime(totalFocus, restRatio)
 
         alarmManager.schedule(anchor, breakDuration)
 
@@ -96,6 +96,17 @@ class TimerService : Service() {
 
                 delay(1000)
             }
+        }
+    }
+
+    private fun calculateBreakTime(totalFocusMillis: Long, restRatio: Double): Long {
+        val calculatedBreak = kotlin.math.round(totalFocusMillis * restRatio).toLong()
+
+        return when (restRatio) {
+            0.1 -> minOf(calculatedBreak, 600_000)
+            0.2 -> minOf(calculatedBreak, 900_000)
+            0.3 -> minOf(calculatedBreak, 1_200_000)
+            else -> calculatedBreak
         }
     }
 
