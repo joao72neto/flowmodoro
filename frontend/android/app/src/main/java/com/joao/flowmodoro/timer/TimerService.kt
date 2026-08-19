@@ -136,7 +136,7 @@ class TimerService : Service() {
             mediaPlayer = MediaPlayer().apply {
                 setAudioAttributes(
                     AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .build()
                 )
