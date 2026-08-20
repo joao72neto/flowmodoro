@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { PiCaretDownLight, PiCaretUpLight } from "react-icons/pi";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
@@ -7,17 +7,17 @@ import RatioSlider from "./RatioSlider";
 import { PRESETS } from "../../consts/ratio-presets";
 import { useTimerContext } from "../../context/timer.context";
 import type { RatioPreset } from "../../consts/ratio-presets";
-import { useSessionContext } from "../../../sessions/context/sessions.context";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 import { isNative } from "../../../../consts/platform";
+import { useRatio } from "../../hooks/useTimerStore";
+import { setRatio } from "../../timer.store";
 
-function RatioSelector() {
+const RatioSelector = memo(() => {
   const [isOpen, setIsOpen] = useState(false);
-  const { restRatio, setRestRatio } = useSessionContext();
   const { mode } = useTimerContext();
-
   const { theme } = useTheme();
 
+  const restRatio = useRatio();
   const isFocusRunning = mode === "focus";
 
   const currentPreset =
@@ -83,14 +83,14 @@ function RatioSelector() {
           <RatioSlider
             presets={PRESETS as RatioPreset[]}
             restRatio={restRatio}
-            onRatioChange={setRestRatio}
+            onRatioChange={setRatio}
             currentPreset={currentPreset}
-            onPresetChange={setRestRatio}
+            onPresetChange={setRatio}
           />
         </div>
       </AnimatedCollapse>
     </div>
   );
-}
+});
 
 export default RatioSelector;

@@ -24,7 +24,6 @@ const SessionCreation = () => {
   const { mode } = useTimerContext();
 
   const {
-    restRatio,
     setSessionName: setContextSessionName,
     sessionName: contextSessionName,
     selectedProject,
@@ -36,7 +35,7 @@ const SessionCreation = () => {
   } = useSessionContext();
 
   const { handleStartBreak, handleStartFocus, handleStopTimer } =
-    useTimerActions(restRatio);
+    useTimerActions();
 
   const [sessionName, setSessionName] = useState(contextSessionName);
 

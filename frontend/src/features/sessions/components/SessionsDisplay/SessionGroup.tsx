@@ -42,14 +42,10 @@ const SessionGroup = memo(
 
     const { theme } = useTheme();
 
-    const {
-      setSessionName,
-      setSelectedProjectId,
-      setSelectedTagId,
-      restRatio,
-    } = useSessionContext();
+    const { setSessionName, setSelectedProjectId, setSelectedTagId } =
+      useSessionContext();
 
-    const { handleStartFocus } = useTimerActions(restRatio);
+    const { handleStartFocus } = useTimerActions();
 
     useEffect(() => {
       setSelectedSession(sessionGroup.sessions[0]);
@@ -104,14 +100,17 @@ const SessionGroup = memo(
 
     const startFocus = useCallback(
       (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+
         setSelectedProjectId(sessionGroup.sessions[0].project.id);
         setSelectedTagId(sessionGroup.sessions[0].tag.id);
         setSessionName(sessionGroup.sessions[0].name);
 
         window.scrollTo({ top: 0, behavior: "smooth" });
 
-        handleStartFocus();
-        e.stopPropagation();
+        setTimeout(() => {
+          handleStartFocus();
+        }, 0);
       },
       [
         sessionGroup.sessions,

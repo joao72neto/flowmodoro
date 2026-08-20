@@ -6,7 +6,7 @@ import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 import type { TimerMode } from "../timer.types";
 
-import { setSeconds, setTotalFocus } from "../timer.store";
+import { getRatio, setSeconds, setTotalFocus } from "../timer.store";
 import { useSeconds } from "./useTimerStore";
 
 import { MAX_BREAK_BY_RATIO } from "../consts/ratio-presets";
@@ -21,10 +21,8 @@ import {
 const useTimer = () => {
   const seconds = useSeconds();
 
-  const { restRatio, handleSaveSession } = useSessionContext();
+  const { handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
-
-  const BREAK_RATIO = restRatio / 100;
 
   const [mode, setMode] = useState<TimerMode>(() => {
     const saved = localStorage.getItem(localStorageKeys.timer);
@@ -127,7 +125,7 @@ const useTimer = () => {
 
     const breakTime = calculateBreakTime({
       seconds: finalFocusSeconds,
-      ratio: BREAK_RATIO,
+      ratio: getRatio() / 100,
     });
 
     setSeconds(breakTime);

@@ -7,14 +7,13 @@ import { useEffect, useRef } from "react";
 import { App } from "@capacitor/app";
 
 import type { PluginListenerHandle } from "@capacitor/core";
-import { useTotalFocus } from "./useTimerStore";
+import { getRatio, getTotalFocus } from "../timer.store";
 import { useTimerContext } from "../context/timer.context";
 
-const useTimerActions = (restRatio: number) => {
+const useTimerActions = () => {
   const { startFocus, startBreak, skipBreak, stopFocus } = useTimerContext();
   const { showDefault, hideModal } = useModal();
 
-  const totalFocusMillis = useTotalFocus();
   const pendingAction = useRef<"start-focus" | null>(null);
 
   useEffect(() => {
@@ -82,10 +81,10 @@ const useTimerActions = (restRatio: number) => {
     startBreak();
 
     if (isNative) {
-      const normalizedRestRatio = restRatio / 100;
+      const normalizedRestRatio = getRatio() / 100;
       await FlowmodoroPlugin.startBreak({
         anchorMillis,
-        totalFocusMillis,
+        totalFocusMillis: getTotalFocus(),
         restRatio: normalizedRestRatio,
       });
     }
