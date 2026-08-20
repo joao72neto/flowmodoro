@@ -18,6 +18,8 @@ const projectIcon = <GoProject />;
 const tagIcon = <IoMdPricetag />;
 
 import { IoClose } from "react-icons/io5";
+import { VscClearAll } from "react-icons/vsc";
+
 import useTimerActions from "../../../timer/hooks/useTimerActions";
 
 const SessionCreation = () => {
@@ -46,7 +48,8 @@ const SessionCreation = () => {
   const isTimerStopped = mode === "stopped";
 
   const hasContent = sessionName.trim().length > 0;
-  const isExpanded = hasContent && !isTimerRunning;
+  const hasProjectOrTag = selectedProject !== null || selectedTag !== null;
+  const isExpanded = (hasContent || hasProjectOrTag) && !isTimerRunning;
 
   const showProjectSelector = !isTimerRunning || selectedProject !== null;
   const showTagSelector = !isTimerRunning || selectedTag !== null;
@@ -170,20 +173,40 @@ const SessionCreation = () => {
             />
 
             {isExpanded && (
-              <button
-                className={clsx(
-                  "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
-                  "transition-colors duration-200",
-                  "hover:text-neutral-20",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2",
-                )}
-                type="button"
-                title="Limpar texto"
-                aria-label="Limpar texto"
-                onClick={() => setSessionName("")}
-              >
-                <IoClose />
-              </button>
+              <div className="flex items-center gap-3 sm:gap-1">
+                <button
+                  className={clsx(
+                    "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
+                    "transition-colors duration-200",
+                    "hover:text-neutral-20",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2",
+                  )}
+                  type="button"
+                  title="Limpar texto"
+                  aria-label="Limpar texto"
+                  onClick={() => setSessionName("")}
+                >
+                  <IoClose />
+                </button>
+                <button
+                  className={clsx(
+                    "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
+                    "transition-colors duration-200",
+                    "hover:text-neutral-20",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2",
+                  )}
+                  type="button"
+                  title="Limpar texto, projeto e tag"
+                  aria-label="Limpar texto, projeto e tag"
+                  onClick={() => {
+                    setSessionName("");
+                    setSelectedProjectId(null);
+                    setSelectedTagId(null);
+                  }}
+                >
+                  <VscClearAll />
+                </button>
+              </div>
             )}
           </div>
         )}
