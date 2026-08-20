@@ -6,6 +6,10 @@ import Stack from "../../../../shared/components/Stack";
 import { IoLogInOutline } from "react-icons/io5";
 import InputGroupWrapper from "../../../../shared/components/inputs/InputGroupWrapper";
 import FormContainer from "./FormContainer";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { LoginSchema, type ILoginSchema } from "../../auth.schema";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({
   onForgorPassword,
@@ -14,13 +18,41 @@ const LoginForm = ({
   onForgorPassword?: () => void;
   onRegister?: () => void;
 }) => {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ILoginSchema>({
+    resolver: yupResolver(LoginSchema),
+    mode: "onChange",
+  });
+
+  const onValid = () => {
+    navigate("/");
+    reset();
+  };
+
   return (
-    <FormContainer direction={-1}>
+    <FormContainer onSubmit={handleSubmit(onValid)} direction={-1}>
       <ReturnTitle path="/">Login</ReturnTitle>
 
       <InputGroupWrapper>
-        <InputGroup label="E-mail" placeholder="Ex: exemplo@email.com" />
-        <InputGroup label="Senha" placeholder="Digite a sua senha" />
+        <InputGroup
+          register={register("email")}
+          error={errors.email}
+          label="E-mail"
+          placeholder="Ex: exemplo@email.com"
+        />
+
+        <InputGroup
+          register={register("password")}
+          error={errors.password}
+          label="Senha"
+          placeholder="Digite a sua senha"
+        />
 
         <div className="flex items-center gap-2 text-sm text-neutral-20">
           <span

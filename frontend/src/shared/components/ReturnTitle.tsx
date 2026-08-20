@@ -18,6 +18,7 @@ const ReturnTitle = ({
   return (
     <div className={clsx("flex items-center", className)}>
       <button
+        type="button"
         className="cursor-pointer hover:-translate-x-1 duration-100 pr-1"
         onClick={() => (path && !onClick ? navigate(path) : onClick?.())}
       >

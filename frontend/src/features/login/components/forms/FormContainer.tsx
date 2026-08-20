@@ -5,13 +5,16 @@ const FormContainer = ({
   children,
   className,
   direction,
+  onSubmit,
 }: {
   children: React.ReactNode;
   className?: string;
   direction: -1 | 1;
+  onSubmit?: () => void;
 }) => {
   return (
-    <motion.div
+    <motion.form
+      onSubmit={onSubmit}
       initial={{ x: `${direction * 100}%` }}
       animate={{ x: 0 }}
       exit={{ x: `${direction * -100}%` }}
@@ -26,7 +29,7 @@ const FormContainer = ({
       >
         {children}
       </div>
-    </motion.div>
+    </motion.form>
   );
 };
 
