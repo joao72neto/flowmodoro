@@ -9,7 +9,7 @@ const FormContainer = ({
 }) => {
   return (
     <div
-      className={clsx("flex flex-col justify-center gap-4 flex-1", className)}
+      className={clsx("flex flex-col justify-center gap-8 flex-1", className)}
     >
       {children}
     </div>
