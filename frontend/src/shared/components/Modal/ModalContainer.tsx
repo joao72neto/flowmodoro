@@ -16,8 +16,8 @@ const panelVariants = {
 };
 
 const panelVariantsLight = {
-  hidden: { opacity: 0, scale: 0.98 },
-  visible: { opacity: 1, scale: 1 },
+  hidden: { scale: 0.98 },
+  visible: { scale: 1 },
 };
 
 const ModalContainer = ({
@@ -49,7 +49,10 @@ const ModalContainer = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 p-4 backdrop-blur-lg"
+          className={clsx(
+            "fixed inset-0 flex items-center justify-center z-50 bg-black/60 p-4",
+            enableHeavyAnimations ? "backdrop-blur-lg" : "backdrop-blur-xs",
+          )}
           onClick={() => close?.()}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

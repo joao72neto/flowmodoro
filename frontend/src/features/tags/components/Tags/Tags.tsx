@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState } from "react";
 import { GoPlus, GoSearch } from "react-icons/go";
 import { PiCaretLeftBold } from "react-icons/pi";
 import { RxUpdate } from "react-icons/rx";
@@ -47,12 +47,9 @@ const Tags = ({
 
   const { mutate: handleDeleteTag } = useDeleteTag();
 
-  const previousFilteredTags = useRef<TagDTO[]>([]);
-  const previousProjectName = useRef<string>("");
-
   const filteredTags = useMemo(() => {
-    if (!tags || tags.length === 0) {
-      return previousFilteredTags.current;
+    if (!tags) {
+      return [];
     }
 
     const result = tags
@@ -61,29 +58,24 @@ const Tags = ({
         tag.name.toLowerCase().includes(searchQuery.toLowerCase()),
       );
 
-    previousFilteredTags.current = result;
-
     return result;
   }, [tags, project.id, searchQuery]);
 
-  const isEmpty = previousFilteredTags.current.length === 0;
+  const isEmpty = filteredTags.length === 0;
 
   return (
     <>
       <div className="relative flex flex-col gap-4 px-3 pb-4 w-full h-full min-h-0">
         <div className="relative flex items-center gap-2 pt-4">
           <button
-            onClick={() => {
-              previousProjectName.current = project.name;
-              onBack();
-            }}
+            onClick={onBack}
             className="p-1 text-neutral-40 hover:text-neutral-10 hover:-translate-x-1 transition-transform cursor-pointer"
             aria-label="Voltar para projetos"
           >
             <PiCaretLeftBold size={24} />
           </button>
           <h1 className="text-xl text-neutral-20 truncate font-semibold">
-            {project.name === "" ? previousProjectName.current : project.name}
+            {project.name}
           </h1>
         </div>
 

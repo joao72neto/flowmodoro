@@ -29,6 +29,10 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectDTO | null>(
     null,
   );
+  const [displayedProject, setDisplayedProject] = useState<ProjectDTO | null>(
+    null,
+  );
+
   const [editingProject, setEditingProject] = useState<ProjectDTO | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -109,7 +113,10 @@ const Projects = () => {
                         setEditingProject(item);
                         openEditModal();
                       }}
-                      onSelectTags={setSelectedProject}
+                      onSelectTags={(project) => {
+                        setDisplayedProject(project);
+                        setSelectedProject(project);
+                      }}
                     />
                   )}
                 </AnimatedList>
@@ -127,8 +134,14 @@ const Projects = () => {
 
           <div className="w-1/2 h-full shrink-0 relative">
             <Tags
-              project={selectedProject || { id: "", name: "", totalFocus: 0 }}
-              onBack={() => setSelectedProject(null)}
+              project={displayedProject || { id: "", name: "", totalFocus: 0 }}
+              onBack={() => {
+                setSelectedProject(null);
+
+                setTimeout(() => {
+                  setDisplayedProject(null);
+                }, 300);
+              }}
             />
           </div>
         </div>
