@@ -6,10 +6,12 @@ const ReturnTitle = ({
   children,
   path,
   className,
+  onClick,
 }: {
   children: string;
   path?: string;
   className?: string;
+  onClick?: () => void;
 }) => {
   const navigate = useNavigate();
 
@@ -17,7 +19,7 @@ const ReturnTitle = ({
     <div className={clsx("flex items-center", className)}>
       <button
         className="cursor-pointer hover:-translate-x-1 duration-100 pr-1"
-        onClick={() => (path ? navigate(path) : window.history.back())}
+        onClick={() => (path && !onClick ? navigate(path) : onClick?.())}
       >
         <PiCaretLeftBold size={24} />
       </button>

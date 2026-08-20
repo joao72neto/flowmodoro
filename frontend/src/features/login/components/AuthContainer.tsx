@@ -1,10 +1,11 @@
 import clsx from "clsx";
+import FormContainer from "./forms/FormContainer";
 
 const AuthContainer = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={clsx(
-        "flex flex-col border-r border-border p-6 w-full gap-4",
+        "flex flex-col border-r border-border p-10 w-full gap-4",
         "max-w-xl shadow-[8px_0_20px_rgba(0,0,0,0.30)] z-10",
       )}
     >
@@ -13,9 +14,7 @@ const AuthContainer = ({ children }: { children: React.ReactNode }) => {
         <p className="text-2xl">Flowmodoro</p>
       </div>
 
-      <section className="flex flex-col justify-center gap-4 flex-1">
-        {children}
-      </section>
+      <FormContainer>{children}</FormContainer>
     </div>
   );
 };
