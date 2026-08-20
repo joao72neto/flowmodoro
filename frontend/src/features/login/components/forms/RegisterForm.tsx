@@ -9,7 +9,7 @@ import { CiCirclePlus } from "react-icons/ci";
 
 const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
   return (
-    <FormContainer>
+    <FormContainer direction={1}>
       <ReturnTitle onClick={onReturn}>Cadastro</ReturnTitle>
 
       <InputGroupWrapper>

@@ -5,6 +5,7 @@ import clsx from "clsx";
 import Stack from "../../../../shared/components/Stack";
 import { IoLogInOutline } from "react-icons/io5";
 import InputGroupWrapper from "../../../../shared/components/inputs/InputGroupWrapper";
+import FormContainer from "./FormContainer";
 
 const LoginForm = ({
   onForgorPassword,
@@ -14,7 +15,7 @@ const LoginForm = ({
   onRegister?: () => void;
 }) => {
   return (
-    <>
+    <FormContainer direction={-1}>
       <ReturnTitle path="/">Login</ReturnTitle>
 
       <InputGroupWrapper>
@@ -46,7 +47,7 @@ const LoginForm = ({
       <Stack align="left">
         <Button icon={<IoLogInOutline size={21} />}>Entrar</Button>
       </Stack>
-    </>
+    </FormContainer>
   );
 };
 

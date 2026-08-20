@@ -8,7 +8,7 @@ import InputGroupWrapper from "../../../../shared/components/inputs/InputGroupWr
 
 const PasswordRecovery = ({ onReturn }: { onReturn: () => void }) => {
   return (
-    <FormContainer>
+    <FormContainer direction={1}>
       <ReturnTitle onClick={onReturn}>Recuperar Senha</ReturnTitle>
 
       <InputGroupWrapper>
