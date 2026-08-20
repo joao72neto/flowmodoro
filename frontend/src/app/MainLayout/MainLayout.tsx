@@ -10,9 +10,12 @@ import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 
 import LoadingScreen from "./LoadingScreen";
 
+import Stack from "../../shared/components/Stack";
+import Button from "../../shared/components/buttons/Button/Button";
 import Footer from "./Footer/Footer";
 import SyncStatus from "./SyncStatus";
 
+import { Link } from "react-router-dom";
 import { useAppReady } from "../../shared/hooks/useAppReady";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
@@ -38,9 +41,18 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen flex flex-col gap-5">
-      <div className="flex justify-start items-center pt-5 px-5">
-        <SyncStatus />
+      <div className="flex items-center">
+        <Stack align="left" className="pt-5 px-5 flex-1">
+          <SyncStatus />
+        </Stack>
+
+        <Stack align="right" className="pt-5 px-5">
+          <Link to="/login">
+            <Button>Login</Button>
+          </Link>
+        </Stack>
       </div>
+
       <div className="relative flex flex-1 overflow-x-hidden items-center">
         <MainContentContainer>{children}</MainContentContainer>
 

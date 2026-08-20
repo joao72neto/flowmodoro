@@ -3,6 +3,9 @@ import Button from "../../shared/components/buttons/Button/Button";
 import clsx from "clsx";
 import Stack from "../../shared/components/Stack";
 import { IoLogInOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+
+import { PiCaretLeftBold } from "react-icons/pi";
 
 const Login = () => {
   return (
@@ -19,7 +22,7 @@ const Login = () => {
         </div>
 
         <section className="flex flex-col justify-center gap-4 flex-1">
-          <h1 className="text-2xl mb-4">Login</h1>
+          <ReturnTitle className="mb-4">Login</ReturnTitle>
 
           <div className="flex flex-col gap-2">
             <label>E-mail</label>
@@ -57,3 +60,27 @@ const Login = () => {
 };
 
 export default Login;
+
+const ReturnTitle = ({
+  children,
+  path,
+  className,
+}: {
+  children: string;
+  path?: string;
+  className?: string;
+}) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className={clsx("flex items-center", className)}>
+      <button
+        className="cursor-pointer hover:-translate-x-1 duration-100 pr-1"
+        onClick={() => (path ? navigate(path) : window.history.back())}
+      >
+        <PiCaretLeftBold size={24} />
+      </button>
+      <h1 className={"text-2xl"}>{children}</h1>
+    </div>
+  );
+};
