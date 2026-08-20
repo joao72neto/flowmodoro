@@ -17,6 +17,10 @@ import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 import { isNative } from "../../../../consts/platform";
 
+import { FaPlay } from "react-icons/fa6";
+import { useSessionContext } from "../../context/sessions.context";
+import useTimerActions from "../../../timer/hooks/useTimerActions";
+
 const BORDER_COLORS: Record<number, string> = {
   10: "border-l-danger",
   20: "border-l-primary",
@@ -37,6 +41,15 @@ const SessionGroup = memo(
     );
 
     const { theme } = useTheme();
+
+    const {
+      setSessionName,
+      setSelectedProjectId,
+      setSelectedTagId,
+      restRatio,
+    } = useSessionContext();
+
+    const { handleStartFocus } = useTimerActions(restRatio);
 
     useEffect(() => {
       setSelectedSession(sessionGroup.sessions[0]);
@@ -89,6 +102,26 @@ const SessionGroup = memo(
       [sessionGroup.sessions],
     );
 
+    const startFocus = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        setSelectedProjectId(sessionGroup.sessions[0].project.id);
+        setSelectedTagId(sessionGroup.sessions[0].tag.id);
+        setSessionName(sessionGroup.sessions[0].name);
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        handleStartFocus();
+        e.stopPropagation();
+      },
+      [
+        sessionGroup.sessions,
+        handleStartFocus,
+        setSelectedProjectId,
+        setSelectedTagId,
+        setSessionName,
+      ],
+    );
+
     return (
       <>
         <div className="flex flex-col w-full">
@@ -115,6 +148,16 @@ const SessionGroup = memo(
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full">
                 <div className="flex gap-3 items-center justify-between sm:justify-start w-full sm:w-auto sm:flex-1 min-w-0">
                   <div className="flex items-center gap-3 min-w-0">
+                    <button
+                      onClick={startFocus}
+                      className={clsx(
+                        "hover:scale-110 text-neutral-40  hover:text-primary",
+                        "duration-100 ease-in-out",
+                      )}
+                    >
+                      <FaPlay />
+                    </button>
+
                     {isTogglable && (
                       <span
                         className={clsx(
