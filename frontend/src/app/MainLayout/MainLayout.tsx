@@ -11,12 +11,12 @@ import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 import LoadingScreen from "./LoadingScreen";
 
 import Stack from "../../shared/components/Stack";
-import Button from "../../shared/components/buttons/Button/Button";
 import Footer from "./Footer/Footer";
 import SyncStatus from "./SyncStatus";
 
 import { Link } from "react-router-dom";
 import { useAppReady } from "../../shared/hooks/useAppReady";
+import { IoLogInOutline } from "react-icons/io5";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
@@ -48,7 +48,15 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
         <Stack align="right" className="pt-5 px-5">
           <Link to="/login">
-            <Button>Login</Button>
+            <button
+              title="Ir para a página de login"
+              className={clsx(
+                "flex items-center gap-2",
+                "hover:scale-110 hover:text-primary duration-75",
+              )}
+            >
+              <IoLogInOutline size={30} />
+            </button>
           </Link>
         </Stack>
       </div>

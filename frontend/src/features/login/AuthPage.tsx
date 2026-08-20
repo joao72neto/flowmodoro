@@ -4,6 +4,7 @@ import RegisterForm from "./components/forms/RegisterForm";
 import { useState } from "react";
 import PasswordRecovery from "./components/forms/PasswordRecovery";
 import { AnimatePresence } from "framer-motion";
+import clsx from "clsx";
 
 const Login = () => {
   const [tab, setTab] = useState<"login" | "register" | "forgot-password">(
@@ -29,7 +30,12 @@ const Login = () => {
         </AnimatePresence>
       </AuthContainer>
 
-      <div className="flex items-center flex-1 bg-neutral-20"></div>
+      <div
+        className={clsx(
+          "flex items-center flex-1",
+          "bg-gradient-to-b from-neutral-60 to-neutral-10",
+        )}
+      ></div>
     </div>
   );
 };
