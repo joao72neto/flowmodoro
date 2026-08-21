@@ -48,6 +48,7 @@ const LoginForm = ({
         />
 
         <InputGroup
+          password
           register={register("password")}
           error={errors.password}
           label="Senha"

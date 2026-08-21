@@ -18,6 +18,7 @@ const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
     handleSubmit,
   } = useForm<IRegisterSchema>({
     resolver: yupResolver(RegisterSchema),
+    mode: "onChange",
   });
 
   const onValid = () => {
@@ -38,6 +39,7 @@ const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
         />
 
         <InputGroup
+          password
           register={register("password")}
           error={errors.password}
           label="Senha"
@@ -45,6 +47,7 @@ const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
         />
 
         <InputGroup
+          password
           register={register("confirmPassword")}
           error={errors.confirmPassword}
           label="Confirmar Senha"

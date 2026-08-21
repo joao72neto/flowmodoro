@@ -1,6 +1,9 @@
 import clsx from "clsx";
 import type { VariantType } from "../../global.types";
 import { forwardRef, type InputHTMLAttributes } from "react";
+import { PiEyeSlashBold } from "react-icons/pi";
+import { PiEyeBold } from "react-icons/pi";
+import { useState } from "react";
 
 const focusVariants = {
   primary: "focus-within:border-primary!",
@@ -26,6 +29,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   variant?: VariantType;
   icon?: React.ReactNode;
   error?: string;
+  password?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -36,11 +40,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       disabled,
       variant = "primary",
       icon,
+      password,
       error,
       ...props
     },
     ref,
   ) => {
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
       <div className="flex flex-col gap-1 w-full">
         <div
@@ -65,16 +72,41 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               {icon}
             </div>
           )}
+
           <input
             {...props}
             ref={ref}
+            type={
+              password && showPassword
+                ? "text"
+                : password
+                  ? "password"
+                  : props.type
+            }
             disabled={disabled}
             className={clsx(
               "w-full py-2 bg-transparent text-neutral-10 focus:outline-none",
-              icon ? "pl-10 pr-4" : "px-4",
+              icon ? "pl-10" : "px-4",
+              password ? "pr-10" : "pr-4",
             )}
             placeholder={placeholder}
           />
+
+          {password && (
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              disabled={disabled}
+              className="absolute right-3 text-neutral-40 transition-colors hover:text-neutral-10"
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+            >
+              {showPassword ? (
+                <PiEyeSlashBold size={20} />
+              ) : (
+                <PiEyeBold size={20} />
+              )}
+            </button>
+          )}
         </div>
         {error && (
           <span className="text-xs text-danger text-left font-medium animate-in fade-in slide-in-from-top-1">
