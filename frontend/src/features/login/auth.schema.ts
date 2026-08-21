@@ -25,3 +25,14 @@ export const RegisterSchema = yup.object({
     .required("A confirmação de senha é obrigatória")
     .oneOf([yup.ref("password")], "As senhas não coincidem"),
 });
+
+export type IPasswordRecoverySchema = yup.InferType<
+  typeof PasswordRecoverySchema
+>;
+
+export const PasswordRecoverySchema = yup.object({
+  email: yup
+    .string()
+    .email("O e-mail é inválido")
+    .required("O e-mail é obrigatório"),
+});
