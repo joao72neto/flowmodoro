@@ -34,7 +34,7 @@ export const AnimatedCollapse = ({
     return (
       <div
         className={clsx(
-          "w-full animate-fade-in-simple",
+          "w-full animate-fade-in",
           !overflow && "overflow-hidden",
         )}
       >
