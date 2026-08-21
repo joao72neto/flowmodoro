@@ -6,16 +6,47 @@ import Button from "../../../../shared/components/buttons/Button/Button";
 import InputGroupWrapper from "../../../../shared/components/inputs/InputGroupWrapper";
 
 import { CiCirclePlus } from "react-icons/ci";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { RegisterSchema, type IRegisterSchema } from "../../auth.schema";
 
 const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
+  const {
+    register,
+    formState: { errors },
+    reset,
+    handleSubmit,
+  } = useForm<IRegisterSchema>({
+    resolver: yupResolver(RegisterSchema),
+  });
+
+  const onValid = () => {
+    reset();
+    onReturn();
+  };
+
   return (
-    <FormContainer direction={1}>
+    <FormContainer onSubmit={handleSubmit(onValid)} direction={1}>
       <ReturnTitle onClick={onReturn}>Cadastro</ReturnTitle>
 
       <InputGroupWrapper>
-        <InputGroup label="E-mail" placeholder="Ex: exemplo@email.com" />
-        <InputGroup label="Senha" placeholder="Digite a senha" />
         <InputGroup
+          register={register("email")}
+          error={errors.email}
+          label="E-mail"
+          placeholder="Ex: exemplo@email.com"
+        />
+
+        <InputGroup
+          register={register("password")}
+          error={errors.password}
+          label="Senha"
+          placeholder="Digite a senha"
+        />
+
+        <InputGroup
+          register={register("confirmPassword")}
+          error={errors.confirmPassword}
           label="Confirmar Senha"
           placeholder="Digite a senha novamente"
         />

@@ -47,7 +47,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={clsx(
             "group relative flex items-center w-full transition-all duration-200",
             "rounded-md border bg-neutral-80/50",
-            error ? "border-danger!" : "border-border",
+            error ? "border-danger! animate-shake" : "border-border",
             !error && focusVariants[variant],
             disabled && "opacity-50 cursor-not-allowed",
             className,
