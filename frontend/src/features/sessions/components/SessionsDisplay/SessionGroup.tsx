@@ -15,7 +15,6 @@ import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
 import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
-import { isNative } from "../../../../consts/platform";
 
 import { FaPlay } from "react-icons/fa6";
 import { useSessionContext } from "../../context/sessions.context";
@@ -204,7 +203,7 @@ const SessionGroup = memo(
             </div>
           </Stack>
 
-          <AnimatedCollapse enableHeavyAnimations={!isNative} show={isOpen}>
+          <AnimatedCollapse show={isOpen}>
             <Stack
               gap={2}
               className={clsx(

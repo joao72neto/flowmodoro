@@ -1,61 +1,54 @@
 import type { ReactNode } from "react";
-import { useState, useEffect } from "react";
 import clsx from "clsx";
+import { usePresence } from "../hooks/usePresence";
 
 interface AnimatedCollapseProps {
   show: boolean;
   children: ReactNode;
   overflow?: boolean;
-  enableHeavyAnimations?: boolean;
+  className?: string;
+  duration?: number;
 }
 
 export const AnimatedCollapse = ({
   show,
   children,
   overflow = false,
-  enableHeavyAnimations = true,
+  className,
+  duration = 200,
 }: AnimatedCollapseProps) => {
-  const [shouldRender, setShouldRender] = useState(show);
+  const { mounted, visible } = usePresence(show, duration);
 
-  useEffect(() => {
-    if (show) {
-      setShouldRender(true);
-    }
-  }, [show]);
-
-  const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget && !show) {
-      setShouldRender(false);
-    }
-  };
-
-  if (!enableHeavyAnimations) {
-    if (!show) return null;
-    return (
-      <div
-        className={clsx(
-          "w-full animate-fade-in",
-          !overflow && "overflow-hidden",
-        )}
-      >
-        {children}
-      </div>
-    );
-  }
+  if (!mounted) return null;
 
   return (
     <div
-      onTransitionEnd={handleTransitionEnd}
       className={clsx(
-        "grid w-full transition-[grid-template-rows,opacity] duration-250 ease-in-out",
-        show ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+        "grid w-full transition-[grid-template-rows] ease-[cubic-bezier(0.2,0,0,1)]",
+        visible ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        className,
       )}
+      style={{
+        transitionDuration: `${duration}ms`,
+        contain: "paint",
+      }}
+      aria-hidden={!visible}
     >
-      {shouldRender && (
-        <div className={clsx("min-h-0 px-1", !overflow && "overflow-hidden")}>
+      <div className={clsx("min-h-0", !overflow && "overflow-hidden")}>
+        <div
+          className={clsx(
+            "w-full transform-gpu transition-[opacity,transform] ease-[cubic-bezier(0.2,0,0,1)]",
+            visible
+              ? "opacity-100 translate-y-0 animate-fade-in"
+              : "opacity-0 -translate-y-2 pointer-events-none",
+          )}
+          style={{
+            transitionDuration: `${duration}ms`,
+          }}
+        >
           {children}
         </div>
-      )}
+      </div>
     </div>
   );
 };
