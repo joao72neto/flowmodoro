@@ -12,18 +12,18 @@ export const applyUpdates = ({
   old?: SessionModel;
   updated?: SessionUpdateDTO;
 }): SessionModel => {
+  const focus = updated?.focus ?? old?.focus ?? DEFAULT_SESSION.focus;
+  const ratio = updated?.ratio ?? old?.ratio ?? DEFAULT_SESSION.ratio;
+
   return {
     id,
     date: new Date().toISOString(),
-    name: updated?.name || old?.name || DEFAULT_SESSION.name,
-    focus: updated?.focus || old?.focus || DEFAULT_SESSION.focus,
-    ratio: updated?.ratio || old?.ratio || DEFAULT_SESSION.ratio,
-    rest: calculateRest(
-      updated?.focus || old?.focus || DEFAULT_SESSION.focus,
-      updated?.ratio || old?.ratio || DEFAULT_SESSION.ratio,
-    ),
+    name: updated?.name ?? old?.name ?? DEFAULT_SESSION.name,
+    focus,
+    ratio,
+    rest: calculateRest(focus, ratio),
     projectId:
-      updated?.projectId || old?.projectId || DEFAULT_SESSION.projectId,
-    tagId: updated?.tagId || old?.tagId || DEFAULT_SESSION.tagId,
+      updated?.projectId ?? old?.projectId ?? DEFAULT_SESSION.projectId,
+    tagId: updated?.tagId ?? old?.tagId ?? DEFAULT_SESSION.tagId,
   };
 };

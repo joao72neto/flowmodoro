@@ -13,7 +13,7 @@ export const applyUpdates = ({
 }): ProjectModel => {
   return {
     id,
-    name: updated?.name || old?.name || DEFAULT_PROJECT.name,
-    createdAt: old?.createdAt || DEFAULT_PROJECT.createdAt,
+    name: updated?.name ?? old?.name ?? DEFAULT_PROJECT.name,
+    createdAt: old?.createdAt ?? DEFAULT_PROJECT.createdAt,
   };
 };
