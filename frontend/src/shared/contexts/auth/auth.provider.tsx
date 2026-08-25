@@ -168,6 +168,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const resetPassword = async (data: { newPassword: string; code: string }) => {
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(
+      data.code,
+    );
+    if (exchangeError) {
+      throw new Error(formatAuthError(exchangeError));
+    }
+
     const { error } = await supabase.auth.updateUser({
       password: data.newPassword,
     });
@@ -175,7 +182,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (error) {
       throw new Error(formatAuthError(error));
     }
-
     return { success: true };
   };
 
