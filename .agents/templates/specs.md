@@ -49,3 +49,4 @@ Substitua os trechos entre colchetes pelo conteúdo do projeto:
 
 ## 6. Dúvidas Pendentes / A Propor
 - [Aponte decisões que você tomou por padrão, mas que o usuário precisa aprovar/confirmar].
+- [Ex: Gostaria de valdar o input de senha com regras customizadas?]

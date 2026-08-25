@@ -17,10 +17,13 @@ import SyncStatus from "./SyncStatus";
 import { Link } from "react-router-dom";
 import { useAppReady } from "../../shared/hooks/useAppReady";
 import { IoLogInOutline } from "react-icons/io5";
+import { useAuth } from "../../shared/contexts/auth/auth.context";
+import UserAvatarMenu from "../../shared/components/UserAvatarMenu";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const isReady = useAppReady();
 
@@ -47,17 +50,21 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         </Stack>
 
         <Stack align="right" className="pt-5 px-5">
-          <Link to="/login">
-            <button
-              title="Ir para a página de login"
-              className={clsx(
-                "flex items-center gap-2",
-                "hover:scale-110 hover:text-primary duration-75",
-              )}
-            >
-              <IoLogInOutline size={30} />
-            </button>
-          </Link>
+          {isAuthenticated ? (
+            <UserAvatarMenu />
+          ) : (
+            <Link to="/login">
+              <button
+                title="Ir para a página de login"
+                className={clsx(
+                  "flex items-center gap-2",
+                  "hover:scale-110 hover:text-primary duration-75",
+                )}
+              >
+                <IoLogInOutline size={30} />
+              </button>
+            </Link>
+          )}
         </Stack>
       </div>
 

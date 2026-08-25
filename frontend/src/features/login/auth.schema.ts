@@ -26,6 +26,11 @@ export const passwordValidation = yup
 export type IRegisterSchema = yup.InferType<typeof RegisterSchema>;
 
 export const RegisterSchema = yup.object({
+  name: yup
+    .string()
+    .required("O nome é obrigatório")
+    .min(2, "O nome deve ter pelo menos 2 caracteres"),
+
   email: yup
     .string()
     .email("O e-mail é inválido")

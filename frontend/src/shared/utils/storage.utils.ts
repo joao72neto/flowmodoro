@@ -7,6 +7,7 @@ export const localStorageKeys = {
 
   userId: "flowmodoro_anonymous_user_id",
   theme: "flowmodoro_theme",
+  authUser: "flowmodoro_auth_user",
 };
 
 export const sessionStorageKeys = {

@@ -9,8 +9,13 @@ import { CiCirclePlus } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RegisterSchema, type IRegisterSchema } from "../../auth.schema";
+import { useAuth } from "../../../../shared/contexts/auth/auth.context";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const {
     register,
     formState: { errors },
@@ -21,9 +26,10 @@ const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
     mode: "onChange",
   });
 
-  const onValid = () => {
+  const onValid = (data: IRegisterSchema) => {
+    login({ email: data.email, name: data.name });
     reset();
-    onReturn();
+    navigate("/");
   };
 
   return (
@@ -31,6 +37,13 @@ const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
       <ReturnTitle onClick={onReturn}>Cadastro</ReturnTitle>
 
       <InputGroupWrapper>
+        <InputGroup
+          register={register("name")}
+          error={errors.name}
+          label="Nome"
+          placeholder="Seu nome completo"
+        />
+
         <InputGroup
           register={register("email")}
           error={errors.email}

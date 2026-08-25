@@ -101,6 +101,31 @@ const SessionCreation = () => {
     }
   };
 
+  const handleClearAll = useCallback(() => {
+    setSessionName("");
+    setSelectedProjectId(null);
+    setSelectedTagId(null);
+    localStorage.removeItem(localStorageKeys.session);
+  }, [setSessionName, setSelectedProjectId, setSelectedTagId]);
+
+  const handleClearSessionName = useCallback(() => {
+    setSessionName("");
+
+    const storedSession = localStorage.getItem(localStorageKeys.session);
+
+    if (!storedSession) return;
+
+    const session = JSON.parse(storedSession);
+
+    localStorage.setItem(
+      localStorageKeys.session,
+      JSON.stringify({
+        ...session,
+        sessionName: "",
+      }),
+    );
+  }, [setSessionName]);
+
   const handleSelectedProject = useCallback(
     (project: ProjectDTO | null) => {
       setSelectedProjectId(project?.id ?? null);
@@ -184,7 +209,7 @@ const SessionCreation = () => {
                   type="button"
                   title="Limpar texto"
                   aria-label="Limpar texto"
-                  onClick={() => setSessionName("")}
+                  onClick={handleClearSessionName}
                 >
                   <IoClose />
                 </button>
@@ -198,11 +223,7 @@ const SessionCreation = () => {
                   type="button"
                   title="Limpar texto, projeto e tag"
                   aria-label="Limpar texto, projeto e tag"
-                  onClick={() => {
-                    setSessionName("");
-                    setSelectedProjectId(null);
-                    setSelectedTagId(null);
-                  }}
+                  onClick={handleClearAll}
                 >
                   <VscClearAll />
                 </button>

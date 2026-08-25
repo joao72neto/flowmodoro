@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema, type ILoginSchema } from "../../auth.schema";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../../../../shared/contexts/auth/auth.context";
 
 const LoginForm = ({
   onForgorPassword,
@@ -21,6 +22,7 @@ const LoginForm = ({
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const alertParam = searchParams.get("alert");
+  const { login } = useAuth();
 
   const {
     register,
@@ -32,7 +34,8 @@ const LoginForm = ({
     mode: "onChange",
   });
 
-  const onValid = () => {
+  const onValid = (data: ILoginSchema) => {
+    login({ email: data.email });
     navigate("/");
     reset();
   };

@@ -2,12 +2,26 @@ import { Network } from "@capacitor/network";
 
 import syncQueue from "./sync-queue.service";
 import { isNative } from "../../consts/platform";
+import { localStorageKeys } from "../../shared/utils/storage.utils";
 
 const SYNC_EVENT = "sync-queue:trigger";
+const AUTH_CHANGE_EVENT = "auth:change";
+
+const isUserAuthenticated = (): boolean => {
+  try {
+    const user = localStorage.getItem(localStorageKeys.authUser);
+    return user !== null;
+  } catch {
+    return false;
+  }
+};
 
 export const initSync = () => {
   syncQueue.init();
-  const process = () => syncQueue.processQueue();
+  const process = () => {
+    if (!isUserAuthenticated()) return;
+    syncQueue.processQueue();
+  };
 
   if (isNative) {
     Network.addListener("networkStatusChange", (status) => {
@@ -29,6 +43,10 @@ export const initSync = () => {
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") process();
+  });
+
+  window.addEventListener(AUTH_CHANGE_EVENT, () => {
+    if (isUserAuthenticated()) process();
   });
 };
 
