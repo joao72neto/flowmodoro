@@ -103,13 +103,20 @@ const SessionCreation = () => {
 
   const handleClearAll = useCallback(() => {
     setSessionName("");
+    setContextSessionName("");
     setSelectedProjectId(null);
     setSelectedTagId(null);
     localStorage.removeItem(localStorageKeys.session);
-  }, [setSessionName, setSelectedProjectId, setSelectedTagId]);
+  }, [
+    setSessionName,
+    setSelectedProjectId,
+    setSelectedTagId,
+    setContextSessionName,
+  ]);
 
   const handleClearSessionName = useCallback(() => {
     setSessionName("");
+    setContextSessionName("");
 
     const storedSession = localStorage.getItem(localStorageKeys.session);
 
@@ -124,7 +131,7 @@ const SessionCreation = () => {
         sessionName: "",
       }),
     );
-  }, [setSessionName]);
+  }, [setSessionName, setContextSessionName]);
 
   const handleSelectedProject = useCallback(
     (project: ProjectDTO | null) => {
