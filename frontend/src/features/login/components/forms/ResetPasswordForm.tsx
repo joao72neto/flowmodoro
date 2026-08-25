@@ -7,11 +7,21 @@ import InputGroupWrapper from "../../../../shared/components/inputs/InputGroupWr
 import { IoKeyOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ResetPasswordSchema, type IResetPasswordSchema } from "../../auth.schema";
+import {
+  ResetPasswordSchema,
+  type IResetPasswordSchema,
+} from "../../auth.schema";
 import { useNavigate } from "react-router-dom";
+import { useResetPassword } from "../../useAuthOperations";
 
-const ResetPasswordForm = ({ code }: { code: string }) => {
+const ResetPasswordForm = ({ code: _code }: { code: string }) => {
   const navigate = useNavigate();
+
+  const {
+    mutate: doResetPassword,
+    isPending: isSubmitting,
+    error: authError,
+  } = useResetPassword();
 
   const {
     register,
@@ -23,16 +33,27 @@ const ResetPasswordForm = ({ code }: { code: string }) => {
     mode: "onChange",
   });
 
-  const onValid = (data: IResetPasswordSchema) => {
-    // Log do código de recuperação para propósitos de debug/teste
-    console.log("Alterando senha com o código:", code, data);
-    reset();
-    navigate("/login?alert=reset_success");
+  const onValid = async (data: IResetPasswordSchema) => {
+    doResetPassword(
+      { newPassword: data.password, code: _code },
+      {
+        onSuccess: () => {
+          reset();
+          navigate("/login?alert=reset_success");
+        },
+      },
+    );
   };
 
   return (
     <FormContainer onSubmit={handleSubmit(onValid)} direction={1}>
       <ReturnTitle path="/login">Alterar Senha</ReturnTitle>
+
+      {authError && (
+        <div className="p-3 text-sm text-danger bg-danger/10 border border-danger/30 rounded-md text-left font-medium animate-in fade-in slide-in-from-top-1">
+          {authError.message}
+        </div>
+      )}
 
       <InputGroupWrapper>
         <InputGroup
@@ -53,7 +74,9 @@ const ResetPasswordForm = ({ code }: { code: string }) => {
       </InputGroupWrapper>
 
       <Stack align="left">
-        <Button icon={<IoKeyOutline size={21} />}>Alterar Senha</Button>
+        <Button icon={<IoKeyOutline size={21} />} loading={isSubmitting}>
+          Alterar Senha
+        </Button>
       </Stack>
     </FormContainer>
   );

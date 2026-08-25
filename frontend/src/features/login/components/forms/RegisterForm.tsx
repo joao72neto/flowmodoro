@@ -9,12 +9,17 @@ import { CiCirclePlus } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RegisterSchema, type IRegisterSchema } from "../../auth.schema";
-import { useAuth } from "../../../../shared/contexts/auth/auth.context";
 import { useNavigate } from "react-router-dom";
+import { useRegister } from "../../useAuthOperations";
 
 const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
-  const { login } = useAuth();
   const navigate = useNavigate();
+
+  const {
+    mutate: doRegister,
+    isPending: isSubmitting,
+    error: authError,
+  } = useRegister();
 
   const {
     register,
@@ -26,15 +31,31 @@ const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
     mode: "onChange",
   });
 
-  const onValid = (data: IRegisterSchema) => {
-    login({ email: data.email, name: data.name });
-    reset();
-    navigate("/");
+  const onValid = async (data: IRegisterSchema) => {
+    doRegister(
+      {
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      },
+      {
+        onSuccess: () => {
+          reset();
+          navigate("/");
+        },
+      },
+    );
   };
 
   return (
     <FormContainer onSubmit={handleSubmit(onValid)} direction={1}>
       <ReturnTitle onClick={onReturn}>Cadastro</ReturnTitle>
+
+      {authError && (
+        <div className="p-3 text-sm text-danger bg-danger/10 border border-danger/30 rounded-md text-left font-medium animate-in fade-in slide-in-from-top-1">
+          {authError.message}
+        </div>
+      )}
 
       <InputGroupWrapper>
         <InputGroup
@@ -69,7 +90,9 @@ const RegisterForm = ({ onReturn }: { onReturn: () => void }) => {
       </InputGroupWrapper>
 
       <Stack align="left">
-        <Button icon={<CiCirclePlus size={21} />}>Cadastrar</Button>
+        <Button icon={<CiCirclePlus size={21} />} loading={isSubmitting}>
+          Cadastrar
+        </Button>
       </Stack>
     </FormContainer>
   );

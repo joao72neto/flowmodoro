@@ -10,7 +10,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema, type ILoginSchema } from "../../auth.schema";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAuth } from "../../../../shared/contexts/auth/auth.context";
+
+import { useLogin } from "../../useAuthOperations";
 
 const LoginForm = ({
   onForgorPassword,
@@ -22,7 +23,12 @@ const LoginForm = ({
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const alertParam = searchParams.get("alert");
-  const { login } = useAuth();
+
+  const {
+    mutate: doLogin,
+    error: authError,
+    isPending: isSubmitting,
+  } = useLogin();
 
   const {
     register,
@@ -34,15 +40,30 @@ const LoginForm = ({
     mode: "onChange",
   });
 
-  const onValid = (data: ILoginSchema) => {
-    login({ email: data.email });
-    navigate("/");
-    reset();
+  const onValid = async (data: ILoginSchema) => {
+    doLogin(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          reset();
+          navigate("/");
+        },
+      },
+    );
   };
 
   return (
     <FormContainer onSubmit={handleSubmit(onValid)} direction={-1}>
       <ReturnTitle path="/">Login</ReturnTitle>
+
+      {authError && (
+        <div className="p-3 text-sm text-danger bg-danger/10 border border-danger/30 rounded-md text-left font-medium animate-in fade-in slide-in-from-top-1">
+          {authError.message}
+        </div>
+      )}
 
       {alertParam === "missing_code" && (
         <div className="p-3 text-sm text-danger bg-danger/10 border border-danger/30 rounded-md text-left font-medium animate-in fade-in slide-in-from-top-1">
@@ -96,7 +117,9 @@ const LoginForm = ({
       </InputGroupWrapper>
 
       <Stack align="left">
-        <Button icon={<IoLogInOutline size={21} />}>Entrar</Button>
+        <Button icon={<IoLogInOutline size={21} />} loading={isSubmitting}>
+          Entrar
+        </Button>
       </Stack>
     </FormContainer>
   );
