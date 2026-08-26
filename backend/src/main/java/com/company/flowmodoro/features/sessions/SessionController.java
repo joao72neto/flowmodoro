@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.sessions;
 
 import com.company.flowmodoro.common.dto.PageResponse;
+import com.company.flowmodoro.configs.security.CurrentUser;
 import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionCreateDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +46,7 @@ public class SessionController {
     public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         return ResponseEntity.ok(
             sessionService.consult(page - 1, size, userId)
@@ -56,7 +56,7 @@ public class SessionController {
     @PostMapping("/bulk")
     public ResponseEntity<List<SessionDTO>> saveAll(
         @RequestBody List<@Valid SessionCreateDTO> dtos,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         List<SessionModel> sessions = sessionService.saveAll(
             createMapper.toEntity(dtos),
@@ -68,7 +68,7 @@ public class SessionController {
     @PostMapping
     public ResponseEntity<SessionDTO> save(
         @Valid @RequestBody SessionCreateDTO dto,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         SessionModel session = sessionService.save(
             createMapper.toEntity(dto),
@@ -80,7 +80,7 @@ public class SessionController {
     @PutMapping("/bulk")
     public ResponseEntity<List<SessionDTO>> updateAll(
         @RequestBody List<@Valid SessionUpdateDTO> dtos,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         List<SessionModel> sessions = sessionService.updateAll(dtos, userId);
         return ResponseEntity.ok(mapper.toDTO(sessions));
@@ -90,7 +90,7 @@ public class SessionController {
     public ResponseEntity<SessionDTO> update(
         @PathVariable UUID id,
         @Valid @RequestBody SessionUpdateDTO dto,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         SessionModel session = sessionService.update(id, dto, userId);
         return ResponseEntity.ok(mapper.toDTO(session));
@@ -99,7 +99,7 @@ public class SessionController {
     @DeleteMapping("/bulk")
     public ResponseEntity<Void> deleteAll(
         @RequestBody List<UUID> ids,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         sessionService.deleteAll(ids, userId);
         return ResponseEntity.noContent().build();
@@ -108,7 +108,7 @@ public class SessionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @PathVariable UUID id,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         sessionService.delete(id, userId);
 

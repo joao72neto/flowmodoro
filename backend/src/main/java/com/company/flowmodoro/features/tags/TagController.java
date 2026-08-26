@@ -1,5 +1,6 @@
 package com.company.flowmodoro.features.tags;
 
+import com.company.flowmodoro.configs.security.CurrentUser;
 import com.company.flowmodoro.features.tags.dtos.TagCreateDTO;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateBulkDTO;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +36,7 @@ public class TagController {
     @GetMapping
     public ResponseEntity<List<TagDTO>> findByProject(
         @RequestParam UUID projectId,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         List<TagDTO> tags = service.findAllByProject(projectId, userId);
         return ResponseEntity.ok(tags);
@@ -45,7 +45,7 @@ public class TagController {
     @PostMapping("/bulk")
     public ResponseEntity<List<TagDTO>> saveAll(
         @Valid @RequestBody List<TagCreateDTO> dtos,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         List<TagModel> tags = service.saveAll(
             mapper.fromPayload(dtos, userId),
@@ -57,7 +57,7 @@ public class TagController {
     @PostMapping
     public ResponseEntity<TagDTO> save(
         @Valid @RequestBody TagCreateDTO dto,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         TagModel tag = service.save(mapper.fromPayload(dto, userId), userId);
         return ResponseEntity.status(201).body(mapper.toDTO(tag));
@@ -66,7 +66,7 @@ public class TagController {
     @PutMapping("/bulk")
     public ResponseEntity<List<TagDTO>> updateAll(
         @Valid @RequestBody List<TagUpdateBulkDTO> dtos,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         List<TagModel> tags = service.updateAll(dtos, userId);
         return ResponseEntity.ok(mapper.toDTO(tags));
@@ -76,7 +76,7 @@ public class TagController {
     public ResponseEntity<TagDTO> update(
         @PathVariable UUID id,
         @Valid @RequestBody TagUpdateDTO dto,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         TagModel tag = service.update(id, dto, userId);
         return ResponseEntity.ok(mapper.toDTO(tag));
@@ -85,7 +85,7 @@ public class TagController {
     @DeleteMapping("/bulk")
     public ResponseEntity<Void> deleteAll(
         @RequestBody List<UUID> ids,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         service.deleteAll(ids, userId);
         return ResponseEntity.noContent().build();
@@ -94,7 +94,7 @@ public class TagController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @PathVariable UUID id,
-        @RequestHeader("X-User-Id") UUID userId
+        @CurrentUser UUID userId
     ) {
         service.delete(id, userId);
         return ResponseEntity.noContent().build();
