@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getAnonymousUserId } from "../shared/utils/storage.utils";
 import { handleApiError } from "./api-error.configs";
 import { supabase } from "./supabase.configs";
 
@@ -18,9 +17,6 @@ api.interceptors.request.use(async (config) => {
   } catch (error) {
     console.error("Failed to retrieve Supabase session token", error);
   }
-
-  const userId = getAnonymousUserId();
-  config.headers["X-User-Id"] = userId;
   return config;
 });
 

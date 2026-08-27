@@ -17,6 +17,16 @@ import { localStorageKeys } from "../../shared/utils/storage.utils";
 class BackupService {
   private readonly VERSION = 1;
 
+  private getUserId(): string {
+    const { id: userId } = JSON.parse(
+      localStorage.getItem(localStorageKeys.authUser) || "{}",
+    );
+    if (!userId) {
+      throw new Error("id do usuário não encontrado");
+    }
+    return userId;
+  }
+
   async exportWeb(): Promise<void> {
     try {
       const [projects, tags, sessions] = await Promise.all([
@@ -25,7 +35,7 @@ class BackupService {
         db.sessions.toArray(),
       ]);
 
-      const userId = localStorage.getItem(localStorageKeys.userId);
+      const userId = this.getUserId();
 
       if (!userId) {
         throw new Error("id do usuário não encontrado");
@@ -66,7 +76,7 @@ class BackupService {
         db.sessions.toArray(),
       ]);
 
-      const userId = localStorage.getItem(localStorageKeys.userId);
+      const userId = this.getUserId();
 
       if (!userId) {
         throw new Error("id do usuário não encontrado");
@@ -179,7 +189,7 @@ class BackupService {
       );
     }
 
-    if (result.data?.userId !== localStorage.getItem(localStorageKeys.userId)) {
+    if (result.data?.userId !== this.getUserId()) {
       throw new Error("id do usuário não corresponde ao id do usuário logado");
     }
 
