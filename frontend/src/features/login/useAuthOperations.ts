@@ -6,7 +6,17 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: async (data: { email: string; password: string }) =>
-      login(data),
+      await login(data),
+  });
+};
+
+export const useLogout = () => {
+  const { logout } = useAuth();
+
+  return useMutation({
+    mutationFn: async () => {
+      await logout();
+    },
   });
 };
 
@@ -18,7 +28,7 @@ export const useRegister = () => {
       email: string;
       password: string;
       name: string;
-    }) => register(data),
+    }) => await register(data),
   });
 };
 
@@ -26,7 +36,7 @@ export const useRecoverPassword = () => {
   const { recoverPassword } = useAuth();
 
   return useMutation({
-    mutationFn: async (email: string) => recoverPassword(email),
+    mutationFn: async (email: string) => await recoverPassword(email),
   });
 };
 
@@ -40,6 +50,6 @@ export const useResetPassword = () => {
     }: {
       newPassword: string;
       code: string;
-    }) => resetPassword({ newPassword, code }),
+    }) => await resetPassword({ newPassword, code }),
   });
 };

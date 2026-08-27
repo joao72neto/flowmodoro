@@ -72,7 +72,6 @@ const useTimerActions = () => {
       pendingAction.current = null;
     }
 
-    console.log("Ola");
     startFocusTimer();
   };
 
@@ -97,7 +96,6 @@ const useTimerActions = () => {
   };
 
   const handleStopTimer = async ({ type }: { type: "focus" | "break" }) => {
-    console.log("Cheguei");
     if (type === "focus") {
       await stopForegroundTimer();
       stopFocus();

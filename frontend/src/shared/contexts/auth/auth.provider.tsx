@@ -5,11 +5,18 @@ import { localStorageKeys } from "../../utils/storage.utils";
 import { AuthContext } from "./auth.context";
 import type { User } from "./auth.types";
 
+import { db } from "../../../local/indexedDB";
+import { useModal } from "../modal/modal.context";
+import { useQueryClient } from "@tanstack/react-query";
+
 export const AUTH_CHANGE_EVENT = "auth:change";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { showWarning, hideModal } = useModal();
+  const queryClient = useQueryClient();
+
   const [user, setUser] = useState<User | null>(() => {
     try {
       const saved = localStorage.getItem(localStorageKeys.authUser);
@@ -142,16 +149,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { success: true };
   };
 
-  const logout = async () => {
+  const performLogout = async () => {
+    hideModal();
     try {
       await supabase.auth.signOut();
     } catch (err) {
       console.error("Error signing out from Supabase", err);
     } finally {
       localStorage.removeItem(localStorageKeys.authUser);
+      localStorage.removeItem(localStorageKeys.lastSync);
       setUser(null);
+      await Promise.all([
+        db.sessions.clear(),
+        db.projects.clear(),
+        db.tags.clear(),
+        db.syncQueue.clear(),
+      ]);
+      queryClient.invalidateQueries();
       window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
     }
+  };
+
+  const logout = async () => {
+    showWarning({
+      title: "Deseja realmente sair?",
+      message:
+        "Ao sair, todos os dados que ainda não foram sincronizados com o servidor serão perdidos. Certifique-se de realizar o backup ou esperar a sincronização.",
+      confirmLabel: "Sair",
+      cancelLabel: "Cancelar",
+      action: performLogout,
+    });
   };
 
   const recoverPassword = async (email: string) => {

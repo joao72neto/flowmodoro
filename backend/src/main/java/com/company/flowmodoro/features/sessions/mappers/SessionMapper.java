@@ -24,6 +24,9 @@ public class SessionMapper {
             .name(sessionDTO.getName())
             .focus(sessionDTO.getFocus())
             .ratio(sessionDTO.getRatio() != null ? sessionDTO.getRatio() : null)
+            .rest(sessionDTO.getRest())
+            .date(sessionDTO.getDate())
+            .updatedAt(sessionDTO.getUpdatedAt())
             .project(
                 sessionDTO.getProject() != null &&
                     sessionDTO.getProject().getId() != null
@@ -52,6 +55,8 @@ public class SessionMapper {
             .focus(session.getFocus())
             .ratio(session.getRatio())
             .rest(session.getRest())
+            .date(session.getDate())
+            .updatedAt(session.getUpdatedAt())
             .project(
                 session.getProject() != null
                     ? projectMapper.toDTO(session.getProject())

@@ -3,6 +3,7 @@ package com.company.flowmodoro.features.sessions;
 import com.company.flowmodoro.features.projects.ProjectModel;
 import com.company.flowmodoro.features.tags.TagModel;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,13 @@ public interface SessionRepository extends JpaRepository<SessionModel, UUID> {
         UUID userId,
         List<LocalDate> dates
     );
+
+    List<SessionModel> findByUserIdAndUpdatedAtGreaterThanEqualOrderByIdDesc(
+        UUID userId,
+        OffsetDateTime lastSync
+    );
+
+    List<SessionModel> findByUserIdOrderByIdDesc(UUID userId);
 
     List<SessionModel> findByProjectAndUserId(
         ProjectModel project,

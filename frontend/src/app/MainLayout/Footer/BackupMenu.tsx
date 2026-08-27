@@ -4,12 +4,19 @@ import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
 
 import { useClickOutside } from "../../../shared/hooks/useClickOutside";
-import { useExportBackup, useImportBackup } from "../../../local/backup/useBackup";
+import {
+  useExportBackup,
+  useImportBackup,
+} from "../../../local/backup/useBackup";
 
 import Button from "../../../shared/components/buttons/Button/Button";
 import ExpandableButton from "../../../shared/components/buttons/ExpandableButton";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
+import { useAuth } from "../../../shared/contexts/auth/auth.context";
 import { CiImport, CiExport } from "react-icons/ci";
+import { IoSyncOutline } from "react-icons/io5";
+import { executePull } from "../../../local/sync/pull-manager";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function BackupMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +24,8 @@ function BackupMenu() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { showError } = useModal();
+  const { isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
 
   const {
     mutate: upload,
@@ -32,6 +41,18 @@ function BackupMenu() {
     isPending: downloadIsPending,
   } = useExportBackup();
 
+  const {
+    mutate: pullData,
+    error: pullError,
+    reset: resetPull,
+    isPending: isPulling,
+  } = useMutation({
+    mutationFn: executePull,
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+
   useClickOutside(containerRef, () => setIsOpen(false));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,17 +61,19 @@ function BackupMenu() {
     e.target.value = "";
   };
 
-  const errorMessage = uploadError?.message || downloadError?.message;
+  const errorMessage =
+    uploadError?.message || downloadError?.message || pullError?.message;
 
   if (errorMessage) {
     showError({
-      title: "Erro ao realizar backup",
+      title: "Erro no backup / sincronização",
       message: errorMessage,
       action: () => {},
     });
 
     resetUpload();
     resetDownload();
+    resetPull();
   }
 
   return (
@@ -81,7 +104,7 @@ function BackupMenu() {
                 variant="secondary"
                 className="rounded-full"
                 loading={uploadIsPending}
-                disabled={downloadIsPending}
+                disabled={downloadIsPending || isPulling}
                 onClick={() => fileInputRef.current?.click()}
               >
                 Importar
@@ -98,12 +121,31 @@ function BackupMenu() {
                 variant="secondary"
                 className="rounded-full"
                 loading={downloadIsPending}
-                disabled={uploadIsPending}
+                disabled={uploadIsPending || isPulling}
                 onClick={() => download()}
               >
                 Exportar
               </Button>
             </motion.div>
+
+            {isAuthenticated && (
+              <motion.div
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Button
+                  icon={<IoSyncOutline />}
+                  variant="secondary"
+                  className="rounded-full"
+                  loading={isPulling}
+                  disabled={uploadIsPending || downloadIsPending}
+                  onClick={() => pullData()}
+                >
+                  Sincronizar
+                </Button>
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

@@ -19,3 +19,11 @@ export const updateSessions = async (
 export const deleteSessions = async (ids: string[]): Promise<void> => {
   return api.delete(`/sessions/bulk`, { data: ids });
 };
+
+export const pullSessions = async (
+  lastSync?: string | null,
+): Promise<SessionDTO[]> => {
+  const params = lastSync ? { lastSync } : {};
+  const res = await api.get<SessionDTO[]>("/sessions/pull", { params });
+  return res.data;
+};

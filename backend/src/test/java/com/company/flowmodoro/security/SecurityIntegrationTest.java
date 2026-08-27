@@ -88,6 +88,16 @@ class SecurityIntegrationTest {
     }
 
     @Test
+    @DisplayName("Pull sessions endpoint should succeed with valid JWT")
+    void pullSessionsEndpointShouldSucceedWithValidJwt() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        mockMvc.perform(get("/api/sessions/pull")
+                .with(jwt().jwt(jwt -> jwt.subject(userId.toString()))))
+            .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("Tags endpoint should succeed with valid JWT for existing project")
     void tagsEndpointShouldSucceedWithValidJwt() throws Exception {
         UUID userId = UUID.randomUUID();

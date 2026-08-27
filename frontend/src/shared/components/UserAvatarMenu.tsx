@@ -5,9 +5,12 @@ import clsx from "clsx";
 import { useAuth } from "../contexts/auth/auth.context";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { getInitials } from "../utils/avatar.utils";
+import { useLogout } from "../../features/login/useAuthOperations";
 
 const UserAvatarMenu = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { mutate: logout, isPending } = useLogout();
+
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -24,20 +27,24 @@ const UserAvatarMenu = () => {
 
   return (
     <div ref={menuRef} className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        title={user.name || user.email}
-        className={clsx(
-          "flex items-center justify-center",
-          "w-9 h-9 rounded-full",
-          "bg-primary text-white font-semibold text-sm",
-          "hover:scale-110 duration-75 cursor-pointer",
-          "select-none",
-        )}
-      >
-        {initials}
-      </button>
+      {isPending ? (
+        <div className="animate-spin border-b border-primary w-8 h-8 rounded-full" />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+          title={user.name || user.email}
+          className={clsx(
+            "flex items-center justify-center",
+            "w-9 h-9 rounded-full",
+            "bg-primary text-white font-semibold text-sm",
+            "hover:scale-110 duration-75 cursor-pointer",
+            "select-none",
+          )}
+        >
+          {initials}
+        </button>
+      )}
 
       <AnimatePresence>
         {isOpen && (

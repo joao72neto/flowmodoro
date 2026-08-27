@@ -20,6 +20,7 @@ export interface SessionDTO {
   rest: number;
   ratio: number;
   date: string;
+  updatedAt?: string;
   project: {
     id: string;
     name: string;

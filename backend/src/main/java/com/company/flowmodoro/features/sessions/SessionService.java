@@ -6,6 +6,7 @@ import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.sessions.helpers.SessionValidator;
 import com.company.flowmodoro.features.sessions.mappers.SessionUpdateMapper;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,17 @@ public class SessionService {
             datePage.getTotalElements(),
             datePage.getTotalPages()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<SessionModel> pull(UUID userId, OffsetDateTime lastSync) {
+        if (lastSync != null) {
+            return sessionRepository.findByUserIdAndUpdatedAtGreaterThanEqualOrderByIdDesc(
+                userId,
+                lastSync
+            );
+        }
+        return sessionRepository.findByUserIdOrderByIdDesc(userId);
     }
 
     @Transactional

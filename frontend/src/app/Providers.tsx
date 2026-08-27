@@ -10,15 +10,15 @@ import QueryClientConfig from "../configs/QueryClientConfig";
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <ModalProvider>
-      <AuthProvider>
-        <QueryClientConfig>
+      <QueryClientConfig>
+        <AuthProvider>
           <ThemeProvider>
             <SessionProvider>
               <TimerProvider>{children}</TimerProvider>
             </SessionProvider>
           </ThemeProvider>
-        </QueryClientConfig>
-      </AuthProvider>
+        </AuthProvider>
+      </QueryClientConfig>
     </ModalProvider>
   );
 };

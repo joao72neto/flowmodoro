@@ -1,6 +1,7 @@
 import { Network } from "@capacitor/network";
 
 import syncQueue from "./sync-queue.service";
+import { executePull } from "./pull-manager";
 import { isNative } from "../../consts/platform";
 import { localStorageKeys } from "../../shared/utils/storage.utils";
 
@@ -45,8 +46,15 @@ export const initSync = () => {
     if (document.visibilityState === "visible") process();
   });
 
-  window.addEventListener(AUTH_CHANGE_EVENT, () => {
-    if (isUserAuthenticated()) process();
+  window.addEventListener(AUTH_CHANGE_EVENT, async () => {
+    if (isUserAuthenticated()) {
+      try {
+        await executePull();
+      } catch (err) {
+        console.error("Falha no pull, prosseguindo com offline push", err);
+      }
+      process();
+    }
   });
 };
 

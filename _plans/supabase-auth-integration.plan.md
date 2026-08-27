@@ -17,11 +17,13 @@ Este documento detalha o plano técnico de implementação para decodificação 
 ## 📂 Arquivos e Pacotes Envolvidos
 
 ### 1. Modificações de Dependências e Configurações
-- `backend/pom.xml`: Adicionar dependência `spring-boot-starter-oauth2-resource-server`.
+
+- `backend/pom.xml`: Adicionar dependência `spring-boot-starter-oa'uth2-resource-server`.
 - `backend/src/main/resources/application.properties`: Adicionar configurações de JWKS URI e Issuer URI do Supabase.
 - `backend/src/main/java/com/company/flowmodoro/configs/WebConfig.java`: Ajustar configuração de CORS e registrar `HandlerMethodArgumentResolver` para injeção do usuário atual.
 
 ### 2. Novos Componentes de Segurança (`configs/security/`)
+
 - `backend/src/main/java/com/company/flowmodoro/configs/security/SecurityConfig.java`: Configuração principal do Spring Security / Resource Server, regras de autorização de rotas e filtros CORS.
 - `backend/src/main/java/com/company/flowmodoro/configs/security/CustomAuthenticationEntryPoint.java`: Manipulador para converter falhas de autenticação (`401`) no formato JSON `ErrorResponse`.
 - `backend/src/main/java/com/company/flowmodoro/configs/security/CustomAccessDeniedHandler.java`: Manipulador para converter acessos negados (`403`) no formato JSON `ErrorResponse`.
@@ -30,15 +32,18 @@ Este documento detalha o plano técnico de implementação para decodificação 
 - `backend/src/main/java/com/company/flowmodoro/configs/security/SecurityUtils.java`: Utilitário estático auxiliar para obtenção rápida do `UUID` do usuário autenticado no contexto atual.
 
 ### 3. Tratamento de Exceções (`exception/`)
+
 - `backend/src/main/java/com/company/flowmodoro/exception/enums/CommonErrorCode.java`: Adicionar `UNAUTHORIZED` e `ACCESS_DENIED`.
 
 ### 4. Ajustes nas Features Existentes
+
 - `backend/src/main/java/com/company/flowmodoro/configs/RateLimitInterceptor.java`: Atualizar para obter o identificador a partir do usuário autenticado no token (com fallback para IP em rotas públicas).
 - `backend/src/main/java/com/company/flowmodoro/features/projects/ProjectController.java`: Substituir `@RequestHeader("X-User-Id") UUID userId` por `@CurrentUser UUID userId`.
 - `backend/src/main/java/com/company/flowmodoro/features/sessions/SessionController.java`: Substituir `@RequestHeader("X-User-Id") UUID userId` por `@CurrentUser UUID userId`.
 - `backend/src/main/java/com/company/flowmodoro/features/tags/TagController.java`: Substituir `@RequestHeader("X-User-Id") UUID userId` por `@CurrentUser UUID userId`.
 
 ### 5. Testes Automatizados (`src/test/java/com/company/flowmodoro/`)
+
 - `backend/src/test/java/com/company/flowmodoro/security/SecurityIntegrationTest.java`: Testes de integração cobrindo cenários com JWT válido, JWT inválido/expirado, rota pública e rota protegida sem token.
 
 ---
@@ -142,4 +147,3 @@ Este documento detalha o plano técnico de implementação para decodificação 
 - [x] Atualizar `ProjectController`, `SessionController` e `TagController` para usar `@CurrentUser`.
 - [x] Atualizar `RateLimitInterceptor` para usar identidade autenticada.
 - [x] Implementar suíte de testes de segurança e validar build com `./mvnw clean test` (ou `mvn test`).
-

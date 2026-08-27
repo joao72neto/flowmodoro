@@ -38,6 +38,7 @@ class SessionMapper {
     rest: session.rest,
     date: session.date,
     ratio: session.ratio,
+    updatedAt: session.updatedAt,
     project: {
       id: project?.id || "",
       name: project?.name || "",
@@ -64,6 +65,28 @@ class SessionMapper {
 
   fromPayloadList = (sessions: SessionPayloadDTO[]): SessionModel[] => {
     return sessions.map((session) => this.fromPayload(session));
+  };
+
+  fromDTO = (dto: SessionDTO): SessionModel => ({
+    id: dto.id,
+    name: dto.name || DEFAULT_SESSION.name,
+    focus: dto.focus || DEFAULT_SESSION.focus,
+    rest:
+      dto.rest !== undefined && dto.rest !== null
+        ? dto.rest
+        : calculateRest(
+            dto.focus || DEFAULT_SESSION.focus,
+            dto.ratio || DEFAULT_SESSION.ratio,
+          ),
+    ratio: dto.ratio || DEFAULT_SESSION.ratio,
+    date: dto.date || new Date().toISOString(),
+    projectId: dto.project?.id || undefined,
+    tagId: dto.tag?.id || undefined,
+    updatedAt: dto.updatedAt,
+  });
+
+  fromDTOList = (dtos: SessionDTO[]): SessionModel[] => {
+    return dtos.map((dto) => this.fromDTO(dto));
   };
 }
 

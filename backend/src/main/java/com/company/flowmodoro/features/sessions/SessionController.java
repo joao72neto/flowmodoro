@@ -9,8 +9,10 @@ import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
 import com.company.flowmodoro.features.sessions.mappers.SessionCreateMapper;
 import com.company.flowmodoro.features.sessions.mappers.SessionMapper;
 import jakarta.validation.Valid;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +53,17 @@ public class SessionController {
         return ResponseEntity.ok(
             sessionService.consult(page - 1, size, userId)
         );
+    }
+
+    @GetMapping("/pull")
+    public ResponseEntity<List<SessionDTO>> pullSessions(
+        @RequestParam(required = false) @DateTimeFormat(
+            iso = DateTimeFormat.ISO.DATE_TIME
+        ) OffsetDateTime lastSync,
+        @CurrentUser UUID userId
+    ) {
+        List<SessionModel> sessions = sessionService.pull(userId, lastSync);
+        return ResponseEntity.ok(mapper.toDTO(sessions));
     }
 
     @PostMapping("/bulk")

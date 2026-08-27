@@ -2,6 +2,7 @@ export const localStorageKeys = {
   timer: "flowmodoro_timer_state",
   restRatio: "flowmodoro_rest_ratio",
   session: "flowmodoro_session",
+  lastSync: "flowmodoro:lastSync",
 
   theme: "flowmodoro_theme",
   authUser: "flowmodoro_auth_user",

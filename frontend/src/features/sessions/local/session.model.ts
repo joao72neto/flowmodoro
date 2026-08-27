@@ -7,4 +7,5 @@ export interface SessionModel {
   projectId?: string;
   tagId?: string;
   date: string;
+  updatedAt?: string;
 }
