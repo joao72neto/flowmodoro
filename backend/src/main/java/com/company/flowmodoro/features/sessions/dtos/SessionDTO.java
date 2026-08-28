@@ -34,6 +34,8 @@ public class SessionDTO {
 
     private OffsetDateTime updatedAt;
 
+    private OffsetDateTime deletedAt;
+
     private ProjectDTO project;
 
     private TagCreateDTO tag;

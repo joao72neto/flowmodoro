@@ -23,6 +23,8 @@ public class ProjectMapper {
         return ProjectDTO.builder()
             .id(entity.getId())
             .name(entity.getName())
+            .updatedAt(entity.getUpdatedAt())
+            .deletedAt(entity.getDeletedAt())
             .build();
     }
 

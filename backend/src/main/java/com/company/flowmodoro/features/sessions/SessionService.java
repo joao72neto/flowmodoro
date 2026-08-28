@@ -188,9 +188,10 @@ public class SessionService {
 
         sessions.forEach(session -> {
             validator.validateSessionBelongsToUser(session, userId);
+            session.setDeletedAt(java.time.OffsetDateTime.now());
         });
 
-        sessionRepository.deleteAll(sessions);
+        sessionRepository.saveAll(sessions);
     }
 
     @Transactional
@@ -201,6 +202,7 @@ public class SessionService {
 
         validator.validateSessionBelongsToUser(session, userId);
 
-        sessionRepository.deleteById(id);
+        session.setDeletedAt(java.time.OffsetDateTime.now());
+        sessionRepository.save(session);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -35,9 +36,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> findAll(
-        @CurrentUser UUID userId
-    ) {
+    public ResponseEntity<List<ProjectDTO>> findAll(@CurrentUser UUID userId) {
         List<ProjectDTO> projects = projectService.findAll(userId);
         return ResponseEntity.ok(projects);
     }
@@ -108,5 +107,14 @@ public class ProjectController {
     ) {
         projectService.delete(id, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/pull")
+    public ResponseEntity<List<ProjectDTO>> pull(
+        @RequestParam(required = false) java.time.OffsetDateTime lastSync,
+        @CurrentUser UUID userId
+    ) {
+        List<ProjectModel> projects = projectService.pull(userId, lastSync);
+        return ResponseEntity.ok(projectMapper.toDTO(projects));
     }
 }

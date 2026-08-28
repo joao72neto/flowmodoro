@@ -23,6 +23,17 @@ class ProjectMapper {
 
   fromPayloadList = (projects: ProjectPayloadDTO[]): ProjectModel[] =>
     projects.map(this.fromPayload);
+
+  fromDTO = (dto: ProjectDTO): ProjectModel => ({
+    id: dto.id,
+    name: dto.name,
+    createdAt: dto.updatedAt || new Date().toISOString(),
+    updatedAt: dto.updatedAt,
+    deletedAt: dto.deletedAt,
+  });
+
+  fromDTOList = (dtos: ProjectDTO[]): ProjectModel[] =>
+    dtos.map(this.fromDTO);
 }
 
 export default new ProjectMapper();

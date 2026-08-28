@@ -17,3 +17,11 @@ export const updateTags = async (
 export const deleteTags = async (ids: string[]): Promise<void> => {
   await api.delete("/tags/bulk", { data: ids });
 };
+
+export const pullTags = async (
+  lastSync?: string | null,
+): Promise<TagDTO[]> => {
+  const params = lastSync ? { lastSync } : {};
+  const res = await api.get<TagDTO[]>("/tags/pull", { params });
+  return res.data;
+};

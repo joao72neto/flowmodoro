@@ -8,4 +8,5 @@ export interface SessionModel {
   tagId?: string;
   date: string;
   updatedAt?: string;
+  deletedAt?: string | null;
 }

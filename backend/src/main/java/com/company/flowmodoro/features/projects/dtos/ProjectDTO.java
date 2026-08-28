@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.projects.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +20,14 @@ public class ProjectDTO {
     private String name;
 
     private Long totalFocus;
+
+    private OffsetDateTime updatedAt;
+
+    private OffsetDateTime deletedAt;
+
+    public ProjectDTO(UUID id, String name, Long totalFocus) {
+        this.id = id;
+        this.name = name;
+        this.totalFocus = totalFocus;
+    }
 }

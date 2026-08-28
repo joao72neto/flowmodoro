@@ -47,6 +47,8 @@ public class TagMapper {
             .projectId(
                 entity.getProject() != null ? entity.getProject().getId() : null
             )
+            .updatedAt(entity.getUpdatedAt())
+            .deletedAt(entity.getDeletedAt())
             .build();
     }
 

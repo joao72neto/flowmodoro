@@ -3,4 +3,6 @@ export type TagDTO = {
   name: string;
   projectId: string;
   totalFocus: number;
+  updatedAt?: string;
+  deletedAt?: string | null;
 };

@@ -19,3 +19,11 @@ export const updateProjects = async (
 export const deleteProjects = async (ids: string[]): Promise<void> => {
   await api.delete(`/projects/bulk`, { data: ids });
 };
+
+export const pullProjects = async (
+  lastSync?: string | null,
+): Promise<ProjectDTO[]> => {
+  const params = lastSync ? { lastSync } : {};
+  const res = await api.get<ProjectDTO[]>("/projects/pull", { params });
+  return res.data;
+};

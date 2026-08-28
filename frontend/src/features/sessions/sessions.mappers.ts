@@ -83,6 +83,7 @@ class SessionMapper {
     projectId: dto.project?.id || undefined,
     tagId: dto.tag?.id || undefined,
     updatedAt: dto.updatedAt,
+    deletedAt: dto.deletedAt,
   });
 
   fromDTOList = (dtos: SessionDTO[]): SessionModel[] => {

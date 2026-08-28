@@ -21,6 +21,7 @@ export interface SessionDTO {
   ratio: number;
   date: string;
   updatedAt?: string;
+  deletedAt?: string | null;
   project: {
     id: string;
     name: string;

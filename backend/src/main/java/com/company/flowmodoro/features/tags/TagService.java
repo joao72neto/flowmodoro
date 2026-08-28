@@ -158,6 +158,17 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
+    @Transactional(readOnly = true)
+    public List<TagModel> pull(UUID userId, java.time.OffsetDateTime lastSync) {
+        if (lastSync != null) {
+            return tagRepository.findByUserIdAndUpdatedAtGreaterThanEqual(
+                userId,
+                lastSync
+            );
+        }
+        return tagRepository.findByUserId(userId);
+    }
+
     @Transactional
     public void deleteAll(List<UUID> ids, UUID userId) {
         List<TagModel> tags = tagRepository.findAllById(ids);
@@ -174,9 +185,10 @@ public class TagService {
                 userId
             );
             sessions.forEach(session -> session.setTag(null));
+            tag.setDeletedAt(java.time.OffsetDateTime.now());
         });
 
-        tagRepository.deleteAll(tags);
+        tagRepository.saveAll(tags);
     }
 
     @Transactional
@@ -194,6 +206,7 @@ public class TagService {
 
         sessions.forEach(session -> session.setTag(null));
 
-        tagRepository.delete(tag);
+        tag.setDeletedAt(java.time.OffsetDateTime.now());
+        tagRepository.save(tag);
     }
 }

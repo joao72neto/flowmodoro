@@ -55,6 +55,19 @@ class TagMapper {
       projectId: tag.projectId,
     };
   };
+
+  fromDTO = (dto: TagDTO): TagModel => ({
+    id: dto.id,
+    name: dto.name,
+    projectId: dto.projectId,
+    createdAt: dto.updatedAt || new Date().toISOString(),
+    updatedAt: dto.updatedAt,
+    deletedAt: dto.deletedAt,
+  });
+
+  fromDTOList = (dtos: TagDTO[]): TagModel[] => {
+    return dtos.map((dto) => this.fromDTO(dto));
+  };
 }
 
 export default new TagMapper();

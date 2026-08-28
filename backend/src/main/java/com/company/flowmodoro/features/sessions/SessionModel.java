@@ -58,4 +58,7 @@ public class SessionModel {
     @UpdateTimestamp
     @Column(name = "ses_updated_at")
     private OffsetDateTime updatedAt;
+
+    @Column(name = "ses_deleted_at")
+    private OffsetDateTime deletedAt;
 }

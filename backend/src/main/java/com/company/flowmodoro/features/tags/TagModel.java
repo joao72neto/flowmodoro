@@ -7,11 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "tags")
@@ -31,4 +33,11 @@ public class TagModel {
     @ManyToOne
     @JoinColumn(name = "tag_pro_id")
     private ProjectModel project;
+
+    @UpdateTimestamp
+    @Column(name = "tag_updated_at")
+    private OffsetDateTime updatedAt;
+
+    @Column(name = "tag_deleted_at")
+    private OffsetDateTime deletedAt;
 }

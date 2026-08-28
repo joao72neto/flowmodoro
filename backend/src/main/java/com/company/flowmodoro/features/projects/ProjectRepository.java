@@ -1,6 +1,7 @@
 package com.company.flowmodoro.features.projects;
 
 import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +22,7 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, UUID> {
                 ON s.project.id = p.id
                 AND s.userId = :userId
             WHERE p.userId = :userId
+              AND p.deletedAt IS NULL
             GROUP BY p.id, p.name
         		ORDER BY p.id DESC
         """
@@ -28,4 +30,11 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, UUID> {
     List<ProjectDTO> findAllWithTotalFocus(UUID userId);
 
     boolean existsByNameAndUserId(String name, UUID userId);
+
+    List<ProjectModel> findByUserIdAndUpdatedAtGreaterThanEqual(
+        UUID userId,
+        OffsetDateTime lastSync
+    );
+
+    List<ProjectModel> findByUserId(UUID userId);
 }

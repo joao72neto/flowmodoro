@@ -99,4 +99,13 @@ public class TagController {
         service.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/pull")
+    public ResponseEntity<List<TagDTO>> pull(
+        @RequestParam(required = false) java.time.OffsetDateTime lastSync,
+        @CurrentUser UUID userId
+    ) {
+        List<TagModel> tags = service.pull(userId, lastSync);
+        return ResponseEntity.ok(mapper.toDTO(tags));
+    }
 }

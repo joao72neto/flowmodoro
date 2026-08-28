@@ -132,6 +132,20 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    @Transactional(readOnly = true)
+    public List<ProjectModel> pull(
+        UUID userId,
+        java.time.OffsetDateTime lastSync
+    ) {
+        if (lastSync != null) {
+            return projectRepository.findByUserIdAndUpdatedAtGreaterThanEqual(
+                userId,
+                lastSync
+            );
+        }
+        return projectRepository.findByUserId(userId);
+    }
+
     @Transactional
     public void deleteAll(List<UUID> ids, UUID userId) {
         List<ProjectModel> projects = projectRepository.findAllById(ids);
@@ -150,9 +164,10 @@ public class ProjectService {
                 session.setProject(null);
                 session.setTag(null);
             });
+            project.setDeletedAt(java.time.OffsetDateTime.now());
         });
 
-        projectRepository.deleteAll(projects);
+        projectRepository.saveAll(projects);
     }
 
     @Transactional
@@ -169,6 +184,7 @@ public class ProjectService {
             session.setTag(null);
         });
 
-        projectRepository.delete(project);
+        project.setDeletedAt(java.time.OffsetDateTime.now());
+        projectRepository.save(project);
     }
 }
