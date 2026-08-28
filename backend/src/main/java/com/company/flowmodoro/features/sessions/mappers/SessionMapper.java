@@ -27,6 +27,7 @@ public class SessionMapper {
             .rest(sessionDTO.getRest())
             .date(sessionDTO.getDate())
             .updatedAt(sessionDTO.getUpdatedAt())
+            .deletedAt(sessionDTO.getDeletedAt())
             .project(
                 sessionDTO.getProject() != null &&
                     sessionDTO.getProject().getId() != null
@@ -57,6 +58,7 @@ public class SessionMapper {
             .rest(session.getRest())
             .date(session.getDate())
             .updatedAt(session.getUpdatedAt())
+            .deletedAt(session.getDeletedAt())
             .project(
                 session.getProject() != null
                     ? projectMapper.toDTO(session.getProject())

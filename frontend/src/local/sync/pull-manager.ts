@@ -19,8 +19,12 @@ export const executePull = async (): Promise<void> => {
         await db.projects.delete(apiProject.id);
       } else {
         const local = await db.projects.get(apiProject.id);
-        const localUpdated = local?.updatedAt ? new Date(local.updatedAt).getTime() : 0;
-        const apiUpdated = apiProject.updatedAt ? new Date(apiProject.updatedAt).getTime() : 0;
+        const localUpdated = local?.updatedAt
+          ? new Date(local.updatedAt).getTime()
+          : 0;
+        const apiUpdated = apiProject.updatedAt
+          ? new Date(apiProject.updatedAt).getTime()
+          : 0;
         if (!local || apiUpdated >= localUpdated) {
           await db.projects.put(projectMapper.fromDTO(apiProject));
         }
@@ -36,8 +40,12 @@ export const executePull = async (): Promise<void> => {
         await db.tags.delete(apiTag.id);
       } else {
         const local = await db.tags.get(apiTag.id);
-        const localUpdated = local?.updatedAt ? new Date(local.updatedAt).getTime() : 0;
-        const apiUpdated = apiTag.updatedAt ? new Date(apiTag.updatedAt).getTime() : 0;
+        const localUpdated = local?.updatedAt
+          ? new Date(local.updatedAt).getTime()
+          : 0;
+        const apiUpdated = apiTag.updatedAt
+          ? new Date(apiTag.updatedAt).getTime()
+          : 0;
         if (!local || apiUpdated >= localUpdated) {
           await db.tags.put(tagMapper.fromDTO(apiTag));
         }
@@ -53,8 +61,12 @@ export const executePull = async (): Promise<void> => {
         await db.sessions.delete(apiSession.id);
       } else {
         const local = await db.sessions.get(apiSession.id);
-        const localUpdated = local?.updatedAt ? new Date(local.updatedAt).getTime() : 0;
-        const apiUpdated = apiSession.updatedAt ? new Date(apiSession.updatedAt).getTime() : 0;
+        const localUpdated = local?.updatedAt
+          ? new Date(local.updatedAt).getTime()
+          : 0;
+        const apiUpdated = apiSession.updatedAt
+          ? new Date(apiSession.updatedAt).getTime()
+          : 0;
         if (!local || apiUpdated >= localUpdated) {
           await db.sessions.put(sessionMapper.fromDTO(apiSession));
         }
