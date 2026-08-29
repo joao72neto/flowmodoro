@@ -114,11 +114,12 @@ public class ProjectService {
     }
 
     private ProjectModel createFromBulkDTO(ProjectPayloadDTO dto, UUID userId) {
-        ProjectModel tag = new ProjectModel();
-        tag.setId(dto.getId());
-        tag.setName(dto.getName());
-        tag.setUserId(userId);
-        return tag;
+        ProjectModel project = new ProjectModel();
+        project.setId(dto.getId());
+        project.setName(dto.getName());
+        project.setColor(dto.getColor());
+        project.setUserId(userId);
+        return project;
     }
 
     @Transactional

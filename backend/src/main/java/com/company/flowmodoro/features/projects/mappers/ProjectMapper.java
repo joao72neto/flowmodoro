@@ -12,6 +12,7 @@ public class ProjectMapper {
         return ProjectModel.builder()
             .id(dto.getId())
             .name(dto.getName())
+            .color(dto.getColor())
             .build();
     }
 
@@ -23,6 +24,7 @@ public class ProjectMapper {
         return ProjectDTO.builder()
             .id(entity.getId())
             .name(entity.getName())
+            .color(entity.getColor())
             .updatedAt(entity.getUpdatedAt())
             .deletedAt(entity.getDeletedAt())
             .build();

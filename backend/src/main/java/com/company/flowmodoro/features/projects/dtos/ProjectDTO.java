@@ -21,13 +21,16 @@ public class ProjectDTO {
 
     private Long totalFocus;
 
+    private String color;
+
     private OffsetDateTime updatedAt;
 
     private OffsetDateTime deletedAt;
 
-    public ProjectDTO(UUID id, String name, Long totalFocus) {
+    public ProjectDTO(UUID id, String name, Long totalFocus, String color) {
         this.id = id;
         this.name = name;
         this.totalFocus = totalFocus;
+        this.color = color;
     }
 }

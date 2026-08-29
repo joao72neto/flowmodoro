@@ -19,12 +19,7 @@ import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 import { FaPlay } from "react-icons/fa6";
 import { useSessionContext } from "../../context/sessions.context";
 import useTimerActions from "../../../timer/hooks/useTimerActions";
-
-const BORDER_COLORS: Record<number, string> = {
-  10: "border-l-danger",
-  20: "border-l-primary",
-  30: "border-l-success",
-};
+import { getStableProjectColor } from "../../../projects/consts/project-colors";
 
 const TOTAL_FOCUS_CLASSES = clsx(
   "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
@@ -78,13 +73,11 @@ const SessionGroup = memo(
     const hasTagOrProject = tag.id !== "" || project.id !== "";
     const showTagAndProject = hasTagOrProject;
 
-    const firstRatio = Math.round((sessionGroup.sessions[0]?.ratio || 0) * 100);
+    const hasProject = Boolean(project && project.id !== "");
 
-    const isUniform = sessionGroup.sessions.every(
-      (session) => Math.round(session.ratio * 100) === firstRatio,
-    );
-
-    const borderColorClass = isUniform ? BORDER_COLORS[firstRatio] : undefined;
+    const projectColor = hasProject
+      ? getStableProjectColor(project.id, project.color)
+      : undefined;
 
     const handleDetails = useCallback(
       (sessionId: string) => {
@@ -132,8 +125,8 @@ const SessionGroup = memo(
                 : "bg-neutral-80/90",
               "border-l-4",
               "contain-content",
-              borderColorClass,
             )}
+            style={hasProject ? { borderLeftColor: projectColor } : undefined}
             direction="row"
             gap={3}
             onClick={
@@ -177,7 +170,20 @@ const SessionGroup = memo(
               {showTagAndProject && (
                 <div className="flex self-start items-center gap-2 min-w-0 sm:flex-1">
                   {project?.name && (
-                    <Label icon={<GoProject />}>{project.name}</Label>
+                    <Label
+                      icon={<GoProject />}
+                      style={
+                        projectColor
+                          ? {
+                              backgroundColor: `${projectColor}1a`,
+                              color: projectColor,
+                              borderColor: `${projectColor}40`,
+                            }
+                          : undefined
+                      }
+                    >
+                      {project.name}
+                    </Label>
                   )}
                   {tag?.name && (
                     <Label variant="secondary" icon={<IoMdPricetag />}>

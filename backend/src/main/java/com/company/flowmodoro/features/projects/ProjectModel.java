@@ -31,6 +31,9 @@ public class ProjectModel {
     @Column(name = "pro_name")
     private String name;
 
+    @Column(name = "pro_color")
+    private String color;
+
     @Column(name = "pro_user_id")
     private UUID userId;
 

@@ -15,7 +15,8 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, UUID> {
             SELECT new com.company.flowmodoro.features.projects.dtos.ProjectDTO(
                 p.id,
                 p.name,
-                COALESCE(SUM(s.focus), 0)
+                COALESCE(SUM(s.focus), 0),
+                p.color
             )
             FROM ProjectModel p
             LEFT JOIN SessionModel s
@@ -23,7 +24,7 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, UUID> {
                 AND s.userId = :userId
             WHERE p.userId = :userId
               AND p.deletedAt IS NULL
-            GROUP BY p.id, p.name
+            GROUP BY p.id, p.name, p.color
         		ORDER BY p.id DESC
         """
     )

@@ -12,9 +12,13 @@ public class ProjectUpdateMapper {
         if (dto.getName() != null) {
             entity.setName(dto.getName());
         }
+        if (dto.getColor() != null) {
+            entity.setColor(dto.getColor());
+        }
     }
 
     public void apply(ProjectModel entity, ProjectPayloadDTO dto) {
         entity.setName(dto.getName());
+        entity.setColor(dto.getColor());
     }
 }

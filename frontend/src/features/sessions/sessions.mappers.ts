@@ -42,6 +42,7 @@ class SessionMapper {
     project: {
       id: project?.id || "",
       name: project?.name || "",
+      color: project?.color || "",
     },
     tag: {
       id: tag?.id || "",

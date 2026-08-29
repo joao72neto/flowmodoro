@@ -14,6 +14,7 @@ export const applyUpdates = ({
   return {
     id,
     name: updated?.name ?? old?.name ?? DEFAULT_PROJECT.name,
+    color: updated?.color ?? old?.color ?? DEFAULT_PROJECT.color,
     createdAt: old?.createdAt ?? DEFAULT_PROJECT.createdAt,
   };
 };

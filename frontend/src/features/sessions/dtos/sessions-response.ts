@@ -25,6 +25,7 @@ export interface SessionDTO {
   project: {
     id: string;
     name: string;
+    color: string;
   };
   tag: {
     id: string;
