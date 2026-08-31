@@ -55,7 +55,7 @@
 ## 6. Dúvidas Pendentes / A Propor
 
 - **Estratégia de Injeção do Usuário:** Propõe-se utilizar a anotação padrão do Spring Security `@AuthenticationPrincipal Jwt jwt` (ou um `@CurrentUser` customizado) nos controllers, ou obter o usuário diretamente no Service via `SecurityContextHolder`. Confirma essa abordagem?
-R: Pode utilizar a anotação padrão do Spring Security.
+  R: Pode utilizar a anotação padrão do Spring Security.
 
 - **Formato de Erro 401/403:** A API deve seguir o formato padrão existente de exceções da aplicação (ex: `GlobalExceptionHandler` / `ProblemDetail` / DTO customizado) para respostas de erro de autenticação emitidas pelo Spring Security.
-R: Pode seguir o formato padrão existente.
+  R: Pode seguir o formato padrão existente.

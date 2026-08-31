@@ -1,8 +1,6 @@
 package com.company.flowmodoro.features.sessions;
 
-import com.company.flowmodoro.common.dto.PageResponse;
 import com.company.flowmodoro.configs.security.CurrentUser;
-import com.company.flowmodoro.features.sessions.dtos.DailySessionsDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionCreateDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionDTO;
 import com.company.flowmodoro.features.sessions.dtos.SessionUpdateDTO;
@@ -16,7 +14,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,17 +41,6 @@ public class SessionController {
         this.createMapper = createMapper;
     }
 
-    @GetMapping
-    public ResponseEntity<PageResponse<DailySessionsDTO>> consult(
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "10") int size,
-        @CurrentUser UUID userId
-    ) {
-        return ResponseEntity.ok(
-            sessionService.consult(page - 1, size, userId)
-        );
-    }
-
     @GetMapping("/pull")
     public ResponseEntity<List<SessionDTO>> pullSessions(
         @RequestParam(required = false) @DateTimeFormat(
@@ -78,18 +64,6 @@ public class SessionController {
         return ResponseEntity.status(201).body(mapper.toDTO(sessions));
     }
 
-    @PostMapping
-    public ResponseEntity<SessionDTO> save(
-        @Valid @RequestBody SessionCreateDTO dto,
-        @CurrentUser UUID userId
-    ) {
-        SessionModel session = sessionService.save(
-            createMapper.toEntity(dto),
-            userId
-        );
-        return ResponseEntity.status(201).body(mapper.toDTO(session));
-    }
-
     @PutMapping("/bulk")
     public ResponseEntity<List<SessionDTO>> updateAll(
         @RequestBody List<@Valid SessionUpdateDTO> dtos,
@@ -99,32 +73,12 @@ public class SessionController {
         return ResponseEntity.ok(mapper.toDTO(sessions));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SessionDTO> update(
-        @PathVariable UUID id,
-        @Valid @RequestBody SessionUpdateDTO dto,
-        @CurrentUser UUID userId
-    ) {
-        SessionModel session = sessionService.update(id, dto, userId);
-        return ResponseEntity.ok(mapper.toDTO(session));
-    }
-
     @DeleteMapping("/bulk")
     public ResponseEntity<Void> deleteAll(
         @RequestBody List<UUID> ids,
         @CurrentUser UUID userId
     ) {
         sessionService.deleteAll(ids, userId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-        @PathVariable UUID id,
-        @CurrentUser UUID userId
-    ) {
-        sessionService.delete(id, userId);
-
         return ResponseEntity.noContent().build();
     }
 }

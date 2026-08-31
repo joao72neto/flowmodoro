@@ -1,8 +1,6 @@
 package com.company.flowmodoro.features.projects;
 
-import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
 import com.company.flowmodoro.features.projects.dtos.ProjectPayloadDTO;
-import com.company.flowmodoro.features.projects.dtos.ProjectUpdateDTO;
 import com.company.flowmodoro.features.projects.helpers.ProjectValidator;
 import com.company.flowmodoro.features.projects.mappers.ProjectUpdateMapper;
 import com.company.flowmodoro.features.sessions.SessionModel;
@@ -38,8 +36,18 @@ public class ProjectService {
         this.validator = validator;
     }
 
-    public List<ProjectDTO> findAll(UUID userId) {
-        return projectRepository.findAllWithTotalFocus(userId);
+    @Transactional(readOnly = true)
+    public List<ProjectModel> pull(
+        UUID userId,
+        java.time.OffsetDateTime lastSync
+    ) {
+        if (lastSync != null) {
+            return projectRepository.findByUserIdAndUpdatedAtGreaterThanEqual(
+                userId,
+                lastSync
+            );
+        }
+        return projectRepository.findByUserId(userId);
     }
 
     public ProjectModel findById(UUID id, UUID userId) {
@@ -66,13 +74,6 @@ public class ProjectService {
             .toList();
 
         return projectRepository.saveAll(entities);
-    }
-
-    @Transactional
-    public ProjectModel save(ProjectModel project, UUID userId) {
-        validator.validateUniqueName(project.getName(), userId);
-        project.setUserId(userId);
-        return projectRepository.save(project);
     }
 
     @Transactional
@@ -113,40 +114,6 @@ public class ProjectService {
         return projectRepository.saveAll(entities);
     }
 
-    private ProjectModel createFromBulkDTO(ProjectPayloadDTO dto, UUID userId) {
-        ProjectModel project = new ProjectModel();
-        project.setId(dto.getId());
-        project.setName(dto.getName());
-        project.setColor(dto.getColor());
-        project.setUserId(userId);
-        return project;
-    }
-
-    @Transactional
-    public ProjectModel update(UUID id, ProjectUpdateDTO dto, UUID userId) {
-        ProjectModel project = findById(id, userId);
-
-        validator.validateUniqueName(dto.getName(), userId);
-
-        updateMapper.apply(project, dto);
-
-        return projectRepository.save(project);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProjectModel> pull(
-        UUID userId,
-        java.time.OffsetDateTime lastSync
-    ) {
-        if (lastSync != null) {
-            return projectRepository.findByUserIdAndUpdatedAtGreaterThanEqual(
-                userId,
-                lastSync
-            );
-        }
-        return projectRepository.findByUserId(userId);
-    }
-
     @Transactional
     public void deleteAll(List<UUID> ids, UUID userId) {
         List<ProjectModel> projects = projectRepository.findAllById(ids);
@@ -171,21 +138,12 @@ public class ProjectService {
         projectRepository.saveAll(projects);
     }
 
-    @Transactional
-    public void delete(UUID id, UUID userId) {
-        ProjectModel project = findById(id, userId);
-
-        var sessions = sessionRepository.findByProjectAndUserId(
-            project,
-            userId
-        );
-
-        sessions.forEach(session -> {
-            session.setProject(null);
-            session.setTag(null);
-        });
-
-        project.setDeletedAt(java.time.OffsetDateTime.now());
-        projectRepository.save(project);
+    private ProjectModel createFromBulkDTO(ProjectPayloadDTO dto, UUID userId) {
+        ProjectModel project = new ProjectModel();
+        project.setId(dto.getId());
+        project.setName(dto.getName());
+        project.setColor(dto.getColor());
+        project.setUserId(userId);
+        return project;
     }
 }
