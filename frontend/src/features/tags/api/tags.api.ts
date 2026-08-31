@@ -2,6 +2,12 @@ import api from "../../../configs/api.configs";
 import type { TagDTO } from "../dtos/tags-response";
 import type { TagPayloadDTO, TagUpdateBulkDTO } from "../dtos/tags-request";
 
+export const pullTags = async (lastSync?: string | null): Promise<TagDTO[]> => {
+  const params = lastSync ? { lastSync } : {};
+  const res = await api.get<TagDTO[]>("/tags/pull", { params });
+  return res.data;
+};
+
 export const createTags = async (data: TagPayloadDTO[]): Promise<TagDTO[]> => {
   const res = await api.post<TagDTO[]>("/tags/bulk", data, {});
   return res.data;
@@ -16,12 +22,4 @@ export const updateTags = async (
 
 export const deleteTags = async (ids: string[]): Promise<void> => {
   await api.delete("/tags/bulk", { data: ids });
-};
-
-export const pullTags = async (
-  lastSync?: string | null,
-): Promise<TagDTO[]> => {
-  const params = lastSync ? { lastSync } : {};
-  const res = await api.get<TagDTO[]>("/tags/pull", { params });
-  return res.data;
 };

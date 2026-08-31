@@ -5,8 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.company.flowmodoro.features.projects.ProjectModel;
-import com.company.flowmodoro.features.projects.ProjectRepository;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,9 +23,6 @@ class SecurityIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ProjectRepository projectRepository;
 
     @MockBean
     private JwtDecoder jwtDecoder;
@@ -57,7 +52,7 @@ class SecurityIntegrationTest {
     void tagsEndpointShouldReturn401WhenNoToken() throws Exception {
         mockMvc
             .perform(
-                get("/api/tags").param(
+                get("/api/tags/pull").param(
                     "projectId",
                     UUID.randomUUID().toString()
                 )
@@ -81,6 +76,20 @@ class SecurityIntegrationTest {
     }
 
     @Test
+    @DisplayName("Pull tags endpoint should succeed with valid JWT")
+    void pullTagsEndpointShouldSucceedWithValidJwt() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        mockMvc
+            .perform(
+                get("/api/tags/pull").with(
+                    jwt().jwt(jwt -> jwt.subject(userId.toString()))
+                )
+            )
+            .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("Pull sessions endpoint should succeed with valid JWT")
     void pullSessionsEndpointShouldSucceedWithValidJwt() throws Exception {
         UUID userId = UUID.randomUUID();
@@ -90,31 +99,6 @@ class SecurityIntegrationTest {
                 get("/api/sessions/pull").with(
                     jwt().jwt(jwt -> jwt.subject(userId.toString()))
                 )
-            )
-            .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName(
-        "Tags endpoint should succeed with valid JWT for existing project"
-    )
-    void tagsEndpointShouldSucceedWithValidJwt() throws Exception {
-        UUID userId = UUID.randomUUID();
-        UUID projectId = UUID.randomUUID();
-
-        projectRepository.save(
-            ProjectModel.builder()
-                .id(projectId)
-                .name("Test Project")
-                .userId(userId)
-                .build()
-        );
-
-        mockMvc
-            .perform(
-                get("/api/tags")
-                    .param("projectId", projectId.toString())
-                    .with(jwt().jwt(jwt -> jwt.subject(userId.toString())))
             )
             .andExpect(status().isOk());
     }

@@ -5,9 +5,7 @@ import com.company.flowmodoro.features.projects.ProjectService;
 import com.company.flowmodoro.features.projects.helpers.ProjectValidator;
 import com.company.flowmodoro.features.sessions.SessionModel;
 import com.company.flowmodoro.features.sessions.SessionRepository;
-import com.company.flowmodoro.features.tags.dtos.TagDTO;
 import com.company.flowmodoro.features.tags.dtos.TagUpdateBulkDTO;
-import com.company.flowmodoro.features.tags.dtos.TagUpdateDTO;
 import com.company.flowmodoro.features.tags.helpers.TagValidator;
 import com.company.flowmodoro.features.tags.mappers.TagUpdateMapper;
 import java.util.List;
@@ -49,6 +47,17 @@ public class TagService {
         this.projectValidator = projectValidator;
     }
 
+    @Transactional(readOnly = true)
+    public List<TagModel> pull(UUID userId, java.time.OffsetDateTime lastSync) {
+        if (lastSync != null) {
+            return tagRepository.findByUserIdAndUpdatedAtGreaterThanEqual(
+                userId,
+                lastSync
+            );
+        }
+        return tagRepository.findByUserId(userId);
+    }
+
     @Transactional
     public List<TagModel> saveAll(List<TagModel> tags, UUID userId) {
         List<TagModel> entities = tags
@@ -71,27 +80,6 @@ public class TagService {
             })
             .toList();
         return tagRepository.saveAll(entities);
-    }
-
-    @Transactional
-    public TagModel save(TagModel tag, UUID userId) {
-        projectValidator.validateProjectExists(tag.getProject());
-
-        validator.validateUniqueName(tag.getName(), tag.getProject().getId());
-
-        ProjectModel project = projectService.findById(
-            tag.getProject().getId(),
-            userId
-        );
-
-        tag.setProject(project);
-
-        return tagRepository.save(tag);
-    }
-
-    public List<TagDTO> findAllByProject(UUID projectId, UUID userId) {
-        projectService.findById(projectId, userId);
-        return tagRepository.findAllWithTotalFocus(projectId, userId);
     }
 
     @Transactional
@@ -131,44 +119,6 @@ public class TagService {
         return tagRepository.saveAll(entities);
     }
 
-    private TagModel createFromBulkDTO(TagUpdateBulkDTO dto, UUID userId) {
-        validator.validateProjectIdIsNotNull(dto.getProjectId());
-
-        TagModel tag = new TagModel();
-        tag.setId(dto.getId());
-        tag.setName(dto.getName());
-        tag.setProject(projectService.findById(dto.getProjectId(), userId));
-        return tag;
-    }
-
-    @Transactional
-    public TagModel update(UUID id, TagUpdateDTO dto, UUID userId) {
-        TagModel tag = tagRepository.findById(id).orElse(null);
-
-        validator.validateTagExists(tag);
-
-        validator.validateUniqueName(
-            tag,
-            dto.getName(),
-            tag.getProject().getId()
-        );
-
-        projectService.findById(tag.getProject().getId(), userId);
-        updateMapper.apply(tag, dto);
-        return tagRepository.save(tag);
-    }
-
-    @Transactional(readOnly = true)
-    public List<TagModel> pull(UUID userId, java.time.OffsetDateTime lastSync) {
-        if (lastSync != null) {
-            return tagRepository.findByUserIdAndUpdatedAtGreaterThanEqual(
-                userId,
-                lastSync
-            );
-        }
-        return tagRepository.findByUserId(userId);
-    }
-
     @Transactional
     public void deleteAll(List<UUID> ids, UUID userId) {
         List<TagModel> tags = tagRepository.findAllById(ids);
@@ -191,22 +141,13 @@ public class TagService {
         tagRepository.saveAll(tags);
     }
 
-    @Transactional
-    public void delete(UUID id, UUID userId) {
-        TagModel tag = tagRepository.findById(id).orElse(null);
+    private TagModel createFromBulkDTO(TagUpdateBulkDTO dto, UUID userId) {
+        validator.validateProjectIdIsNotNull(dto.getProjectId());
 
-        validator.validateTagExists(tag);
-
-        validator.validateTagBelongsToUser(tag, userId);
-
-        List<SessionModel> sessions = sessionRepository.findByTagAndUserId(
-            tag,
-            userId
-        );
-
-        sessions.forEach(session -> session.setTag(null));
-
-        tag.setDeletedAt(java.time.OffsetDateTime.now());
-        tagRepository.save(tag);
+        TagModel tag = new TagModel();
+        tag.setId(dto.getId());
+        tag.setName(dto.getName());
+        tag.setProject(projectService.findById(dto.getProjectId(), userId));
+        return tag;
     }
 }
