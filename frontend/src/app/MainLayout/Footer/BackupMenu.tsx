@@ -7,7 +7,7 @@ import { useClickOutside } from "../../../shared/hooks/useClickOutside";
 import {
   useExportBackup,
   useImportBackup,
-} from "../../../local/backup/useBackup";
+} from "../../../features/backup/useBackup";
 
 import Button from "../../../shared/components/buttons/Button/Button";
 import ExpandableButton from "../../../shared/components/buttons/ExpandableButton";
@@ -61,18 +61,45 @@ function BackupMenu() {
     e.target.value = "";
   };
 
-  const errorMessage =
-    uploadError?.message || downloadError?.message || pullError?.message;
+  if (!isAuthenticated) {
+    return <div />;
+  }
 
-  if (errorMessage) {
+  if (uploadError) {
+    if (uploadError.name === "ImportPullError") {
+      showError({
+        title: "Sincronização pendente",
+        message:
+          "Os dados foram salvos no servidor com sucesso, mas a atualização local falhou. Deseja tentar sincronizar agora?",
+        confirmLabel: "Sincronizar",
+        cancelLabel: "Fechar",
+        action: () => pullData(),
+      });
+    } else {
+      showError({
+        title: "Erro ao importar backup",
+        message: uploadError.message,
+        action: () => {},
+      });
+    }
+    resetUpload();
+  }
+
+  if (downloadError) {
     showError({
-      title: "Erro no backup / sincronização",
-      message: errorMessage,
+      title: "Erro ao exportar backup",
+      message: downloadError.message,
       action: () => {},
     });
-
-    resetUpload();
     resetDownload();
+  }
+
+  if (pullError) {
+    showError({
+      title: "Erro na sincronização",
+      message: pullError.message,
+      action: () => {},
+    });
     resetPull();
   }
 
@@ -128,24 +155,22 @@ function BackupMenu() {
               </Button>
             </motion.div>
 
-            {isAuthenticated && (
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
+            <motion.div
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <Button
+                icon={<IoSyncOutline />}
+                variant="secondary"
+                className="rounded-full"
+                loading={isPulling}
+                disabled={uploadIsPending || downloadIsPending}
+                onClick={() => pullData()}
               >
-                <Button
-                  icon={<IoSyncOutline />}
-                  variant="secondary"
-                  className="rounded-full"
-                  loading={isPulling}
-                  disabled={uploadIsPending || downloadIsPending}
-                  onClick={() => pullData()}
-                >
-                  Sincronizar
-                </Button>
-              </motion.div>
-            )}
+                Sincronizar
+              </Button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

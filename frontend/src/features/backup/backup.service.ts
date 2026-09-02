@@ -1,18 +1,22 @@
-import { db } from "../indexedDB";
-
-import sessionMapper from "../../features/sessions/sessions.mappers";
-import projectMapper from "../../features/projects/projects.mappers";
-import tagMapper from "../../features/tags/tags.mappers";
-
+import { db } from "../../local/indexedDB";
 import type { BackupData } from "./backup.schema";
-
-import syncQueue from "../sync/sync-queue.service";
 import { backupSchema } from "./backup.schema";
-
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { Share } from "@capacitor/share";
-
 import { localStorageKeys } from "../../shared/utils/storage.utils";
+import { importBackupApi } from "./api/backup.api";
+import { executePull } from "../../local/sync/pull-manager";
+
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+
+export class ImportPullError extends Error {
+  constructor(
+    message = "Os dados foram salvos no servidor com sucesso, mas a atualização local falhou.",
+  ) {
+    super(message);
+    this.name = "ImportPullError";
+  }
+}
 
 class BackupService {
   private readonly VERSION = 1;
@@ -114,60 +118,30 @@ class BackupService {
   }
 
   async importData(file: File): Promise<void> {
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      throw new Error(
+        "Arquivo muito grande. O tamanho máximo permitido é de 5MB.",
+      );
+    }
+
     const raw = await file.text();
     const data = this.parseAndValidate(raw);
 
-    const projectModels = projectMapper.fromPayloadList(data.projects);
-    const tagModels = tagMapper.fromPayloadList(data.tags);
-    const sessionModels = sessionMapper.fromPayloadList(data.sessions);
+    // 1. Envia o payload completo para a API no backend
+    await importBackupApi(data);
 
+    // 2. Reseta o lastSync para forçar pull completo
+    localStorage.removeItem(localStorageKeys.lastSync);
+
+    // 3. Executa o pull para sincronizar o IndexedDB local
     try {
-      await db.transaction(
-        "rw",
-        db.projects,
-        db.tags,
-        db.sessions,
-        async () => {
-          await db.projects.bulkPut(projectModels);
-          await db.tags.bulkPut(tagModels);
-          await db.sessions.bulkPut(sessionModels);
-        },
+      await executePull();
+    } catch (pullErr) {
+      console.error(
+        "Importação salva no servidor, mas falha no pull local:",
+        pullErr,
       );
-
-      await Promise.all(
-        data.projects.map((project) =>
-          syncQueue.addToQueue({
-            entityType: "project",
-            action: "UPDATE",
-            payload: project,
-          }),
-        ),
-      );
-
-      await Promise.all(
-        data.tags.map((tag) =>
-          syncQueue.addToQueue({
-            entityType: "tag",
-            action: "UPDATE",
-            payload: tag,
-          }),
-        ),
-      );
-
-      await Promise.all(
-        data.sessions.map((session) =>
-          syncQueue.addToQueue({
-            entityType: "session",
-            action: "UPDATE",
-            payload: session,
-          }),
-        ),
-      );
-    } catch (err) {
-      console.error(err);
-      throw new Error(
-        "Não foi possível restaurar o backup. O arquivo pode estar corrompido.",
-      );
+      throw new ImportPullError();
     }
   }
 

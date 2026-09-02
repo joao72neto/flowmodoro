@@ -3,6 +3,7 @@ package com.company.flowmodoro.features.tags;
 import com.company.flowmodoro.features.tags.dtos.TagDTO;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -47,4 +48,12 @@ public interface TagRepository extends JpaRepository<TagModel, UUID> {
 
     @Query("SELECT t FROM TagModel t WHERE t.project.userId = :userId")
     List<TagModel> findByUserId(@Param("userId") UUID userId);
+
+    @Query(
+        "SELECT t FROM TagModel t WHERE t.id = :id AND t.project.userId = :userId"
+    )
+    Optional<TagModel> findByIdAndUserId(
+        @Param("id") UUID id,
+        @Param("userId") UUID userId
+    );
 }

@@ -2,8 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import backupService from "./backup.service";
 import { APP_DATA_QUERY_KEY } from "../../consts/global-query-key";
-
-import { triggerSync } from "../sync/sync-manager";
 import { isNative } from "../../consts/platform";
 
 export const useExportBackup = () => {
@@ -28,7 +26,6 @@ export const useImportBackup = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
-      triggerSync();
     },
   });
 };
