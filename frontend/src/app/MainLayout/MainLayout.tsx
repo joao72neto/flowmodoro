@@ -8,14 +8,11 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { lockScroll, unlockScroll } from "../../shared/utils/scroll-lock.utils";
 
-import LoadingScreen from "./LoadingScreen";
-
 import Stack from "../../shared/components/Stack";
 import Footer from "./Footer/Footer";
 import SyncStatus from "./SyncStatus";
 
 import { Link } from "react-router-dom";
-import { useAppReady } from "../../shared/hooks/useAppReady";
 import { IoLogInOutline } from "react-icons/io5";
 import { useAuth } from "../../shared/contexts/auth/auth.context";
 import UserAvatarMenu from "../../shared/components/UserAvatarMenu";
@@ -24,8 +21,6 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useNotificationPermission();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { isAuthenticated } = useAuth();
-
-  const isReady = useAppReady();
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -37,10 +32,6 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       }
     };
   }, [isSidebarOpen]);
-
-  if (!isReady) {
-    return <LoadingScreen />;
-  }
 
   return (
     <div className="min-h-screen flex flex-col gap-5">

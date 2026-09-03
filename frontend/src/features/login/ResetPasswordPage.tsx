@@ -10,10 +10,8 @@ const ResetPasswordPage = () => {
   const code = searchParams.get("code");
 
   useEffect(() => {
-    if (!code) {
-      navigate("/login?alert=missing_code", { replace: true });
-    }
-  }, [code, navigate]);
+    navigate("/login?alert=not_available", { replace: true });
+  }, []);
 
   if (!code) return null;
 

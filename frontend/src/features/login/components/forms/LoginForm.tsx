@@ -14,7 +14,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../useAuthOperations";
 
 const LoginForm = ({
-  onForgorPassword,
   onRegister,
 }: {
   onForgorPassword?: () => void;
@@ -78,6 +77,12 @@ const LoginForm = ({
         </div>
       )}
 
+      {alertParam === "not_available" && (
+        <div className="p-3 text-sm text-danger bg-danger/10 border border-danger/30 rounded-md text-left font-medium animate-in fade-in slide-in-from-top-1">
+          A página de alteração de senha ainda não está disponível.
+        </div>
+      )}
+
       <InputGroupWrapper>
         <InputGroup
           register={register("email")}
@@ -95,15 +100,6 @@ const LoginForm = ({
         />
 
         <div className="flex items-center gap-2 text-sm text-neutral-20">
-          <span
-            className={clsx(
-              "border-r border-border pr-2 hover:cursor-pointer",
-              "hover:text-neutral-10 hover:underline",
-            )}
-            onClick={onForgorPassword}
-          >
-            Esqueceu a senha?
-          </span>
           <span
             className={clsx(
               "pr-2 hover:cursor-pointer",

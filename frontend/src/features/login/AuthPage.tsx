@@ -16,10 +16,7 @@ const Login = () => {
       <AuthContainer>
         <AnimatePresence mode="wait">
           {tab === "login" && (
-            <LoginForm
-              onForgorPassword={() => setTab("forgot-password")}
-              onRegister={() => setTab("register")}
-            />
+            <LoginForm onRegister={() => setTab("register")} />
           )}
           {tab === "register" && (
             <RegisterForm onReturn={() => setTab("login")} />

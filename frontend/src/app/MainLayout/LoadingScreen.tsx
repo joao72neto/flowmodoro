@@ -63,7 +63,7 @@ const LoadingScreen = () => {
         <span className="text-lg font-medium tracking-wide text-neutral-10">
           Iniciando...
         </span>
-        <p className="text-sm text-neutral-20">Preparando o sistema</p>
+        <p className="text-sm text-neutral-20">Preparando aplicação</p>
       </motion.div>
     </div>
   );
