@@ -8,6 +8,7 @@ import type { User } from "./auth.types";
 import { db } from "../../../local/indexedDB";
 import { useModal } from "../modal/modal.context";
 import { useQueryClient } from "@tanstack/react-query";
+import { PULL_COMPLETED_EVENT } from "../../../local/sync/sync-manager";
 
 export const AUTH_CHANGE_EVENT = "auth:change";
 
@@ -26,6 +27,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const handlePullCompleted = () => {
+      queryClient.invalidateQueries();
+    };
+
+    window.addEventListener(PULL_COMPLETED_EVENT, handlePullCompleted);
+
+    return () => {
+      window.removeEventListener(PULL_COMPLETED_EVENT, handlePullCompleted);
+    };
+  }, [queryClient]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

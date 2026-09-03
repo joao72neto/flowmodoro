@@ -8,6 +8,13 @@ import projectMapper from "../../features/projects/projects.mappers";
 import tagMapper from "../../features/tags/tags.mappers";
 
 export const executePull = async (): Promise<void> => {
+  const totalSessions = await db.sessions.count();
+  const totalProjects = await db.projects.count();
+  const totalTags = await db.tags.count();
+
+  if (totalProjects === 0 || totalTags === 0 || totalSessions === 0)
+    localStorage.removeItem(localStorageKeys.lastSync);
+
   const lastSync = localStorage.getItem(localStorageKeys.lastSync);
   const syncStartTime = new Date().toISOString();
 

@@ -4,9 +4,10 @@ import syncQueue from "./sync-queue.service";
 import { executePull } from "./pull-manager";
 import { isNative } from "../../consts/platform";
 import { localStorageKeys } from "../../shared/utils/storage.utils";
+import { AUTH_CHANGE_EVENT } from "../../shared/contexts/auth/auth.provider";
 
 const SYNC_EVENT = "sync-queue:trigger";
-const AUTH_CHANGE_EVENT = "auth:change";
+export const PULL_COMPLETED_EVENT = "sync:completed";
 
 const isUserAuthenticated = (): boolean => {
   try {
@@ -50,6 +51,7 @@ export const initSync = () => {
     if (isUserAuthenticated()) {
       try {
         await executePull();
+        window.dispatchEvent(new Event(PULL_COMPLETED_EVENT));
       } catch (err) {
         console.error("Falha no pull, prosseguindo com offline push", err);
       }
