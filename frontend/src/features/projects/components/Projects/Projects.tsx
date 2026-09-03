@@ -151,7 +151,7 @@ const Projects = () => {
         title="Atualizar Projeto"
         edit={handleEditProject}
         loading={isUpdating}
-        defaultValues={editingProject || undefined}
+        defaultValues={editingProject ?? undefined}
         inputLabel="Novo nome"
         confirmButtonIcon={<RxUpdate />}
         confirmButtonText="Atualizar"
