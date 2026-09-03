@@ -86,6 +86,9 @@ const SessionSelector = <T extends ProjectDTO | TagDTO>({
           "flex items-center gap-2 border p-2 rounded-lg transition-all duration-200",
           "bg-neutral-80 border-border text-neutral-20 hover:bg-neutral-80/20",
           disabled ? "opacity-80 pointer-events-none" : "hover:cursor-pointer",
+          value &&
+            variant === "secondary" &&
+            "bg-secondary/15! border-secondary/40! text-neutral-20!",
         )}
         style={
           value && valueColor
@@ -146,9 +149,12 @@ const SessionSelector = <T extends ProjectDTO | TagDTO>({
                       "group flex items-center justify-between hover:cursor-pointer p-2 rounded-lg border",
                       "bg-transparent border-transparent duration-200 hover:border-border",
                       "text-neutral-40 hover:bg-neutral-60/20 hover:text-neutral-20",
+                      active && variant === "secondary"
+                        ? "bg-secondary/15! border-secondary/40! text-neutral-20"
+                        : undefined,
                     )}
                     style={
-                      active && itemColor
+                      active && itemColor && variant === "primary"
                         ? {
                             backgroundColor: `${itemColor}1a`,
                             borderColor: `${itemColor}30`,
@@ -164,19 +170,20 @@ const SessionSelector = <T extends ProjectDTO | TagDTO>({
                     <div
                       className={clsx(
                         "w-4 h-4 border rounded-full flex items-center justify-center transition-all duration-200",
-                        "border-border group-hover:border-neutral-40",
+                        "border-border group-hover:border-secondary",
+                        active && variant === "secondary" && "border-secondary",
                       )}
                       style={
-                        active && itemColor
+                        active && itemColor && variant === "primary"
                           ? { borderColor: itemColor }
                           : undefined
                       }
                     >
                       {active && (
                         <div
-                          className={"w-2 h-2 rounded-full"}
+                          className={"w-2 h-2 rounded-full bg-secondary"}
                           style={
-                            itemColor
+                            itemColor && variant === "primary"
                               ? { backgroundColor: itemColor }
                               : undefined
                           }

@@ -11,9 +11,13 @@ import Label from "../../../../shared/components/labels/Label";
 
 import { GoProject, GoChevronDown } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
-import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
+import {
+  localStorageKeys,
+  sessionStorageKeys,
+} from "../../../../shared/utils/storage.utils";
 import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
 
 import { FaPlay } from "react-icons/fa6";
@@ -35,6 +39,7 @@ const SessionGroup = memo(
     );
 
     const { theme } = useTheme();
+    const { showDefault, hideModal } = useModal();
 
     const { setSessionName, setSelectedProjectId, setSelectedTagId } =
       useSessionContext();
@@ -90,27 +95,51 @@ const SessionGroup = memo(
       [sessionGroup.sessions],
     );
 
+    const confirmFocusStart = useCallback(() => {
+      setSelectedProjectId(sessionGroup.sessions[0].project.id);
+      setSelectedTagId(sessionGroup.sessions[0].tag.id);
+      setSessionName(sessionGroup.sessions[0].name);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      setTimeout(() => {
+        handleStartFocus();
+      }, 0);
+    }, [
+      sessionGroup.sessions,
+      handleStartFocus,
+      setSelectedProjectId,
+      setSelectedTagId,
+      setSessionName,
+    ]);
+
     const startFocus = useCallback(
       (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
 
-        setSelectedProjectId(sessionGroup.sessions[0].project.id);
-        setSelectedTagId(sessionGroup.sessions[0].tag.id);
-        setSessionName(sessionGroup.sessions[0].name);
+        const saved = localStorage.getItem(localStorageKeys.timer);
+        const { mode } = JSON.parse(saved ?? "{}");
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (mode === "focus" || mode === "break ") {
+          showDefault({
+            title: "Deseja iniciar o foco?",
+            message:
+              "Já existe uma sessão em andamento. Caso prossiga, a sessão atual será interrompida.",
+            confirmLabel: "Sim",
+            cancelLabel: "Não",
+            action: () => {
+              confirmFocusStart();
+              hideModal();
+            },
+            cancel: () => {
+              return;
+            },
+          });
+        }
 
-        setTimeout(() => {
-          handleStartFocus();
-        }, 0);
+        confirmFocusStart();
       },
-      [
-        sessionGroup.sessions,
-        handleStartFocus,
-        setSelectedProjectId,
-        setSelectedTagId,
-        setSessionName,
-      ],
+      [showDefault, confirmFocusStart, hideModal],
     );
 
     return (
