@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
@@ -17,6 +17,7 @@ import { CiImport, CiExport } from "react-icons/ci";
 import { IoSyncOutline } from "react-icons/io5";
 import { executePull } from "../../../local/sync/pull-manager";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PULL_COMPLETED_EVENT } from "../../../local/sync/sync-manager";
 
 function BackupMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +54,8 @@ function BackupMenu() {
     },
   });
 
+  const [isPullingAfterLogin, setIsPullingAfterLogin] = useState(true);
+
   useClickOutside(containerRef, () => setIsOpen(false));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +63,25 @@ function BackupMenu() {
     if (file) upload(file);
     e.target.value = "";
   };
+
+  useEffect(() => {
+    if (isPulling) {
+      setIsOpen(false);
+      return;
+    }
+
+    if (isAuthenticated) {
+      window.addEventListener(PULL_COMPLETED_EVENT, () =>
+        setIsPullingAfterLogin(false),
+      );
+
+      return () => {
+        window.removeEventListener(PULL_COMPLETED_EVENT, () =>
+          setIsPullingAfterLogin(false),
+        );
+      };
+    }
+  }, [isPulling, isAuthenticated]);
 
   if (!isAuthenticated) {
     return <div />;
@@ -131,7 +153,7 @@ function BackupMenu() {
                 variant="secondary"
                 className="rounded-full"
                 loading={uploadIsPending}
-                disabled={downloadIsPending || isPulling}
+                disabled={downloadIsPending || isPulling || isPullingAfterLogin}
                 onClick={() => fileInputRef.current?.click()}
               >
                 Importar
@@ -148,7 +170,7 @@ function BackupMenu() {
                 variant="secondary"
                 className="rounded-full"
                 loading={downloadIsPending}
-                disabled={uploadIsPending || isPulling}
+                disabled={uploadIsPending || isPulling || isPullingAfterLogin}
                 onClick={() => download()}
               >
                 Exportar
@@ -164,7 +186,7 @@ function BackupMenu() {
                 icon={<IoSyncOutline />}
                 variant="secondary"
                 className="rounded-full"
-                loading={isPulling}
+                loading={isPulling || isPullingAfterLogin}
                 disabled={uploadIsPending || downloadIsPending}
                 onClick={() => pullData()}
               >
@@ -184,7 +206,11 @@ function BackupMenu() {
             transition={{ duration: 0.2 }}
             className="flex"
           >
-            <LuDatabaseBackup size={25} />
+            {isPulling || isPullingAfterLogin ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+            ) : (
+              <LuDatabaseBackup size={25} />
+            )}
           </motion.span>
         }
         className={clsx("rounded-full! ml-1!", { "bg-neutral-60!": isOpen })}
