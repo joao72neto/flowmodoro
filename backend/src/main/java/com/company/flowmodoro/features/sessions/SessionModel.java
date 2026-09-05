@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -45,7 +44,7 @@ public class SessionModel {
     private UUID userId;
 
     @Column(name = "ses_date", updatable = false)
-    private LocalDate date;
+    private OffsetDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "ses_pro_id", nullable = true)

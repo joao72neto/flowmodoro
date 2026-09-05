@@ -4,7 +4,6 @@ import com.company.flowmodoro.features.projects.dtos.ProjectDTO;
 import com.company.flowmodoro.features.tags.dtos.TagCreateDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ public class SessionDTO {
 
     private Long rest;
 
-    private LocalDate date;
+    private OffsetDateTime date;
 
     private OffsetDateTime updatedAt;
 

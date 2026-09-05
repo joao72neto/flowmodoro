@@ -2,7 +2,7 @@ package com.company.flowmodoro.features.sessions.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,5 +31,5 @@ public class SessionCreateDTO {
 
     private UUID tagId;
 
-    private LocalDate date;
+    private OffsetDateTime date;
 }
