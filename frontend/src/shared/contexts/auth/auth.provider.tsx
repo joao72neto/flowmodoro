@@ -9,13 +9,14 @@ import { db } from "../../../local/indexedDB";
 import { useModal } from "../modal/modal.context";
 import { useQueryClient } from "@tanstack/react-query";
 import { PULL_COMPLETED_EVENT } from "../../../local/sync/sync-manager";
+import { AUTH_EXPIRED_EVENT } from "../../../configs/api.configs";
 
 export const AUTH_CHANGE_EVENT = "auth:change";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { showWarning, hideModal } = useModal();
+  const { showWarning, hideModal, showInfo } = useModal();
   const queryClient = useQueryClient();
 
   const [user, setUser] = useState<User | null>(() => {
@@ -39,6 +40,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       window.removeEventListener(PULL_COMPLETED_EVENT, handlePullCompleted);
     };
   }, [queryClient]);
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      performLogout();
+      showInfo({
+        title: "Sessão expirada",
+        message: "Faça login novamente",
+        cancelLabel: "Ok",
+        action: hideModal,
+      });
+    };
+    window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    return () => {
+      window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    };
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
