@@ -135,6 +135,7 @@ const SessionGroup = memo(
               return;
             },
           });
+          return;
         }
 
         confirmFocusStart();
