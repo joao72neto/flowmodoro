@@ -12,6 +12,7 @@ import type { TagDTO } from "../dtos/tags-response";
 import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
 
 import { v4 as uuidv4 } from "uuid";
+import { useEffect } from "react";
 
 const TagModal = ({
   isOpen,
@@ -65,9 +66,15 @@ const TagModal = ({
     mode: "onChange",
     resolver: yupResolver(CreateTagSchema),
     defaultValues: {
-      name: defaultValues?.name || "",
+      name: defaultValues?.name ?? "",
     },
   });
+
+  useEffect(() => {
+    reset({
+      name: defaultValues?.name ?? "",
+    });
+  }, [defaultValues?.name, reset]);
 
   const closeAndReset = () => {
     reset();
