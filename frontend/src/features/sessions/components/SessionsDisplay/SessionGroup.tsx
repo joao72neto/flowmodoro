@@ -96,9 +96,20 @@ const SessionGroup = memo(
     );
 
     const confirmFocusStart = useCallback(() => {
-      setSelectedProjectId(sessionGroup.sessions[0].project.id);
-      setSelectedTagId(sessionGroup.sessions[0].tag.id);
-      setSessionName(sessionGroup.sessions[0].name);
+      const { project, tag, name } = sessionGroup.sessions[0];
+
+      setSelectedProjectId(project.id);
+      setSelectedTagId(tag.id);
+      setSessionName(name);
+
+      localStorage.setItem(
+        localStorageKeys.session,
+        JSON.stringify({
+          sessionName: name,
+          selectedProjectId: project.id,
+          selectedTagId: tag.id,
+        }),
+      );
 
       window.scrollTo({ top: 0, behavior: "smooth" });
 

@@ -9,6 +9,7 @@ import { App } from "@capacitor/app";
 import type { PluginListenerHandle } from "@capacitor/core";
 import { getRatio, getTotalFocus } from "../timer.store";
 import { useTimerContext } from "../context/timer.context";
+import { localStorageKeys } from "../../../shared/utils/storage.utils";
 
 const useTimerActions = () => {
   const { startFocus, startBreak, skipBreak, stopFocus } = useTimerContext();
@@ -54,8 +55,11 @@ const useTimerActions = () => {
     const anchorMillis = Date.now();
     startFocus();
 
+    const saved = localStorage.getItem(localStorageKeys.session);
+    const { sessionName } = saved ? JSON.parse(saved) : "Flowmodoro";
+
     if (isNative) {
-      await FlowmodoroPlugin.startFocus({ anchorMillis });
+      await FlowmodoroPlugin.startFocus({ anchorMillis, sessionName });
     }
   };
 
@@ -79,12 +83,16 @@ const useTimerActions = () => {
     const anchorMillis = Date.now();
     startBreak();
 
+    const saved = localStorage.getItem(localStorageKeys.session);
+    const { sessionName } = saved ? JSON.parse(saved) : "Flowmodoro";
+
     if (isNative) {
       const normalizedRestRatio = getRatio() / 100;
       await FlowmodoroPlugin.startBreak({
         anchorMillis,
         totalFocusMillis: getTotalFocus(),
         restRatio: normalizedRestRatio,
+        sessionName,
       });
     }
   };
