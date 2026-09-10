@@ -18,6 +18,7 @@ import { IoSyncOutline } from "react-icons/io5";
 import { executePull } from "../../../local/sync/pull-manager";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PULL_COMPLETED_EVENT } from "../../../local/sync/sync-manager";
+import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
 
 function BackupMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +55,11 @@ function BackupMenu() {
     },
   });
 
-  const [isPullingAfterLogin, setIsPullingAfterLogin] = useState(true);
+  const [isPullingAfterLogin, setIsPullingAfterLogin] = useState(() => {
+    return sessionStorage.getItem(sessionStorageKeys.isPulling) === "true"
+      ? true
+      : false;
+  });
 
   useClickOutside(containerRef, () => setIsOpen(false));
 
