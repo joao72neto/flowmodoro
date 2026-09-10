@@ -11,7 +11,29 @@ const AuthContainer = ({ children }: { children: React.ReactNode }) => {
       )}
     >
       <div className={"flex items-center gap-2 text-neutral-10"}>
-        <img src="/flowmodoro-icon.svg" alt="App logo" className="w-10" />
+        <svg
+          width={44}
+          height={44}
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="relative text-neutral-10 drop-shadow-sm"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M12 6V12L16.5 16.5"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
         <p className="text-2xl">Flowmodoro</p>
       </div>
 

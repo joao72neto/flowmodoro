@@ -43,15 +43,31 @@ const LoadingScreen = () => {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        <motion.img
-          src="/flowmodoro-icon.svg"
-          alt="Flowmodoro Logo"
+        <motion.svg
           width={44}
           height={44}
-          className="relative drop-shadow-sm"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="relative text-neutral-10 drop-shadow-sm"
           animate={{ scale: [1, 1.06, 1] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M12 6V12L16.5 16.5"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </motion.svg>
       </div>
 
       <motion.div
