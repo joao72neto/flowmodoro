@@ -11,17 +11,19 @@ import Label from "../../../../shared/components/labels/Label";
 
 import { GoProject, GoChevronDown } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
-import { sessionStorageKeys } from "../../../../shared/utils/storage.utils";
+import {
+  localStorageKeys,
+  sessionStorageKeys,
+} from "../../../../shared/utils/storage.utils";
 import type { SessionDTO, SessionGroupDTO } from "../../dtos/sessions-response";
 
+import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
-import { isNative } from "../../../../consts/platform";
 
-const BORDER_COLORS: Record<number, string> = {
-  10: "border-l-danger",
-  20: "border-l-primary",
-  30: "border-l-success",
-};
+import { FaPlay } from "react-icons/fa6";
+import { useSessionContext } from "../../context/sessions.context";
+import useTimerActions from "../../../timer/hooks/useTimerActions";
+import { getStableProjectColor } from "../../../projects/consts/project-colors";
 
 const TOTAL_FOCUS_CLASSES = clsx(
   "flex items-center shrink-0 whitespace-nowrap text-sm sm:text-base bg-neutral-80/50",
@@ -37,6 +39,12 @@ const SessionGroup = memo(
     );
 
     const { theme } = useTheme();
+    const { showDefault, hideModal } = useModal();
+
+    const { setSessionName, setSelectedProjectId, setSelectedTagId } =
+      useSessionContext();
+
+    const { handleStartFocus } = useTimerActions();
 
     useEffect(() => {
       setSelectedSession(sessionGroup.sessions[0]);
@@ -70,13 +78,11 @@ const SessionGroup = memo(
     const hasTagOrProject = tag.id !== "" || project.id !== "";
     const showTagAndProject = hasTagOrProject;
 
-    const firstRatio = Math.round((sessionGroup.sessions[0]?.ratio || 0) * 100);
+    const hasProject = Boolean(project && project.id !== "");
 
-    const isUniform = sessionGroup.sessions.every(
-      (session) => Math.round(session.ratio * 100) === firstRatio,
-    );
-
-    const borderColorClass = isUniform ? BORDER_COLORS[firstRatio] : undefined;
+    const projectColor = hasProject
+      ? getStableProjectColor(project.id, project.color)
+      : undefined;
 
     const handleDetails = useCallback(
       (sessionId: string) => {
@@ -87,6 +93,65 @@ const SessionGroup = memo(
         }
       },
       [sessionGroup.sessions],
+    );
+
+    const confirmFocusStart = useCallback(() => {
+      const { project, tag, name } = sessionGroup.sessions[0];
+
+      setSelectedProjectId(project.id);
+      setSelectedTagId(tag.id);
+      setSessionName(name);
+
+      localStorage.setItem(
+        localStorageKeys.session,
+        JSON.stringify({
+          sessionName: name,
+          selectedProjectId: project.id,
+          selectedTagId: tag.id,
+        }),
+      );
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      setTimeout(() => {
+        handleStartFocus();
+      }, 0);
+    }, [
+      sessionGroup.sessions,
+      handleStartFocus,
+      setSelectedProjectId,
+      setSelectedTagId,
+      setSessionName,
+    ]);
+
+    const startFocus = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+
+        const saved = localStorage.getItem(localStorageKeys.timer);
+        const { mode } = JSON.parse(saved ?? "{}");
+
+        if (mode === "focus" || mode === "break ") {
+          showDefault({
+            title: "Deseja iniciar o foco?",
+            message:
+              "Já existe uma sessão em andamento. Caso prossiga, a sessão atual será interrompida.",
+            confirmLabel: "Sim",
+            cancelLabel: "Não",
+            action: () => {
+              confirmFocusStart();
+              hideModal();
+            },
+            cancel: () => {
+              return;
+            },
+          });
+          return;
+        }
+
+        confirmFocusStart();
+      },
+      [showDefault, confirmFocusStart, hideModal],
     );
 
     return (
@@ -101,8 +166,8 @@ const SessionGroup = memo(
                 : "bg-neutral-80/90",
               "border-l-4",
               "contain-content",
-              borderColorClass,
             )}
+            style={hasProject ? { borderLeftColor: projectColor } : undefined}
             direction="row"
             gap={3}
             onClick={
@@ -115,6 +180,16 @@ const SessionGroup = memo(
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full">
                 <div className="flex gap-3 items-center justify-between sm:justify-start w-full sm:w-auto sm:flex-1 min-w-0">
                   <div className="flex items-center gap-3 min-w-0">
+                    <button
+                      onClick={startFocus}
+                      className={clsx(
+                        "hover:scale-110 text-neutral-40  hover:text-primary",
+                        "duration-100 ease-in-out",
+                      )}
+                    >
+                      <FaPlay />
+                    </button>
+
                     {isTogglable && (
                       <span
                         className={clsx(
@@ -136,7 +211,20 @@ const SessionGroup = memo(
               {showTagAndProject && (
                 <div className="flex self-start items-center gap-2 min-w-0 sm:flex-1">
                   {project?.name && (
-                    <Label icon={<GoProject />}>{project.name}</Label>
+                    <Label
+                      icon={<GoProject />}
+                      style={
+                        projectColor
+                          ? {
+                              backgroundColor: `${projectColor}1a`,
+                              color: projectColor,
+                              borderColor: `${projectColor}40`,
+                            }
+                          : undefined
+                      }
+                    >
+                      {project.name}
+                    </Label>
                   )}
                   {tag?.name && (
                     <Label variant="secondary" icon={<IoMdPricetag />}>
@@ -162,7 +250,7 @@ const SessionGroup = memo(
             </div>
           </Stack>
 
-          <AnimatedCollapse enableHeavyAnimations={!isNative} show={isOpen}>
+          <AnimatedCollapse show={isOpen}>
             <Stack
               gap={2}
               className={clsx(

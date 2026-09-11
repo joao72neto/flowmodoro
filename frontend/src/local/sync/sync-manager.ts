@@ -1,14 +1,33 @@
 import { Network } from "@capacitor/network";
 
 import syncQueue from "./sync-queue.service";
+import { executePull } from "./pull-manager";
 import { isNative } from "../../consts/platform";
+import {
+  localStorageKeys,
+  sessionStorageKeys,
+} from "../../shared/utils/storage.utils";
+import { AUTH_CHANGE_EVENT } from "../../shared/contexts/auth/auth.provider";
 
 const SYNC_EVENT = "sync-queue:trigger";
+export const PULL_COMPLETED_EVENT = "sync:completed";
+
+const isUserAuthenticated = (): boolean => {
+  try {
+    const user = localStorage.getItem(localStorageKeys.authUser);
+    return user !== null;
+  } catch {
+    return false;
+  }
+};
 
 export const initSync = () => {
   return;
   syncQueue.init();
-  const process = () => syncQueue.processQueue();
+  const process = () => {
+    if (!isUserAuthenticated()) return;
+    syncQueue.processQueue();
+  };
 
   if (isNative) {
     Network.addListener("networkStatusChange", (status) => {
@@ -30,6 +49,21 @@ export const initSync = () => {
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") process();
+  });
+
+  window.addEventListener(AUTH_CHANGE_EVENT, async () => {
+    if (isUserAuthenticated()) {
+      try {
+        sessionStorage.setItem(sessionStorageKeys.isPulling, "true");
+        await executePull();
+        window.dispatchEvent(new Event(PULL_COMPLETED_EVENT));
+      } catch (err) {
+        console.error("Falha no pull, prosseguindo com offline push", err);
+      } finally {
+        sessionStorage.removeItem(sessionStorageKeys.isPulling);
+      }
+      process();
+    }
   });
 };
 

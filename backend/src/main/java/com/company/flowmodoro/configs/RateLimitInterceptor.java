@@ -1,5 +1,6 @@
 package com.company.flowmodoro.configs;
 
+import com.company.flowmodoro.configs.security.SecurityUtils;
 import com.company.flowmodoro.exception.ErrorResponse.ErrorResponse;
 import com.company.flowmodoro.exception.enums.CommonErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -37,13 +39,12 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         HttpServletResponse response,
         Object handler
     ) throws Exception {
-        String userId = request.getHeader("X-User-Id");
+        UUID authenticatedUserId = SecurityUtils.getCurrentUserId();
+        String identifier = authenticatedUserId != null
+            ? authenticatedUserId.toString()
+            : request.getRemoteAddr();
 
-        if (userId == null || userId.isBlank()) {
-            userId = request.getRemoteAddr();
-        }
-
-        Bucket bucket = buckets.computeIfAbsent(userId, k -> createNewBucket());
+        Bucket bucket = buckets.computeIfAbsent(identifier, k -> createNewBucket());
 
         if (bucket.tryConsume(1)) {
             return true;

@@ -5,15 +5,23 @@ export interface FlowmodoroPlugin {
   ensureExactAlarmPermission(): Promise<{ granted: boolean }>;
   ensureBatteryOptimization(): Promise<{ granted: boolean }>;
 
-  startFocus({ anchorMillis }: { anchorMillis: number }): Promise<void>;
+  startFocus({
+    anchorMillis,
+    sessionName,
+  }: {
+    anchorMillis: number;
+    sessionName: string;
+  }): Promise<void>;
   startBreak({
     anchorMillis,
     totalFocusMillis,
     restRatio,
+    sessionName,
   }: {
     anchorMillis: number;
     totalFocusMillis: number;
     restRatio: number;
+    sessionName: string;
   }): Promise<void>;
   stopTimer(): Promise<void>;
 }

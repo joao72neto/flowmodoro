@@ -9,6 +9,7 @@ import DropdownMenu from "../../../../shared/components/Dropdown/DropdownMenu";
 import { formatToHour } from "../../../../shared/utils/number.utils";
 import { useModal } from "../../../../shared/contexts/modal/modal.context";
 import type { ProjectDTO } from "../../dtos/projects-response";
+import { getStableProjectColor } from "../../consts/project-colors";
 
 const Project = ({
   projectData,
@@ -22,6 +23,7 @@ const Project = ({
   onSelectTags?: (project: ProjectDTO) => void;
 }) => {
   const { showDefault, hideModal } = useModal();
+  const projectColor = getStableProjectColor(projectData.id, projectData.color);
 
   const handleDelete = () => {
     showDefault({
@@ -43,7 +45,11 @@ const Project = ({
     >
       <div className="flex flex-col gap-1.5 min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <GoProject className="text-primary/70 shrink-0" size={18} />
+          <GoProject
+            style={{ color: projectColor }}
+            className="shrink-0"
+            size={18}
+          />
           <span className="font-semibold text-neutral-10 text-sm sm:text-base truncate pr-2">
             {projectData.name}
           </span>
@@ -63,7 +69,8 @@ const Project = ({
               e.stopPropagation();
               onSelectTags?.(projectData);
             }}
-            className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors cursor-pointer"
+            style={{ color: projectColor }}
+            className="flex items-center gap-1 opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
           >
             <IoMdPricetag className="shrink-0" size={13} />
             <span>Ver Tags</span>

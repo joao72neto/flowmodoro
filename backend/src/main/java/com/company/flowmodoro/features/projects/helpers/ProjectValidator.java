@@ -18,7 +18,12 @@ public class ProjectValidator {
     }
 
     public void validateUniqueName(String name, UUID userId) {
-        if (projectRepository.existsByNameAndUserId(name, userId)) {
+        if (
+            projectRepository.existsByNameAndUserIdAndDeletedAtIsNull(
+                name,
+                userId
+            )
+        ) {
             throw new InvalidProjectException(
                 ProjectErrorCode.PROJECT_EXISTS,
                 "Projeto com nome '" + name + "' já existe"
@@ -35,7 +40,12 @@ public class ProjectValidator {
             return;
         }
 
-        if (projectRepository.existsByNameAndUserId(name, userId)) {
+        if (
+            projectRepository.existsByNameAndUserIdAndDeletedAtIsNull(
+                name,
+                userId
+            )
+        ) {
             throw new InvalidProjectException(
                 ProjectErrorCode.PROJECT_EXISTS,
                 "Projeto com nome '" + name + "' já existe"

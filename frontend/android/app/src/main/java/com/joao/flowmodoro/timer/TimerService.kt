@@ -32,7 +32,8 @@ class TimerService : Service() {
             TimerNotificationHelper.NOTIFICATION_ID_TIMER,
             notificationHelper.buildTimerNotification(
                 "00:00",
-                false
+                false,
+                "Flowmodoro"
             )
         )
     }
@@ -42,11 +43,18 @@ class TimerService : Service() {
             ?: System.currentTimeMillis()
 
         when (intent?.action) {
-            ACTION_START_FOCUS -> startFocus(anchor)
+
+            ACTION_START_FOCUS -> {
+                val sessionName = intent.getStringExtra(EXTRA_SESSION_NAME) ?: "Flowmodoro"
+                startFocus(anchor, sessionName)
+            }
+
             ACTION_START_BREAK -> {
+                val sessionName = intent.getStringExtra(EXTRA_SESSION_NAME) ?: "Flowmodoro"
                 val restRatio = intent.getDoubleExtra(EXTRA_REST_RATIO, 0.2)
                 val totalFocus = intent.getLongExtra(EXTRA_TOTAL_FOCUS, 0L)
-                startBreak(anchor, totalFocus, restRatio)
+
+                startBreak(anchor, totalFocus, restRatio, sessionName)
             }
 
             ACTION_BREAK_FINISHED -> handleBreakFinished()
@@ -56,7 +64,7 @@ class TimerService : Service() {
         return START_STICKY
     }
 
-    private fun startFocus(anchor: Long) {
+    private fun startFocus(anchor: Long, sessionName: String) {
         stopAlarmSound()
         tickerJob?.cancel()
 
@@ -66,7 +74,8 @@ class TimerService : Service() {
 
                 notificationHelper.updateTimerNotification(
                     TimeFormatter.format(elapsed),
-                    false
+                    false,
+                    sessionName
                 )
 
                 delay(1000)
@@ -74,11 +83,11 @@ class TimerService : Service() {
         }
     }
 
-    private fun startBreak(anchor: Long, totalFocus: Long, restRatio: Double) {
+    private fun startBreak(anchor: Long, totalFocus: Long, restRatio: Double, sessionName: String) {
         stopAlarmSound()
         tickerJob?.cancel()
 
-        val breakDuration = (totalFocus * restRatio).toLong()
+        val breakDuration = calculateBreakTime(totalFocus, restRatio)
 
         alarmManager.schedule(anchor, breakDuration)
 
@@ -91,11 +100,23 @@ class TimerService : Service() {
 
                 notificationHelper.updateTimerNotification(
                     TimeFormatter.formatCountdown(remaining),
-                    true
+                    true,
+                    sessionName
                 )
 
                 delay(1000)
             }
+        }
+    }
+
+    private fun calculateBreakTime(totalFocusMillis: Long, restRatio: Double): Long {
+        val calculatedBreak = kotlin.math.round(totalFocusMillis * restRatio).toLong()
+
+        return when (restRatio) {
+            0.1 -> minOf(calculatedBreak, 600_000)
+            0.2 -> minOf(calculatedBreak, 900_000)
+            0.3 -> minOf(calculatedBreak, 1_200_000)
+            else -> calculatedBreak
         }
     }
 
@@ -125,7 +146,7 @@ class TimerService : Service() {
             mediaPlayer = MediaPlayer().apply {
                 setAudioAttributes(
                     AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .build()
                 )
@@ -199,11 +220,13 @@ class TimerService : Service() {
 
     companion object {
         const val EXTRA_ANCHOR = "extra_anchor"
+        const val EXTRA_TOTAL_FOCUS = "extra_total_focus"
+        const val EXTRA_REST_RATIO = "extra_rest_ratio"
+        const val EXTRA_SESSION_NAME = "extra_session_name"
         const val ACTION_START_FOCUS = "com.joao.flowmodoro.action.START_FOCUS"
         const val ACTION_START_BREAK = "com.joao.flowmodoro.action.START_BREAK"
         const val ACTION_BREAK_FINISHED = "com.joao.flowmodoro.action.BREAK_FINISHED"
         const val ACTION_STOP = "com.joao.flowmodoro.action.STOP"
-        const val EXTRA_TOTAL_FOCUS = "extra_total_focus"
-        const val EXTRA_REST_RATIO = "extra_rest_ratio"
+
     }
 }

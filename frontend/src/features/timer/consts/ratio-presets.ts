@@ -3,8 +3,7 @@ export type RatioPreset = {
   label: string;
   textClass: string;
   bgClass: string;
-}
-
+};
 
 export const PRESETS: RatioPreset[] = [
   {
@@ -27,3 +26,9 @@ export const PRESETS: RatioPreset[] = [
     bgClass: "bg-success",
   },
 ] as const;
+
+export const MAX_BREAK_BY_RATIO = {
+  0.1: 600,
+  0.2: 900,
+  0.3: 1200,
+} as const;

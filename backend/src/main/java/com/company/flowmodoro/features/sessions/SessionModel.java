@@ -8,12 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "sessions")
@@ -43,7 +44,7 @@ public class SessionModel {
     private UUID userId;
 
     @Column(name = "ses_date", updatable = false)
-    private LocalDate date;
+    private OffsetDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "ses_pro_id", nullable = true)
@@ -52,4 +53,11 @@ public class SessionModel {
     @ManyToOne
     @JoinColumn(name = "ses_tag_id", nullable = true)
     private TagModel tag;
+
+    @UpdateTimestamp
+    @Column(name = "ses_updated_at")
+    private OffsetDateTime updatedAt;
+
+    @Column(name = "ses_deleted_at")
+    private OffsetDateTime deletedAt;
 }

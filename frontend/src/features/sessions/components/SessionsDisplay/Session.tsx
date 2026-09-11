@@ -8,13 +8,8 @@ import { IoMdPricetag } from "react-icons/io";
 import Label from "../../../../shared/components/labels/Label";
 import type { SessionDTO } from "../../dtos/sessions-response";
 
+import { getStableProjectColor } from "../../../projects/consts/project-colors";
 import { memo } from "react";
-
-const BORDER_COLORS: Record<number, string> = {
-  10: "border-l-danger",
-  20: "border-l-primary",
-  30: "border-l-success",
-};
 
 const FOCUS_CLASSES = clsx(
   "shrink-0 whitespace-nowrap text-sm bg-neutral-80/50 border border-border",
@@ -29,8 +24,10 @@ const Session = memo(
     session: SessionDTO;
     onClick?: (id: string) => void;
   }) => {
-    const ratioKey = Math.round(session.ratio * 100);
-    const borderColorClass = BORDER_COLORS[ratioKey];
+    const hasProject = Boolean(session.project && session.project.id !== "");
+    const projectColor = hasProject
+      ? getStableProjectColor(session.project.id, session.project.color)
+      : undefined;
 
     const showTagAndProject =
       session.tag.id !== "" || session.project.id !== "";
@@ -43,8 +40,8 @@ const Session = memo(
             "border shadow-lg border-border py-3 px-4 sm:py-4 sm:px-5 cursor-pointer rounded-xl w-full",
             "hover:bg-neutral-80/40 hover:translate-x-0.5 transition duration-200 bg-neutral-80/60",
             "border-l-4",
-            borderColorClass,
           )}
+          style={hasProject ? { borderLeftColor: projectColor } : undefined}
         >
           <div className="flex flex-col gap-2">
             <div className="flex justify-between w-full items-center sm:w-auto sm:flex-1 min-w-0">
@@ -58,7 +55,20 @@ const Session = memo(
             {showTagAndProject && (
               <div className="flex items-center gap-2 min-w-0 sm:flex-1">
                 {session.project?.name && (
-                  <Label icon={<GoProject />}>{session.project.name}</Label>
+                  <Label
+                    icon={<GoProject />}
+                    style={
+                      projectColor
+                        ? {
+                            backgroundColor: `${projectColor}1a`,
+                            color: projectColor,
+                            borderColor: `${projectColor}40`,
+                          }
+                        : undefined
+                    }
+                  >
+                    {session.project.name}
+                  </Label>
                 )}
                 {session.tag?.name && (
                   <Label variant="secondary" icon={<IoMdPricetag />}>

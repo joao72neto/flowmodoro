@@ -1,15 +1,24 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LuDatabaseBackup } from "react-icons/lu";
 import { clsx } from "clsx";
 
 import { useClickOutside } from "../../../shared/hooks/useClickOutside";
-import { useExportBackup, useImportBackup } from "../../../local/backup/useBackup";
+import {
+  useExportBackup,
+  useImportBackup,
+} from "../../../features/backup/useBackup";
 
 import Button from "../../../shared/components/buttons/Button/Button";
 import ExpandableButton from "../../../shared/components/buttons/ExpandableButton";
 import { useModal } from "../../../shared/contexts/modal/modal.context";
+import { useAuth } from "../../../shared/contexts/auth/auth.context";
 import { CiImport, CiExport } from "react-icons/ci";
+import { IoSyncOutline } from "react-icons/io5";
+import { executePull } from "../../../local/sync/pull-manager";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PULL_COMPLETED_EVENT } from "../../../local/sync/sync-manager";
+import { sessionStorageKeys } from "../../../shared/utils/storage.utils";
 
 function BackupMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +26,8 @@ function BackupMenu() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { showError } = useModal();
+  const { isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
 
   const {
     mutate: upload,
@@ -32,6 +43,24 @@ function BackupMenu() {
     isPending: downloadIsPending,
   } = useExportBackup();
 
+  const {
+    mutate: pullData,
+    error: pullError,
+    reset: resetPull,
+    isPending: isPulling,
+  } = useMutation({
+    mutationFn: executePull,
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+
+  const [isPullingAfterLogin, setIsPullingAfterLogin] = useState(() => {
+    return sessionStorage.getItem(sessionStorageKeys.isPulling) === "true"
+      ? true
+      : false;
+  });
+
   useClickOutside(containerRef, () => setIsOpen(false));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,17 +69,65 @@ function BackupMenu() {
     e.target.value = "";
   };
 
-  const errorMessage = uploadError?.message || downloadError?.message;
+  useEffect(() => {
+    if (isPulling) {
+      setIsOpen(false);
+      return;
+    }
 
-  if (errorMessage) {
+    if (isAuthenticated) {
+      window.addEventListener(PULL_COMPLETED_EVENT, () =>
+        setIsPullingAfterLogin(false),
+      );
+
+      return () => {
+        window.removeEventListener(PULL_COMPLETED_EVENT, () =>
+          setIsPullingAfterLogin(false),
+        );
+      };
+    }
+  }, [isPulling, isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return <div />;
+  }
+
+  if (uploadError) {
+    if (uploadError.name === "ImportPullError") {
+      showError({
+        title: "Sincronização pendente",
+        message:
+          "Os dados foram salvos no servidor com sucesso, mas a atualização local falhou. Deseja tentar sincronizar agora?",
+        confirmLabel: "Sincronizar",
+        cancelLabel: "Fechar",
+        action: () => pullData(),
+      });
+    } else {
+      showError({
+        title: "Erro ao importar backup",
+        message: uploadError.message,
+        action: () => {},
+      });
+    }
+    resetUpload();
+  }
+
+  if (downloadError) {
     showError({
-      title: "Erro ao realizar backup",
-      message: errorMessage,
+      title: "Erro ao exportar backup",
+      message: downloadError.message,
       action: () => {},
     });
-
-    resetUpload();
     resetDownload();
+  }
+
+  if (pullError) {
+    showError({
+      title: "Erro na sincronização",
+      message: pullError.message,
+      action: () => {},
+    });
+    resetPull();
   }
 
   return (
@@ -81,7 +158,7 @@ function BackupMenu() {
                 variant="secondary"
                 className="rounded-full"
                 loading={uploadIsPending}
-                disabled={downloadIsPending}
+                disabled={downloadIsPending || isPulling || isPullingAfterLogin}
                 onClick={() => fileInputRef.current?.click()}
               >
                 Importar
@@ -98,10 +175,27 @@ function BackupMenu() {
                 variant="secondary"
                 className="rounded-full"
                 loading={downloadIsPending}
-                disabled={uploadIsPending}
+                disabled={uploadIsPending || isPulling || isPullingAfterLogin}
                 onClick={() => download()}
               >
                 Exportar
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <Button
+                icon={<IoSyncOutline />}
+                variant="secondary"
+                className="rounded-full"
+                loading={isPulling || isPullingAfterLogin}
+                disabled={uploadIsPending || downloadIsPending}
+                onClick={() => pullData()}
+              >
+                Sincronizar
               </Button>
             </motion.div>
           </motion.div>
@@ -117,7 +211,11 @@ function BackupMenu() {
             transition={{ duration: 0.2 }}
             className="flex"
           >
-            <LuDatabaseBackup size={25} />
+            {isPulling || isPullingAfterLogin ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+            ) : (
+              <LuDatabaseBackup size={25} />
+            )}
           </motion.span>
         }
         className={clsx("rounded-full! ml-1!", { "bg-neutral-60!": isOpen })}

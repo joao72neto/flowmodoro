@@ -43,11 +43,11 @@ class TimerNotificationHelper(private val context: Context) {
         manager.createNotificationChannel(alarmChannel)
     }
 
-    fun buildTimerNotification(time: String, isBreak: Boolean): Notification {
-        val label = if (isBreak) "Descanso" else "Foco"
+    fun buildTimerNotification(time: String, isBreak: Boolean, label: String): Notification {
+        val mode = if (isBreak) "Descanso" else "Foco"
 
         return NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
-            .setContentTitle("Flowmodoro · $label")
+            .setContentTitle("$mode · $label")
             .setContentText("Tempo: $time")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
@@ -58,8 +58,8 @@ class TimerNotificationHelper(private val context: Context) {
             .build()
     }
 
-    fun updateTimerNotification(time: String, isBreak: Boolean) {
-        manager.notify(NOTIFICATION_ID_TIMER, buildTimerNotification(time, isBreak))
+    fun updateTimerNotification(time: String, isBreak: Boolean, label: String) {
+        manager.notify(NOTIFICATION_ID_TIMER, buildTimerNotification(time, isBreak, label))
     }
 
     fun notifyBreakFinished() {

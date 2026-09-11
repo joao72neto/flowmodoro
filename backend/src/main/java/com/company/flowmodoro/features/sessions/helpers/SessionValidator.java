@@ -6,7 +6,7 @@ import com.company.flowmodoro.features.sessions.SessionModel;
 import com.company.flowmodoro.features.sessions.enums.SessionErrorCode;
 import com.company.flowmodoro.features.sessions.exceptions.InvalidSessionException;
 import com.company.flowmodoro.features.tags.TagModel;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -84,7 +84,9 @@ public class SessionValidator {
 
         if (session.getDate() == null) {
             session.setDate(
-                session.getDate() != null ? session.getDate() : LocalDate.now()
+                session.getDate() != null
+                    ? session.getDate()
+                    : OffsetDateTime.now()
             );
         }
 

@@ -17,30 +17,15 @@ import type { TagDTO } from "../../../tags/dtos/tags-response";
 const projectIcon = <GoProject />;
 const tagIcon = <IoMdPricetag />;
 
-import { FlowmodoroPlugin } from "../../../../mobile/plugins";
-
-import { isNative } from "../../../../consts/platform";
-
-import { ensureAllPermissions } from "../../permissions.utils";
-import type { PluginListenerHandle } from "@capacitor/core";
-
 import { IoClose } from "react-icons/io5";
+import { VscClearAll } from "react-icons/vsc";
 
-import { useRef } from "react";
-import { App } from "@capacitor/app";
-import { useTotalFocus } from "../../../timer/hooks/useTimerStore";
-import { useModal } from "../../../../shared/contexts/modal/modal.context";
+import useTimerActions from "../../../timer/hooks/useTimerActions";
 
 const SessionCreation = () => {
-  const { mode, startBreak, startFocus, stopFocus, skipBreak } =
-    useTimerContext();
-
-  const { showDefault, hideModal } = useModal();
-
-  const totalFocusMillis = useTotalFocus();
+  const { mode } = useTimerContext();
 
   const {
-    restRatio,
     setSessionName: setContextSessionName,
     sessionName: contextSessionName,
     selectedProject,
@@ -51,7 +36,8 @@ const SessionCreation = () => {
     tags,
   } = useSessionContext();
 
-  const pendingAction = useRef<"start-focus" | null>(null);
+  const { handleStartBreak, handleStartFocus, handleStopTimer } =
+    useTimerActions();
 
   const [sessionName, setSessionName] = useState(contextSessionName);
 
@@ -62,7 +48,8 @@ const SessionCreation = () => {
   const isTimerStopped = mode === "stopped";
 
   const hasContent = sessionName.trim().length > 0;
-  const isExpanded = hasContent && !isTimerRunning;
+  const hasProjectOrTag = selectedProject !== null || selectedTag !== null;
+  const isExpanded = (hasContent || hasProjectOrTag) && !isTimerRunning;
 
   const showProjectSelector = !isTimerRunning || selectedProject !== null;
   const showTagSelector = !isTimerRunning || selectedTag !== null;
@@ -79,6 +66,10 @@ const SessionCreation = () => {
   );
 
   useEffect(() => {
+    setSessionName(contextSessionName);
+  }, [contextSessionName]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       localStorage.setItem(
         localStorageKeys.session,
@@ -93,40 +84,6 @@ const SessionCreation = () => {
     return () => clearTimeout(timer);
   }, [sessionName, selectedProject, selectedTag]);
 
-  useEffect(() => {
-    if (!isNative) {
-      return;
-    }
-
-    const setup = async () => {
-      const listener = await App.addListener("resume", async () => {
-        if (!pendingAction.current) {
-          return;
-        }
-
-        const ok = await ensureAllPermissions();
-        if (!ok) {
-          return;
-        }
-
-        pendingAction.current = null;
-        startFocusTimer();
-      });
-
-      return listener;
-    };
-
-    let listener: PluginListenerHandle | undefined;
-    setup().then((l) => {
-      listener = l;
-    });
-
-    return () => {
-      listener?.remove();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const commitSessionName = () => {
     setContextSessionName(sessionName.trim());
   };
@@ -136,78 +93,45 @@ const SessionCreation = () => {
       commitSessionName();
 
       if (mode === null) {
-        startFocus();
+        handleStartFocus();
         return;
       }
 
-      startBreak();
+      handleStartBreak();
     }
   };
 
-  const startFocusTimer = async () => {
-    const anchorMillis = Date.now();
-    startFocus();
+  const handleClearAll = useCallback(() => {
+    setSessionName("");
+    setContextSessionName("");
+    setSelectedProjectId(null);
+    setSelectedTagId(null);
+    localStorage.removeItem(localStorageKeys.session);
+  }, [
+    setSessionName,
+    setSelectedProjectId,
+    setSelectedTagId,
+    setContextSessionName,
+  ]);
 
-    if (isNative) {
-      await FlowmodoroPlugin.startFocus({ anchorMillis });
-    }
-  };
+  const handleClearSessionName = useCallback(() => {
+    setSessionName("");
+    setContextSessionName("");
 
-  const handleStartFocus = async () => {
-    if (isNative) {
-      pendingAction.current = "start-focus";
+    const storedSession = localStorage.getItem(localStorageKeys.session);
 
-      const ok = await ensureAllPermissions();
+    if (!storedSession) return;
 
-      if (!ok) {
-        return;
-      }
+    const session = JSON.parse(storedSession);
 
-      pendingAction.current = null;
-    }
-
-    startFocusTimer();
-  };
-
-  const handleStartBreak = async () => {
-    const anchorMillis = Date.now();
-    startBreak();
-
-    if (isNative) {
-      const normalizedRestRatio = restRatio / 100;
-      await FlowmodoroPlugin.startBreak({
-        anchorMillis,
-        totalFocusMillis,
-        restRatio: normalizedRestRatio,
-      });
-    }
-  };
-
-  const stopForegroundTimer = async () => {
-    if (isNative) {
-      await FlowmodoroPlugin.stopTimer();
-    }
-  };
-
-  const handleStopTimer = async ({ type }: { type: "focus" | "break" }) => {
-    if (type === "focus") {
-      await stopForegroundTimer();
-      stopFocus();
-    } else {
-      showDefault({
-        title: "Atenção!",
-        message: "Tem certeza que deseja pular o intervalo?",
-        confirmLabel: "Sim",
-        cancelLabel: "Não",
-        action: async () => {
-          await stopForegroundTimer();
-          skipBreak();
-          hideModal();
-        },
-        cancel: () => hideModal,
-      });
-    }
-  };
+    localStorage.setItem(
+      localStorageKeys.session,
+      JSON.stringify({
+        ...session,
+        sessionName: "",
+      }),
+    );
+  }, [setSessionName, setContextSessionName]);
 
   const handleSelectedProject = useCallback(
     (project: ProjectDTO | null) => {
@@ -236,8 +160,8 @@ const SessionCreation = () => {
         isExpanded
           ? "max-w-full"
           : isTimerRunning
-            ? "max-w-[300px] sm:max-w-[550px]"
-            : "max-w-[300px]",
+            ? "max-w-[320px] sm:max-w-[550px]"
+            : "max-w-[320px]",
         isFocusRunning
           ? "border-primary/50 animate-border-pulse-focus"
           : isBreakRunning
@@ -281,20 +205,36 @@ const SessionCreation = () => {
             />
 
             {isExpanded && (
-              <button
-                className={clsx(
-                  "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
-                  "transition-colors duration-200",
-                  "hover:text-neutral-20",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2",
-                )}
-                type="button"
-                title="Limpar texto"
-                aria-label="Limpar texto"
-                onClick={() => setSessionName("")}
-              >
-                <IoClose />
-              </button>
+              <div className="flex items-center gap-3 sm:gap-1">
+                <button
+                  className={clsx(
+                    "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
+                    "transition-colors duration-200",
+                    "hover:text-neutral-20",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2",
+                  )}
+                  type="button"
+                  title="Limpar texto"
+                  aria-label="Limpar texto"
+                  onClick={handleClearSessionName}
+                >
+                  <IoClose />
+                </button>
+                <button
+                  className={clsx(
+                    "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
+                    "transition-colors duration-200",
+                    "hover:text-neutral-20",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2",
+                  )}
+                  type="button"
+                  title="Limpar texto, projeto e tag"
+                  aria-label="Limpar texto, projeto e tag"
+                  onClick={handleClearAll}
+                >
+                  <VscClearAll />
+                </button>
+              </div>
             )}
           </div>
         )}

@@ -12,12 +12,14 @@ describe("normalizeSessions", () => {
     const project1: ProjectModel = {
       id: crypto.randomUUID(),
       name: "Project 1",
+      color: "",
       createdAt: "",
     };
 
     const project2: ProjectModel = {
       id: crypto.randomUUID(),
       name: "Project 2",
+      color: "",
       createdAt: "",
     };
 
@@ -75,12 +77,14 @@ describe("normalizeSessions", () => {
       project: {
         id: project1.id,
         name: project1.name,
+        color: project1.color,
       },
       tag: {
         id: tag1.id,
         name: tag1.name,
       },
       date: sessions[0].date,
+      updatedAt: sessions[0].updatedAt,
     });
 
     expect(result[1]).toEqual({
@@ -92,12 +96,14 @@ describe("normalizeSessions", () => {
       project: {
         id: project2.id,
         name: project2.name,
+        color: project2.color,
       },
       tag: {
         id: tag2.id,
         name: tag2.name,
       },
       date: sessions[1].date,
+      updatedAt: sessions[0].updatedAt,
     });
   });
 
@@ -139,7 +145,7 @@ describe("normalizeSessions", () => {
       focus: sessions[0].focus,
       ratio: sessions[0].ratio,
       rest: sessions[0].rest,
-      project: { id: "", name: "" },
+      project: { id: "", name: "", color: "" },
       tag: { id: "", name: "" },
       date: sessions[0].date,
     });
@@ -150,7 +156,7 @@ describe("normalizeSessions", () => {
       focus: sessions[1].focus,
       ratio: sessions[1].ratio,
       rest: sessions[1].rest,
-      project: { id: "", name: "" },
+      project: { id: "", name: "", color: "" },
       tag: { id: "", name: "" },
       date: sessions[1].date,
     });
@@ -166,7 +172,7 @@ describe("buildDailySessions", () => {
         focus: 25,
         ratio: 0.2,
         rest: 5,
-        project: { id: "", name: "" },
+        project: { id: "", name: "", color: "" },
         tag: { id: "", name: "" },
         date: "2026-08-13T10:00:00",
       },
@@ -176,7 +182,7 @@ describe("buildDailySessions", () => {
         focus: 25,
         ratio: 0.2,
         rest: 5,
-        project: { id: "", name: "" },
+        project: { id: "", name: "", color: "" },
         tag: { id: "", name: "" },
         date: "2026-08-12T10:00:00",
       },
@@ -186,7 +192,7 @@ describe("buildDailySessions", () => {
         focus: 30,
         ratio: 0.2,
         rest: 6,
-        project: { id: "", name: "" },
+        project: { id: "", name: "", color: "" },
         tag: { id: "", name: "" },
         date: "2026-08-12T11:00:00",
       },
@@ -196,7 +202,7 @@ describe("buildDailySessions", () => {
         focus: 30,
         ratio: 0.2,
         rest: 6,
-        project: { id: "1", name: "Project 1" },
+        project: { id: "1", name: "Project 1", color: "" },
         tag: { id: "1", name: "Tag 1" },
         date: "2026-08-12T12:00:00",
       },
@@ -206,7 +212,7 @@ describe("buildDailySessions", () => {
         focus: 30,
         ratio: 0.2,
         rest: 6,
-        project: { id: "1", name: "Project 1" },
+        project: { id: "1", name: "Project 1", color: "" },
         tag: { id: "1", name: "Tag 1" },
         date: "2026-08-12T13:00:00",
       },

@@ -11,9 +11,8 @@ import { CreateTagSchema } from "../tag.schema";
 import type { TagDTO } from "../dtos/tags-response";
 import type { useCreateTag, useUpdateTag } from "../hooks/useTags";
 
-import { isNative } from "../../../consts/platform";
-
 import { v4 as uuidv4 } from "uuid";
+import { useEffect } from "react";
 
 const TagModal = ({
   isOpen,
@@ -67,9 +66,15 @@ const TagModal = ({
     mode: "onChange",
     resolver: yupResolver(CreateTagSchema),
     defaultValues: {
-      name: defaultValues?.name || "",
+      name: defaultValues?.name ?? "",
     },
   });
+
+  useEffect(() => {
+    reset({
+      name: defaultValues?.name ?? "",
+    });
+  }, [defaultValues?.name, reset]);
 
   const closeAndReset = () => {
     reset();
@@ -100,11 +105,7 @@ const TagModal = ({
   };
 
   return (
-    <ModalContainer
-      enableHeavyAnimations={!isNative}
-      isOpen={isOpen}
-      close={close}
-    >
+    <ModalContainer isOpen={isOpen} close={close}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6 w-full"

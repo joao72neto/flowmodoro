@@ -33,9 +33,17 @@ Quando o usuário inicia o descanso calculado pelo app, ele pode:
 - esperar até o término (uma notificação será enviada ao finalizar);
 - ou pular a pausa e iniciar uma nova sessão.
 
+### Múltiplos Usuários e Login
+
+A aplicação suporta múltiplos usuários, cada um com suas próprias credenciais e dados. Após o primeiro login, o sistema gerencia a renovação do token de acesso (refresh token) de forma automática, sem exigir que o usuário se autentique novamente com frequência.
+
+A autenticação é feita através do servidor do Supabase, que responde imediatamente e não sofre do cold start do backend (hospedado no plano gratuito do Render). Isso significa que o login funciona instantaneamente, independente do estado do servidor da aplicação.
+
+Mesmo que o servidor esteja "dormindo" no momento, isso não bloqueia o uso do app: é possível criar projetos, tags e sessões, e usar o timer normalmente. Quando o servidor acordar, as operações pendentes são executadas automaticamente.
+
 ### Gestão de Projetos e Tags
 
-A aplicação conta com uma barra lateral (*sidebar*) à direita para gerenciar projetos e tags, que podem ser atribuídos às sessões de forma opcional.
+A aplicação conta com uma barra lateral (_sidebar_) à direita para gerenciar projetos e tags, que podem ser atribuídos às sessões de forma opcional.
 
 Nela é possível:
 
@@ -81,6 +89,7 @@ A versão nativa oferece funcionalidades adicionais, como a execução do timer 
 - **Axios** para comunicação com a API
 
 ### Android
+
 - **Capacitor** para desenvolvimento de aplicativo nativo
 - **Kotlin** para criação de plugins nativos
 
@@ -91,6 +100,7 @@ O deploy foi realizado em plataformas gratuitas:
 - [**Vercel**](https://vercel.com/) para o frontend
 - [**Render**](https://render.com/) para a API Spring
 - [**Aiven**](https://aiven.io/) para o banco de dados
+- [**Supabase Auth**](https://supabase.com/auth) para autenticação de usuários
 
 Por conta da limitação de recursos e cold start da API, o projeto utiliza uma abordagem **offline-first** para proporcionar uma experiência offline, em que os dados são armazenados localmente e sincronizados com o backend apenas quando houver conexão disponível.
 

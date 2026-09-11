@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { localStorageKeys } from "../../../shared/utils/storage.utils";
 import { useCreateSession } from "../hooks/useSessions";
@@ -10,6 +10,7 @@ import { getStorageObject } from "../../../shared/utils/storage.utils";
 import type { SessionPayloadDTO } from "../dtos/sessions-request";
 
 import { v4 as uuidv4 } from "uuid";
+import { getRatio } from "../../timer/timer.store";
 
 export const SessionProvider = ({
   children,
@@ -50,57 +51,60 @@ export const SessionProvider = ({
     [tags, selectedTagId],
   );
 
-  const [restRatio, setRestRatio] = useState<number>(() => {
-    const saved = localStorage.getItem(localStorageKeys.restRatio);
-    return saved ? Number(saved) : 20;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(localStorageKeys.restRatio, restRatio.toString());
-  }, [restRatio]);
-
   const { mutate: createSession } = useCreateSession();
 
-  const handleSaveSession = ({ focusSeconds }: ISaveSessionData) => {
-    setCurrentPage(1);
-    const session: SessionPayloadDTO = {
-      id: uuidv4(),
-      name: sessionName,
-      focus: focusSeconds,
-      ratio: restRatio / 100,
-      projectId: selectedProjectId || undefined,
-      tagId: selectedTagId || undefined,
-    };
+  const handleSaveSession = useCallback(
+    ({ focusSeconds }: ISaveSessionData) => {
+      setCurrentPage(1);
+      const session: SessionPayloadDTO = {
+        id: uuidv4(),
+        name: sessionName,
+        focus: focusSeconds,
+        ratio: getRatio() / 100,
+        projectId: selectedProjectId || undefined,
+        tagId: selectedTagId || undefined,
+      };
 
-    createSession(session);
-  };
+      createSession(session);
+    },
+    [sessionName, selectedProjectId, selectedTagId, createSession],
+  );
+
+  const value = useMemo(
+    () => ({
+      currentPage,
+      setCurrentPage,
+
+      handleSaveSession,
+
+      projects,
+      tags,
+
+      selectedProjectId,
+      selectedTagId,
+      setSelectedProjectId,
+      setSelectedTagId,
+
+      selectedTag,
+      selectedProject,
+
+      setSessionName,
+      sessionName,
+    }),
+    [
+      currentPage,
+      handleSaveSession,
+      projects,
+      tags,
+      selectedProjectId,
+      selectedTagId,
+      selectedTag,
+      selectedProject,
+      sessionName,
+    ],
+  );
 
   return (
-    <SessionContext.Provider
-      value={{
-        currentPage,
-        setCurrentPage,
-
-        handleSaveSession,
-        restRatio,
-        setRestRatio,
-
-        projects,
-        tags,
-
-        selectedProjectId,
-        selectedTagId,
-        setSelectedProjectId,
-        setSelectedTagId,
-
-        selectedTag,
-        selectedProject,
-
-        setSessionName,
-        sessionName,
-      }}
-    >
-      {children}
-    </SessionContext.Provider>
+    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
   );
 };

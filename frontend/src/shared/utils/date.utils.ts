@@ -32,6 +32,9 @@ export const formatToBRDate = (value: string) => {
 };
 
 export const getLocalDateKey = (isoDate: string): string => {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
+    return isoDate;
+  }
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/Sao_Paulo",
     year: "numeric",

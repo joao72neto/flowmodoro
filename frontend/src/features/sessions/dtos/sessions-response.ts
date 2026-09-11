@@ -20,9 +20,12 @@ export interface SessionDTO {
   rest: number;
   ratio: number;
   date: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
   project: {
     id: string;
     name: string;
+    color: string;
   };
   tag: {
     id: string;

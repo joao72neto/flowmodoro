@@ -3,4 +3,6 @@ export type TagModel = {
   name: string;
   projectId: string;
   createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
 };

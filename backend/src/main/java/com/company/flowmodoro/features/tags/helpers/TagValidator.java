@@ -19,7 +19,12 @@ public class TagValidator {
     }
 
     public void validateUniqueName(String name, UUID projectId) {
-        if (tagRepository.existsByNameAndProjectId(name, projectId)) {
+        if (
+            tagRepository.existsByNameAndProjectIdAndDeletedAtIsNull(
+                name,
+                projectId
+            )
+        ) {
             throw new InvalidTagException(
                 TagErrorCode.TAG_EXISTS,
                 "Tag com nome '" + name + "' já existe"
@@ -32,7 +37,12 @@ public class TagValidator {
             return;
         }
 
-        if (tagRepository.existsByNameAndProjectId(name, userId)) {
+        if (
+            tagRepository.existsByNameAndProjectIdAndDeletedAtIsNull(
+                name,
+                userId
+            )
+        ) {
             throw new InvalidProjectException(
                 TagErrorCode.TAG_EXISTS,
                 "Tag com nome '" + name + "' já existe"

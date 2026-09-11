@@ -4,7 +4,6 @@ import Stack from "../../../../shared/components/Stack";
 import { AnimatedCollapse } from "../../../../shared/components/AnimatedCollapse";
 import { FaChevronDown } from "react-icons/fa6";
 import { useTheme } from "../../../../shared/contexts/theme/theme.context";
-import { isNative } from "../../../../consts/platform";
 
 const DailySessions = ({
   children,
@@ -44,7 +43,7 @@ const DailySessions = ({
         </span>
       </div>
 
-      <AnimatedCollapse enableHeavyAnimations={!isNative} show={isOpen}>
+      <AnimatedCollapse show={isOpen}>
         <Stack gap={2} className={clsx(theme === "light" && "pb-4")}>
           {children}
         </Stack>

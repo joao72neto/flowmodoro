@@ -14,4 +14,6 @@ public class ProjectUpdateDTO {
 
     @NotBlank(message = "Project name is required")
     private String name;
+
+    private String color;
 }

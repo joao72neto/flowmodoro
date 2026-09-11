@@ -7,22 +7,37 @@ class ProjectMapper {
   toPayload = (project: ProjectModel): ProjectPayloadDTO => ({
     id: project.id,
     name: project.name,
+    color: project.color,
   });
 
   fromModel = (project: ProjectModel): ProjectDTO => ({
     id: project.id,
     name: project.name,
     totalFocus: 0,
+    color: project.color,
   });
 
   fromPayload = (project: ProjectPayloadDTO): ProjectModel => ({
     id: project.id,
     name: project.name,
+    color: project.color,
     createdAt: new Date().toISOString(),
   });
 
   fromPayloadList = (projects: ProjectPayloadDTO[]): ProjectModel[] =>
     projects.map(this.fromPayload);
+
+  fromDTO = (dto: ProjectDTO): ProjectModel => ({
+    id: dto.id,
+    name: dto.name,
+    color: dto.color,
+    createdAt: dto.updatedAt || new Date().toISOString(),
+    updatedAt: dto.updatedAt,
+    deletedAt: dto.deletedAt,
+  });
+
+  fromDTOList = (dtos: ProjectDTO[]): ProjectModel[] =>
+    dtos.map(this.fromDTO);
 }
 
 export default new ProjectMapper();

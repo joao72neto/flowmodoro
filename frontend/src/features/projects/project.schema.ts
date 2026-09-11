@@ -4,4 +4,5 @@ export type ICreateProject = yup.InferType<typeof CreateProjectSchema>;
 
 export const CreateProjectSchema = yup.object({
   name: yup.string().required("O nome do projeto é obrigatório"),
+  color: yup.string().required("A cor do projeto é obrigatória"),
 });

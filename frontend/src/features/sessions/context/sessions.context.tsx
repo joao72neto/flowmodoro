@@ -11,8 +11,6 @@ interface ISessionContext {
   currentPage: number;
   setCurrentPage: (page: number) => void;
 
-  restRatio: number;
-  setRestRatio: (ratio: number) => void;
   handleSaveSession: (data: ISaveSessionData) => void;
 
   projects: ProjectDTO[] | undefined;

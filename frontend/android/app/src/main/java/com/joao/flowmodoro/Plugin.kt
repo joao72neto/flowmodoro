@@ -111,9 +111,12 @@ class Plugin : Plugin() {
     @PluginMethod
     fun startFocus(call: PluginCall) {
         val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
+        val sessionName = call.getString("sessionName") ?: ""
+
         dispatch(Intent(context, TimerService::class.java).apply {
             action = TimerService.ACTION_START_FOCUS
             putExtra(TimerService.EXTRA_ANCHOR, anchorMillis)
+            putExtra(TimerService.EXTRA_SESSION_NAME, sessionName)
         })
         call.resolve()
     }
@@ -124,12 +127,13 @@ class Plugin : Plugin() {
             ?: return call.reject("totalFocusMillis é obrigatório")
 
         val anchorMillis = call.getNumber("anchorMillis") ?: System.currentTimeMillis()
-
         val restRatio = call.getDouble("restRatio") ?: 0.2
-
+        val sessionName = call.getString("sessionName") ?: ""
 
         dispatch(Intent(context, TimerService::class.java).apply {
             action = TimerService.ACTION_START_BREAK
+
+            putExtra(TimerService.EXTRA_SESSION_NAME, sessionName)
             putExtra(TimerService.EXTRA_TOTAL_FOCUS, totalFocusMillis)
             putExtra(TimerService.EXTRA_ANCHOR, anchorMillis)
             putExtra(TimerService.EXTRA_REST_RATIO, restRatio)

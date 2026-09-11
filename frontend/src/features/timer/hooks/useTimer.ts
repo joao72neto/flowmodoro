@@ -6,8 +6,10 @@ import { useModal } from "../../../shared/contexts/modal/modal.context";
 import { useSessionContext } from "../../sessions/context/sessions.context";
 import type { TimerMode } from "../timer.types";
 
-import { setSeconds, setTotalFocus } from "../timer.store";
+import { getRatio, setSeconds, setTotalFocus } from "../timer.store";
 import { useSeconds } from "./useTimerStore";
+
+import { MAX_BREAK_BY_RATIO } from "../consts/ratio-presets";
 
 import { isNative } from "../../../consts/platform";
 
@@ -19,10 +21,8 @@ import {
 const useTimer = () => {
   const seconds = useSeconds();
 
-  const { restRatio, handleSaveSession } = useSessionContext();
+  const { handleSaveSession } = useSessionContext();
   const { showDefault, hideModal } = useModal();
-
-  const BREAK_RATIO = restRatio / 100;
 
   const [mode, setMode] = useState<TimerMode>(() => {
     const saved = localStorage.getItem(localStorageKeys.timer);
@@ -102,11 +102,32 @@ const useTimer = () => {
     setMode("focus");
   };
 
+  const calculateBreakTime = ({
+    seconds,
+    ratio,
+  }: {
+    seconds: number;
+    ratio: number;
+  }) => {
+    const calculatedBreak = Math.round(seconds * ratio);
+    const maxBreak =
+      MAX_BREAK_BY_RATIO[ratio as keyof typeof MAX_BREAK_BY_RATIO];
+
+    return maxBreak !== undefined
+      ? Math.min(calculatedBreak, maxBreak)
+      : calculatedBreak;
+  };
+
   const stopFocus = () => {
     const finalFocusSeconds = seconds;
     setTotalFocus(finalFocusSeconds * 1000);
     setMode("stopped");
-    const breakTime = Math.round(finalFocusSeconds * BREAK_RATIO);
+
+    const breakTime = calculateBreakTime({
+      seconds: finalFocusSeconds,
+      ratio: getRatio() / 100,
+    });
+
     setSeconds(breakTime);
     baseSecondsRef.current = breakTime;
     startTimeRef.current = Date.now();

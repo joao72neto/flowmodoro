@@ -5,11 +5,13 @@ const Label = ({
   icon,
   variant = "primary",
   className,
+  style,
 }: {
   children: React.ReactNode;
   icon?: React.ReactNode;
   variant?: "primary" | "secondary";
   className?: string;
+  style?: React.CSSProperties;
 }) => {
   const bgColor =
     variant === "primary"
@@ -23,13 +25,12 @@ const Label = ({
 
   return (
     <div
+      style={style}
       className={clsx(
         "flex items-center gap-1.5 shrink-0",
         "px-2.5 py-0.5 sm:py-1 rounded-lg border",
         "transition-[scale] duration-200 ease-out hover:scale-[1.02] cursor-default select-none",
-        bgColor,
-        textColor,
-        borderColor,
+        !style && [bgColor, textColor, borderColor],
         className,
       )}
     >

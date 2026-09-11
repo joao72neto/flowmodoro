@@ -26,8 +26,6 @@ import type { SessionDTO } from "../dtos/sessions-response";
 import { useDeleteSession, useUpdateSession } from "../hooks/useSessions";
 import { useFetchTagsByProject } from "../../tags/hooks/useTags";
 
-import { isNative } from "../../../consts/platform";
-
 interface SessionDraft {
   title: string;
   selectedProjectId: string | null;
@@ -183,7 +181,6 @@ const SessionDetailsModal = ({
   return (
     <ModalContainer
       isOpen={isOpen}
-      enableHeavyAnimations={!isNative}
       close={handleClose}
       className="!gap-10 !overflow-visible"
     >
