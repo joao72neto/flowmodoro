@@ -31,7 +31,7 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, UUID> {
     )
     List<ProjectDTO> findAllWithTotalFocus(UUID userId);
 
-    boolean existsByNameAndUserId(String name, UUID userId);
+    boolean existsByNameAndUserIdAndDeletedAtIsNull(String name, UUID userId);
 
     List<ProjectModel> findByUserIdAndUpdatedAtGreaterThanEqual(
         UUID userId,

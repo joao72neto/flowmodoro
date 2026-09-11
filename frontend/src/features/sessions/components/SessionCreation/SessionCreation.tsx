@@ -160,8 +160,8 @@ const SessionCreation = () => {
         isExpanded
           ? "max-w-full"
           : isTimerRunning
-            ? "max-w-[315px] sm:max-w-[550px]"
-            : "max-w-[315px]",
+            ? "max-w-[320px] sm:max-w-[550px]"
+            : "max-w-[320px]",
         isFocusRunning
           ? "border-primary/50 animate-border-pulse-focus"
           : isBreakRunning

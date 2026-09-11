@@ -36,7 +36,10 @@ public interface TagRepository extends JpaRepository<TagModel, UUID> {
     )
     List<TagDTO> findAllWithTotalFocus(UUID projectId, UUID userId);
 
-    boolean existsByNameAndProjectId(String name, UUID projectId);
+    boolean existsByNameAndProjectIdAndDeletedAtIsNull(
+        String name,
+        UUID projectId
+    );
 
     @Query(
         "SELECT t FROM TagModel t WHERE t.project.userId = :userId AND t.updatedAt >= :lastSync"
