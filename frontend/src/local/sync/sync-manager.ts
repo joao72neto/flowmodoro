@@ -22,7 +22,6 @@ const isUserAuthenticated = (): boolean => {
 };
 
 export const initSync = () => {
-  return;
   syncQueue.init();
   const process = () => {
     if (!isUserAuthenticated()) return;
