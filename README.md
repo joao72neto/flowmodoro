@@ -69,7 +69,7 @@ A aplicação também possui suporte a dispositivos Android por meio do Capacito
 
 A versão nativa oferece funcionalidades adicionais, como a execução do timer em segundo plano por meio de um Foreground Service e um alarme para notificar o término do período de descanso.
 
-[Baixar APK para Android](./frontend/apk/flowmodoro-v1.6.0.apk)
+[Baixar APK para Android](./frontend/apk/flowmodoro-v1.7.0.apk)
 
 ## 🛠️ Tecnologias
 
