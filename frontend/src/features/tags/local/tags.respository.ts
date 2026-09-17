@@ -10,6 +10,7 @@ import mapper from "../tags.mappers";
 
 import syncQueue from "../../../local/sync/sync-queue.service";
 import { sumFocusBy } from "../../../shared/utils/sum-focus-by/sum-focus-by.util";
+import { ApiError } from "../../../configs/api-error.configs";
 
 export const fetchTagsByProject = async (
   projectId: string,
@@ -35,6 +36,10 @@ export const fetchTagsByProject = async (
 export const createTag = async (payload: TagPayloadDTO): Promise<TagDTO> => {
   const tag: TagModel = mapper.fromPayload(payload);
 
+  const nameExists = await existsByName(tag.name);
+  if (nameExists)
+    throw new ApiError(`Tag com o nome "${tag.name}" já existe`, 400);
+
   await db.tags.add(tag);
 
   const saveToQueue = mapper.toPayload(tag);
@@ -54,7 +59,13 @@ export const updateTag = async ({
   data: TagUpdateDTO;
 }) => {
   const old = await db.tags.get(id);
-  if (!old) throw new Error("Tag not found locally");
+
+  if (!old) throw new ApiError("Tag não encontrada localmente", 404);
+  if (old.name === data.name) return;
+
+  const nameExists = await existsByName(data.name);
+  if (nameExists)
+    throw new ApiError(`Tag com o nome "${data.name}" já existe`, 400);
 
   const updatedTag: TagModel = applyUpdates({
     id,
@@ -86,4 +97,9 @@ export const deleteTag = async (id: string) => {
   });
 
   await db.tags.delete(id);
+};
+
+export const existsByName = async (name: string) => {
+  const count = await db.tags.where("name").equals(name.trim()).count();
+  return count > 0;
 };

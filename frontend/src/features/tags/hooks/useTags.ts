@@ -67,7 +67,7 @@ export const useUpdateTag = () => {
     }: {
       id: string;
       data: TagUpdateDTO;
-    }): Promise<TagDTO> => updateTag({ id, data }),
+    }): Promise<TagDTO | undefined> => updateTag({ id, data }),
 
     meta: {
       errorTitle: "Erro ao atualizar tag",
