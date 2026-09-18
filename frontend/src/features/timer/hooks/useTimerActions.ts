@@ -60,6 +60,10 @@ const useTimerActions = () => {
 
     if (isNative) {
       await FlowmodoroPlugin.startFocus({ anchorMillis, sessionName });
+      localStorage.setItem(
+        localStorageKeys.nativeAnchor,
+        JSON.stringify({ anchorMillis }),
+      );
     }
   };
 
@@ -94,6 +98,14 @@ const useTimerActions = () => {
         restRatio: normalizedRestRatio,
         sessionName,
       });
+      localStorage.setItem(
+        localStorageKeys.nativeAnchor,
+        JSON.stringify({
+          anchorMillis,
+          totalFocusMillis: getTotalFocus(),
+          restRatio: normalizedRestRatio,
+        }),
+      );
     }
   };
 

@@ -1,6 +1,8 @@
 import { registerPlugin } from "@capacitor/core";
 
 export interface FlowmodoroPlugin {
+  isServiceRunning(): Promise<{ running: boolean }>;
+
   ensureNotificationPermission(): Promise<{ granted: boolean }>;
   ensureExactAlarmPermission(): Promise<{ granted: boolean }>;
   ensureBatteryOptimization(): Promise<{ granted: boolean }>;

@@ -25,6 +25,8 @@ class TimerService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isRunning = true
+
         notificationHelper = TimerNotificationHelper(this)
         alarmManager = AlarmManager(this)
 
@@ -214,11 +216,13 @@ class TimerService : Service() {
         stopAlarmSound()
         serviceScope.cancel()
         super.onDestroy()
+        isRunning = false
     }
 
     override fun onBind(p0: Intent?): IBinder? = null
 
     companion object {
+        @Volatile var isRunning = false
         const val EXTRA_ANCHOR = "extra_anchor"
         const val EXTRA_TOTAL_FOCUS = "extra_total_focus"
         const val EXTRA_REST_RATIO = "extra_rest_ratio"

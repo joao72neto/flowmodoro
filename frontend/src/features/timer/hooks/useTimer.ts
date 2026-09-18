@@ -12,6 +12,8 @@ import { useSeconds } from "./useTimerStore";
 import { MAX_BREAK_BY_RATIO } from "../consts/ratio-presets";
 
 import { isNative } from "../../../consts/platform";
+import { FlowmodoroPlugin } from "../../../mobile/plugins";
+import { App } from "@capacitor/app";
 
 import {
   updateFaviconWithTime,
@@ -57,6 +59,45 @@ const useTimer = () => {
       resetFavicon();
     }
   }, [mode, seconds]);
+
+  useEffect(() => {
+    if (!isNative) return;
+
+    const syncNativeTimer = async () => {
+      const { running } = await FlowmodoroPlugin.isServiceRunning();
+      if (running) return;
+
+      if ((mode === "focus" || mode === "break") && !running) {
+        const saved = localStorage.getItem(localStorageKeys.session);
+        const { sessionName } = saved ? JSON.parse(saved) : "Flowmodoro";
+
+        const anchorRaw = localStorage.getItem(localStorageKeys.nativeAnchor);
+        if (!anchorRaw) return;
+
+        const anchor = JSON.parse(anchorRaw);
+
+        if (mode === "focus") {
+          FlowmodoroPlugin.startFocus({
+            anchorMillis: anchor.anchorMillis,
+            sessionName,
+          });
+        } else if (mode === "break") {
+          FlowmodoroPlugin.startBreak({
+            anchorMillis: anchor.anchorMillis,
+            restRatio: anchor.restRatio,
+            totalFocusMillis: anchor.totalFocusMillis,
+            sessionName,
+          });
+        }
+      }
+    };
+
+    const resumeListener = App.addListener("resume", syncNativeTimer);
+
+    return () => {
+      resumeListener.then((l) => l.remove());
+    };
+  }, [mode]);
 
   useEffect(() => {
     const syncTime = () => {

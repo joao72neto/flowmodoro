@@ -28,6 +28,12 @@ class Plugin : Plugin() {
     private val alarmManager: AlarmManager
         get() = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+
+    @PluginMethod
+    fun isServiceRunning(call: PluginCall) {
+        call.resolve(JSObject().put("running", TimerService.isRunning))
+    }
+
     @PluginMethod
     fun ensureNotificationPermission(call: PluginCall) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {

@@ -1,5 +1,7 @@
 export const localStorageKeys = {
   timer: "flowmodoro_timer_state",
+  nativeAnchor: "flowmodoro_native_anchor",
+
   restRatio: "flowmodoro_rest_ratio",
   session: "flowmodoro_session",
   lastSync: "flowmodoro:lastSync",
