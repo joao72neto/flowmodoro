@@ -149,178 +149,187 @@ const SessionCreation = () => {
   );
 
   return (
-    <div
-      className={clsx(
-        "relative z-10 w-full",
-        "border border-border p-4 rounded-2xl shadow-lg",
-        "transition-[max-width, colors] duration-250 bg-neutral-80/40",
-        isBreakRunning || isTimerStopped
-          ? "focus-within:border-success/50 focus-within:shadow-[0_0_20px_rgba(34,197,94,0.08)]"
-          : "focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
-        isExpanded
-          ? "max-w-full"
-          : isTimerRunning
-            ? "max-w-[320px] sm:max-w-[550px]"
-            : "max-w-[320px]",
-        isFocusRunning
-          ? "border-primary/50 animate-border-pulse-focus"
-          : isBreakRunning
-            ? "border-success/50 animate-border-pulse-break"
-            : "hover:border-neutral-60/80",
-      )}
-    >
+    <div className="w-full flex flex-col items-center relative">
       <div
         className={clsx(
-          "flex sm:flex-row items-stretch sm:items-center",
-          showSelectorsContainer ? "gap-4 flex-col" : "flex-row",
+          "relative z-10 w-full",
+          "border border-border p-4 rounded-2xl shadow-lg",
+          "transition-[max-width, colors] duration-250 bg-neutral-80/40",
+          isBreakRunning || isTimerStopped
+            ? "focus-within:border-success/50 focus-within:shadow-[0_0_20px_rgba(34,197,94,0.08)]"
+            : "focus-within:border-primary/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
+          isExpanded
+            ? "max-w-full"
+            : isTimerRunning
+              ? "max-w-[320px] sm:max-w-[550px]"
+              : "max-w-[320px]",
+          isFocusRunning
+            ? "border-primary/50 animate-border-pulse-focus"
+            : isBreakRunning
+              ? "border-success/50 animate-border-pulse-break"
+              : "hover:border-neutral-60/80",
         )}
       >
-        {isTimerRunning || isTimerStopped ? (
-          <div
-            title={
-              isTimerRunning
-                ? "Foco em andamento"
-                : "Pronto para iniciar a pausa"
-            }
-            className={clsx(
-              "flex-1 min-w-0 py-1",
-              "truncate text-neutral-10 text-base sm:text-lg",
-            )}
-          >
-            {sessionName}
-          </div>
-        ) : (
-          <div className="flex justify-between items-center flex-1">
-            <input
-              className={clsx(
-                "flex-1 min-w-0 py-1",
-                "bg-transparent text-neutral-10 text-base sm:text-lg",
-                "focus:outline-none placeholder:text-neutral-40",
-              )}
-              placeholder="Estou focando em..."
-              value={sessionName}
-              onKeyDown={handleKeyDown}
-              onBlur={commitSessionName}
-              onChange={(e) => setSessionName(e.target.value)}
-            />
-
-            {isExpanded && (
-              <div className="flex items-center gap-3 sm:gap-1">
-                <button
-                  className={clsx(
-                    "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
-                    "transition-colors duration-200",
-                    "hover:text-neutral-20",
-                    "focus-visible:outline-2 focus-visible:outline-offset-2",
-                  )}
-                  type="button"
-                  title="Limpar texto"
-                  aria-label="Limpar texto"
-                  onClick={handleClearSessionName}
-                >
-                  <IoClose />
-                </button>
-                <button
-                  className={clsx(
-                    "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
-                    "transition-colors duration-200",
-                    "hover:text-neutral-20",
-                    "focus-visible:outline-2 focus-visible:outline-offset-2",
-                  )}
-                  type="button"
-                  title="Limpar texto, projeto e tag"
-                  aria-label="Limpar texto, projeto e tag"
-                  onClick={handleClearAll}
-                >
-                  <VscClearAll />
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
         <div
           className={clsx(
-            "flex items-center justify-between sm:justify-start gap-8",
+            "flex sm:flex-row items-stretch sm:items-center",
+            showSelectorsContainer ? "gap-4 flex-col" : "flex-row",
           )}
         >
+          {isTimerRunning || isTimerStopped ? (
+            <div
+              title={
+                isTimerRunning
+                  ? "Foco em andamento"
+                  : "Pronto para iniciar a pausa"
+              }
+              className={clsx(
+                "flex-1 min-w-0 py-1",
+                "truncate text-neutral-10 text-base sm:text-lg",
+              )}
+            >
+              {sessionName}
+            </div>
+          ) : (
+            <div className="flex justify-between items-center flex-1">
+              <input
+                className={clsx(
+                  "flex-1 min-w-0 py-1",
+                  "bg-transparent text-neutral-10 text-base sm:text-lg",
+                  "focus:outline-none placeholder:text-neutral-40",
+                )}
+                placeholder="Estou focando em..."
+                value={sessionName}
+                onKeyDown={handleKeyDown}
+                onBlur={commitSessionName}
+                onChange={(e) => setSessionName(e.target.value)}
+              />
+
+              {isExpanded && (
+                <div className="flex items-center gap-3 sm:gap-1">
+                  <button
+                    className={clsx(
+                      "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
+                      "transition-colors duration-200",
+                      "hover:text-neutral-20",
+                      "focus-visible:outline-2 focus-visible:outline-offset-2",
+                    )}
+                    type="button"
+                    title="Limpar texto"
+                    aria-label="Limpar texto"
+                    onClick={handleClearSessionName}
+                  >
+                    <IoClose />
+                  </button>
+                  <button
+                    className={clsx(
+                      "cursor-pointer rounded-md p-1 text-xl text-neutral-40",
+                      "transition-colors duration-200",
+                      "hover:text-neutral-20",
+                      "focus-visible:outline-2 focus-visible:outline-offset-2",
+                    )}
+                    type="button"
+                    title="Limpar texto, projeto e tag"
+                    aria-label="Limpar texto, projeto e tag"
+                    onClick={handleClearAll}
+                  >
+                    <VscClearAll />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           <div
             className={clsx(
-              "items-center gap-3",
-              showSelectorsContainer ? "flex" : "hidden",
+              "flex items-center justify-between sm:justify-start gap-8",
             )}
           >
-            {showProjectSelector && (
-              <SessionSelector<ProjectDTO>
-                value={selectedProject}
-                onChange={handleSelectedProject}
-                disabled={isTimerRunning}
-                title="Projetos"
-                variant="primary"
-                items={projects}
-                placeholder="Pesquisar projeto..."
-                emptyMsg="Nenhum projeto encontrado"
-                icon={projectIcon}
+            <div
+              className={clsx(
+                "items-center gap-3",
+                showSelectorsContainer ? "flex" : "hidden",
+              )}
+            >
+              {showProjectSelector && (
+                <SessionSelector<ProjectDTO>
+                  value={selectedProject}
+                  onChange={handleSelectedProject}
+                  disabled={isTimerRunning}
+                  title="Projetos"
+                  variant="primary"
+                  items={projects}
+                  placeholder="Pesquisar projeto..."
+                  emptyMsg="Nenhum projeto encontrado"
+                  icon={projectIcon}
+                >
+                  Projetos
+                </SessionSelector>
+              )}
+              {showTagSelector && (
+                <SessionSelector<TagDTO>
+                  value={selectedTag}
+                  onChange={handleSelecteTag}
+                  disabled={isTimerRunning}
+                  title="Tags"
+                  variant="secondary"
+                  items={tags}
+                  placeholder="Pesquisar tag..."
+                  emptyMsg={
+                    selectedProject
+                      ? "Nenhuma tag encontrada"
+                      : "Selecione um projeto primeiro"
+                  }
+                  icon={tagIcon}
+                >
+                  Tags
+                </SessionSelector>
+              )}
+            </div>
+
+            {mode === null ? (
+              <button
+                title="Iniciar foco"
+                onClick={handleStartFocus}
+                className={clsx(buttonClasses, !isExpanded && "hidden")}
               >
-                Projetos
-              </SessionSelector>
-            )}
-            {showTagSelector && (
-              <SessionSelector<TagDTO>
-                value={selectedTag}
-                onChange={handleSelecteTag}
-                disabled={isTimerRunning}
-                title="Tags"
-                variant="secondary"
-                items={tags}
-                placeholder="Pesquisar tag..."
-                emptyMsg={
-                  selectedProject
-                    ? "Nenhuma tag encontrada"
-                    : "Selecione um projeto primeiro"
-                }
-                icon={tagIcon}
+                <FaPlayCircle />
+              </button>
+            ) : mode === "focus" ? (
+              <button
+                title="Parar foco"
+                onClick={() => handleStopTimer({ type: "focus" })}
+                className={buttonClasses}
               >
-                Tags
-              </SessionSelector>
+                <FaStopCircle />
+              </button>
+            ) : mode === "stopped" ? (
+              <button
+                title="Iniciar pausa"
+                onClick={handleStartBreak}
+                className={buttonClasses}
+              >
+                <FaPlayCircle />
+              </button>
+            ) : (
+              <button
+                title="Pular pausa"
+                onClick={() => handleStopTimer({ type: "break" })}
+                className={buttonClasses}
+              >
+                <IoPlaySkipForwardCircleSharp />
+              </button>
             )}
           </div>
-
-          {mode === null ? (
-            <button
-              title="Iniciar foco"
-              onClick={handleStartFocus}
-              className={clsx(buttonClasses, !isExpanded && "hidden")}
-            >
-              <FaPlayCircle />
-            </button>
-          ) : mode === "focus" ? (
-            <button
-              title="Parar foco"
-              onClick={() => handleStopTimer({ type: "focus" })}
-              className={buttonClasses}
-            >
-              <FaStopCircle />
-            </button>
-          ) : mode === "stopped" ? (
-            <button
-              title="Iniciar pausa"
-              onClick={handleStartBreak}
-              className={buttonClasses}
-            >
-              <FaPlayCircle />
-            </button>
-          ) : (
-            <button
-              title="Pular pausa"
-              onClick={() => handleStopTimer({ type: "break" })}
-              className={buttonClasses}
-            >
-              <IoPlaySkipForwardCircleSharp />
-            </button>
-          )}
         </div>
       </div>
+      {hasContent && mode === null && (
+        <div className="absolute top-[105%] sm:top-[110%] bg-neutral-80 z-20 border border-border p-5 w-full rounded-xl">
+          {[1, 2, 3, 4, 5].map((_, index) => (
+            <div key={index}>{`Session ${index + 1}`}</div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
