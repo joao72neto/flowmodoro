@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createSession,
   deleteSession,
+  fetchSessionAutocompleteSuggestions,
   fetchSessions,
   updateSession,
 } from "../local/sessions.repository";
@@ -94,5 +95,24 @@ export const useDeleteSession = () => {
       queryClient.invalidateQueries({ queryKey: [APP_DATA_QUERY_KEY] });
       triggerSync();
     },
+  });
+};
+
+export const useSessionAutocompleteSuggestions = (
+  searchTerm: string,
+  enabled: boolean = true,
+) => {
+  const trimmedTerm = searchTerm.trim();
+
+  return useQuery({
+    queryKey: [
+      APP_DATA_QUERY_KEY,
+      SESSIONS_QUERY_KEY,
+      "autocomplete",
+      trimmedTerm,
+    ],
+    queryFn: () => fetchSessionAutocompleteSuggestions(trimmedTerm),
+    enabled: enabled && trimmedTerm.length > 0,
+    staleTime: 1000 * 60,
   });
 };

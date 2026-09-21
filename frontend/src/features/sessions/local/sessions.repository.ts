@@ -1,7 +1,11 @@
 import { db } from "../../../local/indexedDB";
 import type { PaginationResponse } from "../../../shared/global.types";
 import type { SessionModel } from "./session.model";
-import type { SessionDTO, DailySessionsDTO } from "../dtos/sessions-response";
+import type {
+  SessionDTO,
+  DailySessionsDTO,
+  SessionSuggestionDTO,
+} from "../dtos/sessions-response";
 import type {
   SessionPayloadDTO,
   SessionUpdateDTO,
@@ -111,4 +115,59 @@ export const deleteSession = async (id: string) => {
   });
 
   await db.sessions.delete(id);
+};
+
+export const fetchSessionAutocompleteSuggestions = async (
+  searchTerm: string,
+): Promise<SessionSuggestionDTO[]> => {
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  if (!normalizedSearch) return [];
+
+  const sessions = await db.sessions.toArray();
+  const projects = await db.projects.toArray();
+  const tags = await db.tags.toArray();
+
+  const projectMap = new Map(projects.map((p) => [p.id, p]));
+  const tagMap = new Map(tags.map((t) => [t.id, t]));
+
+  // 1. Filtrar sessões ativas (não deletadas) que contêm o termo de busca
+  const matchingSessions = sessions.filter((s) => {
+    if (s.deletedAt) return false;
+    return s.name.toLowerCase().includes(normalizedSearch);
+  });
+
+  // 2. Ordenar por data mais recente primeiro (decrescente)
+  matchingSessions.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  // 3. Deduplicar pela combinação única de (nome + projectId + tagId)
+  const seenCombinations = new Set<string>();
+  const suggestions: SessionSuggestionDTO[] = [];
+
+  for (const session of matchingSessions) {
+    const key = `${session.name.trim().toLowerCase()}|${session.projectId || ""}|${session.tagId || ""}`;
+    if (seenCombinations.has(key)) continue;
+
+    seenCombinations.add(key);
+
+    const project = session.projectId
+      ? projectMap.get(session.projectId)
+      : null;
+    const tag = session.tagId ? tagMap.get(session.tagId) : null;
+
+    suggestions.push({
+      id: session.id,
+      name: session.name,
+      project: project
+        ? { id: project.id, name: project.name, color: project.color }
+        : null,
+      tag: tag ? { id: tag.id, name: tag.name } : null,
+      date: session.date,
+    });
+
+    if (suggestions.length >= 10) break;
+  }
+
+  return suggestions;
 };

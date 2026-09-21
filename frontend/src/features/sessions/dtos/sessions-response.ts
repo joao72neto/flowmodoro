@@ -32,3 +32,18 @@ export interface SessionDTO {
     name: string;
   };
 }
+
+export interface SessionSuggestionDTO {
+  id: string;
+  name: string;
+  project: {
+    id: string;
+    name: string;
+    color?: string;
+  } | null;
+  tag: {
+    id: string;
+    name: string;
+  } | null;
+  date: string;
+}

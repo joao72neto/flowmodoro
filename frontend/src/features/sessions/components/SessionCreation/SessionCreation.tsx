@@ -9,10 +9,11 @@ import SessionSelector from "./SessionSelector";
 
 import { useTimerContext } from "../../../timer/context/timer.context";
 import { useSessionContext } from "../../context/sessions.context";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { localStorageKeys } from "../../../../shared/utils/storage.utils";
 import type { ProjectDTO } from "../../../projects/dtos/projects-response";
 import type { TagDTO } from "../../../tags/dtos/tags-response";
+import type { SessionSuggestionDTO } from "../../dtos/sessions-response";
 
 const projectIcon = <GoProject />;
 const tagIcon = <IoMdPricetag />;
@@ -21,6 +22,9 @@ import { IoClose } from "react-icons/io5";
 import { VscClearAll } from "react-icons/vsc";
 
 import useTimerActions from "../../../timer/hooks/useTimerActions";
+import { useClickOutside } from "../../../../shared/hooks/useClickOutside";
+import SessionAutocomplete from "./SessionAutocomplete";
+import { useSessionAutocompleteSuggestions } from "../../hooks/useSessions";
 
 const SessionCreation = () => {
   const { mode } = useTimerContext();
@@ -40,6 +44,17 @@ const SessionCreation = () => {
     useTimerActions();
 
   const [sessionName, setSessionName] = useState(contextSessionName);
+  const [isFocused, setIsFocused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(containerRef, () => {
+    setIsFocused(false);
+  });
+
+  const { data: suggestions = [] } = useSessionAutocompleteSuggestions(
+    sessionName,
+    isFocused && mode === null,
+  );
 
   const isTimerRunning = mode === "focus" || mode === "break";
 
@@ -148,8 +163,38 @@ const SessionCreation = () => {
     [setSelectedTagId],
   );
 
+  const handleSelectSuggestion = useCallback(
+    (suggestion: SessionSuggestionDTO) => {
+      setSessionName(suggestion.name);
+      setContextSessionName(suggestion.name);
+
+      if (suggestion.project) {
+        setSelectedProjectId(suggestion.project.id);
+      } else {
+        setSelectedProjectId(null);
+      }
+
+      if (suggestion.tag) {
+        setSelectedTagId(suggestion.tag.id);
+      } else {
+        setSelectedTagId(null);
+      }
+
+      setIsFocused(false);
+    },
+    [
+      setSessionName,
+      setContextSessionName,
+      setSelectedProjectId,
+      setSelectedTagId,
+    ],
+  );
+
   return (
-    <div className="w-full flex flex-col items-center relative">
+    <div
+      ref={containerRef}
+      className="w-full flex flex-col items-center relative"
+    >
       <div
         className={clsx(
           "relative z-10 w-full",
@@ -200,6 +245,7 @@ const SessionCreation = () => {
                 )}
                 placeholder="Estou focando em..."
                 value={sessionName}
+                onFocus={() => setIsFocused(true)}
                 onKeyDown={handleKeyDown}
                 onBlur={commitSessionName}
                 onChange={(e) => setSessionName(e.target.value)}
@@ -323,12 +369,11 @@ const SessionCreation = () => {
           </div>
         </div>
       </div>
-      {hasContent && mode === null && (
-        <div className="absolute top-[105%] sm:top-[110%] bg-neutral-80 z-20 border border-border p-5 w-full rounded-xl">
-          {[1, 2, 3, 4, 5].map((_, index) => (
-            <div key={index}>{`Session ${index + 1}`}</div>
-          ))}
-        </div>
+      {isFocused && hasContent && mode === null && suggestions.length > 0 && (
+        <SessionAutocomplete
+          suggestions={suggestions}
+          onSelect={handleSelectSuggestion}
+        />
       )}
     </div>
   );
